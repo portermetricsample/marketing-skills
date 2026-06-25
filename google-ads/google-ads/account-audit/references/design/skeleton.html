@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title><!-- SLOT:title --><ADVERTISER> — Google Ads Account Audit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================================
+   PASTE references/design/audit.css HERE, VERBATIM. DO NOT EDIT IT.
+   The design is LOCKED. You fill the SLOTs below with content only — you never
+   add, remove, or change a single CSS rule, and never use inline style="...".
+   All selectors are scoped under #audit so this drops into a Porter report.
+   ============================================================================ */
+</style>
+</head>
+<body>
+<div id="audit">
+<div class="doc">
+
+<!-- ============ HEADER ============ -->
+<header>
+  <div class="brandrow">
+    <div>
+      <span class="eyebrow">Google Ads · Account Audit</span>
+      <h1><!-- SLOT:advertiser --><ADVERTISER> — Google Ads Account Audit</h1>
+      <p class="sub"><!-- SLOT:subtitle: one plain sentence on what this audit is --></p>
+    </div>
+    <span class="ga-badge"><span class="ga-dot"></span>Google Ads · live data</span>
+  </div>
+  <div class="metarow">
+    <!-- SLOT:meta — keep these 6 .m blocks; fill the .v values -->
+    <div class="m"><div class="k">Account</div><div class="v"><!-- name (id) --></div></div>
+    <div class="m"><div class="k">Performance window</div><div class="v"><!-- e.g. May 1–31, 2026 --></div></div>
+    <div class="m"><div class="k">Compared to</div><div class="v"><!-- prior period --></div></div>
+    <div class="m"><div class="k">Settings as of</div><div class="v"><!-- run date --></div></div>
+    <div class="m"><div class="k">Currency</div><div class="v"><!-- ISO --></div></div>
+    <div class="m"><div class="k">Active campaigns (spending)</div><div class="v"><!-- N of ~M --></div></div>
+  </div>
+</header>
+
+<div class="body-pad">
+
+<!-- ============ EXECUTIVE SUMMARY (REQUIRED — synthesis arc) ============ -->
+<div class="exec">
+  <span class="tag">Executive summary</span>
+  <h3><!-- SLOT:headline — the one-line money verdict (period-over-period) --></h3>
+  <!-- SLOT:synthesis-body — 2–4 <p>: where it leaks (funnel stage) → culprit + opportunity (named). Use <b> for the entities/numbers that matter. -->
+  <div class="do"><b>Do first →</b> <!-- the 2–3 highest-leverage moves --></div>
+</div>
+
+<!-- ============ SCORECARDS (6 KPIs, each Δ vs prior period, meaning-colored) ============ -->
+<div class="scards">
+  <!-- SLOT:scorecards — repeat this .scard 6×: Spend, Conversions, Conv value, CPA, ROAS, Value/conv.
+       delta class: d-good (improvement) | d-bad (worse) | d-flat. Meaning-colored, not arrow-colored:
+       e.g. spend ▲ is usually d-bad; CPA ▼ is d-good. -->
+  <div class="scard"><div class="lab"><!-- KPI --></div><div class="val"><!-- value --></div><span class="delta d-flat"><!-- ▲/▼ % --></span><span class="cap"><!-- vs prior / note --></span></div>
+</div>
+
+<!-- ============ SEVERITY + VERDICT LEGEND (keep as-is) ============ -->
+<div class="legend">
+  <span class="li"><span class="sev sev-h">HIGH</span> biggest money at stake</span>
+  <span class="li"><span class="sev sev-m">MED</span> meaningful, fix soon</span>
+  <span class="li"><span class="sev sev-l">LOW</span> tune-up / monitor</span>
+  <span class="li"><span class="chip c-broken">Broken</span> against best practice</span>
+  <span class="li"><span class="chip c-review">Review</span> needs a decision</span>
+  <span class="li"><span class="chip c-ok">OK</span> set up right</span>
+</div>
+
+<!-- ============ FINDINGS SECTIONS ============
+     Severity-ordered (HIGH → LOW), NOT fixed §-number order — rank by money at stake.
+     Each section = the block below. OMIT a whole section block if its data does not exist
+     for this account (e.g. no Demand Gen). Never fabricate a section to fill the layout.
+     The 11 candidate sections (use the ones that apply): conversion-tracking, bid-strategy,
+     value-based-bidding, spend-allocation, quality-score, search-terms, device-dayparting,
+     geography, audience-demographics, ad-assets, landing-cro, demand-gen.
+     ============ -->
+<div class="section" id="SLOT:section-id">
+  <div class="section-head"><span class="section-num"><!-- 01 --></span><h2><!-- closed question the data answers --></h2><span class="sev sev-h">HIGH</span><span class="chip c-review">Review</span></div>
+  <p class="lead"><!-- decision-first: first sentence answers the heading, then names the driver. <b> the key entities/numbers. --></p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Entity</th><th>State</th><th>Evidence</th><th>Where · What · Why</th></tr></thead>
+    <tbody>
+      <!-- SLOT:rows — repeat <tr> per finding. State chip: span.state with
+           s-raise|s-ok|s-cut|s-broken|s-review|s-flag. Evidence in <span class="ev">.
+           Recommendation cell is <td class="rec"> with <b>Where:</b> … <b>What:</b> … <b>Why:</b> … -->
+      <tr><td><!-- entity --></td><td><span class="state s-flag"><!-- state --></span></td><td><span class="ev"><!-- numbers, with their window labelled --></span></td><td class="rec"><b>Where:</b> … <b>What:</b> … <b>Why:</b> …</td></tr>
+    </tbody>
+  </table></div>
+  <!-- OPTIONAL callout: co-fix | co-watch | co-win | co-info -->
+  <div class="callout co-fix"><span class="ico">Fix</span><div class="ct"><!-- the one-line takeaway --></div></div>
+  <!-- OPTIONAL bridge to the next section -->
+  <p class="sec-bridge"><!-- one analytical hand-off line --></p>
+</div>
+<!-- …repeat the .section block for each applicable finding, severity-ordered… -->
+
+<!-- ============ WHAT'S ALREADY SET UP RIGHT (confirm the clean fundamentals) ============ -->
+<div class="section" id="pass">
+  <div class="section-head"><span class="section-num">✓</span><h2>What's already set up right</h2><span class="chip c-ok">Confirmed</span></div>
+  <p class="lead"><!-- one line: these passed the check, listed so the reader knows they were checked --></p>
+  <div class="passgrid">
+    <!-- SLOT:pass-cards — repeat .passcard per confirmed-good fundamental (location=Presence, networks off, offline import, landings, in-market, brand defense, …). Only include ones that are actually true for this account. -->
+    <div class="passcard"><div class="h">✓ <!-- title --></div><div class="b"><!-- one plain line --></div></div>
+  </div>
+</div>
+
+<!-- ============ PRIORITIZED ACTION PLAN (highest-$ first) ============ -->
+<div class="section" id="actions">
+  <div class="section-head"><span class="section-num">★</span><h2>Prioritized action plan</h2><span class="chip c-review">Ranked by money</span></div>
+  <div class="todo">
+    <!-- SLOT:actions — repeat .item per action, ranked by dollar impact. The .rank number is auto. -->
+    <div class="item"><div class="rank"></div><div class="tc"><div class="tt"><!-- action --></div><div class="td"><!-- plain detail --></div><span class="tmeta"><!-- the $ / metric tag --></span></div></div>
+  </div>
+</div>
+
+</div><!-- /body-pad -->
+
+<!-- ============ FOOTER + METHOD & CAVEATS (REQUIRED — honesty) ============ -->
+<div class="foot">
+  <b>Method.</b> <!-- SLOT:method — data via Porter Metrics MCP (query_data + campaign.list connector action for true bid targets); landings via tool:porter-tools:scrape; the windows used; currency. -->
+  <div class="meth"><b>Caveats &amp; data gaps (verify in-account).</b> <!-- SLOT:caveats — every gap flagged honestly: QS numeric unreliable (pillars used), brand modelled-value volatility, asset fields, attribution/Auction-Insights/income not exposed, search-term coverage, paused-campaign tail. Never fake; flag. --></div>
+  <div class="meth" style="margin-top:12px"><!-- SLOT:footline — "<ADVERTISER> — Google Ads Account Audit · <period>. Framework: porter-metrics-google-ads (account-audit). Findings ranked by money at stake; every one ends in a Where·What·Why fix." --></div>
+</div>
+
+</div><!-- /doc -->
+</div><!-- /#audit -->
+</body>
+</html>

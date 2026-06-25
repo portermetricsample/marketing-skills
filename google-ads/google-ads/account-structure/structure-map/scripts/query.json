@@ -1,0 +1,38 @@
+{
+  "skill": "structure-map",
+  "doc": "Declarative spec. Replace <placeholders> and RUN. MCP paths: ../../../_framework/porter-mcp-calls.md",
+  "discovery": {
+    "account": { "via": "fetch", "tool_id": "tool:porter-accounts:list_accounts",
+      "args": { "component_name": "google-ads", "query": "<ACCOUNT_HINT>" },
+      "use": "COMPLETE object as <ACCOUNT_OBJECT>" }
+  },
+  "queries": [
+    {
+      "id": "campaigns",
+      "via": "execute",
+      "tool_id": "tool:porter-reporting:query_data",
+      "args": {
+        "accounts": ["<ACCOUNT_OBJECT>"],
+        "fields": ["google_ads_campaign_name", "google_ads_campaign_advertising_channel_type", "google_ads_campaign_bidding_strategy_type", "google_ads_impressions"],
+        "date_range": { "preset": "last_month" },
+        "limit": 1000
+      },
+      "why": "COMPLETE campaign map (includes Demand Gen / PMax without keywords)"
+    },
+    {
+      "id": "adgroups_keywords",
+      "via": "execute",
+      "tool_id": "tool:porter-reporting:query_data",
+      "args": {
+        "accounts": ["<ACCOUNT_OBJECT>"],
+        "fields": ["google_ads_campaign_name", "google_ads_ad_group_name", "google_ads_keyword_info_match_type", "google_ads_impressions"],
+        "date_range": { "preset": "last_month" },
+        "limit": 5000
+      },
+      "why": "ad group detail + match type (Search)"
+    }
+  ],
+  "process": "process.py <result> -> inferred grammar + segmentation parameters + code→line hierarchy + ad group sub-segments + ambiguous tokens",
+  "llm_step": "the model ONLY resolves the ambiguous tokens (with site research or the team dictionary) and names the angles. The decode is done by process.py.",
+  "output": "see prompt.md"
+}

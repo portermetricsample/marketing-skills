@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Acme Insurance — Google Ads Account Audit (TEMPLATE)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Porter brand */
+  --purple:#6701e6; --dark:#1a0340; --pink:#ec4899; --aqua:#2dd4bf;
+  --paper:#ffffff;
+  /* white theme surfaces */
+  --bg:#ffffff; --card:#ffffff; --sunken:#f6f4fb;
+  --line:#e5e7eb; --line2:#eef0f3;
+  --title:#1a0340; --ink:#3f3a4d; --ink-soft:#5d5770; --ink-mute:#8b85a0;
+  --eyebrow:#6701e6;
+  /* meaning colors */
+  --good:#0d9488; --good-soft:#ccf5ef; --good-ink:#0f766e;
+  --bad:#d6155f; --bad-soft:#fbd3e1; --bad-ink:#be205f;
+  --warn-bg:#fcecbf; --warn-ink:#8a5a00;
+  --info-bg:#ede9fe; --info-ink:#6701e6;
+  --win-bg:#e6f3cd; --win-ink:#5e7c00;
+  --purple-soft:#ede9fe; --purple-2:#6701e6;
+  /* type */
+  --font-display:'Bricolage Grotesque','Inter',sans-serif;
+  --font-body:'Hanken Grotesk','Inter',sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  --radius-sm:10px; --radius-md:12px; --radius-lg:16px; --radius-pill:999px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:#f3f1f7;color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;}
+.doc{max-width:1040px;margin:0 auto;background:var(--bg);box-shadow:0 2px 40px rgba(26,3,64,.08);}
+
+/* ---------- HEADER ---------- */
+header{background:linear-gradient(135deg,#1a0340 0%,#3a0a80 55%,#6701e6 130%);color:#fff;padding:46px 44px 40px;}
+.brandrow{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;}
+.eyebrow{font-family:var(--font-body);font-weight:600;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#cdfb52;display:block;margin-bottom:14px;}
+header h1{font-family:var(--font-display);font-weight:800;font-size:46px;line-height:.98;letter-spacing:-.02em;margin:0;color:#fff;}
+header .sub{font-size:16px;color:rgba(255,255,255,.82);margin:14px 0 0;max-width:62ch;}
+.metarow{display:flex;flex-wrap:wrap;gap:30px;margin-top:26px;padding-top:22px;border-top:1px solid rgba(255,255,255,.18);}
+.metarow .m .k{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:5px;}
+.metarow .m .v{font-weight:700;font-size:14.5px;color:#fff;}
+.ga-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:var(--radius-pill);padding:7px 14px;font-size:12.5px;font-weight:600;}
+.ga-dot{width:9px;height:9px;border-radius:50%;background:#cdfb52;box-shadow:0 0 0 3px rgba(205,251,82,.25);}
+
+/* ---------- LAYOUT ---------- */
+.body-pad{padding:0 44px 60px;}
+.section{margin-top:46px;}
+.section-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap;border-bottom:2px solid var(--line);padding-bottom:12px;margin-bottom:8px;}
+.section-num{font-family:var(--font-mono);font-size:12px;font-weight:600;color:var(--ink-mute);}
+.section h2{font-family:var(--font-display);font-weight:800;font-size:26px;line-height:1.05;letter-spacing:-.01em;color:var(--title);margin:0;flex:1;min-width:240px;}
+.lead{font-size:16.5px;line-height:1.6;color:var(--ink);margin:14px 0 6px;max-width:84ch;}
+.lead b{color:var(--title);font-weight:700;}
+.muted{color:var(--ink-soft);}
+.sec-bridge{font-size:13.5px;font-style:italic;color:var(--ink-mute);margin-top:18px;}
+
+/* ---------- CHIPS ---------- */
+.chip{display:inline-flex;align-items:center;gap:5px;font-family:var(--font-display);font-weight:700;font-size:11px;letter-spacing:.02em;padding:3px 11px;border-radius:var(--radius-pill);white-space:nowrap;text-transform:uppercase;}
+.c-ok{background:var(--good-soft);color:var(--good-ink);}
+.c-review{background:var(--warn-bg);color:var(--warn-ink);}
+.c-broken{background:var(--bad-soft);color:var(--bad-ink);}
+.c-na{background:#eceaf1;color:var(--ink-mute);}
+.sev{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:11px;font-weight:600;padding:2px 9px;border-radius:6px;}
+.sev-h{background:var(--bad-soft);color:var(--bad-ink);}
+.sev-m{background:var(--warn-bg);color:var(--warn-ink);}
+.sev-l{background:var(--info-bg);color:var(--info-ink);}
+
+/* ---------- EXEC SYNTHESIS ---------- */
+.exec{background:var(--sunken);border:1px solid #e2dcf3;border-left:5px solid var(--purple);border-radius:var(--radius-md);padding:24px 26px;margin-top:26px;}
+.exec .tag{font-family:var(--font-display);font-weight:800;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--purple-2);background:#fff;border:1px solid #ddd0f7;padding:3px 10px;border-radius:var(--radius-pill);}
+.exec h3{font-family:var(--font-display);font-weight:800;font-size:22px;line-height:1.2;color:var(--title);margin:14px 0 10px;letter-spacing:-.01em;}
+.exec p{font-size:15.5px;line-height:1.6;color:var(--ink);margin:10px 0;}
+.exec p b{color:var(--title);}
+.exec .do{margin-top:14px;padding-top:14px;border-top:1px dashed #d6ccef;font-size:15px;}
+.exec .do b{color:var(--purple-2);}
+
+/* ---------- SCORECARDS ---------- */
+.scards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:24px;}
+.scard{border:1px solid var(--line);border-radius:var(--radius-md);padding:16px 16px 14px;background:var(--card);}
+.scard .lab{font-family:var(--font-mono);font-weight:600;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-mute);}
+.scard .val{font-family:var(--font-display);font-weight:800;font-size:30px;line-height:1;color:var(--title);margin-top:8px;}
+.scard .delta{display:inline-block;margin-top:10px;font-family:var(--font-mono);font-weight:600;font-size:12px;padding:2px 8px;border-radius:var(--radius-pill);}
+.d-good{background:var(--good-soft);color:var(--good-ink);}
+.d-bad{background:var(--bad-soft);color:var(--bad-ink);}
+.d-flat{background:#eceaf1;color:var(--ink-soft);}
+.scard .cap{display:block;font-size:11px;color:var(--ink-mute);margin-top:8px;line-height:1.4;}
+
+/* ---------- TABLES ---------- */
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:var(--radius-md);margin-top:18px;}
+table{border-collapse:collapse;width:100%;font-size:12.5px;}
+thead th{position:sticky;top:0;background:#faf8fe;text-align:right;font-family:var(--font-mono);font-size:10px;letter-spacing:.02em;text-transform:uppercase;color:var(--ink-mute);font-weight:600;padding:10px 11px;border-bottom:2px solid var(--line);white-space:nowrap;}
+thead th:first-child,tbody td:first-child{text-align:left;}
+tbody td{padding:10px 11px;text-align:right;border-bottom:1px solid var(--line2);color:var(--ink);vertical-align:top;}
+tbody tr:last-child td{border-bottom:none;}
+tbody td:first-child{font-weight:600;color:var(--title);max-width:230px;white-space:normal;}
+tbody tr:nth-child(even){background:#fcfbfe;}
+td .ev{display:block;font-size:11.5px;color:var(--ink-soft);text-align:left;line-height:1.45;}
+td.rec{text-align:left;max-width:340px;white-space:normal;font-size:12.5px;line-height:1.5;}
+td.rec b{color:var(--title);}
+.num{font-family:var(--font-mono);font-variant-numeric:tabular-nums;}
+.state{display:inline-block;font-family:var(--font-display);font-weight:700;font-size:10px;letter-spacing:.03em;text-transform:uppercase;padding:2px 8px;border-radius:var(--radius-pill);white-space:nowrap;}
+.s-raise{background:var(--good-soft);color:var(--good-ink);}
+.s-ok{background:var(--good-soft);color:var(--good-ink);}
+.s-cut{background:var(--bad-soft);color:var(--bad-ink);}
+.s-broken{background:var(--bad-soft);color:var(--bad-ink);}
+.s-review{background:var(--warn-bg);color:var(--warn-ink);}
+.s-flag{background:var(--warn-bg);color:var(--warn-ink);}
+
+/* ---------- CALLOUTS ---------- */
+.callout{border-radius:var(--radius-md);padding:15px 17px;margin-top:18px;display:flex;gap:13px;align-items:flex-start;}
+.callout .ico{font-family:var(--font-display);font-weight:800;font-size:11px;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:var(--radius-pill);white-space:nowrap;flex-shrink:0;margin-top:1px;}
+.callout .ct{font-size:13.5px;line-height:1.55;color:var(--ink);}
+.callout .ct b{color:var(--title);}
+.co-fix{background:var(--bad-soft);} .co-fix .ico{background:var(--bad);color:#fff;}
+.co-watch{background:var(--warn-bg);} .co-watch .ico{background:#caa53a;color:#2a1e00;}
+.co-win{background:var(--win-bg);} .co-win .ico{background:var(--win-ink);color:#fff;}
+.co-info{background:var(--info-bg);} .co-info .ico{background:var(--purple);color:#fff;}
+
+/* ---------- LEGEND ---------- */
+.legend{display:flex;flex-wrap:wrap;gap:18px;margin-top:18px;padding:14px 18px;background:var(--sunken);border-radius:var(--radius-md);font-size:12px;color:var(--ink-soft);}
+.legend .li{display:flex;align-items:center;gap:7px;}
+
+/* ---------- TODO ---------- */
+.todo{counter-reset:t;margin-top:20px;}
+.todo .item{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--line2);}
+.todo .item:last-child{border-bottom:none;}
+.todo .rank{counter-increment:t;font-family:var(--font-display);font-weight:800;font-size:20px;color:#fff;background:var(--purple);width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.todo .rank::before{content:counter(t);}
+.todo .tc{flex:1;}
+.todo .tt{font-family:var(--font-display);font-weight:700;font-size:15.5px;color:var(--title);margin:2px 0 4px;}
+.todo .td{font-size:13.5px;color:var(--ink-soft);line-height:1.5;}
+.todo .tmeta{display:inline-block;font-family:var(--font-mono);font-size:11px;color:var(--purple-2);background:var(--purple-soft);padding:2px 8px;border-radius:6px;margin-top:7px;}
+
+/* ---------- pass grid ---------- */
+.passgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:18px;}
+.passcard{border:1px solid var(--good-soft);background:#f3fbf9;border-radius:var(--radius-md);padding:16px 18px;}
+.passcard .h{font-family:var(--font-display);font-weight:700;font-size:14.5px;color:var(--good-ink);display:flex;align-items:center;gap:8px;}
+.passcard .b{font-size:13px;color:var(--ink-soft);margin-top:6px;line-height:1.5;}
+
+/* ---------- footer ---------- */
+.foot{margin-top:54px;border-top:2px solid var(--line);padding:22px 44px 40px;font-size:12px;color:var(--ink-mute);line-height:1.6;background:var(--sunken);}
+.foot b{color:var(--ink-soft);}
+.foot .meth{margin-top:10px;font-size:11.5px;}
+
+a.anchor{color:inherit;text-decoration:none;}
+@media (max-width:720px){
+  .body-pad{padding:0 22px 40px;} header{padding:34px 22px;} header h1{font-size:34px;}
+  .scards{grid-template-columns:1fr 1fr;} .passgrid{grid-template-columns:1fr;} .foot{padding:22px;}
+}
+@media print{
+  body{background:#fff;} .doc{box-shadow:none;max-width:100%;}
+  .section{break-inside:avoid;} .tablewrap{overflow:visible;}
+}
+</style>
+</head>
+<body>
+<div id="audit">
+<div class="doc">
+<div style="background:#fff7ed;border-bottom:2px solid #fdba74;color:#9a3412;padding:10px 44px;font:600 12px/1.45 'Hanken Grotesk',system-ui,sans-serif">TEMPLATE — structure &amp; output contract for the Google Ads account audit. Names are fictional (&ldquo;Acme Insurance&rdquo;) and figures are an illustrative sample, not a real account. Real client audits live OUTSIDE the repo.</div>
+
+<!-- ============ HEADER ============ -->
+<header>
+  <div class="brandrow">
+    <div>
+      <span class="eyebrow">Google Ads · Account Audit</span>
+      <h1>Acme Insurance — Google Ads Account Audit</h1>
+      <p class="sub">A best-practice health check of the paid Google Ads account: is it set up to stop wasting money and to bid toward the conversions that actually matter? Findings are ranked by money at stake, and every one ends in a specific fix.</p>
+    </div>
+    <div class="ga-badge"><span class="ga-dot"></span>Google Ads</div>
+  </div>
+  <div class="metarow">
+    <div class="m"><div class="k">Account</div><div class="v">Acme Insurance · 000-000-0000</div></div>
+    <div class="m"><div class="k">Performance window</div><div class="v">Last 90 days — Mar 23 → Jun 21, 2026</div></div>
+    <div class="m"><div class="k">Compared to</div><div class="v">Prior 90 days</div></div>
+    <div class="m"><div class="k">Settings checked</div><div class="v">Current (as of Jun 2026)</div></div>
+    <div class="m"><div class="k">Currency</div><div class="v">CAD</div></div>
+  </div>
+</header>
+
+<div class="body-pad">
+
+<!-- ============ EXEC SYNTHESIS ============ -->
+<div class="exec">
+  <span class="tag">Executive summary</span>
+  <h3>The account looks more efficient than it really is — because the conversion signal got noisier, not because the buying got smarter.</h3>
+  <p>Over the last 90 days Acme Insurance spent <b>$605K</b> and CPA fell <b>32%</b> ($450 → $306) — which reads like a big win. But conversions jumped <b>76%</b> while conversion <b>value</b> rose only <b>16%</b>, so the value of an average "conversion" dropped <b>34%</b> and ROAS actually slipped to <b>1.87×</b>. Translation: Google is being told to chase a larger pile of <i>shallower</i> events (page views, app-starts, deprecated Universal Analytics goals) that are still flagged as primary conversions.</p>
+  <p>Where it leaks: the <b>conversion definition</b> (153 actions, dozens of shallow ones counted as primary). The biggest single campaign, Life_SEM ($252K), is also losing <b>38% of impressions to Ad Rank</b>, not budget — a quality problem, not a money problem.</p>
+  <p>The good news: the fundamentals the team usually worries about are <b>clean</b> — location is set to Presence (not "presence or interest"), Search Partners and the Display Network are off on Search, offline/CRM conversions are importing, and the landing pages are genuinely strong.</p>
+  <div class="do"><b>Do first:</b> clean the conversion signal (keep only down-funnel actions as primary) and move budget into the two proven campaigns that are capped (Health and Life-BroadMatch). Those moves touch the efficiency of nearly the whole $605K.</div>
+</div>
+
+<!-- ============ SCORECARDS ============ -->
+<div class="scards">
+  <div class="scard"><div class="lab">Spend (90d)</div><div class="val">$605K</div><span class="delta d-flat">▲ 19.8% vs prior</span><span class="cap">$505K previous 90 days</span></div>
+  <div class="scard"><div class="lab">Conversions</div><div class="val">1,977</div><span class="delta d-good">▲ 76.1%</span><span class="cap">Inflated by shallow actions — see §1</span></div>
+  <div class="scard"><div class="lab">Conversion value</div><div class="val">$1.13M</div><span class="delta d-good">▲ 16.4%</span><span class="cap">Grew far slower than conv. count</span></div>
+  <div class="scard"><div class="lab">Cost / conversion</div><div class="val">$306</div><span class="delta d-good">▼ 31.9%</span><span class="cap">Partly an artifact of counting more, shallower conversions</span></div>
+  <div class="scard"><div class="lab">ROAS</div><div class="val">1.87×</div><span class="delta d-bad">▼ 2.9%</span><span class="cap">Conv. value ÷ cost — the truer efficiency read</span></div>
+  <div class="scard"><div class="lab">Value / conversion</div><div class="val">$573</div><span class="delta d-bad">▼ 33.9%</span><span class="cap">$868 → $573: the conversion got "cheaper" because it got smaller</span></div>
+</div>
+
+<div class="legend">
+  <span class="li"><b style="color:var(--ink-soft)">Severity:</b></span>
+  <span class="li"><span class="sev sev-h">● High</span> money at stake now</span>
+  <span class="li"><span class="sev sev-m">● Medium</span> meaningful, not urgent</span>
+  <span class="li"><span class="sev sev-l">● Low</span> housekeeping</span>
+  <span class="li" style="margin-left:auto"><b style="color:var(--ink-soft)">Verdict:</b></span>
+  <span class="li"><span class="chip c-broken">Broken</span></span>
+  <span class="li"><span class="chip c-review">Review</span></span>
+  <span class="li"><span class="chip c-ok">OK</span></span>
+</div>
+
+<!-- ============ §1 CONVERSION TRACKING ============ -->
+<div class="section">
+  <div class="section-head">
+    <span class="section-num">01</span>
+    <h2>Conversion tracking &amp; what bidding optimizes toward</h2>
+    <span class="sev sev-h">● High</span>
+    <span class="chip c-broken">Broken</span>
+  </div>
+  <p class="lead">Offline import works — the problem is the account counts <b>too many things</b> as a conversion. Of <b>153</b> conversion actions, dozens of shallow ones (page views, app-starts, and sunset Universal Analytics goals) are still enabled and marked <b>primary</b>, so Smart Bidding optimizes toward them alongside real revenue. That is the most likely reason conversions rose 76% while value rose only 16%.</p>
+
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>What we checked</th><th>State</th><th>Evidence</th><th class="rec">Recommendation (where · what · why)</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Offline / CRM import in place?</td>
+        <td><span class="state s-ok">OK</span></td>
+        <td><span class="ev">Multiple enabled <span class="num">UPLOAD_CLICKS</span> actions: "All/HD/TLI/CI Payment Received SSR", "Policy Approved/Create SSR", "App Start SSR" + a Qualified-Lead upload.</span></td>
+        <td class="rec"><b>Keep.</b> Down-funnel CRM events (policy approved, payment received) are importing — this is the right backbone. No change.</td>
+      </tr>
+      <tr>
+        <td>Are "primary" conversions actually down-funnel?</td>
+        <td><span class="state s-broken">Broken</span></td>
+        <td><span class="ev">Enabled + primary <b>page-view</b> actions feeding bidding: "Life - Submit Application (Master View)", "Life - Start Application Page View (USE THIS)", "Life - Application Page View", "Critical Illness - Start App Page View", "Quotes Standalone Continued (Analytics)". Mixed in with real PURCHASE / Policy-Approved actions.</span></td>
+        <td class="rec"><b>Where:</b> Account → Goals → Conversions. <b>What:</b> set <i>only</i> down-funnel actions (Policy Approved, Payment Received, Qualified Lead) as <b>Primary</b>; switch every page-view / app-start action to <b>Secondary</b>. <b>Why:</b> bidding currently can't tell a page view from a sold policy, so it buys cheap shallow events and inflates the conversion count.</td>
+      </tr>
+      <tr>
+        <td>Deprecated Universal Analytics goals removed?</td>
+        <td><span class="state s-flag">Review</span></td>
+        <td><span class="ev">Several enabled <span class="num">UNIVERSAL_ANALYTICS_GOAL</span> actions (e.g. "Life - Recommendation Page View (Analytics)", "Critical Illness - App Full Address Page View (Master View)", "Quotes Standalone Continued (Analytics)"). UA was shut down July 2024.</span></td>
+        <td class="rec"><b>Where:</b> the UA-type conversion actions. <b>What:</b> archive/remove them (they no longer receive real data). <b>Why:</b> stale goals clutter the account and risk being re-counted.</td>
+      </tr>
+      <tr>
+        <td>Do primary actions carry a value?</td>
+        <td><span class="state s-broken">Broken</span></td>
+        <td><span class="ev">Enabled, primary, value $0: <b>"Lead-form Start A"</b> — <span class="num">292 conv, $0</span>; <b>"Lead-form Start B"</b> — <span class="num">22 conv, $0</span>. Meanwhile Life runs on value-based bidding.</span></td>
+        <td class="rec"><b>Where:</b> the $0-value primary actions. <b>What:</b> either assign a realistic value (e.g. expected policy value × close-rate) or demote them to Secondary. <b>Why:</b> a $0 conversion tells value-bidding the click was worthless, starving good campaigns of budget.</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="callout co-fix"><span class="ico">Fix</span><div class="ct"><b>One change fixes most of this:</b> a clean primary set of down-funnel events (Policy Approved / Payment Received / Qualified Lead) with values attached. Expect the conversion <i>count</i> to drop and CPA to rise on paper — that's the signal getting honest, and bidding will start steering toward dollars instead of page views.</div></div>
+  <p class="sec-bridge">Next, the bid targets — do they match reality? They do, once you read them from the right source.</p>
+</div>
+
+<!-- ============ §2 BID STRATEGY ============ -->
+<div class="section">
+  <div class="section-head">
+    <span class="section-num">02</span>
+    <h2>Bid strategy — do the targets match actual results?</h2>
+    <span class="sev sev-l">● Low</span>
+    <span class="chip c-ok">OK</span>
+  </div>
+  <p class="lead"><b>Reading note:</b> the campaign target/budget fields in Porter's query_data are fan-out corrupted — the same field returns different values depending on the query, so a "tROAS 36.0 / 3,600%" reading against a ~1.2× actual is that artifact, not a real setting. Pulled from the campaign.list connector action (the reliable source), the targets here are <b>correctly configured and sit right at actual</b>: <b>tROAS 1.2×</b> on both big Life campaigns and <b>tCPA $280</b> on Demand-Gen. No target change needed. Targets last 30 days, sorted by spend.</p>
+
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Campaign</th><th>Strategy</th><th>Target</th><th>Actual (30d)</th><th>State</th><th class="rec">Recommendation</th></tr></thead>
+    <tbody>
+      <tr><td>Acme_Life_SEM_(TL)</td><td class="num">Max Conv. Value</td><td class="num">tROAS 1.2×</td><td class="num">1.26×</td><td><span class="state s-ok">OK</span></td><td class="rec"><b>Keep.</b> Target sits right at actual ROAS — correctly configured (the "36.0" is a query_data fan-out artifact; the campaign.list connector returns 1.2). The real ceiling on this campaign is ad rank/quality, not the target — see §3.</td></tr>
+      <tr><td>Acme_LifeBroadMatch_MOFU_(TL)</td><td class="num">Max Conv. Value</td><td class="num">tROAS 1.2×</td><td class="num">1.20×</td><td><span class="state s-ok">OK</span></td><td class="rec"><b>Keep the target.</b> Set at actual ROAS — fine. This campaign is budget-capped (see §4), so a budget raise is the lever — nothing to fix on the target.</td></tr>
+      <tr><td>Acme_Demandgen_Shorts_(HD)</td><td class="num">Target CPA</td><td class="num">tCPA $280</td><td class="num">$278</td><td><span class="state s-ok">OK</span></td><td class="rec"><b>Keep.</b> tCPA is set right at actual CPA — correctly configured (the "~$0.008" is a query_data fan-out artifact; the campaign.list connector returns $280).</td></tr>
+      <tr><td>SG_Brand_BOFU_(BR)</td><td class="num">Target Impr. Share</td><td class="num">—</td><td class="num">ROAS 47×</td><td><span class="state s-ok">OK</span></td><td class="rec"><b>Keep.</b> Defending the brand SERP on Target Impression Share is a deliberate, sensible choice for a brand campaign that converts at 47× ROAS.</td></tr>
+      <tr><td>Health / Dental / Auto (HD/HA)</td><td class="num">Max Conversions</td><td class="num">no target</td><td class="num">CPA basis</td><td><span class="state s-ok">OK</span></td><td class="rec"><b>Keep for now.</b> Lead-gen campaigns with no conversion value correctly run Maximize Conversions, not value bidding. Revisit only after §1 assigns values.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout co-win"><span class="ico">Reliable source</span><div class="ct"><b>Where these numbers come from.</b> The query_data target/budget fields are fan-out corrupted (the same field returns different values depending on the query — a "tROAS 36.0 / 3,600%" against a ~1.2× actual is that artifact). The true targets above were pulled from the campaign.list connector action (GAQL, direct from the Google Ads API): <b>1.2× ROAS</b> and <b>$280 tCPA</b>, both correctly set near actual.</div></div>
+  <p class="sec-bridge">With targets confirmed healthy, the #1 campaign's real ceiling is ad quality — that's the next section.</p>
+</div>
+
+<!-- ============ §3 QUALITY SCORE ============ -->
+<div class="section">
+  <div class="section-head">
+    <span class="section-num">03</span>
+    <h2>Quality Score — ad relevance, expected CTR &amp; landing experience</h2>
+    <span class="sev sev-h">● High</span>
+    <span class="chip c-review">Review</span>
+  </div>
+  <p class="lead">Most keywords show <b>above-average Landing Page Experience</b> (the pages are good). The weak link is <b>Ad Relevance / Expected CTR on a handful of high-spend "best / compare" terms</b> — led by <b>"best life insurance" (Phrase, $63K spend)</b>, which is below average on <i>both</i>. Numeric Quality Score is unreliable at this grain (Google sums it across ad groups), so we grade on Google's three categorical pillars instead.</p>
+
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Keyword (90d)</th><th>Spend</th><th>Ad relevance</th><th>Exp. CTR</th><th>Landing exp.</th><th class="rec">Recommendation</th></tr></thead>
+    <tbody>
+      <tr><td>best life insurance <span class="num">(Phrase)</span></td><td class="num">$63K</td><td><span class="state s-cut">Below</span></td><td><span class="state s-cut">Below</span></td><td><span class="state s-ok">Above</span></td><td class="rec"><b>Where:</b> the "Best-Intent (Consolidated)" ad group. <b>What:</b> the copy is <i>not</i> the problem — it already runs "Best Life Insurance", "Coverage From $1/Day", "Apply In 15 Minutes". The drag is structural: one consolidated ad group serves many different "best/cheap/compare" queries. Split it into tighter intent themes so each ad matches one query type; add a 4th description where only 3 exist. <b>Why:</b> a single ad answering many intents reads as a weaker match, which is what pulls Ad Relevance + Expected CTR below average.</td></tr>
+      <tr><td>best life insurance canada <span class="num">(Exact)</span></td><td class="num">$20K</td><td><span class="state s-cut">Below</span></td><td><span class="state s-cut">Below</span></td><td><span class="state s-ok">Above</span></td><td class="rec">Same structural fix (split the consolidated ad group); this term shares the gap.</td></tr>
+      <tr><td>life term insurance canada <span class="num">(Exact)</span></td><td class="num">$23K</td><td><span class="state s-cut">Below</span></td><td><span class="state s-flag">Avg</span></td><td><span class="state s-ok">Above</span></td><td class="rec">Same structural issue: this Exact term sits in a mixed-intent ad group — split it so an ad leads with term-life-Canada intent, rather than rewriting copy.</td></tr>
+      <tr><td>best dental insurance plan <span class="num">(Broad)</span></td><td class="num">$12K</td><td><span class="state s-ok">Above</span></td><td><span class="state s-cut">Below</span></td><td><span class="state s-ok">Above</span></td><td class="rec">Expected-CTR drag on a broad term — move to phrase/exact in a dental-intent ad group; copy isn't the gap.</td></tr>
+      <tr><td>"reasonable / cheapest / guaranteed …" <span class="num">(Broad)</span></td><td class="num">$88K+</td><td colspan="3" style="text-align:center"><span class="state s-flag">No QS data</span></td><td class="rec">Three broad-match keywords ("reasonable term life insurance" $26K, "cheapest guaranteed life insurance" $25K, "life insurance canada" broad $19K) return no Quality Score. <b>What:</b> review their search terms for fit and add exact/phrase versions of the winners. <b>Why:</b> $88K on broad match with no quality read is high-risk.</td></tr>
+      <tr><td>health insurance therapy <span class="num">(Phrase)</span></td><td class="num">$1.4K</td><td><span class="state s-cut">Below</span></td><td><span class="state s-flag">Avg</span></td><td><span class="state s-cut">Below</span></td><td class="rec">Below on relevance <i>and</i> landing — likely an off-fit term; consider negative or a therapy-specific page.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout co-info"><span class="ico">Why no number</span><div class="ct">Quality Score is a summing metric in this dataset — the same keyword text across multiple ad groups adds up past 10, so a raw "QS = 28" is meaningless. Google's three <b>pillars</b> (Ad Relevance, Expected CTR, Landing Page Experience) are reliable at any grain, so the audit grades on those.</div></div>
+  <div class="callout co-watch"><span class="ico">Ad copy</span><div class="ct"><b>We read the live ads — the copy is strong.</b> Every top ad group runs 10–15 headlines including "Coverage From $1/Day", "Qualify Without A Medical Test", "Same-day coverage" and "Apply In 15 Minutes". <b>Nearly all assets are still PENDING</b> (Google hasn't graded them) — and critically, the high-spend ad groups under review (Best Life Consolidated, Life Phrase &amp; Exact, Term, Dental, Health) have <i>no</i> graded assets yet, so you can't prune "low" or lean on "best" there. (Only the Brand and Life-BroadMatch "Affordable" groups already show a few GOOD/LEARNING assets.) So the relevance gap is structural (consolidated ad group + broad-match keyword/location insertion), not missing copy. Action: split by intent, fill descriptions to 4, then revisit asset ratings in ~30 days.</div></div>
+  <p class="sec-bridge">Ad Rank loss on these terms ties directly to where the budget is — and isn't — going.</p>
+</div>
+
+<!-- ============ §4 SPEND ALLOCATION ============ -->
+<div class="section">
+  <div class="section-head">
+    <span class="section-num">04</span>
+    <h2>Budget allocation — who's capped, who's coasting?</h2>
+    <span class="sev sev-h">● High</span>
+    <span class="chip c-review">Review</span>
+  </div>
+  <p class="lead">Two proven campaigns are leaving demand on the table because they're <b>budget-capped</b>, while the biggest spender is held back by <b>Ad Rank</b>, not budget. The fix isn't "spend more everywhere" — it's moving money to where it's capped <i>and</i> efficient. Account baseline: CPA <b>$306</b>, ROAS <b>1.87×</b>. (90 days.)</p>
+
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Campaign</th><th>Spend</th><th>Efficiency (90d)</th><th>Lost to budget</th><th>Lost to rank</th><th>State</th><th class="rec">Move</th></tr></thead>
+    <tbody>
+      <tr><td>Acme_Health_SEM_(HD)</td><td class="num">$45K</td><td class="num">CPA $239 ✓</td><td class="num">58.5%</td><td class="num">23.5%</td><td><span class="state s-raise">Raise</span></td><td class="rec"><b>Raise budget.</b> Beats account CPA and loses the majority of impressions to budget — proven demand it can't reach today.</td></tr>
+      <tr><td>Acme_LifeBroadMatch_MOFU_(TL)</td><td class="num">$76K</td><td class="num">ROAS 1.93× ✓</td><td class="num">50.3%</td><td class="num">33.1%</td><td><span class="state s-raise">Raise</span></td><td class="rec"><b>Raise budget.</b> At/above account ROAS and half its impressions lost to budget — the target is healthy (§2), so a budget raise is the clean lever.</td></tr>
+      <tr><td>Acme_Life_SEM_(TL)</td><td class="num">$316K</td><td class="num">ROAS 1.49× ✕</td><td class="num">32.4%</td><td class="num">38.3%</td><td><span class="state s-review">Fix first</span></td><td class="rec"><b>Don't just add budget.</b> Below-avg ROAS and losing more to <b>rank</b> than budget → fix ad relevance (§3) first; then scale.</td></tr>
+      <tr><td>Acme_Dental_SEM_(HD)</td><td class="num">$56K</td><td class="num">CPA $343 ✕</td><td class="num">16.1%</td><td class="num">58.7%</td><td><span class="state s-cut">Fix first</span></td><td class="rec"><b>Rank + landing problem.</b> CPA above account, huge rank loss → fix QS and re-route to the dental page (§5) before any budget change.</td></tr>
+      <tr><td>SG_Brand_BOFU_(BR)</td><td class="num">$9.0K</td><td class="num">ROAS 47× ✓</td><td class="num">0%</td><td class="num">17.7%</td><td><span class="state s-ok">Fine</span></td><td class="rec"><b>Minor:</b> ~18% impressions still lost to rank on brand — a small bid bump could capture near-free brand conversions.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout co-win"><span class="ico">Reallocate</span><div class="ct"><b>Net move:</b> shift budget into <b>Health</b> and <b>Life-BroadMatch</b> (capped + efficient), and hold <b>Life_SEM</b> / <b>Dental</b> flat until their rank/quality issues are fixed. This redirects spend toward demand the account is proven to convert profitably.</div></div>
+</div>
+
+<!-- ============ §5 LANDING / MESSAGE MATCH ============ -->
+<div class="section">
+  <div class="section-head">
+    <span class="section-num">05</span>
+    <h2>Landing pages &amp; message match (CRO)</h2>
+    <span class="sev sev-m">● Medium</span>
+    <span class="chip c-review">Review</span>
+  </div>
+  <p class="lead">Acme Insurance's landing pages are a strength — specific headlines, strong proof (4.8★ / 1,000+ reviews, $13B in coverage, an A-rated insurer), and low-friction on-page forms. The one clear miss: the <b>$56K Dental campaign sends clicks to a generic health page</b> with dental buried and no on-page form, when a dedicated, excellent dental page already exists.</p>
+
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Landing page</th><th>Used by</th><th>Verdict</th><th class="rec">Read &amp; recommendation</th></tr></thead>
+    <tbody>
+      <tr><td>/life-insurance-quote</td><td class="num">Life (~$250K)</td><td><span class="state s-ok">Converts</span></td><td class="rec">Gold standard: "Get your rate in a few clicks," on-page form (DOB, province, sex, smoking), 10% couples + $10K child coverage, full proof stack. Keep as the template for the others.</td></tr>
+      <tr><td>/dental-insurance</td><td class="num">SG Dental (small)</td><td><span class="state s-ok">Converts</span></td><td class="rec">"Dental insurance, made simple for Canadian families" — dental-specific plans, pricing, CDCP FAQ. Strong. <b>Only gap:</b> CTA jumps to an external flow instead of starting a form on-page.</td></tr>
+      <tr><td>/health-insurance-quotes-paid</td><td class="num"><b>Dental_SEM ($56K)</b></td><td><span class="state s-broken">Weak fit</span></td><td class="rec"><b>Where:</b> Acme_Dental_SEM final URL. <b>What:</b> re-point dental ad groups from this generic "health coverage" page to <b>/dental-insurance</b>. <b>Why:</b> dental searchers land on a page about health, with dental shown as a single mid-tier option and no form — a message-match break on the account's worst-CPA Search campaign.</td></tr>
+      <tr><td>/health-insurance-quotes</td><td class="num">Health ($36K)</td><td><span class="state s-ok">Converts</span></td><td class="rec">"Health insurance quotes, made simple… in less than 5 minutes, no medical questions." Named plans + strong proof. Good.</td></tr>
+      <tr><td>/car-insurance</td><td class="num">Auto (test)</td><td><span class="state s-flag">Review</span></td><td class="rec">Broker-style flow (advisor calls within 48h, redirect to app/auto) — heavier than the life/health forms, which explains the low on-platform value. Fine for a test; watch CVR.</td></tr>
+      <tr><td>/life-insurance-quote-select</td><td class="num">Life 45-54 test</td><td><span class="state s-ok">Converts</span></td><td class="rec">Tailored older-age variant ("coverage even with pre-existing conditions," rates for 50/55/60). Good example of audience-matched pages — extend this pattern.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout co-fix"><span class="ico">Fix</span><div class="ct"><b>Highest-leverage CRO move:</b> re-point the Dental campaign to <b>/dental-insurance</b>. Same spend, a page that actually matches the search — should lift conversion rate and pull that $343 CPA back toward the account's $306.</div></div>
+</div>
+
+<!-- ============ §6 DEMOGRAPHICS ============ -->
+<div class="section">
+  <div class="section-head">
+    <span class="section-num">06</span>
+    <h2>Audience &amp; demographics</h2>
+    <span class="sev sev-m">● Medium</span>
+    <span class="chip c-review">Review</span>
+  </div>
+  <p class="lead">Clear bid-adjustment opportunities by age. <b>25-34 is the most efficient segment</b> (ROAS 2.47, CPA $265) and deserves a bid-up; <b>65+ barely returns value</b> (ROAS 0.02, CPA $418); and an <b>"Undetermined" age bucket eats $150K (31% of spend) at ROAS 1.32</b> — bid it down, but don't exclude it (it's a large, unavoidable slice). Audiences are attached on Brand and Demand-Gen but missing from the big non-brand Search campaigns.</p>
+
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Age segment (90d)</th><th>Spend</th><th>CPA</th><th>ROAS</th><th>State</th><th class="rec">Recommendation</th></tr></thead>
+    <tbody>
+      <tr><td>25-34</td><td class="num">$152K</td><td class="num">$265</td><td class="num">2.47×</td><td><span class="state s-raise">Bid up</span></td><td class="rec">Best efficiency at scale — apply a positive bid adjustment.</td></tr>
+      <tr><td>35-44</td><td class="num">$191K</td><td class="num">$324</td><td class="num">2.27×</td><td><span class="state s-ok">Keep</span></td><td class="rec">Biggest segment, solid ROAS — hold or slight up.</td></tr>
+      <tr><td>45-54</td><td class="num">$36K</td><td class="num">$222</td><td class="num">1.48×</td><td><span class="state s-ok">Keep</span></td><td class="rec">Cheap conversions; fine.</td></tr>
+      <tr><td>Undetermined</td><td class="num">$187K</td><td class="num">$368</td><td class="num">1.32×</td><td><span class="state s-flag">Bid down</span></td><td class="rec"><b>Negative bid adjustment, do not exclude.</b> 31% of spend at below-avg ROAS — trimming bids recovers efficiency without cutting reach you can't otherwise target.</td></tr>
+      <tr><td>55-64</td><td class="num">$18K</td><td class="num">$246</td><td class="num">0.92×</td><td><span class="state s-flag">Watch</span></td><td class="rec">Mid CPA, sub-1 ROAS — watch; small bid-down if it persists.</td></tr>
+      <tr><td>65+</td><td class="num">$12K</td><td class="num">$418</td><td class="num">0.02×</td><td><span class="state s-cut">Bid down</span></td><td class="rec">Almost no value returned — strong negative bid adjustment or exclude on value-bidding campaigns.</td></tr>
+      <tr><td>18-24</td><td class="num">$9.0K</td><td class="num">$219</td><td class="num">0.74×</td><td><span class="state s-flag">Watch</span></td><td class="rec">Sub-1 ROAS, but tiny spend ($9.0K) — monitor rather than adjust.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout co-watch"><span class="ico">Audiences</span><div class="ct"><b>Where:</b> Life / Health / Dental Search campaigns. <b>What:</b> add in-market &amp; affinity audiences in <b>Observation</b> mode (they're only on Brand + Demand-Gen today). <b>Why:</b> it costs nothing, gathers data, and unlocks audience bid adjustments later. Note: income &amp; parental-status segments aren't exposed by the connector, so they're out of scope here.</div></div>
+</div>
+
+<!-- ============ §7 SEARCH TERMS ============ -->
+<div class="section">
+  <div class="section-head">
+    <span class="section-num">07</span>
+    <h2>Search terms &amp; negative keywords</h2>
+    <span class="sev sev-m">● Medium</span>
+    <span class="chip c-review">Review</span>
+  </div>
+  <p class="lead">Brand is exceptional (<b>"acme" + "acme" returned ~$413K value on ~$9.0K spend</b>), but the non-brand waste is <b>far bigger than the top rows suggest</b>. Across all ~1,500 search terms, <b>~$120K / 90 days of non-brand spend (≈28%) drove zero tracked conversions</b> (≈$126K once you include terms with under 1 conversion) — a long tail of mostly broad-match variants. The table shows the worst individual offenders; the buckets below are where the real money is.</p>
+
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Search term (90d)</th><th>Match</th><th>Spend</th><th>Conv.</th><th>State</th><th class="rec">Action</th></tr></thead>
+    <tbody>
+      <tr><td>term life insurance quotes</td><td class="num">Exact</td><td class="num">$1,970</td><td class="num">0</td><td><span class="state s-cut">Waste</span></td><td class="rec">Add as negative or pause the matching keyword — no conversions in 90 days.</td></tr>
+      <tr><td>life insurance alberta</td><td class="num">Exact</td><td class="num">$1,655</td><td class="num">0</td><td><span class="state s-cut">Waste</span></td><td class="rec">Same — zero conversions.</td></tr>
+      <tr><td>life insurance policy</td><td class="num">Phrase</td><td class="num">$1,350</td><td class="num">0</td><td><span class="state s-cut">Waste</span></td><td class="rec">Broad-ish phrase, no return — negative or tighten.</td></tr>
+      <tr><td>best life insurance ontario</td><td class="num">Phrase</td><td class="num">$1,105</td><td class="num">0</td><td><span class="state s-cut">Waste</span></td><td class="rec">No conversions — review/negative.</td></tr>
+      <tr><td>life insurance policy canada</td><td class="num">Exact</td><td class="num">$1,050</td><td class="num">0</td><td><span class="state s-cut">Waste</span></td><td class="rec">No conversions — negative.</td></tr>
+      <tr><td>term insurance canada</td><td class="num">Broad</td><td class="num">$980</td><td class="num">0</td><td><span class="state s-cut">Waste</span></td><td class="rec">Broad-match leak — add exact winners, negative the rest.</td></tr>
+      <tr><td>acme / acme</td><td class="num">Exact</td><td class="num">$9.0K</td><td class="num">228</td><td><span class="state s-ok">Brand</span></td><td class="rec">Keep &amp; protect — ~$413K value. The account's profit engine.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout co-fix"><span class="ico">Scale</span><div class="ct"><b>The two buckets that hold the waste (n-gram analysis, non-brand):</b> <b>geo-modifier searches</b> (a province/city in the query) burn <b>$210K at ~$450 CPA</b> vs the $306 account average; <b>competitor / other-brand terms</b> run <b>~$34K at ~$525 CPA</b>, dominated by a competitor brand (also a match-type confusion with a near-identical generic query). <b>What:</b> mine the zero-converters into shared negative lists, tighten the broad match that feeds them, and decide if competitor conquesting earns its CPA. <b>Caveat:</b> the §1 conversion gaps can undercount real outcomes, so treat the $126K as "investigate &amp; trim," not all instantly recoverable.</div></div>
+  <p class="muted" style="font-size:13px;margin-top:12px;">Note: dental &amp; health terms showing $0 value (e.g. "dental insurance" $4.0K, "health insurance" $3.6K) are <b>not</b> waste — those campaigns simply don't track conversion value yet (ties back to §1). They do convert.</p>
+</div>
+
+<!-- ============ §8 ASSETS ============ -->
+<div class="section">
+  <div class="section-head">
+    <span class="section-num">08</span>
+    <h2>Ad assets / extensions</h2>
+    <span class="sev sev-l">● Low</span>
+    <span class="chip c-review">Review</span>
+  </div>
+  <p class="lead">Callouts are present and on-message. Sitelinks, structured snippets and image assets <b>could not be confirmed through Porter</b> (the connector returned blanks/errored) — so this is flagged for a quick manual check rather than reported as missing.</p>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Extension</th><th>State</th><th>Evidence</th><th class="rec">Action</th></tr></thead>
+    <tbody>
+      <tr><td>Callouts</td><td><span class="state s-ok">Present</span></td><td><span class="ev">6 active: "Save hundreds of dollars", "Lowest rates", "Real human help", "Pressure free guidance", "Precise advice", "Best options".</span></td><td class="rec">Good. Keep; consider rotating in proof callouts ("4.8★, 1,000+ reviews").</td></tr>
+      <tr><td>Sitelinks</td><td><span class="state s-flag">Verify</span></td><td><span class="ev">Porter returned no sitelink text (likely a connector limitation, not an absence).</span></td><td class="rec"><b>Check in Google Ads UI.</b> If genuinely missing, add 4+ sitelinks (Term Life, Health &amp; Dental, How it works, Reviews).</td></tr>
+      <tr><td>Structured snippets</td><td><span class="state s-flag">Verify</span></td><td><span class="ev">No data returned via Porter.</span></td><td class="rec"><b>Check in UI;</b> add if absent (e.g. Coverage types).</td></tr>
+      <tr><td>Image assets</td><td><span class="state s-flag">Verify</span></td><td><span class="ev">Field errored in Porter.</span></td><td class="rec"><b>Check in UI;</b> add image assets if eligible.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout co-info"><span class="ico">Data note</span><div class="ct">The sitelink / snippet / image asset fields are unreliable in the Porter Google Ads connector right now — logged as a product gap. The audit reports only what it can verify and points the rest to the UI rather than guessing.</div></div>
+</div>
+
+<!-- ============ §9 DEVICE & SCHEDULE ============ -->
+<div class="section">
+  <div class="section-head">
+    <span class="section-num">09</span>
+    <h2>Device &amp; ad schedule</h2>
+    <span class="sev sev-m">● Medium</span>
+    <span class="chip c-review">Review</span>
+  </div>
+  <p class="lead">Two efficiency gaps hiding in plain sight: <b>desktop converts far better than mobile</b>, yet mobile takes 59% of spend; and <b>weekends run ~23% worse</b> than the start of the week.</p>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Device (90d)</th><th>Spend</th><th>CVR</th><th>CPA</th><th>ROAS</th><th>State</th><th class="rec">Read</th></tr></thead>
+    <tbody>
+      <tr><td>Desktop</td><td class="num">$245K</td><td class="num">5.9%</td><td class="num">$284</td><td class="num">2.28×</td><td><span class="state s-raise">Bid up</span></td><td class="rec">Best efficiency, only 40% of spend — positive device bid adjustment.</td></tr>
+      <tr><td>Mobile</td><td class="num">$358K</td><td class="num">3.5%</td><td class="num">$325</td><td class="num">1.59×</td><td><span class="state s-flag">Investigate</span></td><td class="rec"><b>Where:</b> mobile bids + the mobile quote form. <b>What:</b> trim mobile bids and/or fix the mobile form (CVR ~40% below desktop). <b>Why:</b> 59% of spend sits on the worse-converting device.</td></tr>
+      <tr><td>Connected TV</td><td class="num">$2.1K</td><td class="num">—</td><td class="num">$289</td><td class="num">1.93×</td><td><span class="state s-ok">Tiny</span></td><td class="rec">Negligible (Demand Gen spill); ignore.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout co-watch"><span class="ico">Schedule</span><div class="ct"><b>Day-of-week:</b> Monday/Tuesday are the efficient days (CPA ~$274–289, ROAS ~2.1×); <b>Saturday is the worst</b> (CPA $367, ROAS 1.57×), Sunday close behind. A modest weekend negative bid adjustment (or dayparting) recovers efficiency on the weekend (~26% of weekly spend).</div></div>
+</div>
+
+<!-- ============ §10 GEOGRAPHY ============ -->
+<div class="section">
+  <div class="section-head">
+    <span class="section-num">10</span>
+    <h2>Geography (provinces)</h2>
+    <span class="sev sev-m">● Medium</span>
+    <span class="chip c-review">Review</span>
+  </div>
+  <p class="lead">The big three (Ontario, Alberta, BC = 83% of spend) all run close to the account average, so there's no large geo reallocation — but <b>Quebec is a clear leak</b>, and the breakdown <b>confirms the Presence setting is working</b>: every dollar landed in a Canadian province, none outside the target market.</p>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Province (90d)</th><th>Spend</th><th>Conv</th><th>CPA</th><th>ROAS</th><th>State</th><th class="rec">Read</th></tr></thead>
+    <tbody>
+      <tr><td>Ontario</td><td class="num">$312K</td><td class="num">822</td><td class="num">$304</td><td class="num">1.84×</td><td><span class="state s-ok">On par</span></td><td class="rec">52% of spend, right at account average. Healthy.</td></tr>
+      <tr><td>Alberta</td><td class="num">$99K</td><td class="num">248</td><td class="num">$318</td><td class="num">1.93×</td><td><span class="state s-ok">On par</span></td><td class="rec">Slightly above-avg ROAS.</td></tr>
+      <tr><td>British Columbia</td><td class="num">$91K</td><td class="num">214</td><td class="num">$340</td><td class="num">1.88×</td><td><span class="state s-ok">On par</span></td><td class="rec">Marginally pricier CPA; fine.</td></tr>
+      <tr><td>Manitoba</td><td class="num">$19K</td><td class="num">54</td><td class="num">$279</td><td class="num">2.20×</td><td><span class="state s-raise">Efficient</span></td><td class="rec">Best mid-size province — small bid-up room.</td></tr>
+      <tr><td>Quebec</td><td class="num">$5.4K</td><td class="num">11</td><td class="num">$393</td><td class="num">0.64×</td><td><span class="state s-cut">Leak</span></td><td class="rec"><b>Where:</b> Quebec targeting. <b>What:</b> bid down (or split out) Quebec — conv rate 1.4% vs 4.2% account. <b>Why:</b> English ads to a majority-French market; serve French creative/landing or reduce exposure.</td></tr>
+      <tr><td>Nova Scotia</td><td class="num">$21K</td><td class="num">62</td><td class="num">$264</td><td class="num">1.65×</td><td><span class="state s-ok">On par</span></td><td class="rec">Cheap CPA, slightly below-avg ROAS; fine.</td></tr>
+      <tr><td>New Brunswick</td><td class="num">$14K</td><td class="num">29</td><td class="num">$377</td><td class="num">1.44×</td><td><span class="state s-flag">Watch</span></td><td class="rec">Below-avg ROAS; monitor (partly French too).</td></tr>
+      <tr><td>PEI</td><td class="num">$3.8K</td><td class="num">15</td><td class="num">$201</td><td class="num">2.66×</td><td><span class="state s-raise">Efficient</span></td><td class="rec">Most efficient province (small spend) — minor bid-up room.</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<!-- ============ §11 DEMAND GEN ============ -->
+<div class="section">
+  <div class="section-head">
+    <span class="section-num">11</span>
+    <h2>Demand Gen campaigns</h2>
+    <span class="sev sev-l">● Low</span>
+    <span class="chip c-review">Review</span>
+  </div>
+  <p class="lead">Two small Demand Gen campaigns (~$10K, 2% of spend) run alongside Search. Both lag, and Porter can't expose their asset-group detail — so a full creative read needs the Google Ads UI.</p>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Campaign (90d)</th><th>Spend</th><th>Conv</th><th>CPA</th><th>ROAS</th><th>State</th><th class="rec">Read</th></tr></thead>
+    <tbody>
+      <tr><td>Demand Gen — Video A</td><td class="num">$9.0K</td><td class="num">25.3</td><td class="num">$274</td><td class="num">0.69×</td><td><span class="state s-flag">Watch</span></td><td class="rec">CPA fine but ROAS 0.69× — value not keeping up. Hold; reassess after the §1 conversion-value fix.</td></tr>
+      <tr><td>Demand Gen — Video B</td><td class="num">$4.1K</td><td class="num">8.0</td><td class="num">$417</td><td class="num">— no value</td><td><span class="state s-cut">Trim</span></td><td class="rec">CPA $417, well above account $306, no value tracked — trim or pause until it earns its place.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout co-info"><span class="ico">Data note</span><div class="ct">Demand Gen <b>asset-group</b> performance isn't exposed by the Porter Google Ads connector (returned no rows) — logged as a gap. Audit the DG creatives/audiences in the Google Ads UI.</div></div>
+</div>
+
+<!-- ============ WHAT'S RIGHT ============ -->
+<div class="section">
+  <div class="section-head">
+    <span class="section-num">✓</span>
+    <h2>What's already set up right</h2>
+    <span class="chip c-ok">OK</span>
+  </div>
+  <p class="lead">The fundamentals a media buyer checks first — the ones that quietly waste money when wrong — are clean here:</p>
+  <div class="passgrid">
+    <div class="passcard"><div class="h">✓ Location targeting</div><div class="b">All campaigns set to <b>Presence</b> ("people in your targeted locations"), not "presence or interest." No out-of-market spend leak.</div></div>
+    <div class="passcard"><div class="h">✓ Networks off</div><div class="b"><b>Search Partners OFF</b> and <b>Display Network OFF</b> on every Search campaign — no low-quality network spillover.</div></div>
+    <div class="passcard"><div class="h">✓ Offline conversion import</div><div class="b">CRM/offline events (policy approved, payment received, qualified lead) are <b>importing</b> via Upload — the right backbone (the §1 fix is about which ones count as primary).</div></div>
+    <div class="passcard"><div class="h">✓ Landing pages</div><div class="b">Specific headlines, strong proof (4.8★, an A-rated insurer, $13B in coverage), low-friction on-page forms. A real strength (one dental routing fix in §5).</div></div>
+  </div>
+</div>
+
+<!-- ============ ACTION PLAN ============ -->
+<div class="section">
+  <div class="section-head">
+    <span class="section-num">→</span>
+    <h2>Prioritized action plan</h2>
+  </div>
+  <p class="lead">Ranked by money at stake. The top moves touch the efficiency of nearly the entire $605K.</p>
+  <div class="todo">
+    <div class="item"><div class="rank"></div><div class="tc"><div class="tt">Clean the conversion signal</div><div class="td">Set only down-funnel actions (Policy Approved, Payment Received, Qualified Lead) as Primary; demote page-views, app-starts &amp; Universal Analytics goals to Secondary; assign values to "Lead-form Start A" and "Lead-form Start B" or demote them.</div><span class="tmeta">§1 · affects all Smart Bidding</span></div></div>
+    <div class="item"><div class="rank"></div><div class="tc"><div class="tt">Reallocate budget to capped winners</div><div class="td">Raise budget on Health (CPA $239, 58% lost to budget) and Life-BroadMatch. Hold Life_SEM &amp; Dental flat until quality/rank is fixed.</div><span class="tmeta">§4 · proven, capped demand</span></div></div>
+    <div class="item"><div class="rank"></div><div class="tc"><div class="tt">Restructure the consolidated "best" ad group</div><div class="td">The ad copy is already strong — don't rewrite it. Split the "Best-Intent (Consolidated)" ad group ($63K) by intent so each ad matches one query type, fill descriptions to 4, and revisit asset ratings in ~30 days (still pending for these high-spend ad groups). Also review the three no-QS broad-match keywords ($88K).</div><span class="tmeta">§3 · ~$150K affected</span></div></div>
+    <div class="item"><div class="rank"></div><div class="tc"><div class="tt">Re-point the Dental campaign to /dental-insurance</div><div class="td">Move Dental_SEM ($56K) off the generic health page onto the dedicated dental page that already converts.</div><span class="tmeta">§5 · $56K, worst-CPA Search campaign</span></div></div>
+    <div class="item"><div class="rank"></div><div class="tc"><div class="tt">Apply demographic bid adjustments</div><div class="td">Bid up 25-34; bid down 65+ and the Undetermined age bucket (negative adjustment, not exclude); add audiences in Observation to non-brand Search.</div><span class="tmeta">§6</span></div></div>
+    <div class="item"><div class="rank"></div><div class="tc"><div class="tt">Device, geo &amp; schedule adjustments</div><div class="td">Positive bid on desktop / trim mobile (desktop ROAS 2.28× vs 1.59×); bid down Quebec (ROAS 0.64×, French market); small weekend negative adjustment (Sat CPA $367 vs Mon $274).</div><span class="tmeta">§9 · §10</span></div></div>
+    <div class="item"><div class="rank"></div><div class="tc"><div class="tt">Mine negatives at scale + verify assets</div><div class="td">~$120K/90d of non-brand spend (≈$126K incl. sub-1-conversion terms) drove ~no tracked conversions — mine it into shared negative lists, starting with the geo-modifier (~$450 CPA) and competitor-brand (~$525 CPA) buckets, and tighten the broad match feeding them. Confirm sitelinks / snippets / images in the Google Ads UI.</div><span class="tmeta">§7 · §8</span></div></div>
+  </div>
+</div>
+
+</div><!-- /body-pad -->
+
+<div class="foot">
+  <b>Acme Insurance — Google Ads Account Audit.</b> Account 000-000-0000 · Currency CAD · Performance window: last 90 days (Mar 23 – Jun 21, 2026) vs the prior 90 days · Account settings reflect current state (last 30 days). Data via the Porter Metrics Google Ads connector. Confidential — a structural template — synthetic data.
+  <div class="meth"><b>Method &amp; caveats:</b> Findings come from Google Ads reporting fields, not account change-history. Numeric Quality Score is excluded (it sums across ad groups); Quality Score is graded on Google's three categorical pillars. Bid-strategy targets are read from the campaign.list connector action, not query_data (whose target/budget fields are fan-out corrupted — a "tROAS 36.0 / 3,600%" reading is that artifact); the true targets here are correctly configured (1.2× ROAS, $280 tCPA). Sitelink / structured-snippet / image-asset fields were unreliable in the connector and are flagged for manual verification. Landing-page reads are AI summaries of live page content. CPA/ROAS are computed from base spend, conversions and value (account-total rate fields are unreliable). This version adds device / province / day-of-week segmentation, an n-gram analysis of ~1,500 search terms, and a read of the live RSA ad copy; Demand Gen asset-group detail and Auction Insights remain Google-Ads-UI-only.</div>
+</div>
+
+</div><!-- /doc -->
+</div><!-- /#audit -->
+</body>
+</html>

@@ -1,0 +1,37 @@
+{
+  "skill": "term-routing",
+  "doc": "Declarative spec. The agent substitutes <placeholders> and EXECUTES. MCP paths: ../../../_framework/porter-mcp-calls.md",
+  "discovery": {
+    "account": {
+      "via": "fetch",
+      "tool_id": "tool:porter-accounts:list_accounts",
+      "args": { "component_name": "google-ads", "query": "<ACCOUNT_HINT>" },
+      "use": "FULL object as <ACCOUNT_OBJECT>"
+    }
+  },
+  "queries": [
+    {
+      "id": "search_terms",
+      "via": "execute",
+      "tool_id": "tool:porter-reporting:query_data",
+      "args": {
+        "accounts": ["<ACCOUNT_OBJECT>"],
+        "fields": [
+          "google_ads_search_term",
+          "google_ads_keyword_info_text",
+          "google_ads_keyword_info_match_type",
+          "google_ads_campaign_name",
+          "google_ads_ad_group_name",
+          "google_ads_cost_micros"
+        ],
+        "date_range": { "preset": "last_month" },
+        "sort": [{ "field": "google_ads_cost_micros", "direction": "desc" }],
+        "limit": 5000
+      },
+      "big_result": "persisted to file; export to CSV and pass to process.py"
+    }
+  ],
+  "process": "process.py <csv|json> -> routing_plan (term -> correct owner + negatives) + skipped_intentional, sorted by spend",
+  "llm_step": "none in the typical case (the owner is chosen by match-type + product code, deterministic). The model only intervenes if the 'right product' is ambiguous.",
+  "output": "see prompt.md"
+}

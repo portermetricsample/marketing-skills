@@ -1,0 +1,22 @@
+# Run outputs — real client audits live OUTSIDE this repo (see SKILL.md data-safety rule)
+*-gads-audit*/
+*-gads-audit.html
+*audit*.html
+!google-ads/account-audit/_assembled-template/audit-template.html
+runs/
+data/raw/
+data/landings/
+*.csv
+*.jsonl
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/

@@ -1,0 +1,52 @@
+{
+  "skill": "structure-audit",
+  "doc": "Declarative spec: the agent SUBSTITUTES the <placeholders> and EXECUTES, doesn't re-compose. MCP paths: ../../../_framework/porter-mcp-calls.md",
+  "discovery": {
+    "account": {
+      "via": "fetch",
+      "tool_id": "tool:porter-accounts:list_accounts",
+      "args": { "component_name": "google-ads", "query": "<ACCOUNT_HINT>" },
+      "use": "the FULL object from the result as <ACCOUNT_OBJECT> (not the id string)"
+    }
+  },
+  "queries": [
+    {
+      "id": "structure",
+      "via": "execute",
+      "tool_id": "tool:porter-reporting:query_data",
+      "args": {
+        "accounts": ["<ACCOUNT_OBJECT>"],
+        "fields": [
+          "google_ads_keyword_info_text",
+          "google_ads_keyword_info_match_type",
+          "google_ads_campaign_name",
+          "google_ads_campaign_advertising_channel_type",
+          "google_ads_campaign_bidding_strategy_type",
+          "google_ads_ad_group_name",
+          "google_ads_impressions"
+        ],
+        "date_range": { "date_from": "<DATE_FROM_90D>", "date_to": "<DATE_TODAY>" },
+        "sort": [{ "field": "google_ads_impressions", "direction": "desc" }],
+        "limit": 5000
+      },
+      "paginate": "if total_rows == limit, repeat filtering campaign_name equals <each campaign> and merge (100% coverage)",
+      "on_field_error": "re-discover via search/get_tool_schema and update this spec (dynamic catalog)"
+    },
+    {
+      "id": "audience_optional",
+      "via": "execute",
+      "tool_id": "tool:porter-reporting:query_data",
+      "when": "only if audience claims in the names need to be verified",
+      "args": {
+        "accounts": ["<ACCOUNT_OBJECT>"],
+        "fields": ["google_ads_campaign_name", "google_ads_ad_group_name", "google_ads_ad_group_audience_view_id", "google_ads_impressions"],
+        "date_range": { "preset": "last_month" },
+        "limit": 1000
+      },
+      "note": "detects PRESENCE of audience per ad group; the NAME needs a join by criterion id; AGE is a separate demographic resource"
+    }
+  ],
+  "process": "pass the 'structure' result to process.py → produces inferred convention + deterministic findings (checks A/B/C/D) + theme_suspects for the LLM step",
+  "llm_step": "the model ONLY judges theme_suspects (semantic keyword↔ad group↔campaign alignment). Everything else comes already resolved by process.py",
+  "output": "see prompt.md (fixed format, ordered by severity)"
+}

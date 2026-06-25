@@ -1,0 +1,16 @@
+{
+  "_doc": "FICTIONAL fixture (Acme Insurance) for testing process.py. No real account data. Mirrors raw query_data output {columns, rows}.",
+  "columns": ["google_ads_search_term", "google_ads_keyword_info_text", "google_ads_keyword_info_match_type", "google_ads_campaign_name", "google_ads_ad_group_name", "google_ads_cost_micros"],
+  "rows": [
+    ["life insurance", "life insurance online", "EXACT", "Acme_Life_SEM", "Life - Exact", 800],
+    ["life insurance", "best life insurance", "PHRASE", "Acme_Life_SEM", "Best Life", 500],
+    ["life insurance", "cheap life insurance", "PHRASE", "Acme_Life_SEM", "Cheap Life", 430],
+    ["health insurance", "health insurance coverage", "EXACT", "Acme_Health_SEM", "Health - Exact", 90],
+    ["health insurance", "best dental insurance plan", "BROAD", "Acme_Dental_SEM", "Dental - Broad", 100],
+    ["life insurance canada", "life insurance canada", "EXACT", "Acme_Life_SEM", "Life - Exact", 300],
+    ["life insurance canada", "life insurance canada", "EXACT", "Acme_Life_45-54_Test", "Life - Exact", 120],
+    ["life insurance canada", "life insurance canada", "EXACT", "Acme_Life_55-64_Test", "Life - Exact", 110],
+    ["term insurance", "term life insurance", "EXACT", "Acme_Life_SEM", "Term Life", 200],
+    ["term insurance", "reasonable term life insurance", "BROAD", "Acme_Life_Broad_Test", "Reasonable", 80]
+  ]
+}
