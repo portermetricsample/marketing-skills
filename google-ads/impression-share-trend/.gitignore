@@ -1,0 +1,4 @@
+scripts/data/
+**/__pycache__/
+*.pyc
+scripts/example/acme_findings.json

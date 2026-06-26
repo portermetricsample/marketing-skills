@@ -1,0 +1,16 @@
+{
+ "account": "Acme Insurance (1234567890-1234567890)",
+ "period": {
+  "from": "2026-04-01",
+  "to": "2026-06-23"
+ },
+ "spend": {
+  "Acme_Auto_SEM_(TL)": 184200,
+  "Acme_Home_SEM_(HD)": 52400,
+  "Acme_Life_SEM_(TL)": 39800,
+  "Acme_Health_SEM_(HD)": 31100,
+  "Acme_Renters_SEM_(HA)": 19600,
+  "Acme_Pet_SEM_Test_(HA)": 8900,
+  "Acme_Brand_SEM_(BR)": 7300
+ }
+}
