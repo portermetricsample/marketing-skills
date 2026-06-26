@@ -63,7 +63,7 @@ classification** (no `state`, no `verdict` — that is the alignment sibling's f
           "ad_id": "1234567890",
           "impressions": 8400,
           "clicks": 210,
-          "ctr": 0.025,                       // native; recompute clicks/impressions if grouped coarsely
+          "ctr": 0.025,                       // the NATIVE ctr as a fraction — do NOT recompute clicks/impressions (Porter ad-grain impressions undercounts)
           "conversions": 6,
           "cvr": 0.0286,                      // conversions / clicks; null when clicks = 0
           "thin_volume": false                // true → annotate: ratio on too few clicks/conv to trust
@@ -83,8 +83,9 @@ classification** (no `state`, no `verdict` — that is the alignment sibling's f
 - **`quality_score` is `null` unless it passed the `≤ 10` check** — a value above 10 is an aggregation
   artifact (Porter sums it), not a score. Lead with the categorical grades, which are safe at any grain.
 - **Grades use the `grade` enum or `null`** — a missing historical grade is `null`, never `0`.
-- **`cvr` is computed**, not queried (`conversions / clicks`); `null` on zero clicks. `ctr` is native
-  but recompute `clicks / impressions` if ever grouped coarsely.
+- **`cvr` is computed**, not queried (`conversions / clicks`); `null` on zero clicks. **`ctr` is the
+  native field — do NOT recompute** `clicks / impressions` (Porter's ad-grain `impressions`
+  undercounts vs native ctr; verified live). Native ctr is a percentage → store it as a fraction.
 - **`thin_volume: true`** flags a ratio built on a handful of clicks/conversions — a note for the
   reader, not a judgment.
 - **Impression Share is campaign-grain** — it lives in `campaign_context`, printed once, not per ad group.

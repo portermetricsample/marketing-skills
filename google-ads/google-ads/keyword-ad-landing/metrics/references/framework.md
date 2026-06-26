@@ -46,11 +46,14 @@ group. Validated live: grouping a keyword above its raw criterion grain returned
 **29** — not 1–10. So:
 - **Only trust the numeric QS at one-row-per-keyword grain** (keyword text + match type, fine enough
   that each keyword resolves to a single criterion). If it comes back **> 10 it has been summed →
-  discard the number or re-pull finer.**
+  emit `quality_score: null`** (the deterministic default — don't divide, don't blind re-pull).
 - The **three categorical grades are safe** at any grain — lead with them; treat the numeric QS as
   secondary and gate it on the `≤ 10` sanity check.
-- **CTR also aggregates** as a metric — if grouped coarsely, recompute `clicks / impressions`
-  yourself rather than trusting the native `google_ads_ctr`.
+- **Use the native `google_ads_ctr` — do NOT recompute `clicks / impressions`.** Verified live
+  on a real Search account: Porter's ad-grain `impressions` undercounts, so `clicks / impressions`
+  ran ~3× the native ctr. Native `ctr` returns as a percentage → emit it as a **fraction**
+  (`ctr: 0.0397`, **not** `3.97`); if the value comes back ≥ 1 it is still a percent → divide by 100.
+  To roll multiple ads up to the journey, clicks-weight the native ctr.
 
 ## How it pairs with the alignment skill
 Same unit (one journey = campaign + ad group), same three stages, same scope. When both run for a
@@ -79,7 +82,8 @@ the two facts next to each other.
 - **Don't classify.** Print the numbers; let the alignment verdict and the reader interpret. No
   "good/bad", no thresholds.
 - **Sanity-check the numeric QS (`≤ 10`).** It is a summing metric; a value above 10 is an
-  aggregation artifact, not a real score. Lead with the categorical grades.
+  aggregation artifact, not a real score → **emit `quality_score: null`** and lead with the
+  categorical grades. A missing grade is `null` too, never `0`.
 - **Flag thin volume, don't judge it.** A CTR or CVR on a handful of clicks is noise — annotate the
   click / conversion count next to the ratio so the reader knows when a number isn't yet trustworthy.
   That's a note, not a verdict.

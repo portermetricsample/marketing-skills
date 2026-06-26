@@ -19,8 +19,11 @@ it never scrapes (that is the alignment sibling's job) and it computes one ratio
 | C | `tool:porter-reporting:query_data` | `execute` | ad-behavior pull, below | CTR (native) + the counts to compute CVR — **ad grain**. |
 
 Three separate `query_data` calls **because of grain**, not because of a combine error: grades live
-at keyword grain, IS at campaign grain, CTR/CVR at ad grain. Filter **every** pull to **Search + the
-chosen ad groups** and sort by `google_ads_cost_micros desc`, exactly like the alignment skill.
+at keyword grain, IS at campaign grain, CTR/CVR at ad grain. **Every** pull — A, B AND C — carries
+the SEARCH filter **literally** and sorts by `google_ads_cost_micros desc`:
+`[[{ "field":"google_ads_campaign_advertising_channel_type", "operator":"equals", "value":"SEARCH" }]]`
+(A and C also AND the chosen ad groups; B ANDs the chosen campaigns — IS is campaign-grain). It is
+easy to drop the filter on the campaign-grain pull B — don't.
 
 ## Pull A — Google grades (`keyword_view`, keyword + match type)
 The four `historical_*` grades **do combine** with `campaign_name` / `ad_group_name` (validated — no
@@ -36,7 +39,9 @@ The four `historical_*` grades **do combine** with `campaign_name` / `ad_group_n
 ```
 
 > Read the three categorical grades directly. For the numeric QS apply the `≤ 10` sanity check; if it
-> exceeds 10 it was summed across instances → re-pull at a finer grain or omit the number.
+> exceeds 10 it was summed across instances → **emit `quality_score: null`** (don't divide, don't
+> blind re-pull). A missing grade is `null` too, never `0`.
+> **Filter (this pull):** `[[{channel_type = SEARCH}], [{ad_group_name in [...chosen...]}]]`, sort `cost_micros desc`.
 
 ## Pull B — Search Impression Share (campaign grain)
 IS is coarser than the journey, so it prints as **campaign context**, not per ad group. Use the
@@ -50,7 +55,9 @@ IS is coarser than the journey, so it prints as **campaign context**, not per ad
 ```
 
 High rank-lost → loses the top auction on rank (bid / QS / assets); high budget-lost → capped by
-budget. Disclose which. (Account-total IS does not aggregate cleanly — keep it at campaign grain.)
+budget. Set `is_lost_to` to whichever of rank-lost / budget-lost is **larger**, and disclose it.
+(Account-total IS does not aggregate cleanly — keep it at campaign grain.)
+**Filter (this pull):** `[[{channel_type = SEARCH}], [{campaign_name in [...chosen...]}]]`, sort `cost_micros desc` — easy to forget the SEARCH filter here; include it.
 
 ## Pull C — Ad behavior (ad grain, `ad_id`)
 CTR is native; CVR is computed. Split from A because this is ad grain, not keyword grain:
@@ -61,14 +68,21 @@ CTR is native; CVR is computed. Split from A because this is ad grain, not keywo
  "google_ads_cost_micros"]
 ```
 
-Compute **CVR = `conversions / clicks`** per ad (guard divide-by-zero → `null`, not `0`). `ctr` also
-aggregates as a metric — if you ever group it coarsely, recompute `clicks / impressions` yourself.
+Compute **CVR = `conversions / clicks`** per ad (guard divide-by-zero → `null`, not `0`). **Use the
+native `ctr` — do NOT recompute `clicks / impressions`:** verified live on a real Search account that
+Porter's ad-grain `impressions` undercounts, so the recompute ran ~3× the native ctr. Native ctr
+returns as a percentage → emit it as a **fraction** (`ctr: 0.0397`, **not** `3.97`); if the value
+comes back ≥ 1 it is still a percent → divide by 100. Clicks-weight it to roll ads up to a journey.
+**Filter (this pull):** `[[{channel_type = SEARCH}], [{ad_group_name in [...chosen...]}]]`, sort `cost_micros desc`.
 
 ## Tools NOT needed here (keep it minimal)
 - `scrape` / `crawl` — not used. This is instrumentation; the *alignment* skill reads the page.
 - `list_fields` / `list_custom_fields` — only to re-validate a field name if a query fails.
 
 ## Gotchas
+- **`reauth_required` → STOP, don't degrade.** If any `query_data` returns `detail:"reauth_required
+  component=google-ads url=…"`, the Google Ads connection expired — surface that URL, ask the user to
+  reauthorize, and resume; never emit zeros or a partial pull as if it were the data.
 - **`cost_micros > 0` auto-filter:** asking for cost hides 0-spend rows — fine for ranking by spend.
 - **Grades are historical and can be missing.** New / low-volume keywords return no grade → blank, not `0`.
 - **`conversions`, not `all_conversions`** for CVR (primary actions = the UI). Offer `all_conversions` only if the user asks for phone/store/cross-device.

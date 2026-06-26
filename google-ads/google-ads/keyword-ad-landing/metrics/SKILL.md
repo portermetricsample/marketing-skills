@@ -82,14 +82,17 @@ group.** Validated live: grouping a keyword above its raw criterion grain return
 **29** — not 1–10. So:
 - **Only trust the numeric QS at one-row-per-keyword grain** (keyword text + match type, fine
   enough that each keyword resolves to a single criterion). If it comes back **> 10, it's been
-  summed → discard or re-pull finer.**
+  summed → emit `quality_score: null`** (the deterministic default — don't divide, don't blind re-pull).
 - The **three categorical grades are safe** at any grain — lead with them; treat the numeric QS as
   secondary and gate it on the `≤ 10` sanity check.
 
 ## Pulls (respecting Porter's field-combination rules — validated)
 
-Filter every pull to **Search + the chosen ad groups** and sort by `google_ads_cost_micros desc`,
-exactly like the alignment skill.
+**Every pull — A, B AND C — carries the SEARCH filter literally** and sorts by
+`google_ads_cost_micros desc`, exactly like the alignment skill:
+`[[{ "field":"google_ads_campaign_advertising_channel_type", "operator":"equals", "value":"SEARCH" }]]`
+(A and C also AND the chosen ad groups; B ANDs the chosen campaigns — IS is campaign-grain). It is
+easy to drop the filter on the campaign-grain pull B — don't.
 
 **A · Google grades — `keyword_view`, keyed by keyword (+ match type).** The four `historical_*`
 grades **DO combine with `campaign_name` / `ad_group_name`** (validated — no "cannot be combined"
@@ -105,7 +108,7 @@ keep the QS grain fine (see the aggregation trap):
 ```
 
 > Read the categorical grades directly. For the numeric QS, apply the `≤ 10` sanity check; if it
-> exceeds 10 it was summed across instances → re-pull at a finer grain or omit the number.
+> exceeds 10 it was summed across instances → emit `quality_score: null` (don't divide, don't blind re-pull). A missing grade is `null` too, never `0`.
 
 **B · Search Impression Share — campaign level.** IS is campaign-grain (coarser than the journey),
 so it prints as **campaign context**, not per ad group:
@@ -129,9 +132,11 @@ keep it at campaign grain.)
  "google_ads_cost_micros"]
 ```
 
-Compute **CVR = `conversions / clicks`** per ad (guard divide-by-zero → null, not 0). Note: `ctr`
-also aggregates as a metric — if you ever group it coarsely, recompute `clicks / impressions`
-yourself rather than trusting the native field.
+Compute **CVR = `conversions / clicks`** per ad (guard divide-by-zero → null, not 0). **Use the
+native `ctr` — do NOT recompute `clicks / impressions`:** verified live on a real Search account that
+Porter's ad-grain `impressions` undercounts, so the recompute ran ~3× the native ctr. Native ctr
+returns as a percentage → emit it as a **fraction** (`ctr: 0.0397`, **not** `3.97`); if the value
+comes back ≥ 1 it is still a percent → divide by 100. Clicks-weight it to roll ads up to a journey.
 
 ## How to print it
 
@@ -147,7 +152,8 @@ yourself rather than trusting the native field.
 - **Don't classify.** Print the numbers; let the alignment verdict and the reader interpret. No
   "good/bad", no thresholds.
 - **Sanity-check the numeric QS (`≤ 10`).** It is a summing metric; a value above 10 is an
-  aggregation artifact, not a real score. Lead with the categorical grades.
+  aggregation artifact, not a real score → **emit `quality_score: null`** and lead with the
+  categorical grades. A missing grade is `null` too, never `0`.
 - **Flag thin volume, don't judge it.** A CTR or CVR on a handful of clicks is noise — annotate the
   click/conversion count next to the ratio so the reader knows when a number is not yet trustworthy.
   That's a note, not a verdict.

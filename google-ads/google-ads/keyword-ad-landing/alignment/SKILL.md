@@ -77,6 +77,7 @@ Non-negotiable MCP rules (verified live against the catalog):
 - **`date_range`**: object `{"date_from","date_to"}` OR `{"preset": ...}`. Valid presets (these 7 only): `today, yesterday, last_7_days, last_30_days, last_month, this_month, this_year`. No `last_90_days` / `last_quarter` → use explicit dates.
 - **`filters`** = list of lists: outer list = AND, inner list = OR.
 - **`cost_micros > 0` footgun**: if `google_ads_cost_micros` is in `fields`, the MCP drops zero-spend rows (fine for this skill, which goes by spend — just know it).
+- **`reauth_required` → STOP and ask the user to reauthorize.** If `query_data` fails with `detail: "reauth_required component=google-ads url=…"`, the Google Ads connection expired — surface that URL to the user and resume after they reconnect; never proceed on a partial/empty pull. (Verified live: the `scrape` tool uses a separate connection and can keep working even while google-ads needs reauth — so don't assume the pulls are fine just because scraping works.)
 
 ## Account-discovery step — NEVER invent the id
 ```
@@ -127,39 +128,36 @@ terms (giving journeys with fake spend). Always `sort` by cost + `limit` ≥ exp
 
 ### 3) Scrape the landing pages (Porter's native scrape tool)
 Take the unique *final URLs* from step 2b and scrape them with Porter's `tool:porter-tools:scrape`
-(via `fetch`, read-only). Ask for **two formats in one call**: `markdown` (the whole page, to
-judge the coherence of ALL the copy) and `json` (the structured H1/hero, the highest-weight
-signal). One call per URL → save to `data/landings/<slug>.json`.
+(via `fetch`, read-only). Ask for **markdown only** — the clean text of the whole page. The AI
+reads that page and identifies the hero/H1 itself; there is no rigid field extraction. One call per
+URL → save the **full scrape response** (it carries `metadata.sourceURL`) to `data/landings/<name>.json`;
+the assembler joins on that `sourceURL`, **not** on the filename, so the file can be named anything.
 ```
 fetch(tool_id="tool:porter-tools:scrape", args={
   "url": "<final_url>",
-  "formats": ["markdown", "json"],
+  "formats": ["markdown"],
   "onlyMainContent": true,
-  "waitFor": 3500,                       # let JS render; SPA sites return empty without this
-  "proxy": "auto",                       # bump to "stealth" if the site blocks bots
-  "jsonOptions": { "schema": {
-    "h1":               "string",        # the literal H1 — the single most important signal
-    "hero_headline":    "string",        # the largest hero headline (may equal the H1)
-    "hero_subheadline": "string",
-    "primary_offer":    "string",
-    "primary_cta":      "string",
-    "product_named":    "string",        # what the page sells, in its own words (vertical-agnostic)
-    "form_summary":     "string",        # what the form asks, if any (vertical-agnostic)
-    "proof_points":     ["string"]
-  }}
+  "waitFor": 3500,        # let JS render; SPA sites return empty without this
+  "proxy": "auto"         # bump to "stealth" if the site blocks bots
 })
 ```
-The `json` gives the hero fields (main focus); the `markdown` gives the rest of the page so
-the AI can judge whole-page coherence. If both come back empty, retry with `"proxy":
-"stealth"`; if still empty, mark that landing as not-scraped (L3/L4 = REVIEW, don't guess).
+No `jsonOptions`, no structured schema: pulling the page text and letting the AI read it is simpler
+and more robust than a rigid extraction that often comes back empty. `assemble.py` caps very long
+pages (first ~12K chars — the top of the page carries the most weight) so a huge page can't blow
+context. If the markdown comes back empty, retry with `"proxy": "stealth"`; if still empty, mark
+that landing as not-scraped (`scraped:false` → L3/L4 = REVIEW, don't guess).
 
-> **Degrade gracefully:** if a page returns empty even after `proxy:"stealth"`, mark that landing
-> not-scraped → L3/L4 = REVIEW for that journey (report the keyword↔ad half honestly; never guess page
-> content, never swap in an external scraper — `tool:porter-tools:scrape` is the landing source).
+> ⚠️ **Temporary status:** the scrape tool may return `{"error":"mcp_not_found","mcp_id":"firecrawl"}`
+> — it is being restored by the Porter dev team. While it's down, every landing comes back
+> empty → L3/L4 = REVIEW for all journeys (the skill degrades gracefully and reports the
+> keyword↔ad half honestly; it does NOT guess page content). Keep this tool as the landing
+> source — do not swap in an external scraper.
 
-> **Focus:** the H1/hero carries the most weight (it's the first thing the visitor sees),
-> **but evaluate the whole page and all the copy** — coherence has to hold top to bottom,
-> not just above the fold.
+> **Focus:** the scrape also returns the page's own **`<title>`** (the assembler carries it as
+> `page_title`) — that is the **most reliable hero/identity signal**, because `onlyMainContent` can
+> push the visible hero *below a form* in the markdown body (so the first markdown heading is often
+> NOT the hero). **Lead with `page_title`**, then read the **markdown top-to-bottom** (weight the top
+> most). Coherence has to hold top to bottom, not just above the fold.
 
 ### 4) Assemble the packets (Python — pure function)
 ```bash
@@ -175,30 +173,45 @@ python3 assemble.py \
 `(campaign, ad_group, search_term, keyword, match_type, cost)` shape `--intent` expects — so
 no pre-join is needed; `assemble.py` rolls it up itself.
 
-Produces `data/packets.json`: one journey per ad group with its `cost` (for ranking), intent
-(top keywords → top search terms), and **`ads[]` at ad level** — each ad with its
-headlines/descriptions, its `final_url`, and its scraped `landing` (the hero `json` fields +
-the full-page `markdown`). Compact, ready to judge (it does not dump thousands of rows into context).
+Produces `data/packets.json`: one journey per ad group with its `spend` (for ranking),
+`ad_count` / `landing_count` (the "N ads · M pages" badge), intent (top keywords → top search
+terms), **`pairings[]`** — one per **ad → its own landing page** (the judgment unit: each ad's
+headlines/descriptions + its `final_url` + a light view of its page), and **`destinations[]`** —
+the unique pages this group points to, each carried as **capped page markdown** (joined to the ad on
+the **canonical full URL**, not a slug; markdown stored once per page). Compact, ready to judge.
 
 ### 5) Judge & present (AI, against `references/framework.md`)
 Read `data/packets.json` and apply the rubric. **One finding per ad group**, with the
-**keyword breakdown inside its Intent block** (never an invented word like "journey"). Grade
-the relevance links (search-term↔keyword, keyword↔ad, ad↔landing **reading the H1/hero and the
-whole page**) and give the **three-state verdict** shown as **Aligned / Needs review / Broken**
-(no 0–10 score).
+**keyword breakdown inside its Intent block** and the **ad/page breakdown inside `pairings[]`**
+(never an invented word like "journey"). Judge **each pairing** (ad → its own page) on its own: grade
+L2 keyword↔ad, L3 ad↔landing (**reading the H1/hero and the whole page**), L4 intent↔landing, and give
+that pairing a **three-state verdict** (Aligned / Needs review / Broken, no 0–10 score). L1 (search
+term↔keyword) is judged once on the shared `intent[]`. The **group verdict = the worst pairing
+verdict** (dropped to Broken on severe keyword drift). **Never tie a keyword to a specific ad** —
+Google rotates ads; break the group down by ad → page, not keyword → ad.
+
+**You produce the landing read** (the script no longer extracts it). For each `destination`, **lead
+with its `page_title`** (the page's own `<title>` — the most reliable hero/identity signal; the
+`markdown` body can open on a form because `onlyMainContent` buries the hero), then read the
+`markdown`. Write: `destination.h1` (the page's hero/identity — usually the `page_title`, quoted),
+`destination.page_summary` (one plain line of what the page actually offers, in its own words), and
+`destination.mismatch_word` (the specific word that breaks the scent when the page names a different
+product/place than the ad/keyword promised). If a destination has `scraped:false` (empty markdown and
+no title), set those to null/empty and grade L3/L4 **unknown** — never guess the page.
 
 Emit each finding using the **output contract** in the framework ("Output contract — what each
-finding must CONTAIN"): Identity · Verdict · **Intent** (keywords→search terms) · **Message**
-(ad) · **Destination** (the literal URL + a plain summary of the page) · **Recommendation**
-(break type + plain problem + concrete action). This is **content only — visuals/layout are
-handled by the design/reporting skills**, not here.
+finding must CONTAIN"): Identity · Verdict (group rollup) · **Counts** (`ad_count` · `landing_count`,
+the badge) · **Intent** (keywords→search terms) · **Pairings** (per ad → its landing: the ad, the
+literal URL + a plain page summary, L2/L3/L4, the pairing verdict, a fix when not aligned) · optional
+finding-level **keyword-drift fix**. This is **content only — visuals/layout are handled by the
+design/reporting skills**, not here.
 
 Close with the roll-up: **$ on Broken keywords** (+ $ on Needs-review), the breaks **grouped into
 named systemic patterns with summed spend** (e.g. "Dental keywords → a 'Health' page · $9.2K"),
 and top fixes by money recovered.
 
 ## Files
-- `scripts/assemble.py` — deterministic assembler (MCP pulls + landings → `packets.json`). The data deliverable. Judges nothing; just collapses the huge search-term dump to one packet per ad group.
+- `scripts/assemble.py` — thin deterministic assembler (MCP pulls + landings → `packets.json`). Judges nothing; collapses the huge search-term dump to one packet per ad group, joins each landing to its ad on the **canonical full URL** (not a last-segment slug), and carries the page as **capped markdown** for the AI to read.
 - `references/framework.md` — **the judgment rubric** (relevance links, three states, four break types). The IP.
 - The landing scrape uses `tool:porter-tools:scrape` from the Porter MCP (step 3).
 - `data/raw/*.json`, `data/landings/*.json`, `data/packets.json` — sample data from a real account (anonymize before sharing).

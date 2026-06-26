@@ -4,14 +4,28 @@ What this skill **emits**: a JSON object (the canonical truth), a specialization
 [`output-contract.md`](../../../_framework/output-contract.md). This is the handoff to
 [`porter-reporting`](https://github.com/portermetricsample/porter-reporting), which renders it
 (table, slide, doc). **No presentation here** — emojis/tables/colors are a rendering concern, not the
-analysis output. The fields below mirror the framework's "Output contract — what each finding must
-CONTAIN" (Identity · Verdict · Intent · Message · Destination · Recommendation).
+analysis output.
+
+## The output unit: one finding per AD GROUP, broken into AD → LANDING pairings
+One finding = one ad group. Inside it:
+- **`intent[]`** — the keywords + their search terms (shared across the group). This is **L1**.
+- **`pairings[]`** — one per **ad → its OWN landing page**. Each pairing is judged on its own
+  (L2/L3/L4 + verdict + fix). This is where ad/page irrelevance is found.
+- **`ad_count` / `landing_count`** — how many distinct ads and pages the group runs (the
+  "N ads · M pages" badge). When both are `1`, the single pairing is the whole story.
+
+Why pairings and not one ad: a group can run several ads, each with its own final URL. Google rotates
+which ad serves, so you can **NOT** attribute a keyword to a specific ad — keywords are shared across
+the group's ads. The honest, knowable unit is **ad → its landing page**. **NEVER emit a keyword→ad link.**
 
 ## Enums (the only allowed values)
-- `verdict` / `state`: `aligned` · `needs_review` · `broken` (three states — **no 0–10 score**)
-- `break_type` (only when `broken`): `wrong_page` · `copy_gap` · `keyword_drift` · `ad_miss`
-- `link.grade` (the four relevance links L1–L4): `pass` · `partial` · `fail` · `unknown`
+- `verdict` / `state`: `aligned` · `needs_review` · `broken` (three states — **no 0–10 score**). Used on
+  **both** the finding (group rollup) **and** each pairing.
+- `break_type` (only when not aligned): `wrong_page` · `copy_gap` · `keyword_drift` · `ad_miss`
+- `link.grade` (L2–L4, inside a pairing): `pass` · `partial` · `fail` · `unknown`
 - `match_type`: `EXACT` · `PHRASE` · `BROAD`
+- `off_reason` (only on a search term with `on_intent:false`): `competitor_brand` · `wrong_product` ·
+  `wrong_geo` · `informational`
 
 ## Schema
 
@@ -22,72 +36,83 @@ CONTAIN" (Identity · Verdict · Intent · Message · Destination · Recommendat
     "connector": "google-ads",
     "skill": "keyword-ad-landing-alignment",
     "period": { "from": "2026-05-01", "to": "2026-05-31" },
-    "coverage": {                          // step 0 — what the skill covers vs what's out
-      "search_spend": 41200,               // SEARCH (covered)
-      "uncovered_spend": 18800,            // PMax / Demand Gen / Shopping (no keyword↔term pair)
+    "coverage": {                          // step 0 — SEARCH (covered) vs what's out
+      "search_spend": 41200,
+      "uncovered_spend": 18800,
       "note": "$18.8K in PMax/Demand Gen is outside this skill (no search_term_view)."
     },
     "journeys_analyzed": 12,
     "currency": "CAD"
   },
 
-  // Executive synthesis — exactly three strings, insight-first. Reporting renders it before any finding.
+  // Executive synthesis — exactly three strings, insight-first.
   "synthesis": {
-    "headline":  "One sentence: how much spend flows through broken journeys + the single highest-leverage fix.",
-    "diagnosis": "Where the chain breaks most: the dominant break type + the systemic pattern (e.g. dental keywords landing on a generic Health page).",
+    "headline":  "How much spend flows through broken journeys + the single highest-leverage fix.",
+    "diagnosis": "Where the chain breaks most: the dominant break type + the systemic pattern.",
     "action":    "The one fix to take now — where / what / why."
   },
 
-  // One finding per AD GROUP (the framework's output unit). The keyword breakdown lives INSIDE Intent.
+  // One finding per AD GROUP. Keyword breakdown in intent[]; ad/page breakdown in pairings[].
   "findings": [
     {
-      "entity": { "level": "ad_group", "ad_group": "Dental_Exact", "campaign": "Acme_Health_SEM" },  // Identity — keyed by (campaign, ad_group)
-      "verdict": "broken",                 // Verdict — aligned | needs_review | broken (the three states)
-      "spend": 9230,                       // context only; does NOT move the verdict (relevance is on the words)
+      "entity": { "level": "ad_group", "ad_group": "Dental_Exact", "campaign": "Acme_Health_SEM" },
+      "verdict": "broken",        // GROUP rollup = worst pairing verdict (drops to broken on severe keyword drift)
+      "spend": 9230,              // context only; does NOT move the verdict
+      "ad_count": 2,              // badge — distinct ads in this group
+      "landing_count": 2,         // badge — distinct landing pages
 
-      // The four relevance links, each graded with a one-line reason grounded in the data.
-      "links": [
-        { "link": "L1", "name": "search_term_to_keyword", "grade": "pass",
-          "reason": "Searches like 'dental insurance plans' echo the keyword." },
-        { "link": "L2", "name": "keyword_to_ad",         "grade": "pass",
-          "reason": "Headlines lead with 'Dental Insurance'." },
-        { "link": "L3", "name": "ad_to_landing",         "grade": "fail",
-          "reason": "Page H1 reads 'Health Insurance Plans' — never names dental." },
-        { "link": "L4", "name": "intent_to_landing",     "grade": "fail",
-          "reason": "A dental searcher cannot find a dental offer on the page." }
-      ],
-
-      // Intent — the keyword breakdown (each keyword + match type + its top real search terms).
+      // INTENT (shared across the group) — keywords + their real search terms. This IS L1.
+      // Mark EVERY off-intent term (on_intent:false + off_reason), not only inside broken pairings.
       "intent": [
         { "keyword": "dental insurance", "match_type": "EXACT", "spend": 5100,
           "top_search_terms": [
             { "term": "dental insurance plans", "spend": 2100, "on_intent": true },
-            { "term": "best dental coverage",   "spend": 1400, "on_intent": true }
+            { "term": "brightsmile dental",     "spend": 600,  "on_intent": false, "off_reason": "competitor_brand" }
           ] }
       ],
 
-      // Message — the ad the searcher saw (lead headlines + the description), at ad level.
-      "message": {
-        "ad_id": "692100000001",
-        "headlines": ["Affordable Dental Insurance", "Plans From $19/mo", "Get a Quote Today"],
-        "descriptions": ["Compare dental plans and enrol online in minutes."]
-      },
+      // PAIRINGS — one per ad → its OWN landing page. Judge EACH against the shared intent.
+      "pairings": [
+        {
+          "ad_id": "692100000001",
+          "headlines": ["Affordable Dental Insurance", "Plans From $19/mo", "Get a Quote Today"],
+          "descriptions": ["Compare dental plans and enrol online in minutes."],
 
-      // Destination — the LITERAL final URL + a plain summary of what the page actually says.
-      "destination": {
-        "final_url": "acme.com/health-insurance",     // the real URL, not the page title
-        "page_summary": "Hero headline 'Health Insurance Plans'; lists health/medical coverage; no mention of dental.",
-        "h1": "Health Insurance Plans",                // highest-weight signal (may be null if not scraped)
-        "mismatch_word": "Health",                     // the specific word that reveals the break
-        "scraped": true                                // false → L3/L4 = unknown → verdict cannot be 'aligned'
-      },
+          // DESTINATION — the LITERAL final URL + the AI's reading of the scraped page.
+          "destination": {
+            "final_url": "acme.com/health-insurance",     // the real URL, not the page title
+            "page_title": "Health Insurance Plans",        // the page's own <title> (most reliable hero signal)
+            "h1": "Health Insurance Plans",                // the AI's read of the hero (null if not scraped)
+            "page_summary": "Hero 'Health Insurance Plans'; lists medical coverage; never names dental.",
+            "mismatch_word": "Health",                     // the word that reveals the break
+            "scraped": true                                // false -> L3/L4 unknown -> pairing can't be 'aligned'
+          },
 
-      // Recommendation — break type (when broken) + plain problem + concrete action. {where, what, why}.
+          // LINKS for THIS pairing — L2 keyword↔ad, L3 ad↔landing, L4 intent↔landing.
+          // (L1 search_term↔keyword lives in intent[] above, as on_intent/off_reason.)
+          "links": [
+            { "link": "L2", "name": "keyword_to_ad",     "grade": "pass", "reason": "Headlines lead with 'Dental Insurance'." },
+            { "link": "L3", "name": "ad_to_landing",     "grade": "fail", "reason": "Page H1 reads 'Health Insurance' — never names dental." },
+            { "link": "L4", "name": "intent_to_landing", "grade": "fail", "reason": "A dental searcher cannot find a dental offer." }
+          ],
+
+          "verdict": "broken",         // THIS pairing's state
+          "recommendation": {
+            "break_type": "wrong_page",
+            "where": "Acme_Health_SEM › Dental_Exact › ad 692100000001",
+            "what":  "Repoint this ad to a dedicated dental page, or lead the page hero with 'Dental'.",
+            "why":   "The page headline says 'Health', not 'dental' — the scent breaks on arrival."
+          }
+        }
+        // ... a second pairing for the group's other ad → its (possibly different) page
+      ],
+
+      // Optional FINDING-level fix for KEYWORD DRIFT (an L1 problem, not tied to one ad/page).
       "recommendation": {
-        "break_type": "wrong_page",                    // null when not broken
+        "break_type": "keyword_drift",
         "where": "Acme_Health_SEM › Dental_Exact",
-        "what":  "Repoint the ad to a dedicated dental page, or lead that page's H1/hero with 'Dental'.",
-        "why":   "The page headline says 'Health', not 'dental' — the searcher's scent breaks on arrival."
+        "what":  "Add 'brightsmile dental' as a negative, or tighten the match type.",
+        "why":   "$600 is going to a competitor-brand search this keyword shouldn't catch."
       }
     }
   ],
@@ -95,27 +120,32 @@ CONTAIN" (Identity · Verdict · Intent · Message · Destination · Recommendat
   // Roll-up — always end with this (size of the problem + systemic patterns + top fixes).
   "rollup": {
     "byVerdict": { "aligned": 5, "needs_review": 3, "broken": 4 },
-    "broken_spend": 21400,                 // $ flowing through Broken journeys (the headline number)
+    "broken_spend": 21400,
     "needs_review_spend": 6800,
-    "patterns": [                          // the breaks grouped into NAMED systemic patterns with summed spend
+    "patterns": [
       { "label": "Dental keywords → a generic 'Health' page", "break_type": "wrong_page", "spend": 9200 }
     ],
-    "topFixes": [ /* the highest-$ recommendations, ordered by money recovered */ ]
+    "topFixes": [ /* highest-$ recommendations, ordered by money recovered */ ]
   }
 }
 ```
 
 ## Rules
-- **`verdict` is a STATE, never a number** — `aligned` / `needs_review` / `broken`. Aggregation: any
-  clear `fail` link → `broken`; else any `unknown`/ambiguous → `needs_review`; else → `aligned`.
-- **One finding per ad group**, keyed by `(campaign, ad_group)`. The keyword breakdown lives inside
-  `intent[]` — never invent a unit word like "journey".
-- **The verdict is on the WORDS only.** `spend` is context — it does NOT move the verdict.
-  Never read conversions/CPA/CVR into a relevance grade.
-- **Empty scrape → `scraped:false` → L3/L4 `unknown` → verdict `needs_review`** (never `aligned`,
-  never `broken`). Don't guess page content.
+- **`verdict` is a STATE, never a number** — on **both** the finding and each pairing. Pairing
+  aggregation: any clear L3/L4 `fail` → `broken`; else any `unknown`/ambiguous → `needs_review`; else
+  `aligned`. The FINDING verdict = the **worst pairing verdict**, dropped to `broken` on severe keyword
+  drift (L1).
+- **One finding per `(campaign, ad_group)`.** The same ad-group name in two campaigns = two findings.
+- **`pairings[]` is the ad→landing unit.** `ad_count` / `landing_count` = the distinct counts (the
+  badge). When both are `1` there is exactly one pairing — the whole story.
+- **NEVER emit a keyword→ad link.** Google rotates ads; keywords are shared across the group's ads.
+  Break the group down by **ad → its own page**, not by keyword → ad.
+- **The verdict is on the WORDS only.** `spend` is context — it does NOT move the verdict. Never read
+  conversions/CPA/CVR into a relevance grade.
+- **Empty scrape → `scraped:false` → that pairing's L3/L4 `unknown` → pairing `needs_review`** (never
+  `aligned`). Don't guess page content.
 - **Ground every claim** — quote the search `term`, the `headline`, the page (`h1`/`mismatch_word`).
-- **Weight by spend, not row count.** Search-term coverage is partial (Google hides low-volume terms);
-  the ad group's real spend is its `spend`, not the summed search-term cost.
+- **Weight by spend, not row count.** Search-term coverage is partial (Google hides low-volume terms).
 - **Brand is its own case** — a brand keyword → homepage is usually `aligned`.
-- `synthesis` is **exactly three strings** (`headline` / `diagnosis` / `action`). No `highlights`.
+- `synthesis` is **exactly three strings** (`headline` / `diagnosis` / `action`).
+```
