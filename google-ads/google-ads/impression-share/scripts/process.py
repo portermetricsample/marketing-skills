@@ -28,12 +28,29 @@ F_IS     = "google_ads_search_impression_share"
 F_RANK   = "google_ads_search_rank_lost_impression_share"
 F_BUDGET = "google_ads_search_budget_lost_impression_share"
 F_IMPR   = "google_ads_impressions"
+# top-of-page (premium position) — used by the SNAPSHOT mode (current period)
+F_TOP     = "google_ads_search_top_impression_share"
+F_ABSTOP  = "google_ads_search_absolute_top_impression_share"
+F_RANKTOP = "google_ads_search_rank_lost_top_impression_share"
 
 # --- thresholds (starting heuristics; tune against the curves, see framework §5) ---
 DRIVER_MATERIAL = 0.10   # a loss channel must be >= this to name it
 DRIVER_MIXED    = 0.20   # both channels >= this -> mixed
 LOW_VOL_IMPR    = 1500   # campaign total impressions over the window below this -> low-confidence
 RECENT_WEEKS    = 3      # window for the "current" driver read
+SNAPSHOT_DAYS   = 30     # the "current period" window for the snapshot mode
+
+
+def cap_verdict(rk, bg):
+    """Snapshot cap from recent rank-lost vs budget-lost (0-1 fractions). Ports the snapshot framework §3."""
+    rkp, bgp = rk * 100, bg * 100
+    if rkp >= 20 and bgp >= 20:
+        return "mixed", "rank_limited"          # both high -> fix rank first, then fund
+    if rkp >= 10 and rkp > bgp:
+        return "rank", "rank_limited"
+    if bgp >= 10 and bgp > rkp:
+        return "budget", "budget_limited"
+    return "none", "healthy"
 
 
 def fnum(v):
@@ -152,7 +169,9 @@ def main(rows_path, meta_path=None):
         if is_ == 0 and rk == 0 and bg == 0:
             continue  # non-Search (DEMAND_GEN etc.) — IS family is meaningless there
         by_camp[r.get(F_CAMP)].append({"date": r.get(F_DATE), "is": is_, "rank": rk,
-                                       "budget": bg, "impr": impr})
+                                       "budget": bg, "impr": impr,
+                                       "top": fnum(r.get(F_TOP)), "abstop": fnum(r.get(F_ABSTOP)),
+                                       "ranktop": fnum(r.get(F_RANKTOP))})
 
     all_dates = [to_date(r["date"]) for daily in by_camp.values() for r in daily]
     if not all_dates:
@@ -171,11 +190,22 @@ def main(rows_path, meta_path=None):
         total_impr = sum(w["impr"] for w in weeks)
         low_vol = total_impr < LOW_VOL_IMPR
         is_now, is_then = series[-1], series[0]
+        # --- snapshot mode: current-period (last SNAPSHOT_DAYS days) impression-weighted, incl. top-of-page ---
+        cutoff = dmax - datetime.timedelta(days=SNAPSHOT_DAYS - 1)
+        recent_d = [d for d in daily if to_date(d["date"]) >= cutoff] or daily
+        cti = sum(d["impr"] for d in recent_d) or 1
+        cw = lambda k: sum(d.get(k, 0) * d["impr"] for d in recent_d) / cti
+        cur_rk, cur_bg = cw("rank"), cw("budget")
+        cap, verdict = cap_verdict(cur_rk, cur_bg)
+        current = {"is": round(cw("is"), 4), "top": round(cw("top"), 4), "abs_top": round(cw("abstop"), 4),
+                   "rank_lost": round(cur_rk, 4), "budget_lost": round(cur_bg, 4),
+                   "rank_lost_top": round(cw("ranktop"), 4), "cap": cap, "verdict": verdict}
         # --- render-handoff fields (consumed by the porter-reporting impression-share-trend-monitor) ---
         n = len(weeks); win = 4 if n >= 8 else max(1, n // 2)
         wavg = lambda ws: sum(w["is"] * w["impr"] for w in ws) / (sum(w["impr"] for w in ws) or 1) * 100
         campaigns.append({
             "campaign": camp,
+            "current": current,
             "trend_label": label,
             "is_now": round(is_now, 4),
             "is_then": round(is_then, 4),
@@ -209,7 +239,7 @@ def main(rows_path, meta_path=None):
         dw[c["driver"]] += c["impressions"]
     dominant_driver = max(dw, key=dw.get) if dw else "none"
 
-    meta = {"connector": "google-ads", "skill": "impression-share-trend", "grain": "weekly (from daily)"}
+    meta = {"connector": "google-ads", "skill": "impression-share", "grain": "weekly (from daily)"}
     meta.update(meta_extra)
 
     out = {

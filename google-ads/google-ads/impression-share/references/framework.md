@@ -1,9 +1,9 @@
 # Framework: Impression Share Trend & Driver Diagnosis
 
-Built on [`../../../../_framework/ad-rank-and-impression-share.md`](../../../../_framework/ad-rank-and-impression-share.md)
+Built on [`../../../_framework/ad-rank-and-impression-share.md`](../../../_framework/ad-rank-and-impression-share.md)
 (the rank-vs-budget split) and the validated `performance_decay` trend engine (vendored as
-`scripts/decay_core.py`). Where [`../../account-audit/impression-share/`](../../account-audit/impression-share/SKILL.md)
-reads one period's **cap**, this skill reads the **curve over time** and the **driver of its movement**.
+`scripts/decay_core.py`). This skill reads **both** one period's **cap** (the snapshot mode, incl. top-of-page) **and** the
+**curve over time** with the **driver of its movement** — the unified impression-share view.
 
 ## 1. Business question
 > Per Search campaign: is our impression share trending **up / flat / down** over time — and when it

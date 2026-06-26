@@ -1,7 +1,7 @@
 # Output — Impression Share Trend & Driver Diagnosis
 
 What this skill **emits**: a JSON object (the canonical truth), a specialization of the global
-[`../../../../_framework/output-contract.md`](../../../../_framework/output-contract.md). Handoff to the
+[`../../../_framework/output-contract.md`](../../../_framework/output-contract.md). Handoff to the
 **orchestrator**, which renders it (document / dashboard / slides). **No presentation here** — no emojis,
 tables, markdown, or colors. `scripts/process.py` produces this object with `synthesis` blank; the LLM
 fills `synthesis` and polishes each `recommendation`.
@@ -21,7 +21,7 @@ fills `synthesis` and polishes each `recommendation`.
   "meta": {
     "account": "Acme Insurance",
     "connector": "google-ads",
-    "skill": "impression-share-trend",
+    "skill": "impression-share",
     "grain": "weekly (from daily)",
     "period": { "from": "2026-03-26", "to": "2026-06-23", "weeks_after_trim": 12 }
   },
@@ -38,6 +38,11 @@ fills `synthesis` and polishes each `recommendation`.
   "campaigns": [
     {
       "campaign": "Acme_Health_SEM_(HD)",
+      "current": {                         // SNAPSHOT mode — current period (~30d, impression-weighted)
+        "is": 0.29, "top": 0.21, "abs_top": 0.11,        // overall · top-of-page · absolute-top IS
+        "rank_lost": 0.15, "budget_lost": 0.56, "rank_lost_top": 0.13,
+        "cap": "budget", "verdict": "budget_limited"     // budget-vs-rank cap (incl. top-of-page)
+      },
       "trend_label": "Winning",            // enum — the trajectory
       "is_now":  0.24,                     // last full weekly IS (0-1)
       "is_then": 0.12,                     // first full weekly IS (0-1)
@@ -81,7 +86,7 @@ fills `synthesis` and polishes each `recommendation`.
 - **No competitor attribution.** Budget vs rank is sayable; *which rival* took the rank loss is not
   (Auction Insights unavailable). Never imply it.
 - Each `recommendation` names the **exact campaign + exact lever** in language a non-technical owner can
-  act on (`where` / `what` / `why`). See [`../../../../_framework/writing.md`](../../../../_framework/writing.md).
+  act on (`where` / `what` / `why`). See [`../../../_framework/writing.md`](../../../_framework/writing.md).
 
 ## Render handoff — the `impression-share-trend-monitor` component
 The visual lives in **`porter-reporting`** (`components/google-ads/impression-share-trend-monitor`) — the

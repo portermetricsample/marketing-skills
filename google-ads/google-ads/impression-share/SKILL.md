@@ -1,6 +1,6 @@
 ---
-name: impression-share-trend
-description: For each Google Ads Search campaign, track impression share OVER TIME and classify its trajectory — growing, consistent, flattening, declining or crashing — then tag the driver of any decline as a budget problem (money, raise budget) vs a rank problem (auction, fix bid/Quality). Use this skill whenever the user asks which campaigns are losing or gaining visibility, impression-share trend, IS dropping/declining over time, visibility decay, "are we showing less than we used to", proactive alerts on reach, or which campaigns are consistent vs slipping — even if they don't say "impression share". Judges the TRAJECTORY and its driver; the current-period cap snapshot belongs to `account-audit/impression-share`; competitor/Auction-Insights is unavailable (see `competitor/`).
+name: impression-share
+description: For each Google Ads Search campaign, track impression share OVER TIME and classify its trajectory — growing, consistent, flattening, declining or crashing — then tag the driver of any decline as a budget problem (money, raise budget) vs a rank problem (auction, fix bid/Quality). Use this skill whenever the user asks which campaigns are losing or gaining visibility, impression-share trend, IS dropping/declining over time, visibility decay, "are we showing less than we used to", proactive alerts on reach, or which campaigns are consistent vs slipping — even if they don't say "impression share". Does BOTH the current-period cap snapshot (budget vs rank, incl. top-of-page) AND the trajectory over time with its driver — the unified impression-share view; competitor Auction Insights is unavailable on the connector.
 ---
 
 # Impression Share Trend & Driver Diagnosis
@@ -23,9 +23,9 @@ or many accounts).
 
 ## Scope
 - ✅ **Per-campaign impression-share trajectory over time + the rank-vs-budget driver of any decline.**
-- ❌ **The current-period cap snapshot** (where am I capped right now) → [`../account-audit/impression-share/`](../account-audit/impression-share/SKILL.md). This skill is its **time-series** sibling.
+- ✅ **The current-period cap snapshot** (budget vs rank, incl. **top-of-page**) — emitted as the `current` block per campaign.
 - ❌ **Deeper rank cause** (Quality Score pillars / CPC inflation behind a rank decline) → deferred; pairs with [`../keyword-ad-landing/metrics`](../keyword-ad-landing/).
-- ❌ **Competitor / Auction Insights** — validated **unavailable** on this connector (timeout + reauth + no domain dimension). See [`../competitor/`](../competitor/README.md).
+- ❌ **Competitor / Auction Insights** — validated **unavailable** on this connector (timeout + reauth + no domain dimension).
 - ❌ Per-keyword IS (campaign grain is the floor); Display / Demand Gen / Video (IS ≈ 0 there — dropped automatically).
 
 Built on [`../../_framework/ad-rank-and-impression-share.md`](../../_framework/ad-rank-and-impression-share.md) (what Ad Rank is, the rank-vs-budget split) and the `performance_decay` trend engine (vendored as `scripts/decay_core.py`).
@@ -35,7 +35,7 @@ Built on [`../../_framework/ad-rank-and-impression-share.md`](../../_framework/a
 - **Framework / rubric:** [`references/framework.md`](references/framework.md) — the brain: daily→weekly impression-weighting, edge-week trim, `decay_core` classification, the driver tag, the flat-low "capped" nuance.
 - **Output schema:** [`references/output.md`](references/output.md) — the JSON this skill emits.
 - **Deterministic core:** [`scripts/process.py`](scripts/process.py) (+ vendored [`scripts/decay_core.py`](scripts/decay_core.py)) — does ALL the math; the LLM only writes the narrative.
-- **View (bundled — this is the UNIFIED skill):** this public skill ships BOTH the analysis AND the view. Render the spend-ranked, click-to-expand monitor with `python3 scripts/build_porter_page.py <daily.json> out.html` (Porter-styled) or `scripts/build_interactive.py` (token-neutral). Run `scripts/make_example.py` for a fictional Acme dataset to try it end-to-end. **The same capability is also offered SPLIT across two repos** for the modular pipeline: the analysis in [`porter-analysis/google-ads/impression-share-trend`](https://github.com/portermetricsample/porter-analysis/tree/main/google-ads/impression-share-trend) + the token-driven render component in [`porter-reporting/components/google-ads/impression-share-trend-monitor`](https://github.com/portermetricsample/porter-reporting/tree/main/components/google-ads/impression-share-trend-monitor). Use THIS unified skill to get analysis + view in one; use the split repos to compose your own pipeline.
+- **View (bundled — this is the UNIFIED skill):** this public skill ships BOTH the analysis AND the view. Render the spend-ranked, click-to-expand monitor with `python3 scripts/build_porter_page.py <daily.json> out.html` (Porter-styled) or `scripts/build_interactive.py` (token-neutral). Run `scripts/make_example.py` for a fictional Acme dataset to try it end-to-end. **The same capability is also offered SPLIT across two repos** for the modular pipeline: the analysis in [`porter-analysis/google-ads/impression-share`](https://github.com/portermetricsample/porter-analysis/tree/main/google-ads/impression-share) + the token-driven render component in [`porter-reporting/components/google-ads/impression-share-trend-monitor`](https://github.com/portermetricsample/porter-reporting/tree/main/components/google-ads/impression-share-trend-monitor). Use THIS unified skill to get analysis + view in one; use the split repos to compose your own pipeline.
 
 ## Operate
 **Input:** the daily query in [`references/tools.md`](references/tools.md) — per campaign per day:

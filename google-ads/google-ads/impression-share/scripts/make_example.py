@@ -20,7 +20,8 @@ DAYS = 84
 
 COLS = ["google_ads_campaign_name", "google_ads_date", "google_ads_search_impression_share",
         "google_ads_search_rank_lost_impression_share", "google_ads_search_budget_lost_impression_share",
-        "google_ads_impressions"]
+        "google_ads_impressions", "google_ads_search_top_impression_share",
+        "google_ads_search_absolute_top_impression_share", "google_ads_search_rank_lost_top_impression_share"]
 
 
 def clamp(x, lo, hi):
@@ -47,8 +48,11 @@ def main():
             rk = clamp(rk, 0.0, lost)
             bg = lost - rk
             day_impr = round(impr * (0.85 + 0.3 * abs(math.sin((d + ci) / 7.0))))
+            # top-of-page (premium position): you reach the top a fraction of the time you show
+            top = clamp(is_ * 0.72, 0.0, 0.95); abstop = top * 0.55; ranktop = clamp(rk * 0.85, 0.0, 1.0)
             rows.append([name, date.strftime("%Y%m%d"),
-                         round(is_, 6), round(rk, 6), round(bg, 6), float(day_impr)])
+                         round(is_, 6), round(rk, 6), round(bg, 6), float(day_impr),
+                         round(top, 6), round(abstop, 6), round(ranktop, 6)])
 
     os.makedirs(os.path.join(os.path.dirname(__file__), "example"), exist_ok=True)
     out = {"columns": COLS, "rows": rows, "total_rows": len(rows)}
