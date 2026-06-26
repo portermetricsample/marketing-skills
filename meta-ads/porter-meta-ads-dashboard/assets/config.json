@@ -1,0 +1,515 @@
+{
+ "name": "Meta Ads Dashboard",
+ "charts": {
+  "chart_geo": {
+   "metrics": [
+    "facebook_ads_spend",
+    "facebook_ads_clicks",
+    "facebook_ads_purchase"
+   ],
+   "accounts": [
+    {
+     "id": "act___META_ACCT_NUM__",
+     "name": "__ACCOUNT_NAME__",
+     "company_id": "__COMPANY_ID__",
+     "component_name": "facebook-ads",
+     "source_user_id": "__SOURCE_USER_ID__"
+    }
+   ],
+   "dimensions": [
+    "facebook_ads_country_name"
+   ],
+   "data_source": "facebook-ads",
+   "applies_controls": [
+    "date_range",
+    "filters"
+   ]
+  },
+  "chart_kpi": {
+   "metrics": [
+    "facebook_ads_spend",
+    "facebook_ads_impressions",
+    "facebook_ads_reach",
+    "facebook_ads_clicks",
+    "facebook_ads_inline_link_clicks",
+    "facebook_ads_purchase",
+    "facebook_ads_purchase_roas_purchase"
+   ],
+   "accounts": [
+    {
+     "id": "act___META_ACCT_NUM__",
+     "name": "__ACCOUNT_NAME__",
+     "company_id": "__COMPANY_ID__",
+     "component_name": "facebook-ads",
+     "source_user_id": "__SOURCE_USER_ID__"
+    }
+   ],
+   "dimensions": [],
+   "data_source": "facebook-ads",
+   "applies_controls": [
+    "date_range",
+    "filters"
+   ]
+  },
+  "chart_adset": {
+   "metrics": [
+    "facebook_ads_spend",
+    "facebook_ads_impressions",
+    "facebook_ads_reach",
+    "facebook_ads_clicks",
+    "facebook_ads_inline_link_clicks",
+    "facebook_ads_action_landing_page_view",
+    "facebook_ads_purchase",
+    "facebook_ads_value_omni_purchase",
+    "facebook_ads_purchase_roas_purchase",
+    "facebook_ads_adsetdaily_budget",
+    "facebook_ads_adsetlifetime_budget",
+    "facebook_ads_campaign_daily_budget",
+    "facebook_ads_campaign_lifetime_budget"
+   ],
+   "accounts": [
+    {
+     "id": "act___META_ACCT_NUM__",
+     "name": "__ACCOUNT_NAME__",
+     "company_id": "__COMPANY_ID__",
+     "component_name": "facebook-ads",
+     "source_user_id": "__SOURCE_USER_ID__"
+    }
+   ],
+   "dimensions": [
+    "facebook_ads_adset_name",
+    "facebook_ads_adset_id",
+    "facebook_ads_objective",
+    "facebook_ads_status"
+   ],
+   "data_source": "facebook-ads",
+   "applies_controls": [
+    "date_range",
+    "filters"
+   ]
+  },
+  "chart_trend": {
+   "metrics": [
+    "facebook_ads_spend",
+    "facebook_ads_value_omni_purchase",
+    "facebook_ads_impressions",
+    "facebook_ads_clicks",
+    "facebook_ads_inline_link_clicks",
+    "facebook_ads_purchase"
+   ],
+   "accounts": [
+    {
+     "id": "act___META_ACCT_NUM__",
+     "name": "__ACCOUNT_NAME__",
+     "company_id": "__COMPANY_ID__",
+     "component_name": "facebook-ads",
+     "source_user_id": "__SOURCE_USER_ID__"
+    }
+   ],
+   "dimensions": [
+    "facebook_ads_date"
+   ],
+   "data_source": "facebook-ads",
+   "applies_controls": [
+    "date_range",
+    "filters"
+   ]
+  },
+  "chart_funnel": {
+   "metrics": [
+    "facebook_ads_spend",
+    "facebook_ads_impressions",
+    "facebook_ads_inline_link_clicks",
+    "facebook_ads_action_landing_page_view",
+    "facebook_ads_purchase"
+   ],
+   "accounts": [
+    {
+     "id": "act___META_ACCT_NUM__",
+     "name": "__ACCOUNT_NAME__",
+     "company_id": "__COMPANY_ID__",
+     "component_name": "facebook-ads",
+     "source_user_id": "__SOURCE_USER_ID__"
+    }
+   ],
+   "dimensions": [],
+   "data_source": "facebook-ads",
+   "applies_controls": [
+    "date_range",
+    "filters"
+   ]
+  },
+  "chart_gender": {
+   "metrics": [
+    "facebook_ads_spend",
+    "facebook_ads_clicks",
+    "facebook_ads_purchase"
+   ],
+   "accounts": [
+    {
+     "id": "act___META_ACCT_NUM__",
+     "name": "__ACCOUNT_NAME__",
+     "company_id": "__COMPANY_ID__",
+     "component_name": "facebook-ads",
+     "source_user_id": "__SOURCE_USER_ID__"
+    }
+   ],
+   "dimensions": [
+    "facebook_ads_gender"
+   ],
+   "data_source": "facebook-ads",
+   "applies_controls": [
+    "date_range",
+    "filters"
+   ]
+  },
+  "chart_pacing": {
+   "metrics": [
+    "facebook_ads_spend",
+    "facebook_ads_campaign_daily_budget",
+    "facebook_ads_campaign_lifetime_budget",
+    "facebook_ads_campaign_budget_remaining"
+   ],
+   "accounts": [
+    {
+     "id": "act___META_ACCT_NUM__",
+     "name": "__ACCOUNT_NAME__",
+     "company_id": "__COMPANY_ID__",
+     "component_name": "facebook-ads",
+     "source_user_id": "__SOURCE_USER_ID__"
+    }
+   ],
+   "dimensions": [
+    "facebook_ads_campaign_name",
+    "facebook_ads_campaign_id"
+   ],
+   "data_source": "facebook-ads",
+   "applies_controls": [
+    "date_range",
+    "filters"
+   ]
+  },
+  "chart_ts_dow": {
+   "metrics": [
+    "facebook_ads_spend",
+    "facebook_ads_value_omni_purchase",
+    "facebook_ads_impressions",
+    "facebook_ads_clicks",
+    "facebook_ads_inline_link_clicks",
+    "facebook_ads_purchase"
+   ],
+   "accounts": [
+    {
+     "id": "act___META_ACCT_NUM__",
+     "name": "__ACCOUNT_NAME__",
+     "company_id": "__COMPANY_ID__",
+     "component_name": "facebook-ads",
+     "source_user_id": "__SOURCE_USER_ID__"
+    }
+   ],
+   "dimensions": [
+    "facebook_ads_day"
+   ],
+   "data_source": "facebook-ads",
+   "applies_controls": [
+    "date_range",
+    "filters"
+   ]
+  },
+  "chart_ts_hour": {
+   "metrics": [
+    "facebook_ads_spend",
+    "facebook_ads_value_omni_purchase",
+    "facebook_ads_impressions",
+    "facebook_ads_clicks",
+    "facebook_ads_inline_link_clicks",
+    "facebook_ads_purchase"
+   ],
+   "accounts": [
+    {
+     "id": "act___META_ACCT_NUM__",
+     "name": "__ACCOUNT_NAME__",
+     "company_id": "__COMPANY_ID__",
+     "component_name": "facebook-ads",
+     "source_user_id": "__SOURCE_USER_ID__"
+    }
+   ],
+   "dimensions": [
+    "facebook_ads_hourly_stats_aggregated_by_advertiser_time_zone"
+   ],
+   "data_source": "facebook-ads",
+   "applies_controls": [
+    "date_range",
+    "filters"
+   ]
+  },
+  "chart_ts_week": {
+   "metrics": [
+    "facebook_ads_spend",
+    "facebook_ads_value_omni_purchase",
+    "facebook_ads_impressions",
+    "facebook_ads_clicks",
+    "facebook_ads_inline_link_clicks",
+    "facebook_ads_purchase"
+   ],
+   "accounts": [
+    {
+     "id": "act___META_ACCT_NUM__",
+     "name": "__ACCOUNT_NAME__",
+     "company_id": "__COMPANY_ID__",
+     "component_name": "facebook-ads",
+     "source_user_id": "__SOURCE_USER_ID__"
+    }
+   ],
+   "dimensions": [
+    "facebook_ads_year_week"
+   ],
+   "data_source": "facebook-ads",
+   "applies_controls": [
+    "date_range",
+    "filters"
+   ]
+  },
+  "chart_windows": {
+   "metrics": [
+    "facebook_ads_purchase_1d_click_1d_view",
+    "facebook_ads_purchase_1d_click",
+    "facebook_ads_purchase_7d_click",
+    "facebook_ads_purchase_28d_click",
+    "facebook_ads_action_landing_page_view_1d_click_1d_view",
+    "facebook_ads_action_landing_page_view_1d_click",
+    "facebook_ads_action_landing_page_view_7d_click",
+    "facebook_ads_action_landing_page_view_28d_click"
+   ],
+   "accounts": [
+    {
+     "id": "act___META_ACCT_NUM__",
+     "name": "__ACCOUNT_NAME__",
+     "company_id": "__COMPANY_ID__",
+     "component_name": "facebook-ads",
+     "source_user_id": "__SOURCE_USER_ID__"
+    }
+   ],
+   "dimensions": [],
+   "data_source": "facebook-ads",
+   "applies_controls": [
+    "date_range",
+    "filters"
+   ]
+  },
+  "chart_audience": {
+   "metrics": [
+    "facebook_ads_spend",
+    "facebook_ads_clicks",
+    "facebook_ads_purchase"
+   ],
+   "accounts": [
+    {
+     "id": "act___META_ACCT_NUM__",
+     "name": "__ACCOUNT_NAME__",
+     "company_id": "__COMPANY_ID__",
+     "component_name": "facebook-ads",
+     "source_user_id": "__SOURCE_USER_ID__"
+    }
+   ],
+   "dimensions": [
+    "facebook_ads_age"
+   ],
+   "data_source": "facebook-ads",
+   "applies_controls": [
+    "date_range",
+    "filters"
+   ]
+  },
+  "chart_campaign": {
+   "metrics": [
+    "facebook_ads_spend",
+    "facebook_ads_impressions",
+    "facebook_ads_reach",
+    "facebook_ads_clicks",
+    "facebook_ads_inline_link_clicks",
+    "facebook_ads_action_landing_page_view",
+    "facebook_ads_purchase",
+    "facebook_ads_value_omni_purchase",
+    "facebook_ads_purchase_roas_purchase",
+    "facebook_ads_campaign_daily_budget",
+    "facebook_ads_campaign_lifetime_budget"
+   ],
+   "accounts": [
+    {
+     "id": "act___META_ACCT_NUM__",
+     "name": "__ACCOUNT_NAME__",
+     "company_id": "__COMPANY_ID__",
+     "component_name": "facebook-ads",
+     "source_user_id": "__SOURCE_USER_ID__"
+    }
+   ],
+   "dimensions": [
+    "facebook_ads_campaign_name",
+    "facebook_ads_campaign_id",
+    "facebook_ads_objective",
+    "facebook_ads_status"
+   ],
+   "data_source": "facebook-ads",
+   "applies_controls": [
+    "date_range",
+    "filters"
+   ]
+  },
+  "chart_ts_month": {
+   "metrics": [
+    "facebook_ads_spend",
+    "facebook_ads_value_omni_purchase",
+    "facebook_ads_impressions",
+    "facebook_ads_clicks",
+    "facebook_ads_inline_link_clicks",
+    "facebook_ads_purchase"
+   ],
+   "accounts": [
+    {
+     "id": "act___META_ACCT_NUM__",
+     "name": "__ACCOUNT_NAME__",
+     "company_id": "__COMPANY_ID__",
+     "component_name": "facebook-ads",
+     "source_user_id": "__SOURCE_USER_ID__"
+    }
+   ],
+   "dimensions": [
+    "facebook_ads_year_month"
+   ],
+   "data_source": "facebook-ads",
+   "applies_controls": [
+    "date_range",
+    "filters"
+   ]
+  },
+  "chart_creatives": {
+   "metrics": [
+    "facebook_ads_spend"
+   ],
+   "accounts": [
+    {
+     "id": "act___META_ACCT_NUM__",
+     "name": "__ACCOUNT_NAME__",
+     "company_id": "__COMPANY_ID__",
+     "component_name": "facebook-ads",
+     "source_user_id": "__SOURCE_USER_ID__"
+    }
+   ],
+   "dimensions": [
+    "facebook_ads_ad_name",
+    "facebook_ads_image_asset"
+   ],
+   "data_source": "facebook-ads",
+   "applies_controls": [
+    "date_range"
+   ]
+  },
+  "chart_placement": {
+   "metrics": [
+    "facebook_ads_spend"
+   ],
+   "accounts": [
+    {
+     "id": "act___META_ACCT_NUM__",
+     "name": "__ACCOUNT_NAME__",
+     "company_id": "__COMPANY_ID__",
+     "component_name": "facebook-ads",
+     "source_user_id": "__SOURCE_USER_ID__"
+    }
+   ],
+   "dimensions": [
+    "facebook_ads_publisher_platform"
+   ],
+   "data_source": "facebook-ads",
+   "applies_controls": [
+    "date_range",
+    "filters"
+   ]
+  },
+  "chart_creatives_daily": {
+   "metrics": [
+    "facebook_ads_spend",
+    "facebook_ads_impressions",
+    "facebook_ads_inline_link_clicks",
+    "facebook_ads_purchase_roas_purchase",
+    "facebook_ads_video_play_actions",
+    "facebook_ads_video_thruplay_watched_actions"
+   ],
+   "accounts": [
+    {
+     "id": "act___META_ACCT_NUM__",
+     "name": "__ACCOUNT_NAME__",
+     "company_id": "__COMPANY_ID__",
+     "component_name": "facebook-ads",
+     "source_user_id": "__SOURCE_USER_ID__"
+    }
+   ],
+   "dimensions": [
+    "facebook_ads_ad_name",
+    "facebook_ads_date"
+   ],
+   "data_source": "facebook-ads",
+   "applies_controls": [
+    "date_range"
+   ]
+  },
+  "chart_creatives_metrics": {
+   "metrics": [
+    "facebook_ads_spend",
+    "facebook_ads_impressions",
+    "facebook_ads_clicks",
+    "facebook_ads_inline_link_clicks",
+    "facebook_ads_purchase",
+    "facebook_ads_purchase_roas_purchase",
+    "facebook_ads_value_omni_purchase",
+    "facebook_ads_video_play_actions",
+    "facebook_ads_video_thruplay_watched_actions",
+    "facebook_ads_video_p25_watched_actions",
+    "facebook_ads_video_p50_watched_actions",
+    "facebook_ads_video_p75_watched_actions",
+    "facebook_ads_video_p100_watched_actions"
+   ],
+   "accounts": [
+    {
+     "id": "act___META_ACCT_NUM__",
+     "name": "__ACCOUNT_NAME__",
+     "company_id": "__COMPANY_ID__",
+     "component_name": "facebook-ads",
+     "source_user_id": "__SOURCE_USER_ID__"
+    }
+   ],
+   "dimensions": [
+    "facebook_ads_ad_name",
+    "facebook_ads_created_time"
+   ],
+   "data_source": "facebook-ads",
+   "applies_controls": [
+    "date_range"
+   ]
+  }
+ },
+ "controls": {
+  "filters": [
+   {
+    "field": "facebook_ads_campaign_name",
+    "label": "Campaign"
+   },
+   {
+    "field": "facebook_ads_adset_name",
+    "label": "Ad set"
+   },
+   {
+    "field": "facebook_ads_impression_device",
+    "label": "Device"
+   },
+   {
+    "field": "facebook_ads_ad_name",
+    "label": "Creative"
+   }
+  ],
+  "date_range": {
+   "default": "this_year"
+  }
+ }
+}
