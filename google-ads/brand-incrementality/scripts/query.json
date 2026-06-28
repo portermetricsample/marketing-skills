@@ -1,0 +1,39 @@
+{
+  "skill": "brand-incrementality",
+  "doc": "Declarative spec. Substitute <placeholders> and EXECUTE. MCP paths: ../../../../_framework/porter-mcp-calls.md",
+  "discovery": {
+    "account": { "via": "fetch", "tool_id": "tool:porter-accounts:list_accounts",
+      "args": { "component_name": "google-ads", "query": "<ACCOUNT_HINT>" }, "use": "FULL object as <ACCOUNT_OBJECT>" }
+  },
+  "queries": [
+    {
+      "id": "campaigns_current", "via": "execute", "tool_id": "tool:porter-reporting:query_data",
+      "args": { "accounts": ["<ACCOUNT_OBJECT>"],
+        "fields": ["google_ads_campaign_name", "google_ads_cost_micros", "google_ads_conversions", "google_ads_conversions_value", "google_ads_clicks", "google_ads_impressions"],
+        "date_range": { "preset": "last_month" }, "sort": [{ "field": "google_ads_cost_micros", "direction": "desc" }], "limit": 100 },
+      "save": "campaigns.json"
+    },
+    {
+      "id": "campaigns_previous", "via": "execute", "tool_id": "tool:porter-reporting:query_data",
+      "args": { "accounts": ["<ACCOUNT_OBJECT>"],
+        "fields": ["google_ads_campaign_name", "google_ads_cost_micros", "google_ads_conversions", "google_ads_conversions_value", "google_ads_clicks", "google_ads_impressions"],
+        "date_range": { "date_from": "<PREV_FROM>", "date_to": "<PREV_TO>" }, "sort": [{ "field": "google_ads_cost_micros", "direction": "desc" }], "limit": 100 },
+      "save": "campaigns_prev.json"
+    },
+    {
+      "id": "search_terms", "via": "execute", "tool_id": "tool:porter-reporting:query_data",
+      "args": { "accounts": ["<ACCOUNT_OBJECT>"],
+        "fields": ["google_ads_search_term", "google_ads_keyword_info_text", "google_ads_keyword_info_match_type", "google_ads_campaign_name", "google_ads_cost_micros", "google_ads_conversions", "google_ads_conversions_value", "google_ads_impressions"],
+        "date_range": { "preset": "last_month" }, "sort": [{ "field": "google_ads_cost_micros", "direction": "desc" }], "limit": 5000 },
+      "save": "search_terms.json", "note": "pull deep — brand typos are cheap and a shallow pull under-detects leakage"
+    }
+  ],
+  "context": {
+    "doc": "Per-account input. markers identify the BRAND campaign (not the brand word — company-name prefixing).",
+    "file": "context.json",
+    "shape": { "brand_terms": ["<brand/product names>"], "competitor_terms": ["<rivals>"], "brand_campaign_markers": ["brand", "(br)"], "brand_campaign_names": ["<optional explicit brand campaign names>"] }
+  },
+  "process": "process.py campaigns.json context.json search_terms.json campaigns_prev.json  ->  { meta, split, leakage?, mode_a?, recommendations }",
+  "llm_step": "write the 3-string synthesis (strong incremental framing: the non-brand CPA/ROAS is the number to scale on; holdout caveat as one line); confirm any misspelling/competitor brand match before it drives a negative.",
+  "output": "see ../references/output.md"
+}

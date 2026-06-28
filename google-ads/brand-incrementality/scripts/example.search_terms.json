@@ -1,0 +1,11 @@
+{"columns":["google_ads_search_term","google_ads_keyword_info_text","google_ads_keyword_info_match_type","google_ads_campaign_name","google_ads_cost_micros","google_ads_conversions","google_ads_conversions_value","google_ads_impressions"],
+ "rows":[
+ ["northwind","northwind","EXACT","Northwind Brand (BR)",2000,400,0,8000],
+ ["northwind insurance","northwind insurance","EXACT","Northwind Brand (BR)",1500,250,0,5000],
+ ["northwnd","northwind","PHRASE","Northwind Brand (BR)",300,40,0,1200],
+ ["northwind quote","business insurance quote","BROAD","Northwind Search - Generic",400,20,0,900],
+ ["northwnd insurance","insurance quotes","BROAD","Northwind Search - Categories",150,8,0,400],
+ ["business insurance","business insurance","PHRASE","Northwind Search - Generic",2000,30,0,8000],
+ ["cheap business insurance","business insurance","BROAD","Northwind Search - Generic",800,5,0,3000],
+ ["commercial insurance quote","commercial insurance","EXACT","Northwind Search - Categories",1200,15,0,4000]
+ ]}

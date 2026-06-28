@@ -1,0 +1,7 @@
+{"columns":["google_ads_campaign_name","google_ads_cost_micros","google_ads_conversions","google_ads_conversions_value","google_ads_clicks","google_ads_impressions"],
+ "rows":[
+ ["Northwind Brand (BR)",7200,700,0,5800,29000],
+ ["Northwind Search - Generic",16800,560,0,6600,112000],
+ ["Northwind Search - Competitor Conquest",9800,280,0,3700,55000],
+ ["Northwind Search - Categories",5200,180,0,2800,37000]
+ ]}

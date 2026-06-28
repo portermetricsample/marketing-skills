@@ -1,0 +1,8 @@
+{"_doc":"FICTIONAL Northwind campaign KPIs (current). Mode B: a Brand campaign exists.",
+ "columns":["google_ads_campaign_name","google_ads_cost_micros","google_ads_conversions","google_ads_conversions_value","google_ads_clicks","google_ads_impressions"],
+ "rows":[
+ ["Northwind Brand (BR)",7400,720,0,6000,30000],
+ ["Northwind Search - Generic",18000,600,0,7000,120000],
+ ["Northwind Search - Competitor Conquest",11000,320,0,4000,60000],
+ ["Northwind Search - Categories",5780,200,0,3000,40000]
+ ]}
