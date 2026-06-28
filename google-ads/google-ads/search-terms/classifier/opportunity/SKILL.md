@@ -1,5 +1,5 @@
 ---
-name: search-term-intent-discovery
+name: search-term-opportunity
 description: Mine a Google Ads account's PAID search terms to discover demand by intent and angle that the advertiser is NOT serving well — and turn it into ideas (new landing pages, content assets like a calculator/listicle/guide, and ad variations). Use this skill whenever the user wants to find content/landing/ad opportunities from search terms, asks what to build next, mentions unmet/unserved demand, intent or angle discovery, search-term mining for ideas, "what should I create", a content/creative roadmap from paid demand, or feeding the SEO team real demand — even if they don't say "intent". This is the OFFENSIVE twin of the relevance skill: it discovers opportunity, it does NOT prune or judge term hygiene, and it does NOT produce the content itself.
 ---
 
