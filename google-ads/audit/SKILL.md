@@ -324,6 +324,21 @@ Always acknowledge in the relevant section, never pretend data is missing:
 
 ---
 
+## Design system
+
+The audit HTML must follow the Porter Design System. Before writing or editing the `style.css` of any audit, read:
+
+1. `references/design.md` (in this folder) — the complete element-by-element mapping: fonts, color tokens, chip specs, table rules, callout styles, action plan layout.
+2. `~/porter-design/tokens/colors.css` — the full color token set.
+3. `~/porter-design/tokens/typography.css` — font families and scale.
+
+**The three non-negotiables from porter-design:**
+- Bricolage Grotesque for KPI values and h2 headings. Hanken Grotesk for body and tables. IBM Plex Mono only for section numbers, chips, badges, and `.num` cells.
+- No gradients, no drop shadows — 1px `#e5e7eb` hairline borders only.
+- `--porter-purple` (#6701e6) is the single brand anchor — section numbers, eyebrows, verdict chip borders, "Do first" accent.
+
+---
+
 ## Relationship to other skills
 
 | Skill | Relationship |
