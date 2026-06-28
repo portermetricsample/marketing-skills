@@ -40,9 +40,11 @@ Order matters: conversion tracking verdict gates whether any efficiency metric i
 Run in parallel after Phase A:
 
 3. `performance/financial-overview` + `performance/funnel-metrics` + `performance/brand-incrementality` → feeds **Page 1: Overview**
-4. `campaigns/spend-allocation` + `campaigns/impression-share` + `campaigns/bid-strategy` + `campaigns/campaign-settings` + `ads/metrics` + `search-terms/match-types` + `search-terms/performance` + `search-terms/n-grams` + `search-terms/classifier` → feeds **Page 2: Campaigns** *(keyword/ST sections skip if gate fails)*
-5. `segmentation/audience/geography` + `segmentation/audience/demographics` + `segmentation/audience/devices` → feeds **Page 3: Audiences**
-6. `segmentation/time/trend` + `segmentation/time/cyclical` → feeds **Page 4: Time**
+4. `campaigns/spend-allocation` + `campaigns/impression-share` + `campaigns/bid-strategy` + `campaigns/campaign-settings` → feeds **Page 2: Campaigns**
+5. `ads/metrics` + `search-terms/match-types` + `search-terms/performance` + `search-terms/n-grams` + `search-terms/classifier` → feeds **Page 3: Keywords & Search Terms** *(skip if all-PMax)*
+6. `ads/copy` + `ads/assets` + `ads/health` + `ads/alignment` → feeds **Page 4: Ads**
+7. `segmentation/audience/placements` + `segmentation/audience/geography` + `segmentation/audience/demographics` + `segmentation/audience/devices` → feeds **Page 5: Audiences**
+8. `segmentation/time/trend` + `segmentation/time/cyclical` → feeds **Page 6: Time**
 
 ---
 
@@ -65,20 +67,33 @@ Google Ads skin = violet/purple palette (`#7c5cfc` primary). Apply to all charts
 - Campaign contribution donut: spend share by campaign
 - `campaign-performance-table`: top campaigns by spend + CPA
 
-#### Page 2 · Campaigns *(skip keywords/search terms sub-sections if all-PMax)*
-The full campaign segmentation: how spend is allocated, where visibility is lost, how bidding is set, and what the keyword and search term inventory looks like.
+#### Page 2 · Campaigns
+Campaign-level configuration, spend distribution, and visibility.
 
-**Skills:** `campaigns/spend-allocation`, `campaigns/impression-share`, `campaigns/bid-strategy`, `campaigns/campaign-settings`, `ads/metrics`, `search-terms/match-types`, `search-terms/performance`, `search-terms/n-grams`, `search-terms/classifier`  
+**Skills:** `campaigns/spend-allocation`, `campaigns/impression-share`, `campaigns/bid-strategy`, `campaigns/campaign-settings`  
 **Components:**
 - `campaign-performance-table`: SUMAS breakdown (spend / IS / CPA / bid strategy / status)
 - `impression-share-trend-monitor`: IS over time by campaign
 - `impression-share-competitiveness`: budget-limited vs rank-limited split
-- Match type bar chart: broad / phrase / exact spend share *(skip if PMax-only)*
-- Keyword table with QS (Expected CTR + Ad Relevance + Landing Experience) *(skip if PMax-only)*
-- `search-terms-page`: Winning / Watch / Waste classification *(skip if PMax-only)*
-- `search-term-ngrams`: 1/2/3-gram patterns → negative candidates *(skip if PMax-only)*
 
-#### Page 3 · Audiences
+#### Page 3 · Keywords & Search Terms *(skip entirely if all-PMax)*
+**Skills:** `ads/metrics`, `search-terms/match-types`, `search-terms/performance`, `search-terms/n-grams`, `search-terms/classifier`  
+**Components:**
+- Match type bar chart: broad / phrase / exact spend share
+- Keyword table with QS (Expected CTR + Ad Relevance + Landing Experience)
+- `search-terms-page`: Winning / Watch / Waste classification
+- `search-term-ngrams`: 1/2/3-gram patterns → negative candidates
+
+#### Page 4 · Ads
+RSA copy health, asset coverage, broken/disapproved ads, and keyword→ad→landing chain.
+
+**Skills:** `ads/copy`, `ads/assets`, `ads/health`, `ads/alignment`  
+**Components:**
+- `creative-ad-preview`: RSA copy strength + pinning
+- Ad assets coverage: sitelinks / callouts / snippets / images present?
+- `keyword-ad-landing-alignment`: does the keyword → ad → landing chain make sense?
+
+#### Page 5 · Audiences
 Segmentation by who was reached. Four sub-sections on the same page.
 
 **Skills:** `segmentation/audience/placements`, `segmentation/audience/geography`, `segmentation/audience/demographics`, `segmentation/audience/devices`  
@@ -88,7 +103,7 @@ Segmentation by who was reached. Four sub-sections on the same page.
 - **Demographics:** age × gender grid → over/underperforming segments vs account CPA/ROAS
 - **Technology:** desktop / mobile / tablet split → spend share + CPA per device
 
-#### Page 4 · Time
+#### Page 6 · Time
 Segmentation by when performance happened — all granularities on one page, coarse to fine.
 
 **Skills:** `segmentation/time/trend`, `segmentation/time/cyclical`  
@@ -110,14 +125,12 @@ Segmentation by when performance happened — all granularities on one page, coa
 
 ---
 
-## Gaps (sections not yet in the template)
+## Gaps and future pages
 
-These skills exist but have no matching page yet — add as the template evolves:
-
-| Future page | Skills ready | Porter component ready |
-|-------------|-------------|----------------------|
-| Ads health | `ads/copy`, `ads/assets`, `ads/health` | `creative-ad-preview`, `keyword-ad-landing-alignment` |
-| Conversions detail | `measurement/conversion-cpa` | per-action cost table |
+| Future page | Skills ready | Notes |
+|-------------|-------------|-------|
+| Conversions | `measurement/conversion-tracking`, `measurement/conversion-cpa` | Skills built; conversion KPIs already appear in Overview. Add as Page 3 when depth justifies it. |
+| Budget | ⬜ not built yet | Ad pacing + budget monitoring. Skills need to be built first before this page can be added. |
 
 ---
 
