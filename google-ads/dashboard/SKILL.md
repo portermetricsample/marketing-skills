@@ -79,13 +79,14 @@ The full campaign segmentation: how spend is allocated, where visibility is lost
 - `search-term-ngrams`: 1/2/3-gram patterns → negative candidates *(skip if PMax-only)*
 
 #### Page 3 · Audiences
-Segmentation by who was reached. Three sub-sections on the same page, ordered by data availability.
+Segmentation by who was reached. Four sub-sections on the same page.
 
-**Skills:** `segmentation/audience/geography`, `segmentation/audience/demographics`, `segmentation/audience/devices`  
+**Skills:** `segmentation/audience/placements`, `segmentation/audience/geography`, `segmentation/audience/demographics`, `segmentation/audience/devices`  
 **Components:**
+- **Placements:** placement performance table (Display / PMax / Video only — skip for Search-only accounts)
 - **Geography:** geo bubble map + table (region / city → spend / conversions / CPA). Canada = fallback to bars only (no atlas support).
-- **Demographics:** age × gender grid → over/underperforming segments vs account CPA
-- **Devices:** desktop / mobile / tablet split → spend share + CPA per device
+- **Demographics:** age × gender grid → over/underperforming segments vs account CPA/ROAS
+- **Technology:** desktop / mobile / tablet split → spend share + CPA per device
 
 #### Page 4 · Time
 Segmentation by when performance happened — all granularities on one page, coarse to fine.
@@ -93,9 +94,9 @@ Segmentation by when performance happened — all granularities on one page, coa
 **Skills:** `segmentation/time/trend`, `segmentation/time/cyclical`  
 **Components:**
 - **Trend (coarse → fine):** year → quarter → month → week → day line chart. Highlight the inflection point where CPA or ROAS turned.
-- **Cyclical (day-of-week × hour):** heatmap with cell color = vs account average CPA/ROAS. Surfaces scheduling patterns and bid adjustment candidates.
+- **Ad Schedule (day-of-week × hour):** heatmap with cell color = vs account average CPA/ROAS. Shows the best and worst hours and days of the week.
 
-> **Why not a separate Dayparting page?** Day-of-week and hour-of-day are two granularities of time — they belong on the same page as monthly and weekly trends, not isolated. Isolation would fragment the story; together they show the full time picture from year down to hour.
+> **Why not a separate Dayparting page?** Day-of-week and hour-of-day are two granularities of time — they belong on the same page as monthly and weekly trends, not isolated. Together they show the full time picture from year down to hour.
 
 ---
 
