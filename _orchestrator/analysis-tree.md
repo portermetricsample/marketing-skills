@@ -72,27 +72,34 @@ Don't let the gate produce an all-alarms report that buries the all-clear.
    ├─ Product / business line                  → structure-map (naming → product) · P&L view = compose ⬜  (ecommerce/Shopping only; lead-gen skips)
    ├─ Campaigns
    │   ├─ Campaign type (Search/PMax/Shopping/Demand Gen/Display/Video/App)  → fingerprint; gates what's reportable*
-   │   ├─ Ad groups (hygiene)                  → structure-audit · ad-group performance ⬜
+   │   ├─ Ad groups (hygiene + concentration)  → structure-audit · ad-group concentration: spend-allocation §3b (C6)
    │   ├─ Bidding strategy                      → bid-strategy + value-based-bidding
-   │   ├─ Settings / objectives                 → campaign-settings
-   │   ├─ Spend allocation                      → spend-allocation
-   │   └─ Competitive — Auction Insights + IS   → ⬜ auction-insights (NEW) · IS bridges from funnel Visibility
+   │   ├─ Settings / objectives                 → campaigns/campaign-settings
+   │   ├─ Spend allocation                      → campaigns/spend-allocation
+   │   ├─ Ad schedule (day/hour efficiency)     → campaigns/ad-schedule
+   │   ├─ Demand Gen audit                      → campaigns/demand-gen
+   │   └─ Competitive — Auction Insights + IS   → IS budget-vs-rank: campaigns/impression-share · Auction Insights competitor overlap ⬜ (not exposed)
    ├─ Keywords & search terms
-   │   ├─ Match type / keyword conversion       → ⬜ gap (mapped, no skill built)
-   │   ├─ Search term relevance + landing align → keyword-ad-landing-alignment + -metrics · search-terms/relevance
-   │   ├─ Landing CRO (does the page convert?)  → account-audit/landing-cro
-   │   ├─ Term routing (1 term → N keywords)    → search-terms/term-routing
+   │   ├─ Match type / keyword conversion       → search-terms/match-types (directional when conversions blend)
+   │   ├─ Search term relevance + landing align → ads/alignment + ads/metrics · search-terms/classifier/relevance
+   │   ├─ Landing CRO (does the page convert?)  → ads/landing-cro
+   │   ├─ Term routing / cannibalization        → search-terms/classifier/duplicates
+   │   ├─ Brand / competitor classification     → search-terms/classifier/branded
+   │   ├─ N-gram mining (waste + themes)         → search-terms/n-grams
    │   ├─ Search term performance               → search-terms/performance
-   │   ├─ Intent discovery (new terms)          → search-terms/intent-discovery
-   │   └─ Quality & negatives                   → QS: keyword-ad-landing-metrics · negatives: search-terms/relevance + term-routing (reuse, no own folder)
+   │   ├─ Intent discovery (new terms)          → search-terms/classifier/opportunity
+   │   ├─ Multi-label per term (all tags at once)→ search-terms/classifier (composes branded + relevance + duplicates + opportunity)
+   │   ├─ Quality & negatives                   → QS: ads/metrics · negatives: search-terms/classifier/relevance + classifier/duplicates (reuse, no own folder)
+   │   └─ Brand vs non-brand split              → search-terms/classifier/branded (brand term list required)
    ├─ Ads & assets
-   │   ├─ Asset QA                              → ad-assets
-   │   └─ Ad performance                        → ⬜ gap (no skill)
+   │   ├─ Asset QA                              → ads/assets
+   │   └─ Ad performance (RSA copy strength)    → ads/copy · deeper per-ad metrics ⬜ partial
    ├─ Audiences
    │   ├─ Demographics / geography / device     → segmentation/audience/*
    │   ├─ Placement / network (Mobile · Feed · Search partners · YouTube · Display)  → ⬜ gap (device only today)
-   │   └─ Audience QA                           → account-audit/audience-demographics
-   ├─ Conversion tracking                       → account-audit/conversion-tracking
+   │   └─ Audience QA                           → segmentation/audience/demographics-audit
+   ├─ Conversion tracking                       → measurement/conversion-tracking (emits primaryCount → gates segment efficiency)
+   ├─ UTM / tagging hygiene                      → measurement/utm-tracking
    └─ Time / trends (orthogonal)                → segmentation/time
 
 4. Actions — rollup of topFixes across all nodes, ranked by $
@@ -106,10 +113,12 @@ type fingerprint first (`google_ads_campaign_advertising_channel_type`).
 
 | Gap | Where | Note |
 |-----|-------|------|
-| **Auction Insights / Impression Share** | Campaigns → Competitive | NEW skill: competitor overlap/outranking + IS lost to rank vs budget. IS counts already in `funnel-metrics`; the competitive view is missing |
-| **Ads performance** | Ads & assets | only the QA check (`ad-assets`) exists |
+| **Impression Share (budget vs rank)** | Campaigns → Competitive | ✅ **built** → `campaigns/impression-share`. *Still gap:* Auction Insights competitor overlap/outranking (not exposed by the connector) |
+| **Ads performance** | Ads & assets | 🟡 **partial** → `ads/copy` (RSA strength + copy diversity); deeper per-ad metrics still thin |
 | **Placement / network** | Audiences | `segmentation/audience/devices` covers device; network/placement (Feed, Search partners, YouTube) not yet |
-| **Ad-group performance** | Campaigns → Ad groups | only hygiene (`structure-audit`); no performance cut |
+| **Ad-group performance** | Campaigns → Ad groups | ✅ **built** → `spend-allocation` §3b (C6) concentration + efficiency; `structure-audit` still owns hygiene |
 | **Product P&L view** | Product | detection exists (`structure-map`); the metrics-by-line view is a composition, **not a new skill**. Product only appears on ecommerce / Shopping accounts — lead-gen accounts skip this node entirely. |
 | **naming-convention** | (cross) | ⬜ generates conventions; doesn't block the report |
-| **Match type analysis** | Keywords | keyword match-type (exact/phrase/broad) performance — mapped, not built |
+| **Match type analysis** | Keywords | ✅ **built** → `account-audit/match-types` (concentration + efficiency, directional when conversions blend) |
+| **Brand vs non-brand split** | Keywords / Foundation | ✅ **built** → `search-terms/classifier/branded` (brand + competitor + generic classification + leak detection; needs the brand term list) |
+| **UTM / tagging hygiene** | Conversion tracking | ✅ **built** → `account-audit/utm-tracking` |

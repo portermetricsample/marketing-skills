@@ -46,6 +46,8 @@ Porter Metrics MCP (`google-ads` connector).
 | [campaigns/value-based-bidding/](campaigns/value-based-bidding/) | On Max-Conv-Value / tROAS? Enough conversions to trust it? | ✅ ready |
 | [campaigns/spend-allocation/](campaigns/spend-allocation/) | Which ad groups should get more budget but aren't? | ✅ ready |
 | [campaigns/change-history/](campaigns/change-history/) | What changed in the account and when — overlaid against CPA | ✅ ready |
+| [campaigns/ad-schedule/](campaigns/ad-schedule/) | Day-of-week + hour-of-day efficiency → bid adjustment recommendations | ✅ ready |
+| [campaigns/demand-gen/](campaigns/demand-gen/) | Demand Gen campaign audit vs Search baseline (asset-group detail: UI only) | ✅ ready |
 
 ## Search Terms
 
