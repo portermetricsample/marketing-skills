@@ -20,8 +20,7 @@ Porter Metrics MCP (`google-ads` connector).
 | [performance/](#performance-management) | Financial results — KPIs, funnel, brand split | ✅ ready |
 | [campaigns/](campaigns/) | Campaign-level config + visibility + spend + changes | ✅ ready |
 | [search-terms/](search-terms/) | Search term analysis — classify, score, mine, negate | ✅ full set |
-| [keyword-ad-landing/](keyword-ad-landing/) | The term→keyword→ad→landing chain | ✅ ready |
-| [ads/](ads/) | Ad copy, extensions, health | 🟡 4 of 7 built |
+| [ads/](ads/) | Ad unit + the chain it sits in: copy, extensions, health, alignment, QS, landing | 🟡 7 of 10 built |
 | [segmentation/](segmentation/) | Movement attribution by time / campaign / audience | 🟡 in progress |
 | [measurement/](measurement/) | Conversion tracking + UTM hygiene + per-action CPA | ✅ ready |
 | [account-structure/](account-structure/) | Naming conventions + structural consistency | 🟡 in progress |
@@ -64,14 +63,6 @@ Porter Metrics MCP (`google-ads` connector).
 | [search-terms/classifier/duplicates/](search-terms/classifier/duplicates/) | Same term matched by 2+ keywords → route to owner | ✅ ready |
 | [search-terms/classifier/opportunity/](search-terms/classifier/opportunity/) | Unserved demand → content / landing / ad ideas | ✅ ready |
 
-## Keyword ↔ Ad ↔ Landing
-
-| Skill | What it answers | Status |
-|-------|----------------|--------|
-| [keyword-ad-landing/alignment/](keyword-ad-landing/alignment/) | Does the keyword → ad → landing chain make sense? | ✅ ready |
-| [keyword-ad-landing/metrics/](keyword-ad-landing/metrics/) | QS + 3 pillars (Expected CTR, Ad Relevance, Landing Experience) | ✅ ready |
-| [keyword-ad-landing/landing-cro/](keyword-ad-landing/landing-cro/) | Does the landing page convert? Message + pain points | ✅ ready |
-
 ## Ads
 
 | Skill | What it answers | Status |
@@ -80,6 +71,9 @@ Porter Metrics MCP (`google-ads` connector).
 | [ads/copy/](ads/copy/) | Ad Strength, pinning, headline labels from Google | ✅ ready |
 | [ads/health/](ads/health/) | Broken landing pages + disapproved ads | ✅ ready |
 | [ads/inventory/](ads/inventory/) | Full ad-copy structure map (feeds future skills) | ✅ ready |
+| [ads/alignment/](ads/alignment/) | Does the keyword → ad → landing chain make sense? | ✅ ready |
+| [ads/metrics/](ads/metrics/) | QS + 3 pillars (Expected CTR, Ad Relevance, Landing Experience) | ✅ ready |
+| [ads/landing-cro/](ads/landing-cro/) | Does the landing page convert? Message + pain points | ✅ ready |
 
 ## Segmentation
 
