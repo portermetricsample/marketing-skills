@@ -39,16 +39,13 @@ Order matters: conversion tracking verdict gates whether any efficiency metric i
 ### Phase B — Core pages
 Run in parallel after Phase A:
 
-3. `performance/financial-overview` + `performance/funnel-metrics` → feeds **Page 1: Overview**
+3. `performance/financial-overview` + `performance/funnel-metrics` + `performance/brand-incrementality` → feeds **Page 1: Overview**
 4. `campaigns/spend-allocation` + `campaigns/impression-share` + `campaigns/bid-strategy` → feeds **Page 2: Campaigns**
 5. `measurement/conversion-cpa` → feeds **Page 3: Conversions**
 6. `ads/metrics` (QS) + `search-terms/match-types` → feeds **Page 4: Keywords** *(skip if gate fails)*
 7. `search-terms/performance` + `search-terms/n-grams` + `search-terms/classifier` → feeds **Page 5: Search Terms** *(skip if gate fails)*
 8. `segmentation/time/cyclical` → feeds **Page 6: Dayparting**
 9. `segmentation/audience/geography` → feeds **Page 7: Geography**
-
-### Phase C — Optional pages (need brand_terms)
-10. `performance/brand-incrementality` → feeds **Page 8: Brand Split** *(only if brand_terms provided)*
 
 ---
 
@@ -63,10 +60,11 @@ Google Ads skin = violet/purple palette (`#7c5cfc` primary). Apply to all charts
 ### Pages and their Porter reporting components
 
 #### Page 1 · Overview
-**Skills:** `financial-overview`, `funnel-metrics`, `segmentation/campaign`  
+**Skills:** `financial-overview`, `funnel-metrics`, `performance/brand-incrementality`, `segmentation/campaign`  
 **Components:**
 - KPI scorecard row: spend / conversions / CPA / ROAS vs prior period
 - Trend line: spend + conversions over time
+- `brand-incrementality` component: branded vs non-brand CPA/ROAS split *(requires brand_terms; skip block if not provided)*
 - Campaign contribution donut: spend share by campaign
 - `campaign-performance-table`: top campaigns by spend + CPA
 
@@ -107,12 +105,6 @@ Google Ads skin = violet/purple palette (`#7c5cfc` primary). Apply to all charts
 **Components:**
 - Geo bubble map (if Porter atlas supports the country; Canada = fallback to bars only)
 - Table: region / city → spend / conversions / CPA
-
-#### Page 8 · Brand Split *(only if brand_terms provided)*
-**Skills:** `performance/brand-incrementality`  
-**Components:**
-- `brand-incrementality` component: branded vs non-brand KPI split
-- Table: brand / non-brand / competitor → spend / CPA / ROAS
 
 ---
 
