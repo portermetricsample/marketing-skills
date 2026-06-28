@@ -40,12 +40,9 @@ Order matters: conversion tracking verdict gates whether any efficiency metric i
 Run in parallel after Phase A:
 
 3. `performance/financial-overview` + `performance/funnel-metrics` + `performance/brand-incrementality` → feeds **Page 1: Overview**
-4. `campaigns/spend-allocation` + `campaigns/impression-share` + `campaigns/bid-strategy` → feeds **Page 2: Campaigns**
-5. `measurement/conversion-cpa` → feeds **Page 3: Conversions**
-6. `ads/metrics` (QS) + `search-terms/match-types` → feeds **Page 4: Keywords** *(skip if gate fails)*
-7. `search-terms/performance` + `search-terms/n-grams` + `search-terms/classifier` → feeds **Page 5: Search Terms** *(skip if gate fails)*
-8. `segmentation/time/cyclical` → feeds **Page 6: Dayparting**
-9. `segmentation/audience/geography` → feeds **Page 7: Geography**
+4. `campaigns/spend-allocation` + `campaigns/impression-share` + `campaigns/bid-strategy` + `campaigns/campaign-settings` + `ads/metrics` + `search-terms/match-types` + `search-terms/performance` + `search-terms/n-grams` + `search-terms/classifier` → feeds **Page 2: Campaigns** *(keyword/ST sections skip if gate fails)*
+5. `segmentation/audience/geography` + `segmentation/audience/demographics` + `segmentation/audience/devices` → feeds **Page 3: Audiences**
+6. `segmentation/time/trend` + `segmentation/time/cyclical` → feeds **Page 4: Time**
 
 ---
 
@@ -68,43 +65,37 @@ Google Ads skin = violet/purple palette (`#7c5cfc` primary). Apply to all charts
 - Campaign contribution donut: spend share by campaign
 - `campaign-performance-table`: top campaigns by spend + CPA
 
-#### Page 2 · Campaigns
-**Skills:** `campaigns/spend-allocation`, `campaigns/impression-share`, `campaigns/bid-strategy`  
+#### Page 2 · Campaigns *(skip keywords/search terms sub-sections if all-PMax)*
+The full campaign segmentation: how spend is allocated, where visibility is lost, how bidding is set, and what the keyword and search term inventory looks like.
+
+**Skills:** `campaigns/spend-allocation`, `campaigns/impression-share`, `campaigns/bid-strategy`, `campaigns/campaign-settings`, `ads/metrics`, `search-terms/match-types`, `search-terms/performance`, `search-terms/n-grams`, `search-terms/classifier`  
 **Components:**
 - `campaign-performance-table`: SUMAS breakdown (spend / IS / CPA / bid strategy / status)
 - `impression-share-trend-monitor`: IS over time by campaign
 - `impression-share-competitiveness`: budget-limited vs rank-limited split
+- Match type bar chart: broad / phrase / exact spend share *(skip if PMax-only)*
+- Keyword table with QS (Expected CTR + Ad Relevance + Landing Experience) *(skip if PMax-only)*
+- `search-terms-page`: Winning / Watch / Waste classification *(skip if PMax-only)*
+- `search-term-ngrams`: 1/2/3-gram patterns → negative candidates *(skip if PMax-only)*
 
-#### Page 3 · Conversions
-**Skills:** `measurement/conversion-tracking`, `measurement/conversion-cpa`  
-**Components:**
-- KPI scorecard row: total conversions + CPA (note: primary actions only)
-- Trend line: conversions over time by action type
-- Table: per-conversion-action cost and volume
+#### Page 3 · Audiences
+Segmentation by who was reached. Three sub-sections on the same page, ordered by data availability.
 
-#### Page 4 · Keywords *(skip if all-PMax)*
-**Skills:** `ads/metrics`, `search-terms/match-types`  
+**Skills:** `segmentation/audience/geography`, `segmentation/audience/demographics`, `segmentation/audience/devices`  
 **Components:**
-- Match type bar chart: broad / phrase / exact spend share
-- Keyword table with QS (Expected CTR + Ad Relevance + Landing Experience columns)
+- **Geography:** geo bubble map + table (region / city → spend / conversions / CPA). Canada = fallback to bars only (no atlas support).
+- **Demographics:** age × gender grid → over/underperforming segments vs account CPA
+- **Devices:** desktop / mobile / tablet split → spend share + CPA per device
 
-#### Page 5 · Search Terms *(skip if all-PMax)*
-**Skills:** `search-terms/performance`, `search-terms/n-grams`, `search-terms/classifier`  
-**Components:**
-- `search-terms-page`: full search term table (Winning / Watch / Waste classification)
-- `search-term-ngrams`: top 1/2/3-gram patterns → negative candidates
+#### Page 4 · Time
+Segmentation by when performance happened — all granularities on one page, coarse to fine.
 
-#### Page 6 · Dayparting
-**Skills:** `segmentation/time/cyclical`  
+**Skills:** `segmentation/time/trend`, `segmentation/time/cyclical`  
 **Components:**
-- Heatmap: day-of-week × hour-of-day → CPA or ROAS (cell color = vs account average)
-- Summary: best slot / worst slot / recommended bid adjustment direction
+- **Trend (coarse → fine):** year → quarter → month → week → day line chart. Highlight the inflection point where CPA or ROAS turned.
+- **Cyclical (day-of-week × hour):** heatmap with cell color = vs account average CPA/ROAS. Surfaces scheduling patterns and bid adjustment candidates.
 
-#### Page 7 · Geography
-**Skills:** `segmentation/audience/geography`  
-**Components:**
-- Geo bubble map (if Porter atlas supports the country; Canada = fallback to bars only)
-- Table: region / city → spend / conversions / CPA
+> **Why not a separate Dayparting page?** Day-of-week and hour-of-day are two granularities of time — they belong on the same page as monthly and weekly trends, not isolated. Isolation would fragment the story; together they show the full time picture from year down to hour.
 
 ---
 
@@ -113,19 +104,19 @@ Google Ads skin = violet/purple palette (`#7c5cfc` primary). Apply to all charts
 - **Skin:** Google Ads (violet/purple). All charts use `Porter.charts.*` — no SVG/D3 from scratch.
 - **Page title format:** `[Account Name] · Google Ads · [Month YYYY]`
 - **Date range:** always shown in the report header.
-- **Conversion tracking flag:** if `conversion-tracking` verdict was "unreliable," add a banner on Page 3 and a note on Page 1 KPIs.
-- **Skipped pages:** if Keywords/Search Terms were skipped due to campaign type gate, add a note on the Overview page explaining why.
+- **Conversion tracking flag:** if `conversion-tracking` verdict was "unreliable," add a note on Page 1 KPIs and on any efficiency metric on Pages 2–4.
+- **Skipped sections:** if keywords/search terms were skipped due to campaign type gate, add a visible note on Page 2 explaining why.
 
 ---
 
-## Gaps (pages not yet in the template)
+## Gaps (sections not yet in the template)
 
 These skills exist but have no matching page yet — add as the template evolves:
 
 | Future page | Skills ready | Porter component ready |
 |-------------|-------------|----------------------|
 | Ads health | `ads/copy`, `ads/assets`, `ads/health` | `creative-ad-preview`, `keyword-ad-landing-alignment` |
-| Audiences | `segmentation/audience/demographics`, `segmentation/audience/devices` | not yet |
+| Conversions detail | `measurement/conversion-cpa` | per-action cost table |
 
 ---
 
