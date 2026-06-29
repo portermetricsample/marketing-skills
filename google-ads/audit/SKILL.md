@@ -105,6 +105,33 @@ Each skill returns a verdict and a dollar estimate. Score sections before writin
 
 ---
 
+## Step 2.5 — Verify every finding before you write it (anti-hallucination gate)
+
+The audit is read as fact by a client, so a false flag is worse than a missed one. Before a finding
+goes in the document it must pass all four:
+
+1. **Cite the source.** Every HIGH/MED finding traces to a specific pull — name the field + window it
+   came from. If you can't point to the pull, it doesn't ship.
+2. **Cross-check with a second lens.** Re-derive the claim a different way before trusting it:
+   - **"Action didn't fire / isn't tracked / 0 conversions"** → check `all_conversions` too AND a
+     wider/earlier window. `conversions=0` with `all_conversions>0` = *secondary, fires* (not absent);
+     a recent-month 0 may be **reporting lag** (offline/PURCHASE import late). Say the verified state,
+     never "fired zero" off the primary field alone. (This exact trap produced a false "Paying
+     Customers fired zero" finding in testing — the action fired ~11/mo as a secondary.)
+   - **"Campaign spent $X for 0 conversions"** → confirm it's the primary `conversions` field and
+     re-check against a settled window before calling it pure waste.
+   - **Any rate (CTR/CPA/ROAS/CVR)** → recompute from base counts; never trust an aggregate ratio field.
+   - **Quality Score** → categorical pillars only; numeric QS from `query_data` is corrupted.
+   - **Bid targets / "primary" status** → `primary_for_goal` is True for every action (connector bug);
+     derive primary from `conversions>0`, derive targets from `campaign.list` (per the Step 0 pre-flight).
+3. **Calibrate the wording to the evidence.** Absolute words — "zero", "never", "not tracked",
+   "broken" — are only allowed when the cross-check confirms them. When the data is a snapshot or
+   ambiguous, downgrade: "fires but secondary", "0 in May (provisional — verify in-account)".
+4. **When unresolved, flag don't assert.** If a finding can't be corroborated, render it as a
+   `c-review` / "verify in-account", not a `c-broken`. Never fabricate a number to fill a section.
+
+---
+
 ## Step 3 — Write the document
 
 ### Document skeleton (in order, no exceptions)
