@@ -26,7 +26,7 @@ Reference audits (read these to calibrate tone and density):
 **Run campaign fingerprint first** — determines which sections to include or skip:
 - All Search → full audit
 - PMax present → skip Keywords/Search Terms sections; note the gap
-- Demand Gen present → add §DG section
+- Demand Gen present → add DG section
 - Shopping present → add product P&L note (out of scope for this skill version)
 
 ---
@@ -47,6 +47,8 @@ Run these concurrently after Step 0. Each returns findings + a verdict.
 | `search-terms/performance` | Winning / Watch / Waste by spend |
 | `search-terms/n-grams` | Top waste buckets by 1/2/3-gram pattern |
 | `search-terms/classifier/branded` | Brand leak detection + competitor terms |
+| `search-terms/negatives` | Layer 1 (presence) + Layer 2 (brand containment) — feeds the search terms section |
+| `search-terms/match-types` | Spend concentration by Broad/Phrase/Exact — is budget too heavy on one match type? |
 | `ads/copy` | RSA Ad Strength + asset labels (PENDING/GOOD/LOW/BEST) |
 | `ads/assets` | Sitelinks / callouts / snippets / images present? |
 | `ads/alignment` | Keyword → Ad → Landing chain coherence |
@@ -69,7 +71,7 @@ Each skill returns a verdict and a dollar estimate. Score sections before writin
 - `LOW` — housekeeping, optimization when ready, or low-volume signal
 
 **Ordering rule:**
-1. `measurement/conversion-tracking` is **always §01** — a broken conversion signal corrupts every other number. Run and write this first regardless of severity score.
+1. `measurement/conversion-tracking` is **always 01** — a broken conversion signal corrupts every other number. Run and write this first regardless of severity score.
 2. Remaining sections ordered by `HIGH → MED → LOW`, then by spend at stake within each tier.
 3. `What's Set Up Right` and `Action Plan` always come last.
 
@@ -167,7 +169,7 @@ HIGH = largest $ at stake · MED = real impact, lower urgency · LOW = housekeep
 ```html
 <div class="section" id="[slug]">
   <div class="section-head">
-    <span class="section-num">§N</span>
+    <span class="section-num">N</span>
     <h2>[Section title — question form preferred: "Is the conversion signal trustworthy?"]</h2>
     <span class="chip c-broken|c-review|c-ok|c-na">[Verdict]</span>
     <span class="sev sev-h|sev-m|sev-l">[HIGH|MED|LOW]</span>
@@ -216,56 +218,179 @@ HIGH = largest $ at stake · MED = real impact, lower urgency · LOW = housekeep
 
 ### Sections — what each one covers
 
-#### §01 · Conversion tracking *(always first)*
+#### 01 · Conversion tracking *(always first)*
 **Skill:** `measurement/conversion-tracking`  
 **Check:** Are conversions down-funnel (policy approved, purchase, form fill) — not page views or app starts? Are values assigned? Are deprecated Universal Analytics goals still counting? Is offline/CRM import active?  
-**Bridge:** a noisy conversion signal corrupts bid targets → leads to §02.
+**Bridge:** a noisy conversion signal corrupts bid targets → leads to 02.
 
-#### §02+ · Spend allocation & budget
+#### 02+ · Spend allocation & budget
 **Skill:** `campaigns/spend-allocation` + `campaigns/impression-share`  
 **Check:** Which campaigns are capped (lost to budget)? Which are losing to rank? Who spends the most and converts the least? Per-campaign spend / conv / CPA / IS table. IS budget-vs-rank split.
 
-#### §· Bid strategy
+#### · Bid strategy
 **Skill:** `campaigns/bid-strategy` + `campaigns/value-based-bidding`  
-**Check:** Target vs actual (tCPA, tROAS). Is value-based bidding set where conversion values exist? Are $0-value conversions feeding value bidding?  
-**Caveat:** pull bid targets directly from the API via `campaign.list` — NOT from performance metrics (known Porter artifact: budget fields return wrong values when combined with performance metrics).
+**Check:** Target vs actual (tCPA, tROAS). Broken if Maximize Conversions/Value with no tCPA/tROAS target AND rank-lost IS > 40% — the absent guardrail IS the misconfiguration. Is value-based bidding set where conversion values exist? Are $0-value conversions feeding value bidding?  
+**Caveat:** pull bid targets via GAQL `report.query` — `campaign.list` fails for ~75% of accounts (schema bug or 401). A returned 0 on target fields = no guardrail (meaningful signal). Numeric target values from any route are corrupted (fan-out artifact) — trust only the binary "set vs not set".
 
-#### §· Quality Score
+#### · Quality Score
 **Skill:** `ads/metrics`  
-**Check:** 3 pillars per keyword (Ad Relevance, Expected CTR, Landing Experience). Never report numeric QS — it sums across ad groups and is meaningless. Focus on keywords with highest spend + below-average pillars.
+**Check:** 3 pillars per keyword (Ad Relevance, Expected CTR, Landing Experience). Pull via GAQL `keyword_view` — these fields are absent from `query_data`/`list_fields` in most accounts (route dependency, not a field gap). Numeric QS via GAQL `keyword_view` IS reliable (1-10 per keyword). Numeric QS via `query_data` is NOT (aggregates to nonsensical values — never use). Focus on keywords with highest spend + below-average pillars.
 
-#### §· Search terms & negatives
-**Skills:** `search-terms/performance`, `search-terms/n-grams`, `search-terms/classifier/branded`  
+#### · Search terms & negatives
+**Skills:** `search-terms/performance`, `search-terms/n-grams`, `search-terms/classifier/branded`, `search-terms/negatives`
+
+This section has three distinct blocks. Run all four skills in parallel and render them as subsections.
+
+---
+
+**Block 0 — Negative keyword presence check**
+
+**Goal:** establish whether negative keywords exist at all before analyzing waste. This is a binary check that can produce the highest-severity finding in the section.
+
+**How:** run `search-terms/negatives` (Layer 1 + Layer 2) first. Cross-reference campaign list vs campaigns with negatives to find zero-negative campaigns.
+
+**Verdict table columns:** Campaign · Type · Negative count · Verdict chip · Severity
+
+| Finding | Verdict | Severity |
+|---------|---------|----------|
+| Any Search campaign with 0 negatives | c-broken | HIGH |
+| PMax with <50% of Search campaign negative count | c-review | MED |
+| 1–9 negatives in a Search campaign | c-review | MED |
+| All campaigns have 10+ negatives | c-ok | — |
+
+**Callout — zero negatives:**
+```
+co-fix: "Add negative keywords to [Campaign name]"
+Where: Google Ads UI → [Campaign] → Keywords → Negative keywords
+What: Add intent-filter negatives first (free, cheap, DIY, jobs), then brand containment
+Why: A campaign with zero negatives serves every query that matches any keyword — including irrelevant, low-intent, and competitor brand searches
+```
+
+**Callout — PMax gap (if present):**
+```
+co-info: "PMax campaign has [N] negatives vs [N] average in Search campaigns"
+Why: PMax doesn't support ad-group-level negatives. Apply shared negative lists that cover the same intent filters used in Search.
+```
+
+---
+
+**Block 1 — Waste & negatives**
+
 **Check:** What % of non-brand spend drove zero conversions? Top individual waste terms + worst-value n-gram buckets. Competitor terms: conquest or accident?
 
-#### §· Landing page CRO
+Table columns: Search term · Campaign · Match type · Spend · Conversions · CPA · Verdict chip (Waste / Watch / Win)
+
+Callout rules:
+- `co-fix` if any single term > 2% of total spend with 0 conversions → "Add as negative exact in [Campaign]"
+- `co-fix` if a competitor term appears with significant spend → "Conquest or accident? Verify intent — if accidental, add negative. If conquest, isolate in its own ad group with tailored copy."
+- `co-watch` if a term has conversions but CPA > 2× account average → flag for bid adjustment before negative
+
+---
+
+**Block 2 — Brand containment**
+
+**Goal:** detect own-brand search terms being captured by non-brand campaigns (the "contain_brand" leak). This is the structural problem Resolve audits flag as "Brand and Non-brand Separation."
+
+**Check using `search-terms/classifier/branded`:**
+1. Classify every search term as `brand` / `competitor` / `generic`.
+2. Flag any `brand`-class term served by a campaign NOT in the brand campaign list (`contain_brand = true`).
+3. Calculate total spend and conversions on those leaked brand terms.
+
+**Verdict logic:**
+- If `contain_brand_spend` > 5% of total non-brand campaign spend → `c-broken` / HIGH
+- If `contain_brand_spend` 1–5% → `c-review` / MED
+- If 0 contain_brand terms found → `c-ok` / PASS
+
+**Table columns:** Search term · Served by (campaign) · Should be in (brand campaign) · Spend · Conversions · Match type of triggering keyword
+
+**Callout — always include if any contain_brand terms exist:**
+
+```
+co-fix: "Add brand terms as negative keywords in generic campaigns"
+Where: Each non-brand campaign listed in the contain_brand table
+What: Add [exact match] negatives for each brand-class term found — use the exact term strings from the classifier output, not paraphrases
+Why: Brand searches convert at lower cost when isolated; generic campaigns inflate CPL by competing with the brand campaign's own intent
+Match type rule: always negative exact [brand term] — negative broad risks blocking legitimate generic variants
+```
+
+**Structural recommendation (include when contain_brand_spend is HIGH):**
+
+```
+co-fix: "Restructure into separate brand and non-brand campaigns if not already done"
+Where: Google Ads campaign settings
+What: Create a dedicated brand campaign (if none exists) with brand keywords on exact match. Add all brand terms as negative exact in every generic campaign.
+Why: Without separation, Smart Bidding learns a blended CPA that undervalues brand intent and overweights generic CPL — the account can't optimize each correctly.
+```
+
+**Bridge:** brand containment fixes the intent routing; the next section checks whether the landing pages those terms reach are converting correctly.
+
+#### · Match types
+**Skill:** `search-terms/match-types`  
+**Check:** Is spend over-concentrated in one match type (usually Broad)? Is any type sitting untested at $0?
+
+**Always open with the concentration table** — one row per type, never skip a type even if $0:
+
+| Match type | Spend | Share | Conversions | CPA | Verdict |
+|---|---|---|---|---|---|
+| Broad | … | …% | … | … | chip |
+| Phrase | … | …% | … | … | chip |
+| Exact | … | …% | … | … | chip |
+
+**Blend guardrail (mandatory):** if the account has more than one primary conversion action (e.g. Form Fill + Purchase, or Trial + MQL), mark every CPA value as `directional` and do NOT assert which type is "most efficient." Porter cannot split qualified actions by match type — the per-type CPA is a blend that can invert the true ranking. State this explicitly.
+
+**Verdict per type:**
+- `c-broken` — a type holds ≥70% of spend with no concentration benefit (CPA not clearly better), or a type is untested at $0 with obvious upside
+- `c-review` — concentration exists but CPA advantage is visible; test advised before rebalancing
+- `c-ok` — no concentration issue
+
+**Drill-down rule:** only drill into individual keywords when a type is flagged `c-broken` or `c-review`. Show top 5 keywords by spend for the flagged type only.
+
+**Callout — concentrated:**
+```
+co-fix: "Rebalance spend off [Match type]"
+Where: Google Ads → Keywords tab → filter by match type
+What: Shift 20–30% of [Match type] budget to [Exact/Phrase] — run as parallel ad groups first
+Why: [N]% of spend on one match type increases query irrelevance risk; diversifying gives bid optimization more signal
+```
+
+**Callout — untested type:**
+```
+co-watch: "Pilot [Match type] on top ad groups"
+Where: Google Ads → best-performing ad groups
+What: Add 5–10 [Phrase/Exact] keywords mirroring existing Broad winners; run for 30 days
+Why: [Match type] has $0 spend — no data on whether it performs better or worse than the current blend
+```
+
+**Bridge:** match type distribution explains part of the search term waste pattern — over-indexing on Broad generates more irrelevant queries.
+
+#### · Landing page CRO
 **Skills:** `ads/landing-cro`, `ads/alignment`  
 **Check:** Live scrape each unique landing page. 5 criteria: value prop / CTA / differentiation / proof / form friction. Flag message-match breaks (keyword searches for X, lands on page about Y).
 
-#### §· Audience & demographics
+#### · Audience & demographics
 **Skill:** `segmentation/audience/demographics-audit`  
 **Check:** Age/gender efficiency vs account average. Undetermined bucket size (often 30%+ of spend). Which segments deserve bid up/down.
 
-#### §· Geography
+#### · Geography
 **Skill:** `segmentation/audience/geography`  
 **Check:** Province/region CPA vs account average. Language/market mismatch (e.g. English ads in French Quebec). Best and worst geos.  
 **Caveat:** Porter Canada geo = no map atlas. Use bars, not geo bubble.
 
-#### §· Ad assets (RSA copy)
+#### · Ad assets (RSA copy)
 **Skills:** `ads/copy`, `ads/assets`  
 **Check:** Sitelinks / callouts / snippets / images present? RSA asset labels (PENDING = not enough data yet; note this honestly). Pinning abuse. Ad Strength.  
 **Known gap:** sitelinks and snippets often return blank from the Porter connector → flag for manual UI verification, never report as missing.
 
-#### §· Device & ad schedule
+#### · Device & ad schedule
 **Skills:** `segmentation/audience/devices`, `segmentation/time/cyclical`  
 **Check:** Desktop vs mobile CPA/ROAS gap. Day-of-week conversion pattern vs spend distribution. Weekend efficiency vs weekday.  
 **Rule:** don't recommend bid adjustments if < 30 conversions per device — low-confidence signal, say so explicitly.
 
-#### §· Campaign settings
+#### · Campaign settings
 **Skill:** `campaigns/campaign-settings`  
 **Check:** Location = Presence (not "presence or interest")? Search Partners OFF? Display Network OFF on Search campaigns? These are pass/fail checks.
 
-#### §· Demand Gen *(only if DG campaigns exist)*
+#### · Demand Gen *(only if DG campaigns exist)*
 **Skill:** `campaigns/demand-gen`  
 **Check:** DG campaign CPA/ROAS vs non-brand Search baseline. Is it earning its place?  
 **Known gap:** asset-group detail not available via Porter connector → note in section, direct to UI.
@@ -290,7 +415,7 @@ Ranked by $ at stake (not by section order). Each item:
   <div class="tc">
     <div class="tt">[Action title — imperative verb]</div>
     <div class="td">[2-3 sentences: what exactly to do, where, expected outcome]</div>
-    <span class="tmeta">§[N] · [HIGH|MED|LOW] · Est. [time] in [tool]</span>
+    <span class="tmeta">[N] · [HIGH|MED|LOW] · Est. [time] in [tool]</span>
   </div>
 </div>
 ```
@@ -318,9 +443,16 @@ Always acknowledge in the relevant section, never pretend data is missing:
 | Auction Insights competitor overlap | Note as unavailable, direct to Google Ads UI → Auction Insights tab |
 | Demand Gen asset-group detail | Note as unavailable, direct to UI → Demand Gen campaign → Asset groups |
 | Sitelinks / snippets / images | Flag for UI verification, do NOT report as absent |
-| Bid targets (tCPA / tROAS) | Pull via `campaign.list` action directly, NOT from query_data performance fields |
-| Numeric Quality Score | Never report — use 3 categorical pillars only |
+| Bid targets (tCPA / tROAS) | `campaign.list` is broken for ~75% of accounts (UNRECOGNIZED_FIELD schema bug or 401). Use GAQL `report.query` as primary route. A returned 0 or null on target fields = no guardrail set (meaningful signal — not a data error). Trust only the binary "target set vs not set" — numeric values from any route are corrupted by fan-out artifact. |
+| Numeric QS via query_data | Never use — `query_data` aggregates values across ad groups, returns numbers like 16, 35, 46, 205 (outside the 1-10 scale). Use GAQL `keyword_view` instead: `adGroupCriterion.qualityInfo.qualityScore` returns correct 1-10 per keyword. |
+| QS 3 categorical pillars | NOT available via `query_data`/`list_fields` in most accounts — this is a route dependency, not a field gap. Use GAQL `keyword_view`: `adGroupCriterion.qualityInfo.searchPredictedCtr`, `.creativeQualityScore`, `.postClickQualityScore` |
+| Network settings booleans all False | When `target_search_network`, `target_content_network`, `target_partner_search_network` all return False for every campaign including active ones — this is a Porter rendering artifact, not real account config. Do NOT report as "correctly OFF". Add co-info callout directing to Google Ads UI → Campaign → Settings → Networks. |
 | Geographic data (reauth) | If unavailable, infer from campaign structure + note the gap |
+| Geographic view — city/region granularity | `geographic_view` returns country-level criterion IDs only (integers: 2840=US, 2124=Canada). Sub-national data (city, region, DMA) requires `user_location_view`, not `geographic_view`. Canada has no Porter atlas — use bar tables, not geo bubble. |
+| Search terms — sort order | `order_by` is not supported in `query_data` — results return in default order, not sorted by spend. Sort results client-side after retrieval. Cannot guarantee "top by spend" ordering from query_data directly. |
+| PMax search terms | Zero rows returned from `search_term_view` for PMax campaigns — confirmed Google API limitation, not a Porter gap. Direct client to Google Ads UI → Performance Max campaign → Insights tab → Search terms. |
+| Age + gender in single query | Cannot be combined — universal Google API restriction. Run two separate queries: `age_range_view` and `gender_view`. PMax does not expose either view at all. |
+| Landing page URL field | `google_ads_final_url` is not a valid field name. Use `google_ads_unexpanded_final_url` as the proxy field. |
 
 ---
 
