@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="cream">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Ads Audit — [Client Name]</title>
+
+  <!-- Porter Design System tokens — all semantic vars + .pds-* classes -->
+  <link rel="stylesheet" href="../../../../porter-design/dist/porter-tokens.css">
+
+  <!-- Audit-specific layout (audit structure only — all colors via var(--...)) -->
+  <style>
+    /* ── Reset & base ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--surface-bg);
+      color: var(--text-body);
+      font-family: var(--font-hanken, 'Hanken Grotesk', sans-serif);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .doc {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 48px 32px 96px;
+    }
+
+    /* ── Typography ────────────────────────────────────────────────── */
+    h1, h2, h3, .val { font-family: var(--font-bricolage, 'Bricolage Grotesque', sans-serif); }
+    h1 { font-size: 2.4rem; font-weight: 800; color: var(--text-title); line-height: 1.1; }
+    h2 { font-size: 1.35rem; font-weight: 700; color: var(--text-title); }
+    h3 { font-size: 1.15rem; font-weight: 700; color: var(--text-title); }
+    p  { color: var(--text-body); }
+
+    .eyebrow {
+      font-family: var(--font-bricolage, 'Bricolage Grotesque', sans-serif);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--eyebrow-color);
+    }
+
+    /* ── Header ────────────────────────────────────────────────────── */
+    .audit-header {
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 32px;
+      margin-bottom: 40px;
+    }
+
+    .brandrow {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 20px;
+    }
+
+    .sub {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 6px;
+    }
+
+    .ga-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--tint-a-bg);
+      color: var(--tint-a-text);
+      font-family: var(--font-bricolage, 'Bricolage Grotesque', sans-serif);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      border-radius: 999px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .ga-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--eyebrow-color);
+    }
+
+    .metarow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 24px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .metarow span::before {
+      content: '·';
+      margin-right: 8px;
+      opacity: 0.4;
+    }
+    .metarow span:first-child::before { content: none; }
+
+    /* ── Executive summary ──────────────────────────────────────────── */
+    .exec-summary {
+      background: var(--surface-card);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 32px;
+      margin-bottom: 40px;
+    }
+
+    .exec-summary .tag {
+      display: inline-block;
+      font-family: var(--font-bricolage, 'Bricolage Grotesque', sans-serif);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--eyebrow-color);
+      margin-bottom: 12px;
+    }
+
+    .exec-summary h3 {
+      font-size: 1.25rem;
+      margin-bottom: 16px;
+    }
+
+    .exec-summary p { margin-bottom: 14px; }
+    .exec-summary p:last-of-type { margin-bottom: 16px; }
+
+    .do {
+      background: var(--stat-bg);
+      border-left: 3px solid var(--eyebrow-color);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      font-size: 0.88rem;
+    }
+
+    .do b { color: var(--text-title); }
+
+    /* ── KPI scorecards ─────────────────────────────────────────────── */
+    .scorecards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .scard {
+      background: var(--surface-card);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .scard .lab {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .scard .val {
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: var(--text-title);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .scard .delta {
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .scard .cap {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      display: block;
+    }
+
+    .d-good { color: var(--good); }
+    .d-bad  { color: var(--bad); }
+    .d-flat { color: var(--text-muted); }
+
+    /* ── Legend ─────────────────────────────────────────────────────── */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 20px;
+      background: var(--surface-card);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 14px 20px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+    }
+
+    .legend-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .legend-div {
+      width: 1px;
+      height: 20px;
+      background: var(--card-border);
+    }
+
+    /* ── Chips ──────────────────────────────────────────────────────── */
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      font-family: var(--font-bricolage, 'Bricolage Grotesque', sans-serif);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .c-broken { background: var(--callout-risk-bg); color: var(--callout-risk-tx); }
+    .c-review { background: var(--callout-warn-bg); color: var(--callout-warn-tx); }
+    .c-ok     { background: var(--callout-win-bg);  color: var(--callout-win-tx);  }
+    .c-na     { background: var(--chip-bg);          color: var(--chip-text);        }
+
+    /* severity badges */
+    .sev {
+      display: inline-flex;
+      align-items: center;
+      font-family: var(--font-bricolage, 'Bricolage Grotesque', sans-serif);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .sev-h { background: var(--callout-risk-bg);  color: var(--callout-risk-tx); }
+    .sev-m { background: var(--callout-warn-bg);  color: var(--callout-warn-tx); }
+    .sev-l { background: var(--chip-bg);           color: var(--chip-text); }
+
+    /* row-level state chips (inside tables) */
+    .state .s-ok      { background: var(--callout-win-bg);  color: var(--callout-win-tx);  }
+    .state .s-raise   { background: var(--callout-win-bg);  color: var(--callout-win-tx);  }
+    .state .s-review  { background: var(--callout-warn-bg); color: var(--callout-warn-tx); }
+    .state .s-flag    { background: var(--callout-warn-bg); color: var(--callout-warn-tx); }
+    .state .s-broken  { background: var(--callout-risk-bg); color: var(--callout-risk-tx); }
+    .state .s-cut     { background: var(--callout-risk-bg); color: var(--callout-risk-tx); }
+
+    /* ── Sections ───────────────────────────────────────────────────── */
+    .section {
+      background: var(--surface-card);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .section-num {
+      font-family: var(--font-bricolage, 'Bricolage Grotesque', sans-serif);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--eyebrow-color);
+      min-width: 32px;
+    }
+
+    .section-head h2 { flex: 1; min-width: 200px; }
+
+    .lead {
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+      line-height: 1.65;
+    }
+
+    .lead b { color: var(--text-title); }
+
+    /* ── Tables ─────────────────────────────────────────────────────── */
+    .tablewrap {
+      overflow-x: auto;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    thead th {
+      background: var(--tint-a-bg);
+      color: var(--tint-a-text);
+      font-family: var(--font-hanken, 'Hanken Grotesk', sans-serif);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--card-border);
+      white-space: nowrap;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    tbody tr:last-child { border-bottom: none; }
+
+    tbody tr:hover { background: var(--surface-sunken); }
+
+    tbody td {
+      padding: 12px 14px;
+      vertical-align: top;
+      color: var(--text-body);
+    }
+
+    .num {
+      font-family: var(--font-bricolage, 'Bricolage Grotesque', sans-serif);
+      font-size: 0.85rem;
+      text-align: right;
+      color: var(--text-title);
+    }
+
+    .state { text-align: center; }
+
+    .ev {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .rec { font-size: 0.82rem; line-height: 1.5; }
+    .rec b { color: var(--text-title); }
+
+    /* ── Callouts ───────────────────────────────────────────────────── */
+    .callout {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      border-left: 3px solid transparent;
+      border-radius: 0 8px 8px 0;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      font-size: 0.88rem;
+    }
+
+    .callout:last-of-type { margin-bottom: 0; }
+
+    .co-fix   { border-left-color: var(--bad);              background: var(--callout-risk-bg); }
+    .co-watch { border-left-color: var(--callout-warn-tx);  background: var(--callout-warn-bg); }
+    .co-info  { border-left-color: var(--eyebrow-color);    background: var(--callout-info-bg); }
+    .co-win   { border-left-color: var(--good);             background: var(--callout-win-bg);  }
+
+    .callout .ico {
+      font-family: var(--font-bricolage, 'Bricolage Grotesque', sans-serif);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      margin-top: 2px;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+
+    .co-fix   .ico { background: var(--callout-risk-bg); color: var(--callout-risk-tx); border: 1px solid var(--callout-risk-tx); }
+    .co-watch .ico { background: var(--callout-warn-bg); color: var(--callout-warn-tx); border: 1px solid var(--callout-warn-tx); }
+    .co-info  .ico { background: var(--callout-info-bg); color: var(--callout-info-tx); border: 1px solid var(--callout-info-tx); }
+    .co-win   .ico { background: var(--callout-win-bg);  color: var(--callout-win-tx);  border: 1px solid var(--callout-win-tx);  }
+
+    .callout .ct { flex: 1; line-height: 1.55; }
+    .callout .ct b { color: var(--text-title); }
+
+    /* ── Bridge ─────────────────────────────────────────────────────── */
+    .sec-bridge {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--card-border);
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* ── Term chip — inline technical glossary ──────────────────────
+       Used in h2 titles, lead paragraphs, and callouts to surface
+       the technical name alongside plain-language explanation.
+       Neutral color (chip-bg) so it doesn't compete with verdict chips.
+    ────────────────────────────────────────────────────────────────── */
+    .term {
+      display: inline-flex;
+      align-items: center;
+      font-family: var(--font-bricolage, 'Bricolage Grotesque', sans-serif);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      background: var(--chip-bg);
+      color: var(--chip-text);
+      padding: 1px 7px;
+      border-radius: 4px;
+      vertical-align: middle;
+      white-space: nowrap;
+      position: relative;
+      top: -1px;
+    }
+
+    /* ── What's Set Up Right ─────────────────────────────────────────── */
+    .passgrid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .passcard {
+      background: var(--callout-win-bg);
+      color: var(--callout-win-tx);
+      border-radius: 10px;
+      padding: 16px 18px;
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    .passcard strong {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    /* ── Action plan ────────────────────────────────────────────────── */
+    .action-plan { counter-reset: action; }
+
+    .action-plan .item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      background: var(--surface-card);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 12px;
+    }
+
+    .item .rank {
+      counter-increment: action;
+      font-family: var(--font-bricolage, 'Bricolage Grotesque', sans-serif);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--eyebrow-color);
+      min-width: 36px;
+      line-height: 1;
+    }
+
+    .item .rank::before { content: counter(action, decimal-leading-zero); }
+
+    .item .tc { flex: 1; }
+
+    .item .tt {
+      font-family: var(--font-bricolage, 'Bricolage Grotesque', sans-serif);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-title);
+      margin-bottom: 6px;
+    }
+
+    .item .td { font-size: 0.88rem; color: var(--text-body); line-height: 1.55; margin-bottom: 8px; }
+
+    .item .tmeta {
+      display: inline-flex;
+      gap: 8px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .item .tmeta span {
+      background: var(--surface-sunken);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    /* ── Footer ─────────────────────────────────────────────────────── */
+    .audit-footer {
+      margin-top: 56px;
+      padding-top: 24px;
+      border-top: 1px solid var(--card-border);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* ── Theme switcher (dev only — remove before delivery) ─────────── */
+    .theme-switch {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      display: flex;
+      gap: 6px;
+      background: var(--surface-card);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 6px 8px;
+      z-index: 100;
+    }
+
+    .theme-switch button {
+      font-size: 0.72rem;
+      font-family: var(--font-bricolage, 'Bricolage Grotesque', sans-serif);
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 4px;
+      border: 1px solid var(--card-border);
+      background: var(--surface-sunken);
+      color: var(--text-body);
+      cursor: pointer;
+    }
+
+    .theme-switch button.active {
+      background: var(--eyebrow-color);
+      color: #fff;
+      border-color: var(--eyebrow-color);
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Theme switcher (dev only — remove before delivery) -->
+<div class="theme-switch">
+  <button onclick="setTheme('cream')" class="active">Cream</button>
+  <button onclick="setTheme('white')">White</button>
+  <button onclick="setTheme('blue')">Blue</button>
+  <button onclick="setTheme('purple')">Purple</button>
+</div>
+
+<div class="doc">
+
+  <!-- ══════════════════════════════════════════════════════════════
+       HEADER
+  ════════════════════════════════════════════════════════════════ -->
+  <header class="audit-header">
+    <div class="brandrow">
+      <div>
+        <span class="eyebrow">Google Ads Account Audit</span>
+        <h1>[Client Name]</h1>
+        <p class="sub">[Business description — 1 line]</p>
+      </div>
+      <span class="ga-badge"><span class="ga-dot"></span>Google Ads</span>
+    </div>
+    <div class="metarow">
+      <span>Jan 1 – Mar 31, 2025</span>
+      <span>Account 123-4567890</span>
+      <span>Search</span>
+      <span>Canada</span>
+      <span>Audit date: Jun 28, 2025</span>
+      <span>CAD</span>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       EXECUTIVE SUMMARY
+  ════════════════════════════════════════════════════════════════ -->
+  <div class="exec-summary">
+    <span class="tag">Executive summary</span>
+    <h3>$48K spent this quarter — but the account is measuring the wrong thing, so we don't actually know if it's working.</h3>
+    <p>Google Ads recorded 214 leads in Q1. The real number is 28 — the other 186 were people who just visited the homepage. This single misconfiguration (<span class="term">Page View</span> set as the main goal instead of the contact form) makes every efficiency number in the account unreliable. The cost per lead looks like $225. It's actually $1,725.</p>
+    <p>On top of that, the non-brand campaigns are spending $6,800 on searches that will never convert — things like "medical office space rental" ($890 alone). That's 14% of total spend with zero return. The branded campaigns, by contrast, are efficient and well-protected.</p>
+    <p>What's working: the account is technically clean — ads show only to people in the right location, not on banner sites or partner networks. The brand campaign is profitable. These are solid foundations once the measurement is fixed.</p>
+    <div class="do">
+      <b>Do first:</b> Fix what Google Ads counts as a lead (§01) — everything else is noise until that number is right. Then cut the searches that are wasting money (§06). Then reset the cost-per-lead targets to match reality (§02).
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       KPI SCORECARDS
+  ════════════════════════════════════════════════════════════════ -->
+  <div class="scorecards">
+    <div class="scard">
+      <div class="lab">Spend</div>
+      <div class="val">$48.3K</div>
+      <span class="delta d-bad">▲ 18.2% vs prior</span>
+      <span class="cap">Q1 2025 vs Q1 2024</span>
+    </div>
+    <div class="scard">
+      <div class="lab">Conversions (primary)</div>
+      <div class="val">28</div>
+      <span class="delta d-bad">▼ 34.9% vs prior</span>
+      <span class="cap">Form fills only — page views excluded</span>
+    </div>
+    <div class="scard">
+      <div class="lab">CPA (real)</div>
+      <div class="val">$1,725</div>
+      <span class="delta d-bad">▲ 81.4% vs prior</span>
+      <span class="cap">After stripping shallow conversions</span>
+    </div>
+    <div class="scard">
+      <div class="lab">Clicks</div>
+      <div class="val">4,812</div>
+      <span class="delta d-flat">▲ 3.1% vs prior</span>
+      <span class="cap">Stable volume</span>
+    </div>
+    <div class="scard">
+      <div class="lab">Impression Share</div>
+      <div class="val">54.3%</div>
+      <span class="delta d-bad">▼ 11.2 pts vs prior</span>
+      <span class="cap">Lost to rank on non-brand campaigns</span>
+    </div>
+    <div class="scard">
+      <div class="lab">Zero-conv spend</div>
+      <div class="val">$6,820</div>
+      <span class="delta d-flat">—</span>
+      <span class="cap">14.1% of total spend, no return</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       LEGEND
+  ════════════════════════════════════════════════════════════════ -->
+  <div class="legend">
+    <div class="legend-group">
+      <span class="chip c-broken">Broken</span> Active problem costing money now
+    </div>
+    <div class="legend-group">
+      <span class="chip c-review">Review</span> Flag — verify or monitor before acting
+    </div>
+    <div class="legend-group">
+      <span class="chip c-ok">Pass</span> Working correctly — no action needed
+    </div>
+    <div class="legend-div"></div>
+    <div class="legend-group">
+      <span class="sev sev-h">HIGH</span> Largest $ at stake
+    </div>
+    <div class="legend-group">
+      <span class="sev sev-m">MED</span> Real impact, lower urgency
+    </div>
+    <div class="legend-group">
+      <span class="sev sev-l">LOW</span> Housekeeping / optimize when ready
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       §01 · CONVERSION TRACKING
+  ════════════════════════════════════════════════════════════════ -->
+  <div class="section" id="conversion-tracking">
+    <div class="section-head">
+      <span class="section-num">§01</span>
+      <h2>Are we counting leads correctly? <span class="term">Conversion Tracking</span></h2>
+      <span class="chip c-broken">Broken</span>
+      <span class="sev sev-h">HIGH</span>
+    </div>
+
+    <p class="lead">
+      <b>The account thinks it got 214 leads this quarter. The real number is 28.</b>
+      The other 186 "leads" are people who simply visited the homepage — not a lead at all. This happens because <span class="term">Page View</span> is set as the main action Google Ads optimizes toward, instead of the contact form. Every cost-per-lead number in this account is calculated on the wrong base.
+    </p>
+
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>What we checked</th>
+            <th>State</th>
+            <th>Evidence</th>
+            <th>Recommendation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              Google Ads is optimizing toward real leads
+              <span class="ev">Is the contact form the main goal — not just a page visit?</span>
+            </td>
+            <td class="state"><span class="chip c-broken">Broken</span></td>
+            <td><span class="term">Primary conversion</span>: "Page View — Homepage" (186 of 214 conversions)</td>
+            <td class="rec">
+              <b>Where:</b> Google Ads → Tools → Conversions.<br>
+              <b>What:</b> Set "Page View" to <span class="term">Secondary</span>. Set "Book a consultation" to <span class="term">Primary</span>.<br>
+              <b>Why:</b> Homepage visits inflate the lead count 7.6× — bids chase traffic, not real inquiries.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Each lead has a dollar value assigned
+              <span class="ev">Does Google Ads know what a lead is worth?</span>
+            </td>
+            <td class="state"><span class="chip c-broken">Broken</span></td>
+            <td>All conversions = $0 value. <span class="term">tROAS</span> bidding not available.</td>
+            <td class="rec">
+              <b>Where:</b> Google Ads → Tools → Conversions → each action.<br>
+              <b>What:</b> Assign a value (e.g. $750 average deal value).<br>
+              <b>Why:</b> Without a value, Google can't optimize for revenue — only volume.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Closed deals are sent back to Google Ads
+              <span class="ev">Do we tell Google which clicks actually became clients?</span>
+            </td>
+            <td class="state"><span class="chip c-review">Review</span></td>
+            <td>No <span class="term">CRM import</span> found. Google only sees form fills, not won deals.</td>
+            <td class="rec">
+              <b>Where:</b> Google Ads → Tools → Conversions → + New → Import.<br>
+              <b>What:</b> Import closed-won deals from CRM (Salesforce / HubSpot).<br>
+              <b>Why:</b> Tells Google which leads actually converted — bids improve over time.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Old Analytics goals are turned off
+              <span class="ev">Are there legacy tracking goals still counting from the old setup?</span>
+            </td>
+            <td class="state"><span class="chip c-ok">Pass</span></td>
+            <td>No legacy <span class="term">Universal Analytics</span> goals active.</td>
+            <td class="rec">No action needed.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout co-fix">
+      <span class="ico">Fix</span>
+      <div class="ct">
+        <b>Change the main goal from "page visit" to "form fill" this week.</b>
+        In Google Ads → Tools → Conversions: demote "Page View — Homepage" to <span class="term">Secondary</span>, promote "Book a consultation" to <span class="term">Primary</span>. One change — corrects every efficiency number in the account. Until it's done, all the data below is approximate.
+      </div>
+    </div>
+
+    <div class="callout co-info">
+      <span class="ico">Note</span>
+      <div class="ct">
+        All cost-per-lead figures in this audit use the 28 real form fills, not the 214 recorded by the account. Section numbers have been corrected accordingly.
+      </div>
+    </div>
+
+    <p class="sec-bridge">Because Google thinks the cost per lead is $225 (based on page views), it's bidding as if the account is performing well — §02 shows just how far off the actual bid targets are.</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       §02 · BID STRATEGY
+  ════════════════════════════════════════════════════════════════ -->
+  <div class="section" id="bid-strategy">
+    <div class="section-head">
+      <span class="section-num">§02</span>
+      <h2>Are we bidding the right amount per lead? <span class="term">Bid Strategy</span></h2>
+      <span class="chip c-review">Review</span>
+      <span class="sev sev-h">HIGH</span>
+    </div>
+
+    <p class="lead">
+      <b>The non-brand campaigns are set to pay $225 per lead. The real cost per lead is $1,725 — almost 8× higher.</b>
+      This gap exists because the <span class="term">Target CPA</span> was set when the account was counting page views as leads. Google thinks the account is performing fine. It isn't — it's just measuring the wrong thing.
+    </p>
+
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Campaign</th>
+            <th style="text-align:right">Bid method</th>
+            <th style="text-align:right">Target cost/lead</th>
+            <th style="text-align:right">Real cost/lead (30d)</th>
+            <th>State</th>
+            <th>Recommendation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Brand — Exact<span class="ev">People searching the company name</span></td>
+            <td class="num"><span class="term">tCPA</span></td>
+            <td class="num">$180</td>
+            <td class="num">$162</td>
+            <td class="state"><span class="chip c-ok">Pass</span></td>
+            <td class="rec">Target matches reality. Keep as-is.</td>
+          </tr>
+          <tr>
+            <td>Non-Brand — Core<span class="ev">People searching the service category</span></td>
+            <td class="num"><span class="term">tCPA</span></td>
+            <td class="num">$225</td>
+            <td class="num">$1,725</td>
+            <td class="state"><span class="chip c-broken">Broken</span></td>
+            <td class="rec"><b>Where:</b> Campaign settings → Bidding.<br><b>What:</b> Switch to <span class="term">Maximize Conversions</span> temporarily while tracking is fixed. Reintroduce <span class="term">tCPA</span> at ~$1,400 after 30+ real leads are recorded.<br><b>Why:</b> A $225 target in a $1,725 market means Google isn't bidding to win real leads.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout co-watch">
+      <span class="ico">Watch</span>
+      <div class="ct">
+        Don't update the cost-per-lead targets until §01 is fixed and running for at least 2 weeks (30+ real leads recorded). Resetting a <span class="term">tCPA</span> on broken data just replaces one wrong number with another.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       §03 · CAMPAIGN SETTINGS (Pass example)
+  ════════════════════════════════════════════════════════════════ -->
+  <div class="section" id="campaign-settings">
+    <div class="section-head">
+      <span class="section-num">§03</span>
+      <h2>Is the account set up to reach the right people? <span class="term">Campaign Settings</span></h2>
+      <span class="chip c-ok">Pass</span>
+      <span class="sev sev-l">LOW</span>
+    </div>
+
+    <p class="lead">
+      <b>All 4 campaigns are correctly configured to show ads only to people physically in the target area — and only on Google Search, not Display or partner sites.</b>
+      These three settings are the most common mistakes we find in new accounts. This account has them right.
+    </p>
+
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Setting</th>
+            <th>State</th>
+            <th>Campaigns affected</th>
+            <th>Recommendation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Ads only show to people in the target area
+              <span class="ev"><span class="term">Location targeting</span> = Presence only</span>
+            </td>
+            <td class="state"><span class="chip c-ok">Pass</span></td>
+            <td>All 4 campaigns</td>
+            <td class="rec">No action needed.</td>
+          </tr>
+          <tr>
+            <td>Ads don't run on Google partner sites
+              <span class="ev"><span class="term">Search Partners</span> = OFF</span>
+            </td>
+            <td class="state"><span class="chip c-ok">Pass</span></td>
+            <td>All 4 campaigns</td>
+            <td class="rec">No action needed.</td>
+          </tr>
+          <tr>
+            <td>Ads don't run on banners / Display
+              <span class="ev"><span class="term">Display Network</span> = OFF</span>
+            </td>
+            <td class="state"><span class="chip c-ok">Pass</span></td>
+            <td>All 4 campaigns</td>
+            <td class="rec">No action needed.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       WHAT'S SET UP RIGHT
+  ════════════════════════════════════════════════════════════════ -->
+  <div class="section" id="whats-right">
+    <div class="section-head">
+      <h2>What's Set Up Right</h2>
+    </div>
+    <div class="passgrid">
+      <div class="passcard">
+        <strong>✓ Campaign settings are clean</strong>
+        All 4 campaigns use Presence-only targeting with Search Partners and Display Network off — the three most common structural errors, all avoided.
+      </div>
+      <div class="passcard">
+        <strong>✓ Branded search is protected</strong>
+        Dedicated brand exact-match campaign at efficient CPA ($162). No competitor overlap detected.
+      </div>
+      <div class="passcard">
+        <strong>✓ No deprecated UA goals</strong>
+        Universal Analytics goals have been fully cleaned out — no double-counting risk from legacy tracking.
+      </div>
+      <div class="passcard">
+        <strong>✓ 100% Search campaigns</strong>
+        No wasted spend on Display or Demand Gen mixed into Search budget. Clean channel separation.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       ACTION PLAN
+  ════════════════════════════════════════════════════════════════ -->
+  <div class="section" id="action-plan">
+    <div class="section-head">
+      <h2>Action Plan</h2>
+    </div>
+    <div class="action-plan">
+      <div class="item">
+        <div class="rank"></div>
+        <div class="tc">
+          <div class="tt">Fix conversion tracking — demote Page View to Secondary</div>
+          <div class="td">In Google Ads → Tools → Conversions: set "Page View — Homepage" to Secondary, set "Book a consultation" to Primary. This corrects every efficiency metric in the account. Until this is done, all CPA and bid targets are based on the wrong data.</div>
+          <div class="tmeta">
+            <span>§01</span>
+            <span>HIGH</span>
+            <span>Est. 10 min in Google Ads</span>
+          </div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="rank"></div>
+        <div class="tc">
+          <div class="tt">Switch Non-Brand to Maximize Conversions temporarily</div>
+          <div class="td">Pause tCPA on the Non-Brand Core campaign and switch to Maximize Conversions while conversion tracking stabilizes. After 30 real conversion events (est. 4–6 weeks), reintroduce tCPA at ~$1,400. Current $225 target is not viable.</div>
+          <div class="tmeta">
+            <span>§02</span>
+            <span>HIGH</span>
+            <span>Est. 15 min in Google Ads</span>
+          </div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="rank"></div>
+        <div class="tc">
+          <div class="tt">Assign conversion values to enable value-based bidding</div>
+          <div class="td">In Conversions → each primary action: add a value ($750 avg deal value, or estimate). This unlocks tROAS bidding and makes future bid experiments meaningful. Currently all conversions = $0.</div>
+          <div class="tmeta">
+            <span>§01</span>
+            <span>MED</span>
+            <span>Est. 20 min in Google Ads</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       FOOTER
+  ════════════════════════════════════════════════════════════════ -->
+  <footer class="audit-footer">
+    <p><b>Data source:</b> Google Ads API via Porter Metrics MCP — pulled June 28, 2025.</p>
+    <p><b>Period:</b> January 1 – March 31, 2025 vs January 1 – March 31, 2024.</p>
+    <p><b>Exclusions:</b> Numeric Quality Score excluded (not reliable above ad-group level). Auction Insights not available via connector — check Google Ads UI → Auction Insights tab. Asset-group detail not available for any Demand Gen campaigns.</p>
+    <p><b>Conversion note:</b> All CPA figures in this audit use the 28 form-fill conversions only, not the 214 total recorded by the account. Section numbers are corrected accordingly.</p>
+    <p><b>Currency:</b> All figures in CAD.</p>
+  </footer>
+
+</div>
+
+<!-- Theme switcher script (dev only) -->
+<script>
+  function setTheme(t) {
+    document.documentElement.setAttribute('data-theme', t);
+    document.querySelectorAll('.theme-switch button').forEach(b => {
+      b.classList.toggle('active', b.textContent.toLowerCase() === t);
+    });
+  }
+</script>
+
+</body>
+</html>
