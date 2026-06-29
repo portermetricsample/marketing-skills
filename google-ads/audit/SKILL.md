@@ -8,9 +8,15 @@ description: Assemble a complete Google Ads account audit as a single scrolling 
 ## What this builds
 A single-page HTML narrative document delivered as a Porter report. Not a dashboard — no charts. The document scrolls from Header to Action Plan, with each section backed by live data and ending in a specific recommendation.
 
-Reference audits (read these to calibrate tone and density):
+Reference audits — read these to calibrate **tone, density, and finding logic only**. They predate
+this template and ship the older hand-written teal/navy CSS, so do **not** copy their look:
 - Harper Health (Search, small account): `report_id 69af1804-c1d8-40e7-8cd2-b584c7cf27c0`
-- PolicyMe (Search + DG, large account): `report_id a4324a0f-fc99-4f4a-b2e3-2410016bf187`
+- PolicyMe (Search + DG, large account): `report_id 80939d61-817f-45e5-b96a-25c8ba34b039`
+
+> **Visual standard = this skill's own template** ([`pages/main.html`](pages/main.html) + the Porter
+> Design System themes), NOT those reference reports. Every audit renders from that template in one
+> `data-theme` (default `cream`) so the output is consistent run to run. Deploy via
+> [`references/deploy.md`](references/deploy.md).
 
 ---
 
@@ -478,18 +484,29 @@ Always acknowledge in the relevant section, never pretend data is missing:
 
 ---
 
-## Design system
+## Design system &amp; deploy
 
-The audit HTML must follow the Porter Design System. Before writing or editing the `style.css` of any audit, read:
+**Do not write a stylesheet per account.** Render from the template [`pages/main.html`](pages/main.html)
+— it already carries the full audit layout and pulls every colour from the Porter Design System tokens
+(`~/porter-design/dist/porter-tokens.css`). You fill the content; you never invent CSS. Pick one
+`data-theme` on the `#audit` wrapper (`cream` default · `white` · `blue` · `purple`). This is what
+makes every audit look identical run to run.
 
-1. `references/design.md` (in this folder) — the complete element-by-element mapping: fonts, color tokens, chip specs, table rules, callout styles, action plan layout.
-2. `~/porter-design/tokens/colors.css` — the full color token set.
-3. `~/porter-design/tokens/typography.css` — font families and scale.
+To understand the token mapping before editing the template's layout, read
+[`references/design.md`](references/design.md) (element-by-element: fonts, tokens, chips, tables,
+callouts, action plan).
 
-**The three non-negotiables from porter-design:**
+**The three non-negotiables (baked into the tokens — keep them if you ever touch the template):**
 - Bricolage Grotesque for KPI values and h2 headings. Hanken Grotesk for body and tables. IBM Plex Mono only for section numbers, chips, badges, and `.num` cells.
-- No gradients, no drop shadows — 1px `#e5e7eb` hairline borders only.
-- `--porter-purple` (#6701e6) is the single brand anchor — section numbers, eyebrows, verdict chip borders, "Do first" accent.
+- No gradients, no drop shadows — 1px hairline borders only.
+- The brand purple is the single accent — section numbers, eyebrows, verdict chip borders, "Do first" accent.
+
+### Step 4 — Deploy as a hosted Porter report
+After the standalone HTML is written + verified, deploy it per [`references/deploy.md`](references/deploy.md):
+make the file deploy-safe (wrap in `<div id="audit" data-theme="…">`, scope the style under `#audit`,
+strip the dev theme switcher) → `scripts/to_porter_bundle.py` (inlines the tokens + assembles the
+3-file bundle) → `get_report_template('blank')` → `create_report` (`config.charts:{}`,
+`/* porter:no-compare */`, `visibility:"PRIVATE"`). Reply with the local file path **and** the report URL.
 
 ---
 
