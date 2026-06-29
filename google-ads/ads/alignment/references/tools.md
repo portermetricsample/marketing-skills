@@ -79,9 +79,10 @@ skill (`google_ads_historical_quality_score`, `google_ads_historical_creative_qu
   **surface that URL and ask the user to reauthorize**, then resume. Never treat it as "no data" or
   proceed on a partial pull. (Seen live mid-run: the `scrape` tool uses a DIFFERENT connection and
   kept working while `query_data` needed reauth — so a working scrape does NOT mean the data pulls are fine.)
-- **`scrape` may be down** (`{"error":"mcp_not_found","mcp_id":"firecrawl"}`) — being restored. While
-  down, every landing is empty → L3/L4 = Needs review for all journeys; report the keyword↔ad half
-  honestly. Do NOT swap in an external scraper.
+- **Porter MCP web scraping may be temporarily down** (the `tool:porter-tools:scrape` call returns an
+  `mcp_not_found` error) — being restored. While down, every landing is empty → L3/L4 = Needs review for
+  all journeys; report the keyword↔ad half honestly. Do NOT swap in an external scraper — Porter's native
+  web scraping is the only landing source.
 - **`cost_micros > 0` auto-filter:** asking for cost drops zero-spend rows. Fine here (we go by spend).
 - **No `last_90_days`/`last_quarter` preset** → use explicit `{date_from, date_to}` (30–90 days).
 - **Same ad-group name in two campaigns** = two packets. Keyed by `(campaign, ad_group)`, not name alone.

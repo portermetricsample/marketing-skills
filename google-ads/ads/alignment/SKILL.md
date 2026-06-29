@@ -147,11 +147,11 @@ pages (first ~12K chars — the top of the page carries the most weight) so a hu
 context. If the markdown comes back empty, retry with `"proxy": "stealth"`; if still empty, mark
 that landing as not-scraped (`scraped:false` → L3/L4 = REVIEW, don't guess).
 
-> ⚠️ **Temporary status:** the scrape tool may return `{"error":"mcp_not_found","mcp_id":"firecrawl"}`
-> — it is being restored by the Porter dev team. While it's down, every landing comes back
-> empty → L3/L4 = REVIEW for all journeys (the skill degrades gracefully and reports the
-> keyword↔ad half honestly; it does NOT guess page content). Keep this tool as the landing
-> source — do not swap in an external scraper.
+> ⚠️ **Temporary status:** Porter MCP web scraping (`tool:porter-tools:scrape`) may be temporarily
+> unavailable (returns an `mcp_not_found` error) — it is being restored by the Porter dev team. While
+> it's down, every landing comes back empty → L3/L4 = REVIEW for all journeys (the skill degrades
+> gracefully and reports the keyword↔ad half honestly; it does NOT guess page content). Keep Porter's
+> native web scraping as the landing source — do not swap in an external scraper.
 
 > **Focus:** the scrape also returns the page's own **`<title>`** (the assembler carries it as
 > `page_title`) — that is the **most reliable hero/identity signal**, because `onlyMainContent` can

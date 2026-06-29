@@ -29,6 +29,28 @@ Reference audits (read these to calibrate tone and density):
 - Demand Gen present → add DG section
 - Shopping present → add product P&L note (out of scope for this skill version)
 
+**Then run a pre-flight access check — BEFORE Step 1, never skip.** Two quick calls confirm the
+connector can actually serve the whole audit, so a permission hole surfaces up front instead of as a
+hole in section 06+ after the work is done:
+1. **Bid-strategy / budget route** — call the `campaign.list` connector action (a tiny GAQL: a few
+   campaign rows + `campaign_budget.amount_micros`). It is the *preferred* route for true bid targets and
+   budgets when it works.
+2. **Geo route** — a 1-row `query_data` on `["google_ads_geo_target_region","google_ads_cost_micros"]`.
+
+Branch on the result:
+- **Both OK (HTTP 200 / rows)** → proceed; the Bid-strategy and Geography sections are safe.
+- **`campaign.list` returns 403 / "not configured" / a manager-account permission error** → this account
+  has report access but no Google Ads API access for this customer. Fall back to the GAQL `report.query`
+  route for targets; if that also fails, **tell the user plainly and offer a partial audit** (Bid-strategy
+  dropped, footer gap noted). Never let it surface as a silent hole mid-build — that is the failure mode
+  this check exists to prevent.
+- **Either returns `reauth_required`** → surface the reauth URL and resume after the user reconnects.
+
+> **Reconciles the `campaign.list` question:** earlier notes claimed `campaign.list` "fails for ~75% of
+> accounts." Live runs show it working as the reliable route on accounts where API access *is* configured,
+> and 403-ing where it is **not**. So don't assert either way — the pre-flight **tests it per account** and
+> branches. (The `report.query` GAQL route stays as the documented fallback.)
+
 ---
 
 ## Step 1 — Run all analysis skills in parallel
@@ -230,7 +252,7 @@ HIGH = largest $ at stake · MED = real impact, lower urgency · LOW = housekeep
 #### · Bid strategy
 **Skill:** `campaigns/bid-strategy` + `campaigns/value-based-bidding`  
 **Check:** Target vs actual (tCPA, tROAS). Broken if Maximize Conversions/Value with no tCPA/tROAS target AND rank-lost IS > 40% — the absent guardrail IS the misconfiguration. Is value-based bidding set where conversion values exist? Are $0-value conversions feeding value bidding?  
-**Caveat:** pull bid targets via GAQL `report.query` — `campaign.list` fails for ~75% of accounts (schema bug or 401). A returned 0 on target fields = no guardrail (meaningful signal). Numeric target values from any route are corrupted (fan-out artifact) — trust only the binary "set vs not set".
+**Caveat:** pull bid targets via the `campaign.list` connector action when the Step 0 pre-flight shows it works (the reliable route on accounts where Google Ads API access is configured); fall back to GAQL `report.query` if `campaign.list` 403s. A returned 0 on target fields = no guardrail (meaningful signal). Numeric target values from any route are corrupted (fan-out artifact) — trust only the binary "set vs not set".
 
 #### · Quality Score
 **Skill:** `ads/metrics`  
@@ -443,7 +465,7 @@ Always acknowledge in the relevant section, never pretend data is missing:
 | Auction Insights competitor overlap | Note as unavailable, direct to Google Ads UI → Auction Insights tab |
 | Demand Gen asset-group detail | Note as unavailable, direct to UI → Demand Gen campaign → Asset groups |
 | Sitelinks / snippets / images | Flag for UI verification, do NOT report as absent |
-| Bid targets (tCPA / tROAS) | `campaign.list` is broken for ~75% of accounts (UNRECOGNIZED_FIELD schema bug or 401). Use GAQL `report.query` as primary route. A returned 0 or null on target fields = no guardrail set (meaningful signal — not a data error). Trust only the binary "target set vs not set" — numeric values from any route are corrupted by fan-out artifact. |
+| Bid targets (tCPA / tROAS) | Pull via the `campaign.list` connector action; the Step 0 pre-flight tests it per account. It works where Google Ads API access is configured and 403s where it isn't (an access check, not "broken ~75%"). On a 403 fall back to GAQL `report.query`. A returned 0 or null on target fields = no guardrail set (meaningful signal — not a data error). Trust only the binary "target set vs not set" — numeric values from any route are corrupted by fan-out artifact. |
 | Numeric QS via query_data | Never use — `query_data` aggregates values across ad groups, returns numbers like 16, 35, 46, 205 (outside the 1-10 scale). Use GAQL `keyword_view` instead: `adGroupCriterion.qualityInfo.qualityScore` returns correct 1-10 per keyword. |
 | QS 3 categorical pillars | NOT available via `query_data`/`list_fields` in most accounts — this is a route dependency, not a field gap. Use GAQL `keyword_view`: `adGroupCriterion.qualityInfo.searchPredictedCtr`, `.creativeQualityScore`, `.postClickQualityScore` |
 | Network settings booleans all False | When `target_search_network`, `target_content_network`, `target_partner_search_network` all return False for every campaign including active ones — this is a Porter rendering artifact, not real account config. Do NOT report as "correctly OFF". Add co-info callout directing to Google Ads UI → Campaign → Settings → Networks. |
