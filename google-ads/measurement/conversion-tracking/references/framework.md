@@ -94,7 +94,34 @@ exact target (R1 which CRM, R2 which event).
     (returns True for all — connector bug). Never claim an action "doesn't fire / isn't tracked" off
     `conversions=0` alone, and corroborate recent windows against a settled one (reporting lag).
 
-## 7. Dogfood (Acme Insurance, last 30d — validated, real)
+## 7. The "how many primaries" flag — feeds every segment skill (the inversion guardrail)
+This skill is the **single source of truth** for one fact the rest of the audit depends on: **how many
+distinct conversion actions actually feed the `conversions` metric** (count those with `conversions > 0`).
+Emit it (`primaryCount`) so the segment skills know whether their efficiency reads can be trusted.
+
+- **One primary** → `google_ads_conversions` is that single action everywhere → segment efficiency
+  (by match type / age / gender / device / geo / search term) is **real**.
+- **More than one primary** (e.g. form-fill **and** MQL **and** Opportunity) → `google_ads_conversions`
+  is a **blend**, and Porter **cannot isolate one action by segment** (the conversion-action view will
+  not combine with `keyword_view` / segment views — verified). A segment that wins on the blended
+  count can be the **worst** on cost-per-qualified. So `match-types`, `audience-demographics`,
+  `segmentation/*`, and `search-terms/performance` must report their efficiency ranking as
+  **directional only** when `primaryCount > 1` — never assert "most/least efficient". (Live proof:
+  Broad match was best on all-conversions $/conv but worst on Cost/MQL — the proxy inverted the truth.)
+
+> **Counting `primaryCount` — use `conversions > 0`, NOT `primary_for_goal`** (§3.5). Verified live: an
+> account had **every** action `primary_for_goal == True` yet one returned `conversions = 0` with
+> `all_conversions = 19` — effectively **secondary**. Count the distinct actions with `conversions > 0`;
+> ignore blank `conversion_action_name` rows.
+
+## 8. Known data gaps (document, don't build)
+Two checks an external auditor would run are **not exposed by `query_data`** today. Name them as gaps
+(so the audit stays honest); don't pretend to cover them:
+- **Attribution model** (last-click vs data-driven) — not a readable field. Flag "confirm the model is
+  data-driven" as a manual check.
+- **Enhanced conversions / consent mode** — setup state isn't in the metrics API. Manual check.
+
+## 9. Dogfood (Acme Insurance, last 30d — validated, real)
 ```
 Config (A): 30 actions, ~24 REMOVED. Enabled+primary are mostly PAGE_VIEW / UA goals.
             NO UPLOAD type, NO CRM source → R1: no offline import 🔴
