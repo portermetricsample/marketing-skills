@@ -155,7 +155,58 @@ Always immediately before the first section. Never skip.
 
 ---
 
-## 4. Callout rules
+## 4. Language rules — plain English + term chips
+
+The audit has two audiences in the same document: the **client** (reads title, lead, callouts) and the **account manager** (reads the table to execute). Write for both without dumbing down either.
+
+### Rules
+
+| Block | Write for | Language rule |
+|-------|-----------|---------------|
+| `h2` section title | Client | Business question, not tool name. Add `<span class="term">ToolName</span>` after the question. |
+| `p.lead` | Client | Open with the business consequence (money / leads lost). Jargon goes inside `<span class="term">` when it appears. No raw acronyms in the first sentence. |
+| Table content | Account manager | Technical language is fine — this is the execution instruction. |
+| Callout `Why:` | Both | Plain language. Technical term in `<span class="term">` if needed. |
+| Callout `Where: / What:` | Account manager | Full technical path — UI navigation, exact setting names. |
+
+### Section title pattern
+
+```html
+<h2>Business question in plain language? <span class="term">Technical Name</span></h2>
+```
+
+Examples:
+- ✓ `Are we counting leads correctly? <span class="term">Conversion Tracking</span>`
+- ✓ `Are we bidding the right amount per lead? <span class="term">Bid Strategy</span>`
+- ✓ `Are our ads relevant to what people search? <span class="term">Quality Score</span>`
+- ✗ `Conversion Tracking` (tool name only — client doesn't know what this means)
+
+### Term chip — `.term`
+
+Used inline in titles, leads, and callout text to surface the technical name without breaking the plain-language flow.
+
+```html
+<span class="term">tCPA</span>
+<span class="term">Primary Conversion</span>
+<span class="term">Search Partners</span>
+```
+
+Styling: neutral pill (`--chip-bg` / `--chip-text`) — same token as `c-na` chips but smaller. Never colored like verdict chips — it's a label, not a status.
+
+### Lead paragraph pattern
+
+```
+[Bold sentence: business consequence with a number.]
+[Plain explanation of what caused it, with <span class="term"> wrapping the jargon.]
+```
+
+Examples:
+- ✓ `The account thinks it got 214 leads this quarter. The real number is 28. The other 186 were people who just visited the homepage — because <span class="term">Page View</span> is set as the main goal instead of the contact form.`
+- ✗ `87% of recorded conversions are Page View events with no value attached.` (pure jargon, no business translation)
+
+---
+
+## 5. Callout rules
 
 ### When to use each type
 
