@@ -508,7 +508,67 @@ Always include. Covers:
 
 ---
 
-## 10. Section ordering decision tree
+## 10. Section block profiles
+
+Each section has a fixed set of blocks. `✓` = always present · `?` = conditional · `–` = never.
+
+| Section | Lead | Table type | Fix | Watch | Note | Resolved | Bridge |
+|---------|------|-----------|-----|-------|------|----------|--------|
+| **Header** | – | – | – | – | – | – | – |
+| **Exec Summary** | paragraphs + "Do first" | – | – | – | – | – | – |
+| **KPI Scorecards** | – | scorecard-grid (6 cards) | – | – | – | – | – |
+| **Legend** | – | chip-legend | – | – | – | – | – |
+| §01 Conversion Tracking | ✓ | evidence-table (4 rows: check · state · evidence · rec) | ✓ | – | ? | – | ✓ |
+| §· Spend Allocation | ✓ | campaign-table (spend · conv · CPA · IS · status) | ✓ | ? | ? | – | ✓ |
+| §· Bid Strategy | ✓ | campaign-table (strategy · target · actual · state · rec) | ? | – | – | ? | ✓ |
+| §· Quality Score | ✓ | keyword-table (spend · 3 pillars · rec) | – | ? | ✓ | – | ✓ |
+| §· Search Terms | ✓ | term-table (term · campaign · keyword · match · spend · conv · verdict · action) | ✓ | – | ✓ | – | – |
+| §· Landing Page CRO | ✓ | page-table (URL · C1–C5 criteria · verdict) | ✓ | ? | – | – | – |
+| §· Audience & Demographics | ✓ | segment-table (age · spend · CPA · ROAS · state · rec) | – | ✓ | ? | – | – |
+| §· Geography | ✓ | geo-table (region · spend · conv · CPA · ROAS · state · rec) | ? | – | ? | – | – |
+| §· Ad Assets | ✓ | extension-table (extension · state · evidence · action) | ? | ? | ✓ | – | – |
+| §· Device & Ad Schedule | ✓ | **dual-table**: device-table + dayofweek-table | – | ✓ | ? | – | – |
+| §· Campaign Settings | ✓ | checklist-table (setting · state · campaigns · rec) | ? | – | – | – | – |
+| §· Demand Gen *(if present)* | ✓ | campaign-table (spend · conv · CPA · ROAS vs baseline · rec) | – | – | ✓ | – | – |
+| **What's Set Up Right** | – | passcard-grid (4–6 cards) | – | – | – | – | – |
+| **Action Plan** | – | ranked-items (max 7) | – | – | – | – | – |
+| **Footer** | – | text-only | – | – | – | – | – |
+
+### Table types
+
+| Type | When | Rows describe |
+|------|------|--------------|
+| `evidence-table` | Conversion tracking — structured pass/fail checks | One check per row |
+| `campaign-table` | Campaign-level sections (spend, bid strategy, demand gen) | One campaign per row |
+| `keyword-table` | QS, match types | One keyword per row |
+| `term-table` | Search terms | One search term per row |
+| `page-table` | Landing CRO | One unique landing page per row |
+| `segment-table` | Demographics, geography | One audience segment or geo per row |
+| `extension-table` | Ad assets | One extension type per row |
+| `checklist-table` | Campaign settings | One setting per row |
+| `dual-table` | Device & Ad Schedule | Two sub-tables inside one section (device rows, then day-of-week rows) |
+| `scorecard-grid` | KPI block | 6 cards in a grid (not a `<table>`) |
+| `passcard-grid` | What's Set Up Right | 4–6 cards in a grid (not a `<table>`) |
+| `ranked-items` | Action Plan | Numbered items with title + detail + meta (not a `<table>`) |
+
+### Conditional rules for Fix callout
+
+Fix callouts are not always present. This table defines when they fire:
+
+| Section | Fire Fix when… |
+|---------|----------------|
+| Conversion Tracking | Primary conversions include page views, app starts, or $0-value actions |
+| Spend Allocation | One campaign takes >20% of spend with zero conversions |
+| Bid Strategy | Target is >2× above actual (underbidding) or >50% below actual (overbidding) |
+| Search Terms | >15% of non-brand spend is off-vertical or competitor waste |
+| Landing CRO | Message-match break confirmed (keyword vs landing page mismatch), or broken CTA link |
+| Geography | Language/market mismatch confirmed (e.g. English ads in French Quebec) |
+| Ad Assets | Confirmed structural message-match issue (from `ads/alignment`) |
+| Campaign Settings | Any setting is Broken (Presence off, Search Partners on, Display on for Search) |
+
+---
+
+## 11. Section ordering decision tree
 
 ```
 1. Always start with §01 Conversion Tracking.
