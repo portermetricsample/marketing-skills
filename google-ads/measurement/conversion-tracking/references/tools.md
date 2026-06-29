@@ -31,10 +31,14 @@ Period: `last_30_days`.
 ## Query B — value + volume per action (this is "the query", part 2)
 - `google_ads_conversion_action_name` — the join key.
 - `google_ads_conversion_action_category` — to re-check depth alongside the firing data.
-- `google_ads_conversions` — volume actually firing (R3 needs `conversions > 0`).
+- `google_ads_conversions` — **primary (counted)** volume. `conversions > 0` ⇒ the action is primary.
+- `google_ads_all_conversions` — total volume incl. secondary. `conversions == 0` but `all_conversions > 0`
+  ⇒ the action fires but is **secondary** (not "absent" — framework §3.5). REQUIRED, not optional.
 - `google_ads_conversions_value` — the value per action (R3: value == 0 on a primary = flag).
 
-Sort: `google_ads_conversions` desc (the high-volume actions first). Period: `last_30_days`.
+Sort: `google_ads_all_conversions` desc (catches firing-but-secondary actions the `conversions` sort hides).
+Period: `last_30_days` for the snapshot **plus a wider/earlier settled window** (e.g. last 90d) to rule
+out reporting lag before flagging any action as "0 / not tracked" — offline/PURCHASE actions import late.
 
 ## Join + filter
 Join A ↔ B on `conversion_action_name`. **Audit the ENABLED actions only**; count REMOVED/HIDDEN for

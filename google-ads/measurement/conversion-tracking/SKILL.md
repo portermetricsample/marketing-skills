@@ -41,9 +41,12 @@ map each `conversion_action_category` to funnel depth via the ladder in
 [`references/framework.md`](references/framework.md), then run the four objective rules: R1 offline
 import missing, R2 primary is shallow, R3 value missing, R4 deprecated (Universal Analytics goal).
 When category is `DEFAULT`, fall back to the action **name** for depth and mark it inferred.
-**Caveat on `primary_for_goal`:** it is Google's per-action API flag and can differ from the
-account's UI **Primary/Secondary goal** setting (goal-level config + account-level overrides) —
-report it as the flag it is, and defer to the operator if it conflicts with what they see in the UI.
+**Caveat on `primary_for_goal` — do not key rules off it.** The connector returns `True` for *every*
+action (verified bug), so it can't distinguish primary from secondary. Derive primary status from the
+metrics instead: `conversions > 0` = primary (counted); `conversions == 0` & `all_conversions > 0` =
+secondary (fires, not counted); both 0 over a settled window = not firing. Never report an action as
+"not tracked / fired zero" off `conversions=0` alone, and corroborate recent windows against an earlier
+settled one (reporting lag on offline/PURCHASE actions). See `references/framework.md` §3.5.
 
 **Emit** the JSON in [`references/output.md`](references/output.md):
 - `synthesis` — the canonical three strings: `headline` (the single biggest setup gap + its fix),

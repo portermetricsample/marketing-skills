@@ -7,8 +7,10 @@
 ## 2. The signals (two queries, joined by `conversion_action_name`)
 **A · config** — `conversion_action_name`, `_category`, `_type`, `_conversion_source`,
 `_primary_for_goal`, `_status`.
-**B · metrics** — `conversion_action_name`, `conversions`, `conversions_value`.
+**B · metrics** — `conversion_action_name`, `conversions`, `all_conversions`, `conversions_value`.
 (Config and metrics **don't combine** — "cannot be combined" — so two pulls, join by name.)
+> Pull **`all_conversions` alongside `conversions`** — the gap between them is how you tell a
+> *secondary* action (fires, not counted) from one that *never fires*. See §3.5.
 
 ## 3. The category → depth ladder (the objective reference)
 Map `conversion_action_category` to funnel depth (Google's own taxonomy):
@@ -21,16 +23,39 @@ Map `conversion_action_category` to funnel depth (Google's own taxonomy):
 > `DEFAULT` yet clearly down-funnel — so when category is `DEFAULT`, fall back to the **name** for
 > depth ("payment"/"purchase"/"sale" → L3; "page view"/"start" → L1/L2) and say it's name-inferred.
 
+## 3.5 Determining what's "primary" — and whether it fires (anti-hallucination)
+**Do NOT trust `primary_for_goal`.** The connector returns `True` for *every* action (verified bug),
+so it cannot tell primary from secondary. Derive the real state from the metrics instead, per action:
+- **Primary (counted):** `conversions > 0`. The `conversions` column = primary actions only.
+- **Secondary (fires, not counted):** `conversions == 0` **AND** `all_conversions > 0`. The action
+  IS firing — it's just not feeding bidding. The finding is **"make it primary"**, NOT "it doesn't fire".
+- **Not firing:** `conversions == 0` **AND** `all_conversions == 0` **over a wide, settled window**.
+
+**Two hard guards before you flag anything as "broken / not tracked / zero":**
+1. **Never say "fired zero times" / "not tracked" off the `conversions` field alone.** A `conversions=0`
+   with `all_conversions>0` means *secondary*, not *absent* — saying "zero" there is a false claim.
+   (Real example: an account's `Paying Customers` showed `conversions=0` but `all_conversions=69` over
+   6 months — it fires ~11/mo as a secondary, $0-value action. "Fired zero times" would be wrong.)
+2. **Reporting lag:** offline/CRM/`PURCHASE` actions import days-to-weeks late, so the most recent
+   month is provisional. Before calling an action "0", **re-pull a wider/earlier settled window**
+   (e.g. last 90d or the prior full month) and report the corroborated state, not the snapshot.
+
 ## 4. The 4 objective rules (the recommendation)
-Run over the **ENABLED** actions (drop REMOVED/HIDDEN), joined A+B:
+Run over the **ENABLED** actions (drop REMOVED/HIDDEN), joined A+B. "Primary" below means
+**`conversions > 0`** (the §3.5 definition), NOT `primary_for_goal`:
 - **R1 — offline import missing** → if NO enabled action has `type ∈ {UPLOAD_CLICKS, UPLOAD_CONVERSIONS, STORE_SALES_*}`
   or `conversion_source` containing "Upload"/a CRM → 🔴 "no offline/CRM import; import down-funnel
   CRM events for revenue optimization." (Acme §2 core.)
-- **R2 — primary is shallow** → among `primary_for_goal == True` actions, find the deepest by the
-  ladder. If it's **L1** → 🔴 "your counted conversion is a shallow event; promote a deeper (L2/L3)
-  action to primary." If L2 while an L3 exists unused → 🟡 "a deeper event exists — consider it."
-- **R3 — value missing** → any `primary_for_goal == True` action with `conversions > 0` and
-  `value == 0` → 🔴 "primary '{name}' fires {N} conv with **no value** — add a conversion value."
+- **R2 — primary is shallow** → among **counted (primary, `conversions > 0`)** actions, find the
+  deepest by the ladder. If it's **L1** → 🔴 "your counted conversion is a shallow event; promote a
+  deeper (L2/L3) action to primary." If L2 while an L3 exists unused → 🟡 "a deeper event exists."
+- **R2b — revenue action exists but is only SECONDARY** → an L3 action (`PURCHASE`/`QUALIFIED_LEAD`/…)
+  with `conversions == 0` but `all_conversions > 0` → 🔴 "'{name}' fires {all_conversions} times but
+  isn't a **primary** conversion, so bidding can't optimize toward it — make it primary." This is the
+  correct finding for "the real revenue event isn't driving bids" — NOT "it never fires" (§3.5 guard 1).
+- **R3 — value missing** → any **counted (`conversions > 0`)** action with `value == 0` → 🔴 "primary
+  '{name}' fires {N} conv with **no value** — add a conversion value." (A secondary L3 with no value
+  is R2b, not R3 — fix the primary status first.)
 - **R4 — deprecated** → any enabled `type == UNIVERSAL_ANALYTICS_GOAL` → 🟠 "migrate off Universal
   Analytics goals (deprecated/sunset)."
 - **Hygiene (info, not a rule):** count `REMOVED`/`HIDDEN` actions → "N legacy actions, clean up."
@@ -65,6 +90,9 @@ exact target (R1 which CRM, R2 which event).
   - **`DEFAULT` category** → infer depth from the name; say it's inferred, don't assert.
   - It reads **setup**, not whether a specific event is the "right" business KPI — that's the human's call.
   - **conversions/value** use primary actions (`google_ads_conversions` UI semantics); disclose.
+  - **Primary status comes from `conversions` vs `all_conversions` (§3.5), never from `primary_for_goal`**
+    (returns True for all — connector bug). Never claim an action "doesn't fire / isn't tracked" off
+    `conversions=0` alone, and corroborate recent windows against a settled one (reporting lag).
 
 ## 7. Dogfood (Acme Insurance, last 30d — validated, real)
 ```
