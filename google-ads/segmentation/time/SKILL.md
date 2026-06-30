@@ -23,3 +23,10 @@ Run **both** when the deliverable is a full time analysis. Run **one** when the 
 `campaigns/ad-schedule/` is the **optimization lens** — it takes that pattern and produces specific bid-adjustment recommendations (positive / negative / exclude by day/hour).
 
 They are complementary: run `cyclical/` to understand the shape, then `campaigns/ad-schedule/` to act on it.
+
+## Consolidated (cross-connector) extension
+To render the Time matrix *consolidated* across connectors (Meta + Google + GA4 in one
+table, rows grouped by channel + a Global combined group), see
+[references/consolidated-blend.md](references/consolidated-blend.md): the live porter-blend
+pattern plus the hard gotchas (the `quarter` dimension is broken — derive it from
+`year_month`; conversions don't consolidate across Meta+Google — Meta needs a native feed).
