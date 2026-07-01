@@ -13,8 +13,8 @@ with divergent forks. Follow this exactly so every audit deploys the same way an
    stylesheet. Never invent CSS per account.
 2. **One theme per deliverable.** Pick exactly one `data-theme` — `cream` (default) · `white` ·
    `blue` · `purple`. Set it once on the `#audit` wrapper (see below).
-3. **Self-contained bundle.** A hosted report is 3 files; it cannot reach `~/porter-design/…`. The
-   tokens CSS is **inlined** at deploy time.
+3. **Self-contained bundle.** A hosted report is 3 files; it cannot reach the `porter-design` repo at
+   runtime. The tokens CSS is **inlined** at deploy time.
 4. **Scoped to `#audit`.** Porter injects the bundle into its own chrome, so every audit style must
    live under `#audit` or it bleeds into the Porter UI. The design-system tokens already use
    `[data-theme="…"]` selectors (verified) → they resolve correctly on a `<div id="audit"

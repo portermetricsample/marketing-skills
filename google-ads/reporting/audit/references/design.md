@@ -1,13 +1,17 @@
 # Audit Document — Design Spec
 
-Bridges the Porter Design System (`~/porter-design/`) to the Google Ads audit HTML.
-Read this before writing or editing audit CSS.
+Bridges the **Porter Design System** — the public repo
+[`portermetricsample/porter-design`](https://github.com/portermetricsample/porter-design) —
+to the Google Ads audit HTML. Read this before writing or editing audit CSS.
 
-Source files:
-- `~/porter-design/tokens/themes.css` — the 4 official themes (single source of truth)
-- `~/porter-design/tokens/colors.css` — raw brand tokens
-- `~/porter-design/tokens/typography.css` — font families and scale
-- `~/porter-design/docs/PATTERN-AUDIT.md` — report pattern inventory
+Source files (public — clone the repo or fetch the raw files):
+- `porter-design/tokens/themes.css` — the 4 official themes (single source of truth)
+- `porter-design/tokens/colors.css` — raw brand tokens
+- `porter-design/tokens/typography.css` — font families and scale
+- `porter-design/docs/PATTERN-AUDIT.md` — report pattern inventory
+
+> Raw base URL: `https://raw.githubusercontent.com/portermetricsample/porter-design/main/`
+> e.g. `…/main/tokens/themes.css`. If you keep a local clone, a sibling `../porter-design/` also works.
 
 ---
 

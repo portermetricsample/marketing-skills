@@ -2,7 +2,7 @@
 """
 Design-system audit HTML  ->  Porter reports-v2 bundle (static / baked, no charts).
 
-Turns the standalone audit file (rendered from google-ads/audit/pages/main.html, the Porter Design
+Turns the standalone audit file (rendered from google-ads/reporting/audit/pages/main.html, the Porter Design
 System template) into the 3-file bundle `create_report` expects for the "blank" variant:
   - style.css        : porter-tokens.css (inlined verbatim) + the audit <style> block
   - pages/main.html  : font links + <link rel="stylesheet" href="style.css"> + the #audit body + SDK/report.js

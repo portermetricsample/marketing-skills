@@ -515,7 +515,8 @@ Always acknowledge in the relevant section, never pretend data is missing:
 
 **Do not write a stylesheet per account.** Render from the template [`pages/main.html`](pages/main.html)
 — it already carries the full audit layout and pulls every colour from the Porter Design System tokens
-(`~/porter-design/dist/porter-tokens.css`). You fill the content; you never invent CSS. Pick one
+(`porter-design/dist/porter-tokens.css`, from the public repo `portermetricsample/porter-design`).
+You fill the content; you never invent CSS. Pick one
 `data-theme` on the `#audit` wrapper (`cream` default · `white` · `blue` · `purple`). This is what
 makes every audit look identical run to run.
 
