@@ -1,0 +1,41 @@
+{
+  "skill": "naming-convention",
+  "doc": "Declarative spec. Replace <placeholders> and RUN. MCP paths: ../../../../_framework/porter-mcp-calls.md",
+  "engine": "llm-inferred — NO process.py. Only the data pull below is deterministic; inferring the scheme, the grammar, the controlled vocabulary and the coherence rules is the LLM's, fresh each run.",
+  "discovery": {
+    "account": { "via": "fetch", "tool_id": "tool:porter-accounts:list_accounts",
+      "args": { "component_name": "google-ads", "query": "<ACCOUNT_HINT>" },
+      "use": "COMPLETE object as <ACCOUNT_OBJECT>" }
+  },
+  "optional_input": {
+    "account_profile": "if structure-map already produced it, load it and start from its decoded grammar/lexicons; the queries then only confirm the current names. See ../../../../_framework/account-profile.md"
+  },
+  "queries": [
+    {
+      "id": "campaigns",
+      "via": "execute",
+      "tool_id": "tool:porter-reporting:query_data",
+      "args": {
+        "accounts": ["<ACCOUNT_OBJECT>"],
+        "fields": ["google_ads_campaign_name", "google_ads_campaign_advertising_channel_type", "google_ads_campaign_bidding_strategy_type", "google_ads_impressions"],
+        "date_range": { "preset": "last_month" },
+        "limit": 1000
+      },
+      "why": "COMPLETE campaign name set (includes Demand Gen / PMax without keywords). type + bidding ride along to validate those slots."
+    },
+    {
+      "id": "ad_groups",
+      "via": "execute",
+      "tool_id": "tool:porter-reporting:query_data",
+      "args": {
+        "accounts": ["<ACCOUNT_OBJECT>"],
+        "fields": ["google_ads_campaign_name", "google_ads_ad_group_name", "google_ads_keyword_info_match_type", "google_ads_impressions"],
+        "date_range": { "preset": "last_month" },
+        "limit": 5000
+      },
+      "why": "ad-group names joined to their campaign + real match type (Search) to validate the Match slot"
+    }
+  ],
+  "llm_step": "Over the UNIQUE campaign + ad-group names: (1) infer the account's dominant scheme at both levels; (2) synthesize one grammar per level; (3) build the controlled vocabulary, canonicalizing variants; (4) write the coherence rules binding ad group to campaign; (5) send unresolved internal codes to needs_dictionary. Validate type/match/bidding tokens against the real dimensions in the rows.",
+  "output": "see references/output.md — the convention spec (the insumo)"
+}

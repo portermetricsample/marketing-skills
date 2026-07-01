@@ -10,12 +10,13 @@ here the raw material is how the advertiser **organized** the account, not what 
 |-------|------|--------|
 | [structure-audit/](structure-audit/) | **Validates** keyword↔adgroup↔campaign alignment and hygiene against the account's own convention | ✅ ready |
 | [structure-map/](structure-map/) | **Decodes** the naming convention from dimensions → segmentation parameters (with MCP research) | ✅ ready |
-| naming-convention/ | **Generates** naming conventions to segment by criteria | ⬜ pending |
+| [naming-convention/](naming-convention/) | **Generates** the target naming convention (campaign + ad-group grammar, controlled vocabulary, coherence rules) — LLM-inferred from the account's dominant scheme, emitted as data | ✅ ready |
 
 ## How they compose
 - **`structure-map`** decodes the names → dimensions (what exists, to segment by).
 - **`structure-audit`** validates that this structure is consistent (what's wrong).
-- **`naming-convention`** (future) generates the convention for what's new (what it should be).
+- **`naming-convention`** generates the convention for what's new (what it should be) —
+  LLM-inferred each run, no regex parser.
 Decode what exists → audit whether it's right → define what it should be. They share the
 name-parsing layer.
 

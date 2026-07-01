@@ -111,5 +111,5 @@ type fingerprint first (`google_ads_campaign_advertising_channel_type`).
 | **Placement / network** | Audiences | `segmentation/audience/devices` covers device; network/placement (Feed, Search partners, YouTube) not yet |
 | **Ad-group performance** | Campaigns → Ad groups | only hygiene (`structure-audit`); no performance cut |
 | **Product P&L view** | Product | detection exists (`structure-map`); the metrics-by-line view is a composition, **not a new skill**. Product only appears on ecommerce / Shopping accounts — lead-gen accounts skip this node entirely. |
-| **naming-convention** | (cross) | ⬜ generates conventions; doesn't block the report |
+| **naming-convention** | (cross) | ✅ generates the target convention (LLM-inferred), emitted as data; doesn't block the report |
 | **Match type analysis** | Keywords | keyword match-type (exact/phrase/broad) performance — mapped, not built |

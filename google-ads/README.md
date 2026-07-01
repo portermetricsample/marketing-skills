@@ -23,7 +23,7 @@ Porter Metrics MCP (`google-ads` connector).
 | [ads/](ads/) | Ad unit + the chain it sits in: copy, extensions, health, alignment, QS, landing | 🟡 7 of 10 built |
 | [segmentation/](segmentation/) | Movement attribution by time / campaign / audience | 🟡 in progress |
 | [measurement/](measurement/) | Conversion tracking + UTM hygiene + per-action CPA | ✅ ready |
-| [account-structure/](account-structure/) | Naming conventions + structural consistency | 🟡 in progress |
+| [account-structure/](account-structure/) | Naming conventions + structural consistency | ✅ ready |
 | [account-audit/run-audit/](account-audit/run-audit/) | **Orchestrator** — assembles skills from all clusters into one prioritized audit report | ✅ ready |
 
 ---
@@ -103,7 +103,7 @@ Porter Metrics MCP (`google-ads` connector).
 |-------|----------------|--------|
 | [account-structure/structure-map/](account-structure/structure-map/) | Decode campaign naming → infer dimensions | ✅ ready |
 | [account-structure/structure-audit/](account-structure/structure-audit/) | Is the account internally consistent? | ✅ ready |
-| account-structure/naming-convention | Is the naming convention applied consistently? | ⬜ pending |
+| [account-structure/naming-convention/](account-structure/naming-convention/) | What convention SHOULD campaigns + ad groups follow? Generates the standard (LLM-inferred) as data | ✅ ready |
 
 ## Audit runner
 
