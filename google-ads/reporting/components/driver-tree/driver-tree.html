@@ -1,0 +1,27 @@
+<!--
+  charts/driver-tree — STATIC SCAFFOLD (structure only).
+
+  The driver tree renders ITSELF into a host element — you do not hand-write the
+  columns/nodes here. Two ways to use it:
+
+    1. Self-contained (demo / simple page): you do NOT need this file —
+       call PorterReporting.driverTree.mount("#target", { tree, columns, metrics, … })
+       and it generates the whole tree (columns, nodes, connectors) for you.
+
+    2. Live Porter report page: drop this host into the page, render your data
+       into a node tree, then mount() / build()+drawConnectors() into the host
+       (see a use case, e.g. ./google-ads/account-structure-tree.html, and its
+       README → "Wiring into a live Porter report"). The host carries
+       `data-porter-chart` for that wiring.
+
+  Class hooks only — NO <style> and NO logic here. All appearance is owned by
+  porter-design (see README → "Styling hooks"); all behaviour by the .js.
+-->
+<div class="dt-component">
+  <!-- Optional control row (e.g. a "Group by" switcher) lives here — a use case
+       supplies its own buttons; the bare engine has none. -->
+  <div class="dt-controls"></div>
+
+  <!-- The tree (columns + nodes + SVG connectors) renders here. -->
+  <div class="dt-host" data-porter-chart="driver_tree"></div>
+</div>

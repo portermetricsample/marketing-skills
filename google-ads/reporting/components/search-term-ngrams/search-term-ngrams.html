@@ -1,0 +1,52 @@
+<!--
+  google-ads/search-term-ngrams — static scaffold for a LIVE Porter report.
+  Class hooks only — NO <style> and NO logic here. porter-design owns appearance;
+  search-term-ngrams.js owns behaviour. In a live report, bind the controls to
+  Porter's native filters/params (brand terms, target CPA) and let the SDK inject
+  the raw search-term rows into the host at view time.
+-->
+<div class="sng-component">
+  <div class="sng-controls">
+    <label class="sng-filter">N-gram
+      <select class="sng-n">
+        <option value="">All n</option>
+        <option value="1">Unigram</option>
+        <option value="2">Bigram</option>
+        <option value="3">Trigram</option>
+      </select>
+    </label>
+    <label class="sng-filter">Bucket
+      <select class="sng-bucket-f">
+        <option value="">All buckets</option>
+        <option value="waste">Waste (negative)</option>
+        <option value="winning">Winning (expand)</option>
+        <option value="brand">Brand</option>
+        <option value="competitor">Competitor</option>
+        <option value="neutral">Neutral</option>
+      </select>
+    </label>
+    <label class="sng-filter">Brand
+      <select class="sng-class">
+        <option value="">Brand + non-brand</option>
+        <option value="generic">Non-brand only</option>
+        <option value="brand">Brand only</option>
+        <option value="competitor">Competitor only</option>
+      </select>
+    </label>
+    <label class="sng-filter">Sort by
+      <select class="sng-sort">
+        <option value="cost">Cost</option>
+        <option value="conv">Conversions</option>
+        <option value="terms"># terms</option>
+        <option value="ctr">CTR</option>
+        <option value="cpa">CPA</option>
+        <option value="roas">ROAS</option>
+        <option value="alpha">A–Z</option>
+      </select>
+    </label>
+    <input class="sng-search" type="text" placeholder="Search n-grams… press Enter" />
+  </div>
+
+  <!-- search-term-ngrams.js mount() renders the table into this host -->
+  <div class="sng-host" data-porter-component="google-ads/search-term-ngrams"></div>
+</div>

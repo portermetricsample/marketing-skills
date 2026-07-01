@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Impression-share competitiveness — demo (fictional Acme Insurance)</title>
+<!--
+  Labeled FICTIONAL demo. Open in a browser.
+
+  The CSS below is a clearly-marked DEMO-ONLY fallback so the component is
+  legible standalone — it is NOT the component's styling. In production every
+  class hook is styled by porter-design tokens (see README → "Styling hooks").
+  The component itself (impression-share-competitiveness.js) ships ZERO CSS.
+-->
+<style>
+  /* ---- DEMO-ONLY fallback styling (stands in for porter-design tokens) ---- */
+  :root {
+    --good: #0f6e56; --bad: #a32d2d; --warn: #854f0b; --budget: #b4541b;
+    --card-border: #e3e3df; --surface-card: #fff; --surface-bg: #f6f6f4;
+    --text-title: #1c1c1a; --text-body: #2b2b28; --text-muted: #7a7a72;
+  }
+  body { margin: 0; padding: 28px; background: var(--surface-bg); color: var(--text-body);
+    font-family: "Hanken Grotesk", system-ui, sans-serif; }
+  h1 { font-size: 22px; margin: 0 0 2px; color: var(--text-title); }
+  .sub { color: var(--text-muted); font-size: 13px; margin: 0 0 18px; }
+
+  .pis-controls { margin-bottom: 12px; }
+  .pis-filter { font-size: 12px; color: var(--text-muted); }
+  .pis-filter select { margin-left: 6px; padding: 4px 8px; }
+
+  .pis-note { font-size: 12px; color: var(--text-muted); background: var(--surface-card);
+    border: 1px solid var(--card-border); border-left: 3px solid var(--warn);
+    border-radius: 8px; padding: 9px 12px; margin: 0 0 14px; line-height: 1.5; }
+
+  .pis-summary { background: var(--surface-card); border: 1px solid var(--card-border);
+    border-radius: 12px; padding: 13px 16px; margin-bottom: 14px; }
+  .pis-sum-stats { display: flex; flex-wrap: wrap; gap: 18px; font-size: 13px; }
+  .pis-sum-stat strong { color: var(--text-title); }
+  .pis-sum-stat--rank strong { color: var(--warn); }
+  .pis-sum-stat--budget strong { color: var(--budget); }
+
+  .pis-table { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--surface-card);
+    border: 1px solid var(--card-border); border-radius: 12px; overflow: hidden; }
+  .pis-head th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .04em;
+    color: var(--text-muted); font-weight: 600; padding: 10px 12px; border-bottom: 1px solid var(--card-border); }
+  .pis-row td { padding: 11px 12px; border-bottom: 1px solid var(--card-border); vertical-align: middle; }
+  .pis-row:last-child td { border-bottom: 0; }
+  .pis-camp { font-weight: 600; color: var(--text-title); }
+  .pis-spend { color: var(--text-body); }
+  .pis-is--top { font-weight: 700; color: var(--text-title); }
+  .pis-is--abs { color: var(--text-muted); }
+  .pis-lost--rank { color: var(--warn); }
+  .pis-lost--budget { color: var(--budget); }
+
+  .pis-coverage { width: 180px; }
+  .pis-bar { display: flex; width: 100%; height: 12px; border-radius: 6px; overflow: hidden; background: var(--surface-bg); }
+  .pis-bar-seg--top { background: var(--good); }
+  .pis-bar-seg--lost-rank { background: var(--warn); }
+  .pis-bar-seg--lost-budget { background: var(--budget); }
+
+  .pis-limiter { font-size: 11.5px; font-weight: 600; white-space: nowrap; }
+  .pis-limiter--strong { color: var(--good); }
+  .pis-limiter--rank { color: var(--warn); }
+  .pis-limiter--budget { color: var(--budget); }
+  .pis-limiter--both { color: var(--bad); }
+
+  .pis-empty { color: var(--text-muted); font-size: 13px; }
+</style>
+</head>
+<body>
+  <h1>Search Impression Share — auction competitiveness</h1>
+  <p class="sub">Fictional <strong>Acme Insurance</strong> · demo-only styling · the component ships no CSS · your own account, <em>not</em> competitor Auction Insights</p>
+
+  <div id="host"></div>
+
+  <script src="./example.data.js"></script>
+  <script src="./impression-share-competitiveness.js"></script>
+  <script>
+    var data = PorterReporting.impressionShareExample;
+    PorterReporting.impressionShare.mount("#host", { metrics: data.metrics });
+  </script>
+</body>
+</html>

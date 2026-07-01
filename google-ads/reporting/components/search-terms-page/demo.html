@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>search-terms-page — demo (fictional Acme Insurance)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400..700&display=swap" rel="stylesheet" />
+  <!--
+    DEMO-ONLY styling. NOT the component's CSS — per RULES.md this component ships
+    zero CSS; porter-design owns all appearance. These rules exist so the page is
+    legible standalone, AND they encode the REQUIRED LAYOUT the design system must
+    honour (the split-table equal-height technique, the grid, the chip tones, the
+    lime dark-mode total). The full handoff is in README.md.
+  -->
+  <style>
+    [data-theme="white"]{
+      --surface-bg:#f4f5f7; --surface-card:#fff; --surface-sunken:#f6f7f9; --card-border:#e7e9ee;
+      --text-title:#16181d; --text-body:#3a3f46; --text-muted:#8b9096;
+      --good:#1f9d57; --porter-purple:#6c4cf1; --lime-400:#7a8a00;
+      --t-purple-bg:#ece7fd; --t-purple-fg:#4b32c4; --t-pink-bg:#fde6f0; --t-pink-fg:#b5246a;
+      --t-aqua-bg:#ddf3f4; --t-aqua-fg:#0f7d86; --t-yellow-bg:#fbf0cf; --t-yellow-fg:#7a5a00;
+      --t-green-bg:#e6f3cd; --t-green-fg:#5e7c00; --t-amber-bg:#fdecd2; --t-amber-fg:#9a5b00;
+    }
+    [data-theme="blue"]{
+      --surface-bg:#0d1530; --surface-card:#16203c; --surface-sunken:#1b2647; --card-border:#2a3760;
+      --text-title:#eef2fb; --text-body:#c2cbe0; --text-muted:#8a96b4;
+      --good:#36d07f; --porter-purple:#a892ff; --lime-400:#c7f25a;
+      --t-purple-bg:#2e2a5e; --t-purple-fg:#c9bcff; --t-pink-bg:#4a2138; --t-pink-fg:#ff9cc6;
+      --t-aqua-bg:#123a40; --t-aqua-fg:#58d6df; --t-yellow-bg:#4a3a12; --t-yellow-fg:#f1d27a;
+      --t-green-bg:#2c3a14; --t-green-fg:#b9df72; --t-amber-bg:#43300f; --t-amber-fg:#f0b765;
+    }
+    html,body{margin:0;background:var(--surface-bg);color:var(--text-body);font-family:"Hanken Grotesk",system-ui,sans-serif}
+    .page{max-width:1180px;margin:0 auto;padding:26px}
+    .top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+    h1{font-family:"Bricolage Grotesque";font-weight:800;font-size:19px;color:var(--text-title);margin:0}
+    .sub{color:var(--text-muted);font-size:12.5px;margin:2px 0 16px}
+    .themebtn{font-size:12px;border:1px solid var(--card-border);background:var(--surface-card);color:var(--text-body);border-radius:999px;padding:5px 12px;cursor:pointer}
+
+    /* ---- filter bar ---- */
+    .stp-filters{display:flex;gap:8px;flex-wrap:wrap}
+    .stp-pill{border:1px solid var(--card-border);background:var(--surface-card);color:var(--text-body);border-radius:999px;padding:6px 14px;font:600 13px "Hanken Grotesk";cursor:pointer}
+    .stp-pill--active{background:var(--porter-purple);color:#fff;border-color:var(--porter-purple)}
+
+    /* ---- grid of keyword cards ---- */
+    .stp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(520px,1fr));gap:14px;align-items:start;margin-top:14px}
+    .stp-card{background:var(--surface-card);border:1px solid var(--card-border);border-radius:20px;overflow:hidden}
+    .stp-card[hidden]{display:none!important}
+
+    /* ---- split-table: header/footer/body rows are display:table so columns line up;
+            tbody is a fixed-height scroll area → every card is the same height ---- */
+    .stp-table{width:100%;border-collapse:collapse}
+    .stp-table thead,.stp-table tfoot,.stp-table tbody tr{display:table;width:100%;table-layout:fixed}
+    .stp-body{display:block;height:235px;overflow-y:auto;scrollbar-gutter:stable}
+    .stp-table th,.stp-table td{padding:9px 12px;text-align:right;font-size:13px;color:var(--text-body);vertical-align:middle}
+    .stp-c-term{width:31%;text-align:left;white-space:normal}
+    .stp-c-spend{width:14%}.stp-c-conv{width:12%}.stp-c-cpa{width:15%}.stp-c-tags{width:28%;text-align:left}
+    .stp-row td{border-bottom:1px solid var(--card-border)}
+    .stp-row[hidden]{display:none!important}
+    .stp-body tr:last-child td{border-bottom:0}
+
+    /* merged header row */
+    .stp-head th{background:var(--surface-sunken);text-align:right;font:600 11px "Hanken Grotesk";text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);border-bottom:1px solid var(--card-border)}
+    .stp-head th.stp-c-term,.stp-head th.stp-c-tags{text-align:left}
+    .stp-kw{font-family:"Bricolage Grotesque";font-weight:700;font-size:15px;color:var(--text-title);text-transform:none;letter-spacing:0;margin-right:8px}
+    .stp-mt{font:700 10px "Hanken Grotesk";text-transform:uppercase;letter-spacing:.04em;border-radius:999px;padding:2px 7px;vertical-align:middle}
+    .stp-mt--exact{background:var(--t-aqua-bg);color:var(--t-aqua-fg)}
+    .stp-mt--phrase{background:var(--t-purple-bg);color:var(--t-purple-fg)}
+    .stp-mt--broad{background:var(--t-yellow-bg);color:var(--t-yellow-fg)}
+
+    /* status dot + term */
+    .stp-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px;vertical-align:middle}
+    .stp-dot--on{background:var(--good)}.stp-dot--off{background:var(--text-muted);opacity:.45}
+    .stp-term{color:var(--text-title)}
+
+    /* footer total */
+    .stp-foot td{background:var(--surface-sunken);font-weight:700;color:var(--text-title);border-top:1px solid var(--card-border)}
+    .stp-component[data-filtering="1"] .stp-foot{display:none}
+
+    /* tags cell: chips on one nowrap CLIPPED row; the ⋯ button never clips; open → wrap (height only) */
+    .stp-tags{display:flex;gap:4px;align-items:center}
+    .stp-tags-list{display:flex;gap:5px;flex-wrap:nowrap;overflow:hidden;min-width:0}
+    .stp-tags--open .stp-tags-list{flex-wrap:wrap}
+    .stp-tag{font:600 11px "Hanken Grotesk";border-radius:999px;padding:2px 8px;white-space:nowrap}
+    .stp-tag--purple{background:var(--t-purple-bg);color:var(--t-purple-fg)}
+    .stp-tag--pink{background:var(--t-pink-bg);color:var(--t-pink-fg)}
+    .stp-tag--aqua{background:var(--t-aqua-bg);color:var(--t-aqua-fg)}
+    .stp-tag--yellow{background:var(--t-yellow-bg);color:var(--t-yellow-fg)}
+    .stp-tag--green{background:var(--t-green-bg);color:var(--t-green-fg)}
+    .stp-more{flex:0 0 auto;border:none;background:transparent;color:var(--text-muted);font:700 14px "Hanken Grotesk";cursor:pointer;padding:0 2px;line-height:1}
+
+    /* ---- insights card ---- */
+    .stp-insights{margin-top:14px;background:var(--surface-card);border:1px solid var(--card-border);border-radius:20px;padding:20px 22px}
+    .stp-insights-head{display:flex;justify-content:space-between;align-items:flex-start;gap:18px}
+    .stp-eyebrow{font:700 11px "Bricolage Grotesque";text-transform:uppercase;letter-spacing:.1em;color:var(--porter-purple);margin:0 0 3px}
+    .stp-insights-title{font-family:"Bricolage Grotesque";font-weight:800;font-size:20px;color:var(--text-title);margin:0}
+    .stp-insights-note{color:var(--text-muted);font-size:12px;margin:3px 0 0}
+    .stp-total{text-align:right;white-space:nowrap}
+    .stp-total-num{display:block;font-family:"Bricolage Grotesque";font-weight:800;font-size:32px;color:var(--porter-purple);line-height:1}
+    [data-theme="blue"] .stp-total-num{color:var(--lime-400)}
+    .stp-total-label{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);margin-top:2px}
+    .stp-split{display:block;font-size:11.5px;color:var(--text-muted);margin-top:5px}
+    .stp-rows{list-style:none;margin:14px 0 0;padding:0}
+    .stp-irow{display:flex;align-items:center;gap:14px;padding:11px 0;border-top:1px solid var(--card-border)}
+    .stp-chip{flex:0 0 104px;text-align:center;font:700 11px "Hanken Grotesk";border-radius:999px;padding:4px 0}
+    .stp-chip--purple{background:var(--t-purple-bg);color:var(--t-purple-fg)}
+    .stp-chip--pink{background:var(--t-pink-bg);color:var(--t-pink-fg)}
+    .stp-chip--aqua{background:var(--t-aqua-bg);color:var(--t-aqua-fg)}
+    .stp-chip--yellow{background:var(--t-yellow-bg);color:var(--t-yellow-fg)}
+    .stp-chip--green{background:var(--t-green-bg);color:var(--t-green-fg)}
+    .stp-chip--amber{background:var(--t-amber-bg);color:var(--t-amber-fg)}
+    .stp-imid{flex:1;min-width:0}
+    .stp-iaction{display:block;font-weight:700;color:var(--text-title);font-size:13.5px}
+    .stp-irat{display:block;color:var(--text-muted);font-size:12.5px;margin-top:2px}
+    .stp-imoney{flex:0 0 130px;text-align:right}
+    .stp-idollars{display:block;font-family:"Bricolage Grotesque";font-weight:800;font-size:17px;color:var(--text-title)}
+    .stp-isub{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted)}
+    .stp-est{font:600 9.5px "Hanken Grotesk";text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);border:1px solid var(--card-border);border-radius:4px;padding:0 4px;vertical-align:middle}
+    .stp-empty{padding:24px;color:var(--text-muted)}
+  </style>
+</head>
+<body data-theme="white">
+  <div class="page">
+    <div class="top">
+      <h1>Search terms <span style="font-weight:400;color:var(--text-muted)">— Acme Insurance (fictional)</span></h1>
+      <button class="themebtn" id="theme">Toggle dark</button>
+    </div>
+    <p class="sub">Tags fire only when something is off; a relevant/standard term is untagged. Filter by criterion · click <strong>⋯</strong> on a 2-tag row to expand. <em>Styling here is demo-only; porter-design owns the real appearance.</em></p>
+    <div id="host"></div>
+  </div>
+  <script src="./search-terms-page.js"></script>
+  <script src="./example.data.js"></script>
+  <script>
+    window.PorterReporting.searchTermsPage.mount("#host", window.STP_EXAMPLE);
+    document.getElementById("theme").addEventListener("click", function () {
+      var b = document.body;
+      b.setAttribute("data-theme", b.getAttribute("data-theme") === "white" ? "blue" : "white");
+    });
+  </script>
+</body>
+</html>

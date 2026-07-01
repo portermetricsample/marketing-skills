@@ -1,0 +1,33 @@
+<!--
+  charts/driver-tree/google-ads/performance-drivers — STATIC SCAFFOLD.
+
+  The component renders itself into a host. Two ways to use it:
+
+    1. Self-contained: call PorterReporting.performanceDrivers.mount("#target",
+       { focusMetric, dimension, account, campaigns, adGroups, previous }) and it
+       generates the metric/dimension controls + lever strip + contribution tree.
+
+    2. Live Porter report page: drop this markup in, then mount into it (see
+       README → "Wiring into a live Porter report").
+
+  Class hooks only — NO <style> and NO logic here. Appearance is owned by
+  porter-design (README → "Styling hooks"); behaviour by the .js.
+-->
+<div class="dt-component pd-component">
+  <div class="pd-controls">
+    <div class="pd-seg" data-role="metric">
+      <span class="pd-seg-lab">Explain</span>
+      <!-- metric buttons injected by mount() -->
+    </div>
+    <div class="pd-seg" data-role="dim">
+      <span class="pd-seg-lab">Break down by</span>
+      <!-- dimension buttons injected by mount() -->
+    </div>
+  </div>
+
+  <!-- the LMDI lever strip (why the metric moved, for the selected node) -->
+  <div class="pd-levers"></div>
+
+  <!-- the segment contribution tree -->
+  <div class="pd-tree dt-host" data-porter-chart="perf_drivers"></div>
+</div>

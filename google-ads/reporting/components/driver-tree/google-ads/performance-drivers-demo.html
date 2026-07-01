@@ -1,0 +1,119 @@
+<!doctype html>
+<meta charset="utf-8" />
+<title>Performance drivers — fictional demo (Acme Insurance · Google Ads)</title>
+
+<!-- ============================================================ DEMO-ONLY CSS
+     This component ships NO styling of its own — appearance is owned by the
+     design system (porter-design). The block below is a THROWAWAY fallback so
+     the demo is legible offline. Some rules are STRUCTURAL (the flex columns +
+     the absolute SVG link layer) and load-bearing for the connectors.
+     ========================================================================= -->
+<style>
+  :root {
+    --font-hanken: "Hanken Grotesk", system-ui, sans-serif;
+    --surface-bg: #f4f5f7; --surface-card: #fff; --card-border: #e3e6ea; --surface-sunken: #f1f3f4;
+    --text-title: #14161a; --text-body: #3c4046; --text-muted: #82888f;
+    --good: #1a8f5a; --bad: #c5384b; --accent: #3157f0;
+    --dt-good: #d7f0e1; --dt-mid: #fcecbf; --dt-bad: #f7d2da; --dt-na: var(--card-border);
+    --dt-root-bg: #eef4ff; --dt-root-border: #aecbfa; --dt-link: rgba(128,134,142,0.55);
+  }
+  /* --- driver-tree structural --- */
+  .dt-wrap { position: relative; overflow-x: auto; padding: 6px 2px 10px; }
+  .dt-links { position: absolute; top: 0; left: 0; pointer-events: none; z-index: 0; }
+  .dt-hdrs, .dt-cols { position: relative; z-index: 1; display: flex; gap: 46px; min-width: max-content; }
+  .dt-hdrs { align-items: flex-end; margin-bottom: 10px; } .dt-cols { align-items: flex-start; }
+  .dt-col { display: flex; flex-direction: column; gap: 12px; justify-content: center; }
+  .dt-node { width: 232px; box-sizing: border-box; }
+  /* --- driver-tree appearance --- */
+  .dt-colhdr { width: 232px; box-sizing: border-box; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--text-muted); padding: 0 2px; }
+  .dt-node { padding: 9px 11px; border: 1px solid var(--dt-na); border-radius: 10px; background: var(--surface-card); }
+  .dt-node.dt-good { border-color: #9ad9b6; background: var(--dt-good); }
+  .dt-node.dt-bad  { border-color: #e8a6b2; background: var(--dt-bad); }
+  .dt-node.dt-na   { background: var(--surface-card); }
+  .dt-node.dt-root { background: var(--dt-root-bg); border-color: var(--dt-root-border); }
+  .dt-node.dt-exp { cursor: pointer; } .dt-node.dt-exp:hover { border-color: var(--accent); }
+  .dt-node.dt-sel { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .dt-node.dt-ph { opacity: .6; font-style: italic; border-style: dashed; }
+  .dt-top { display: flex; align-items: flex-start; gap: 5px; }
+  .dt-caret { color: var(--text-muted); font-size: 11px; width: 10px; }
+  .dt-name { font-size: 13px; font-weight: 600; color: var(--text-title); flex: 1; min-width: 0; overflow-wrap: anywhere; }
+  .dt-ext { color: var(--accent); text-decoration: none; flex: none; }
+  /* contribution headline */
+  .dt-headline { margin-top: 7px; display: flex; align-items: baseline; gap: 7px; }
+  .dt-h-val { font-size: 17px; font-weight: 700; color: var(--text-title); }
+  .dt-headline--good .dt-h-val { color: var(--good); } .dt-headline--bad .dt-h-val { color: var(--bad); }
+  .dt-h-sub { font-size: 11px; color: var(--text-muted); }
+  .dt-krows { margin-top: 6px; }
+  .dt-krow { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 2px 0; }
+  .dt-k { font-size: 11px; color: var(--text-muted); } .dt-v { font-size: 12px; font-weight: 500; color: var(--text-body); }
+  .dt-delta { font-size: 10px; font-weight: 700; margin-left: 4px; } .dt-delta--good { color: var(--good); } .dt-delta--bad { color: var(--bad); }
+  .dt-empty { padding: 24px; color: var(--text-muted); font-size: 13px; }
+  /* --- controls --- */
+  .pd-controls { display: flex; flex-wrap: wrap; gap: 18px; margin: 6px 0 16px; }
+  .pd-seg { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .pd-seg-lab { font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--text-muted); font-weight: 600; margin-right: 2px; }
+  .pd-seg-btn { font: inherit; font-size: 12px; padding: 5px 11px; border: 1px solid var(--card-border); background: var(--surface-card); color: var(--text-body); border-radius: 999px; cursor: pointer; }
+  .pd-seg-btn:hover { background: var(--surface-sunken); }
+  .pd-seg-btn.is-active { background: #e8f0fe; border-color: #c6dafc; color: var(--accent); font-weight: 600; }
+  /* --- lever strip --- */
+  .pd-levers { background: var(--surface-card); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px 16px; margin-bottom: 22px; }
+  .pd-levers-head { font-size: 14px; color: var(--text-body); margin-bottom: 10px; }
+  .pd-levers-head strong { color: var(--text-title); }
+  .pd-h-delta { font-weight: 700; } .pd-h-delta--good { color: var(--good); } .pd-h-delta--bad { color: var(--bad); }
+  .pd-h-node { color: var(--text-muted); } .pd-h-vals { float: right; color: var(--text-muted); font-size: 12px; }
+  .pd-lever-rows { display: flex; flex-direction: column; gap: 7px; }
+  .pd-lever { display: grid; grid-template-columns: 120px 1fr 150px; align-items: center; gap: 10px; }
+  .pd-lever-lab { font-size: 12px; color: var(--text-body); }
+  .pd-lever-track { height: 10px; background: var(--surface-sunken); border-radius: 5px; overflow: hidden; }
+  .pd-lever-fill { display: block; height: 100%; border-radius: 5px; }
+  .pd-lever--good .pd-lever-fill { background: var(--good); } .pd-lever--bad .pd-lever-fill { background: var(--bad); } .pd-lever--flat .pd-lever-fill { background: var(--text-muted); }
+  .pd-lever-val { font-size: 12px; font-weight: 600; color: var(--text-title); text-align: right; }
+  .pd-lever--good .pd-lever-val { color: var(--good); } .pd-lever--bad .pd-lever-val { color: var(--bad); }
+  .pd-lever-sh { color: var(--text-muted); font-weight: 500; margin-left: 4px; }
+</style>
+
+<link rel="stylesheet" href="../../../../../../porter-design/dist/porter-tokens.css" />
+
+<style>
+  body { margin: 0; background: var(--surface-bg); }
+  .page { max-width: 1280px; margin: 0 auto; padding: 36px 24px 64px; font-family: var(--font-hanken); color: var(--text-body); }
+  .demo-banner { font-size: 12px; color: var(--text-muted); background: var(--surface-card); border: 1px dashed var(--card-border); border-radius: 10px; padding: 8px 12px; margin-bottom: 18px; }
+  .appbar { display: flex; align-items: center; gap: 10px; }
+  .appbar .word { font-weight: 700; color: var(--text-title); } .appbar .acct { color: var(--text-muted); font-size: 13px; }
+  h1 { font-size: 24px; margin: 6px 0 4px; color: var(--text-title); }
+  .sub { color: var(--text-muted); margin: 0 0 18px; font-size: 14px; max-width: 860px; }
+</style>
+
+<div class="page">
+  <div class="demo-banner">
+    Fictional demo · <strong>Acme Insurance</strong> · Google Ads · synthetic numbers. Styling here is a demo-only fallback — the component ships no CSS.
+  </div>
+  <div class="appbar"><span class="word">Google Ads</span> <span class="acct">· Acme Insurance · 123-456-7890</span></div>
+  <h1>Performance drivers — why did it move?</h1>
+  <p class="sub">Pick a metric in <strong>Explain</strong>. The strip splits its change into the math <strong>levers</strong> (e.g. Conversions = Impressions × CTR × CVR). The tree splits the same change across segments — each node shows its <strong>contribution to the move</strong>, not its own %. <strong>Click any node</strong> and the lever strip recomputes for that node.</p>
+
+  <div id="host"></div>
+</div>
+
+<script src="../driver-tree.js"></script>
+<script src="performance-drivers.js"></script>
+<script src="example.data.js"></script>
+<script>
+  var pd = window.PorterReporting.performanceDrivers;
+  var d = window.PorterReporting.gaExampleData;
+  pd.mount("#host", {
+    account: d.account,
+    campaigns: d.campaigns,
+    adGroups: d.adGroups,
+    previous: d.previous,
+    focusMetric: "conversions",
+    dimension: "campaign_type"
+  });
+  // pre-expand the top branch so the demo shows depth
+  setTimeout(function(){
+    var host = document.querySelector("#host .pd-tree");
+    var col1 = host && host.querySelectorAll(".dt-col")[1];
+    var g = col1 && col1.querySelector(".dt-node[data-dt-expandable]");
+    if (g) g.click();
+  }, 60);
+</script>

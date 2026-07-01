@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en" data-theme="white">
+<meta charset="utf-8" />
+<title>Creative Ad Preview — fictional demo (Acme Insurance)</title>
+
+<!-- Real appearance from porter-design (sibling repo): tokens + the Google-ad skin.
+     This component ships NO CSS of its own; the look lives in porter-design. -->
+<link rel="stylesheet" href="../../../../../porter-design/dist/porter-tokens.css" />
+<link rel="stylesheet" href="../../../../../porter-design/components/CreativeAdPreview/creative-ad-preview.css" />
+
+<style>
+  body { margin: 0; background: var(--surface-bg); color: var(--text-body); font-family: var(--font-hanken, system-ui, sans-serif); }
+  .page { max-width: 860px; margin: 0 auto; padding: 32px 24px 64px; }
+  .demo-banner { font-size: 12px; color: var(--text-muted); border: 1px dashed var(--card-border); border-radius: 10px; padding: 8px 12px; margin: 0 0 16px; }
+  h1 { font-family: var(--font-bricolage, var(--font-hanken)); color: var(--text-title); font-size: 24px; margin: 0 0 4px; }
+  .sub { color: var(--text-muted); margin: 0 0 18px; font-size: 14px; }
+  .themes { display: flex; gap: 6px; margin: 0 0 22px; }
+  .themes button { font: inherit; font-size: 12px; padding: 5px 12px; border: 1px solid var(--card-border); background: var(--surface-card); color: var(--text-body); border-radius: 999px; cursor: pointer; }
+</style>
+
+<body data-theme="white">
+<div class="page">
+  <div class="demo-banner">
+    Fictional demo · account <strong>Acme Insurance</strong> · synthetic numbers (not real performance).
+    Layout = porter-reporting component; look = porter-design skin (the “Google ad” style).
+  </div>
+  <h1>Creative Ad Preview</h1>
+  <p class="sub">One responsive search ad as it appears in Google search, then its full pool of headlines &amp; descriptions annotated with pins, character usage, served state and impressions.</p>
+  <div class="themes">
+    <button data-t="white">white</button>
+    <button data-t="cream">cream</button>
+    <button data-t="blue">blue</button>
+    <button data-t="purple">purple</button>
+  </div>
+  <div id="cap-host"></div>
+</div>
+
+<script src="example.data.js"></script>
+<script src="creative-ad-preview.js"></script>
+<script>
+  var d = window.PorterReporting.exampleData;
+  // synthetic URL-health input (from the live check) — mark the landing page broken to show the flag
+  var urlHealth = {}; urlHealth[d.ad.final_url] = 404;
+  window.PorterReporting.creativeAdPreview.mount("#cap-host", { ad: d.ad, extensions: d.extensions, business: d.business, urlHealth: urlHealth });
+  document.querySelectorAll(".themes button").forEach(function (b) {
+    b.onclick = function () { document.documentElement.setAttribute("data-theme", b.dataset.t); document.body.setAttribute("data-theme", b.dataset.t); };
+  });
+</script>
+</body>
+</html>

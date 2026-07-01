@@ -1,0 +1,41 @@
+<!--
+  google-ads/keyword-ad-landing-alignment — STATIC SCAFFOLD (structure only).
+
+  The markup the component animates: a control bar (verdict filter / sort) + an
+  empty host. Two ways to use it:
+
+    1. Self-contained (demo / simple page): you do NOT need this file —
+       call PorterReporting.addAlignment("#target", { alignment, metrics })
+       (alias of .mount) and it generates this exact structure for you.
+
+    2. Live Porter report page: drop this markup into the page, then render the
+       analysis output into the host (see README → "Wiring into a live Porter
+       report"). The host carries `data-porter-chart` for that wiring.
+
+  Class hooks only — NO <style> and NO logic here. All appearance is owned by
+  porter-design (see README → "Styling hooks"); all behaviour by the .js.
+-->
+<div class="alj-component">
+  <div class="alj-controls">
+    <label class="alj-filter">Show
+      <select class="alj-verdict-filter">
+        <option value="">All verdicts</option>
+        <option value="broken">Broken</option>
+        <option value="needs_review">Needs review</option>
+        <option value="aligned">Aligned</option>
+      </select>
+    </label>
+    <label class="alj-filter">Sort by
+      <select class="alj-sort">
+        <option value="spend">Ad spend (highest first)</option>
+        <option value="attention">Needs attention first</option>
+        <option value="alpha">Ad group (A–Z)</option>
+      </select>
+    </label>
+  </div>
+
+  <!-- The summary banner + journey cards render here. `data-porter-chart` is the
+       live-report binding point (the chart key is illustrative — match your
+       report config; this section pairs the alignment + metrics charts). -->
+  <div class="alj-host" data-porter-chart="jr_alignment"></div>
+</div>

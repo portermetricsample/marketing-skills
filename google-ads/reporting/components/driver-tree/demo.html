@@ -1,0 +1,120 @@
+<!doctype html>
+<meta charset="utf-8" />
+<title>Driver tree — fictional demo (Acme Insurance)</title>
+
+<!-- ============================================================ DEMO-ONLY CSS
+     This component ships NO styling of its own — appearance is owned by the
+     design system (porter-design). The block below is a THROWAWAY fallback so
+     the demo is legible offline; it is NOT the source of truth and NOT part of
+     the component. Some rules here are STRUCTURAL (the flex columns + the
+     absolute SVG link layer) and are load-bearing for the connector drawing —
+     porter-design must keep their layout intent when it owns these hooks.
+     The real porter-design <link> beneath overrides the appearance bits.
+     ========================================================================= -->
+<style>
+  :root {
+    --font-hanken: "Hanken Grotesk", system-ui, sans-serif;
+    --surface-bg: #f4f5f7; --surface-card: #fff; --card-border: #e3e6ea;
+    --text-title: #14161a; --text-body: #3c4046; --text-muted: #82888f;
+    --good: #1a8f5a; --bad: #c5384b; --accent: #3157f0;
+    /* efficiency tints (own ramp) + connector colour — Design owns these tokens */
+    --dt-good: #d7f0e1; --dt-mid: #fcecbf; --dt-bad: #f7d2da; --dt-na: var(--card-border);
+    --dt-root-bg: #eef4ff; --dt-root-border: #aecbfa;
+    --dt-link: rgba(128,134,142,0.55);
+  }
+  /* --- structural (load-bearing for the connectors) --- */
+  .dt-wrap { position: relative; overflow-x: auto; padding: 6px 2px 10px; }
+  .dt-links { position: absolute; top: 0; left: 0; pointer-events: none; z-index: 0; }
+  .dt-hdrs, .dt-cols { position: relative; z-index: 1; display: flex; gap: 46px; min-width: max-content; }
+  .dt-hdrs { align-items: flex-end; margin-bottom: 10px; }
+  .dt-cols { align-items: flex-start; }
+  .dt-col { display: flex; flex-direction: column; gap: 12px; justify-content: center; }
+  .dt-node { width: 240px; box-sizing: border-box; }
+  /* --- appearance (porter-design owns the real version) --- */
+  .dt-colhdr { width: 240px; box-sizing: border-box; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--text-muted); padding: 0 2px; }
+  .dt-node { padding: 9px 11px; border: 1px solid var(--dt-na); border-radius: 10px; background: var(--surface-card); }
+  .dt-node.dt-good { border-color: #9ad9b6; background: var(--dt-good); }
+  .dt-node.dt-mid  { border-color: #f0d488; background: var(--dt-mid); }
+  .dt-node.dt-bad  { border-color: #e8a6b2; background: var(--dt-bad); }
+  .dt-node.dt-root { background: var(--dt-root-bg); border-color: var(--dt-root-border); }
+  .dt-node.dt-exp { cursor: pointer; }
+  .dt-node.dt-exp:hover { border-color: var(--accent); }
+  .dt-node.dt-ph { opacity: .6; font-style: italic; border-style: dashed; }
+  .dt-top { display: flex; align-items: flex-start; gap: 5px; }
+  .dt-caret { color: var(--text-muted); font-size: 11px; width: 10px; }
+  .dt-name { font-size: 13px; font-weight: 600; color: var(--text-title); flex: 1; min-width: 0; overflow-wrap: anywhere; }
+  .dt-ext { color: var(--accent); text-decoration: none; flex: none; }
+  .dt-krows { margin-top: 8px; }
+  .dt-krow { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 3px 0; border-top: 1px solid rgba(0,0,0,.05); }
+  .dt-krow:first-child { border-top: none; }
+  .dt-k { font-size: 11px; color: var(--text-muted); white-space: nowrap; }
+  .dt-v { font-size: 13px; font-weight: 500; color: var(--text-title); text-align: right; }
+  .dt-delta { font-size: 10px; font-weight: 700; margin-left: 4px; white-space: nowrap; }
+  .dt-delta--good { color: var(--good); } .dt-delta--bad { color: var(--bad); } .dt-delta--flat { color: var(--text-muted); }
+  .dt-empty { padding: 24px; color: var(--text-muted); font-size: 13px; }
+</style>
+
+<!-- Real appearance from porter-design (sibling repo); overrides the fallback above when checked out. -->
+<link rel="stylesheet" href="../../../../../porter-design/dist/porter-tokens.css" />
+
+<style>
+  body { margin: 0; background: var(--surface-bg); }
+  .page { max-width: 1180px; margin: 0 auto; padding: 40px 24px 64px; font-family: var(--font-hanken); color: var(--text-body); }
+  .demo-banner { font-size: 12px; color: var(--text-muted); background: var(--surface-card); border: 1px dashed var(--card-border); border-radius: 10px; padding: 8px 12px; margin-bottom: 18px; }
+  h1 { font-size: 26px; margin: 0 0 4px; color: var(--text-title); }
+  .sub { color: var(--text-muted); margin: 0 0 22px; font-size: 14px; }
+</style>
+
+<div class="page">
+  <div class="demo-banner">
+    Fictional demo · account <strong>Acme Insurance</strong> · synthetic numbers (not real performance).
+    Styling here is a <strong>demo-only fallback</strong> — the component ships no CSS; appearance is owned by porter-design.
+  </div>
+
+  <h1>Driver tree</h1>
+  <p class="sub">The connector-agnostic engine: any nested node tree → columns of metric cards, joined by curved connectors. Click a node to expand / collapse. "Generic — Term Life" and the lazy nodes load their children on expand.</p>
+
+  <div id="host"></div>
+</div>
+
+<script src="example.data.js"></script>
+<script src="driver-tree.js"></script>
+<script>
+  var dt = window.PorterReporting.driverTree;
+  var data = window.PorterReporting.exampleData;
+  var H = data.helpers;
+
+  // account-average cost-per-conversion → the efficiency baseline (lower = better)
+  var acctCpa = data.tree.metrics.spend / data.tree.metrics.conv;
+
+  // lazy children for the `children: null` nodes (proves the onExpand path)
+  var LAZY = {
+    "Generic — Term Life": [
+      H.node("acme term life insurance", H.n(4200, 61, 16000), H.n(3700, 54, 14000), []),
+      H.node("life insurance quote", H.n(3300, 38, 9000), H.n(2900, 31, 8000), []),
+      H.node("cheap term life", H.n(2300, 22, 5000), H.n(2000, 19, 5000), [])
+    ],
+    "Competitor — Term Life": [
+      H.node("northwind life", H.n(3100, 31, 8000), H.n(2800, 35, 9000), []),
+      H.node("globex insurance", H.n(2300, 24, 6000), H.n(2100, 26, 7000), [])
+    ],
+    "Brand — Whole Life": [ H.node("acme whole life", H.n(4100, 78, 27000), H.n(3600, 71, 24000), []) ],
+    "Generic — Whole Life": [ H.node("whole life policy", H.n(10500, 90, 25000), H.n(8800, 81, 22000), []) ],
+    "Disability": [ H.node("disability insurance", H.n(7300, 84, 19000), H.n(6900, 71, 15000), []) ],
+    "Bundles": [ H.node("home + auto bundle", H.n(4900, 42, 11000), H.n(3600, 39, 8000), []) ]
+  };
+
+  dt.mount("#host", {
+    tree: data.tree,
+    columns: ["Account", "Product line", "Segment", "Detail"],
+    metrics: [
+      { key: "spend", label: "Spend",       format: "money" },
+      { key: "conv",  label: "Conversions", format: "dec"   },
+      { key: "cpa",   label: "Cost/conv",   format: "money", invert: true },
+      { key: "value", label: "Conv. value", format: "money" }
+    ],
+    efficiency: { metricKey: "cpa", baseline: acctCpa, good: 0.8, bad: 1.2 },  // lower CPA = better
+    compare: true,
+    onExpand: function (node) { return LAZY[node.name] || []; }   // lazy load
+  });
+</script>

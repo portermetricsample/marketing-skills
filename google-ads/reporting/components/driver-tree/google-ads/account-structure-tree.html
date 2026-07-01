@@ -1,0 +1,35 @@
+<!--
+  charts/driver-tree/google-ads/account-structure-tree — STATIC SCAFFOLD.
+
+  The component renders itself into a host. Two ways to use it:
+
+    1. Self-contained (demo / simple page): you do NOT need this file — call
+       PorterReporting.accountStructureTree.mount("#target", { campaigns, adGroups,
+       ads, searchTerms, previous, account, brandTerm }) and it generates the
+       Group-by bar + tree + breakdown for you.
+
+    2. Live Porter report page: drop this markup in, then bind the host charts and
+       render into them (see README → "Wiring into a live Porter report"). The
+       hosts carry `data-porter-chart` for that wiring.
+
+  Class hooks only — NO <style> and NO logic here. Appearance is owned by
+  porter-design (README → "Styling hooks"); behaviour by the .js.
+-->
+<div class="dt-component as-component">
+  <div class="dt-controls as-controls">
+    <div class="as-seg">
+      <span class="as-seg-lab">Group by</span>
+      <button class="as-seg-btn is-active" data-lens="campaign_type">Campaign type</button>
+      <button class="as-seg-btn" data-lens="brand">Brand vs non-brand</button>
+      <button class="as-seg-btn" data-lens="funnel_stage">Funnel stage</button>
+      <button class="as-seg-btn" data-lens="match_type">Match type</button>
+    </div>
+    <div class="as-cov"></div>
+  </div>
+
+  <!-- the driver tree renders here (Account → group → Campaign → Ad group → Ad) -->
+  <div class="as-tree dt-host" data-porter-chart="as_campaigns"></div>
+
+  <!-- the SUMAS "Spend & performance by <group>" table renders here -->
+  <div class="as-breakdown"></div>
+</div>

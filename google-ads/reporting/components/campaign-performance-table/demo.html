@@ -1,0 +1,76 @@
+<!doctype html>
+<meta charset="utf-8" />
+<title>Campaign Performance — fictional demo (Acme Insurance)</title>
+
+<!-- ============================================================ DEMO-ONLY CSS
+     This component ships NO styling of its own — appearance is owned by the
+     design system (porter-design). The block below is a THROWAWAY fallback so
+     the demo is legible offline; it is NOT the source of truth and NOT part of
+     the component. The real <link> beneath it overrides these when present.
+     ========================================================================= -->
+<style>
+  :root {
+    --font-hanken: "Hanken Grotesk", system-ui, sans-serif;
+    --surface-bg: #f4f5f7; --surface-card: #fff; --card-border: #e6e8eb;
+    --text-title: #14161a; --text-body: #3c4046; --text-muted: #82888f;
+    --good: #1a8f5a; --bad: #c5384b; --accent: #3157f0; --accent-2: #8430ce;
+    /* porter-design's red→green conditional-format ramp, mirrored for the demo */
+    --cf-1: #f7c7d5; --cf-2: #fbdcc4; --cf-3: #fcecbf; --cf-4: #dcefb6; --cf-5: #bbe6b0;
+  }
+  /* structural fallback for the component's class hooks (design owns the real ones) */
+  .cpt-controls { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin-bottom: 14px; }
+  .cpt-filter { font-size: 12px; color: var(--text-muted); display: inline-flex; gap: 6px; align-items: center; }
+  .cpt-filter select, .cpt-search { font: inherit; font-size: 13px; padding: 6px 10px; border: 1px solid var(--card-border); border-radius: 8px; background: #fff; }
+  .cpt-search { border-radius: 999px; min-width: 240px; }
+  .cpt { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .cpt thead th { position: sticky; top: 0; background: #f8f9fa; text-align: left; padding: 10px 12px; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--text-muted); border-bottom: 2px solid var(--card-border); }
+  .cpt td { vertical-align: top; padding: 12px; border-bottom: 1px solid #eceff1; }
+  .cpt-camp { min-width: 300px; }
+  .cpt-mv { font-size: 18px; font-weight: 700; color: var(--text-title); line-height: 1.2; }
+  .cpt-sub { display: block; font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+  .cpt-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; vertical-align: middle; }
+  .cpt-dot--active { background: var(--good); } .cpt-dot--inactive { background: #9aa0a6; }
+  .cpt-link { color: var(--text-title); text-decoration: none; font-weight: 600; }
+  .cpt-link:hover { color: var(--accent); text-decoration: underline; }
+  .cpt-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 6px; margin-left: 6px; text-transform: uppercase; letter-spacing: .03em; background: #e8f0fe; color: var(--accent); }
+  .cpt-badge--bid { background: #f3e8fd; color: var(--accent-2); text-transform: none; letter-spacing: 0; }
+  .cpt-delta { font-size: 10px; font-weight: 700; margin-left: 5px; white-space: nowrap; }
+  .cpt-delta--good { color: var(--good); } .cpt-delta--bad { color: var(--bad); } .cpt-delta--flat { color: #9aa0a6; }
+  .cpt-roas--good { color: var(--good); font-weight: 700; } .cpt-roas--bad { color: var(--bad); font-weight: 700; }
+  .cpt-empty { padding: 24px; color: var(--text-muted); font-size: 13px; text-align: center; }
+</style>
+
+<!-- Real appearance from porter-design (sibling repo); overrides the fallback above when checked out. -->
+<link rel="stylesheet" href="../../../../../porter-design/dist/porter-tokens.css" />
+
+<style>
+  body { margin: 0; background: var(--surface-bg); }
+  .page { max-width: 1180px; margin: 0 auto; padding: 40px 24px 64px; font-family: var(--font-hanken); color: var(--text-body); }
+  .demo-banner { font-size: 12px; color: var(--text-muted); background: var(--surface-card); border: 1px dashed var(--card-border); border-radius: 10px; padding: 8px 12px; margin-bottom: 18px; }
+  h1 { font-size: 26px; margin: 0 0 4px; color: var(--text-title); }
+  .sub { color: var(--text-muted); margin: 0 0 22px; font-size: 14px; }
+</style>
+
+<div class="page">
+  <div class="demo-banner">
+    Fictional demo · account <strong>Acme Insurance</strong> · synthetic numbers (not real performance).
+    Styling here is a <strong>demo-only fallback</strong> — the component itself ships no CSS; appearance is owned by porter-design.
+  </div>
+
+  <h1>Campaign Performance</h1>
+  <p class="sub">One row per campaign, columns grouped by SUMAS stage — Budget · Visibility · Engagement · Conversion — each a headline metric + sub-metrics, every number with its Δ vs the previous period, cells heat-tinted by the stage headline. The filter / sort / search bar is part of the component.</p>
+
+  <div id="host"></div>
+</div>
+
+<script src="example.data.js"></script>
+<script src="campaign-performance-table.js"></script>
+<script>
+  var data = window.PorterReporting.exampleData;
+  window.PorterReporting.campaignPerformanceTable.mount("#host", {
+    rows: data.rows,
+    previousRows: data.previousRows,
+    periodDays: (data.period && data.period.days) || 0,   // enables the "Budget used %" sub
+    sort: "conv"
+  });
+</script>

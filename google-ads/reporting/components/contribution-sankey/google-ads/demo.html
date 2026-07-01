@@ -1,0 +1,71 @@
+<!doctype html>
+<meta charset="utf-8" />
+<title>Account contribution sankey — Google Ads — fictional demo (Acme Insurance)</title>
+
+<!-- ============================================================ DEMO-ONLY CSS
+     Throwaway fallback so the demo is legible offline — NOT the component's
+     styling (porter-design owns the look). Structural rules (scroll host,
+     tooltip positioning) are load-bearing.
+     ========================================================================= -->
+<style>
+  :root {
+    --font-hanken: "Hanken Grotesk", system-ui, sans-serif;
+    --surface-bg:#f4f5f7; --surface-card:#fff; --card-border:#e3e6ea;
+    --text-title:#14161a; --text-body:#3c4046; --text-muted:#82888f; --accent:#3157f0;
+    --cat-1:#6701e6; --cat-2:#2dd4bf; --cat-3:#fbbf24; --cat-4:#ec4899;
+    --cat-5:#3b82f6; --cat-6:#f97316; --cat-7:#0ea5e9; --cat-8:#a855f7;
+    --sk-other:#b8bdc9; --sk-ribbon-opacity:.4;
+    --tip-bg:#1a0340; --tip-text:#fff; --tip-border:#1a0340;
+  }
+  body { font-family: var(--font-hanken); background: var(--surface-bg); color: var(--text-body); margin: 0; padding: 26px; }
+  .demo-note { max-width: 960px; margin: 0 auto 16px; font-size: 12.5px; color: var(--text-muted); }
+  .demo-note b { color: var(--text-title); }
+  .card { max-width: 1000px; margin: 0 auto; background: var(--surface-card); border: 1px solid var(--card-border); border-radius: 14px; padding: 16px 18px; }
+
+  .sk-controls.ac-controls { display: flex; gap: 26px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+  .sk-seg { display: inline-flex; align-items: center; gap: 4px; }
+  .sk-seg-lab { font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--text-muted); margin-right: 6px; }
+  .sk-seg-btn { font: inherit; font-size: 13px; font-weight: 600; color: var(--text-muted); background: transparent; border: 1px solid var(--card-border); border-radius: 8px; padding: 5px 11px; cursor: pointer; }
+  .sk-seg-btn:hover { color: var(--text-title); }
+  .sk-seg-btn.is-active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  .sk-host { position: relative; overflow-x: auto; }
+  .sk-svg { display: block; }
+
+  .sk-colhdr { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; fill: var(--text-muted); }
+  .sk-label { font-size: 11px; fill: var(--text-body); }
+  .sk-ribbon { fill-opacity: var(--sk-ribbon-opacity, .4); transition: fill-opacity .12s ease; }
+  .sk-ribbon.is-dim { fill-opacity: .06; }
+  .sk-ribbon.is-hot { fill-opacity: .72; }
+  .sk-node { transition: opacity .12s ease; }
+  .sk-node.is-dim { opacity: .2; }
+
+  .pds-tooltip { position: absolute; pointer-events: none; z-index: 5; background: var(--tip-bg); color: var(--tip-text); border: 1px solid var(--tip-border); border-radius: 9px; padding: 9px 11px; font-size: 12px; max-width: 280px; box-shadow: 0 6px 22px rgba(0,0,0,.25); }
+  .sk-tip-h { font-weight: 700; margin-bottom: 5px; }
+  .sk-tip-grid { display: grid; grid-template-columns: auto auto; gap: 2px 14px; }
+  .sk-tip-k { opacity: .72; }
+  .sk-tip-v { text-align: right; font-weight: 600; }
+  .sk-empty { padding: 24px; color: var(--text-muted); font-size: 13px; }
+</style>
+
+<link rel="stylesheet" href="../../../../../../porter-design/dist/porter-tokens.css" />
+
+<div class="demo-note">
+  <b>Account contribution sankey (Google Ads) — fictional demo.</b> Acme Insurance, synthetic numbers, Search-only.
+  Built from three raw tables (ad groups · keywords · search terms). <b>Flow by</b> switches the metric; <b>Depth</b>
+  extends to the actual search queries. Grey ribbons are the honest "other / unreported" buckets that keep every column reconciled.
+</div>
+
+<div class="card"><div id="host"></div></div>
+
+<script src="../contribution-sankey.js"></script>
+<script src="account-contribution.js"></script>
+<script src="example.data.js"></script>
+<script>
+  var D = (self.PorterReportingExamples && self.PorterReportingExamples.accountContribution) || {};
+  PorterReporting.accountContribution.mount("#host", {
+    account: D.account,
+    adGroups: D.adGroups, keywords: D.keywords, searchTerms: D.searchTerms,
+    metric: "cost", depth: 4, height: 520
+  });
+</script>

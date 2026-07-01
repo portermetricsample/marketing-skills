@@ -1,0 +1,121 @@
+<!doctype html>
+<meta charset="utf-8" />
+<title>Account Structure — fictional demo (Acme Insurance · Google Ads)</title>
+
+<!-- ============================================================ DEMO-ONLY CSS
+     This component ships NO styling of its own — appearance is owned by the
+     design system (porter-design). The block below is a THROWAWAY fallback so
+     the demo is legible offline; it is NOT the source of truth. Some rules are
+     STRUCTURAL (the flex columns + the absolute SVG link layer) and load-bearing
+     for the connector drawing. The real porter-design <link> overrides the rest.
+     ========================================================================= -->
+<style>
+  :root {
+    --font-hanken: "Hanken Grotesk", system-ui, sans-serif;
+    --surface-bg: #f4f5f7; --surface-card: #fff; --card-border: #e3e6ea;
+    --text-title: #14161a; --text-body: #3c4046; --text-muted: #82888f;
+    --good: #1a8f5a; --bad: #c5384b; --accent: #3157f0;
+    --dt-good: #d7f0e1; --dt-mid: #fcecbf; --dt-bad: #f7d2da; --dt-na: var(--card-border);
+    --dt-root-bg: #eef4ff; --dt-root-border: #aecbfa; --dt-link: rgba(128,134,142,0.55);
+    --cf-1: #f7c7d5; --cf-2: #fbdcc4; --cf-3: #fcecbf; --cf-4: #dcefb6; --cf-5: #bbe6b0;
+  }
+  /* --- driver-tree structural (load-bearing for the connectors) --- */
+  .dt-wrap { position: relative; overflow-x: auto; padding: 6px 2px 10px; }
+  .dt-links { position: absolute; top: 0; left: 0; pointer-events: none; z-index: 0; }
+  .dt-hdrs, .dt-cols { position: relative; z-index: 1; display: flex; gap: 46px; min-width: max-content; }
+  .dt-hdrs { align-items: flex-end; margin-bottom: 10px; }
+  .dt-cols { align-items: flex-start; }
+  .dt-col { display: flex; flex-direction: column; gap: 12px; justify-content: center; }
+  .dt-node { width: 240px; box-sizing: border-box; }
+  /* --- driver-tree appearance --- */
+  .dt-colhdr { width: 240px; box-sizing: border-box; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--text-muted); padding: 0 2px; }
+  .dt-node { padding: 9px 11px; border: 1px solid var(--dt-na); border-radius: 10px; background: var(--surface-card); }
+  .dt-node.dt-good { border-color: #9ad9b6; background: var(--dt-good); }
+  .dt-node.dt-mid  { border-color: #f0d488; background: var(--dt-mid); }
+  .dt-node.dt-bad  { border-color: #e8a6b2; background: var(--dt-bad); }
+  .dt-node.dt-root { background: var(--dt-root-bg); border-color: var(--dt-root-border); }
+  .dt-node.dt-exp { cursor: pointer; } .dt-node.dt-exp:hover { border-color: var(--accent); }
+  .dt-node.dt-ph { opacity: .6; font-style: italic; border-style: dashed; }
+  .dt-top { display: flex; align-items: flex-start; gap: 5px; }
+  .dt-caret { color: var(--text-muted); font-size: 11px; width: 10px; }
+  .dt-name { font-size: 13px; font-weight: 600; color: var(--text-title); flex: 1; min-width: 0; overflow-wrap: anywhere; }
+  .dt-ext { color: var(--accent); text-decoration: none; flex: none; }
+  .dt-krows { margin-top: 8px; }
+  .dt-krow { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 3px 0; border-top: 1px solid rgba(0,0,0,.05); }
+  .dt-krow:first-child { border-top: none; }
+  .dt-k { font-size: 11px; color: var(--text-muted); white-space: nowrap; }
+  .dt-v { font-size: 13px; font-weight: 500; color: var(--text-title); text-align: right; }
+  .dt-delta { font-size: 10px; font-weight: 700; margin-left: 4px; white-space: nowrap; }
+  .dt-delta--good { color: var(--good); } .dt-delta--bad { color: var(--bad); } .dt-delta--flat { color: var(--text-muted); }
+  .dt-empty { padding: 24px; color: var(--text-muted); font-size: 13px; }
+  /* --- Group-by control bar (.as-*) --- */
+  .as-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 6px 0 16px; }
+  .as-seg { display: flex; align-items: center; gap: 6px; }
+  .as-seg-lab { font-size: 12px; color: var(--text-muted); margin-right: 2px; }
+  .as-seg-btn { font: inherit; font-size: 12px; padding: 6px 12px; border: 1px solid var(--card-border); background: var(--surface-card); color: var(--text-body); border-radius: 999px; cursor: pointer; }
+  .as-seg-btn:hover { background: #f1f3f4; }
+  .as-seg-btn.is-active { background: #e8f0fe; border-color: #c6dafc; color: var(--accent); }
+  .as-cov { margin-left: auto; font-size: 12px; color: var(--text-muted); background: var(--surface-card); border: 1px solid var(--card-border); border-radius: 8px; padding: 6px 12px; }
+  .as-cov strong { color: var(--text-title); }
+  /* --- SUMAS breakdown table (.as-sumas) --- */
+  .as-breakdown { margin-top: 26px; }
+  .as-title { font-size: 13px; font-weight: 700; color: var(--text-title); margin: 0 0 8px; }
+  .as-tablewrap { overflow-x: auto; border: 1px solid var(--card-border); border-radius: 12px; background: var(--surface-card); }
+  .as-sumas { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .as-sumas th { text-align: left; padding: 10px 12px; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--text-muted); border-bottom: 2px solid var(--card-border); }
+  .as-sumas td { vertical-align: top; padding: 12px; border-bottom: 1px solid #eceff1; }
+  .as-grp-col { min-width: 220px; }
+  .as-mv { font-size: 16px; font-weight: 700; color: var(--text-title); line-height: 1.2; }
+  .as-sub { display: block; font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+  .as-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 7px; background: var(--accent); vertical-align: middle; }
+  .as-badge { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 6px; margin-left: 4px; background: #eef1f4; color: var(--text-muted); }
+  .as-roas--good { color: var(--good); font-weight: 700; } .as-roas--bad { color: var(--bad); font-weight: 700; }
+</style>
+
+<!-- Real appearance from porter-design (sibling repo); overrides the fallback above when checked out. -->
+<link rel="stylesheet" href="../../../../../../porter-design/dist/porter-tokens.css" />
+
+<style>
+  body { margin: 0; background: var(--surface-bg); }
+  .page { max-width: 1280px; margin: 0 auto; padding: 36px 24px 64px; font-family: var(--font-hanken); color: var(--text-body); }
+  .demo-banner { font-size: 12px; color: var(--text-muted); background: var(--surface-card); border: 1px dashed var(--card-border); border-radius: 10px; padding: 8px 12px; margin-bottom: 18px; }
+  .appbar { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .appbar .word { font-weight: 700; color: var(--text-title); }
+  .appbar .acct { color: var(--text-muted); font-size: 13px; }
+  h1 { font-size: 24px; margin: 6px 0 4px; color: var(--text-title); }
+  .sub { color: var(--text-muted); margin: 0 0 18px; font-size: 14px; }
+</style>
+
+<div class="page">
+  <div class="demo-banner">
+    Fictional demo · account <strong>Acme Insurance</strong> · Google Ads · synthetic numbers (not real performance).
+    Styling here is a <strong>demo-only fallback</strong> — the component ships no CSS; appearance is owned by porter-design.
+  </div>
+
+  <div class="appbar"><span class="word">Google Ads</span> <span class="acct">· Acme Insurance · 123-456-7890</span></div>
+  <h1>Account Structure</h1>
+  <p class="sub">The account as a driver tree. Use <strong>Group by</strong> to re-bucket the second column; click any node to expand Campaign → Ad group → Ad. Node colour = cost-per-conversion vs the account average; chips = vs the previous period.</p>
+
+  <div id="host"></div>
+</div>
+
+<script src="../driver-tree.js"></script>
+<script src="account-structure-tree.js"></script>
+<script src="example.data.js"></script>
+<script>
+  var ast = window.PorterReporting.accountStructureTree;
+  var d = window.PorterReporting.gaExampleData;
+
+  ast.mount("#host", {
+    account: d.account,
+    brandTerm: d.brandTerm,
+    campaigns: d.campaigns,
+    adGroups: d.adGroups,
+    ads: d.ads,
+    searchTerms: d.searchTerms,
+    previous: d.previous,
+    lens: "campaign_type",            // default group-by
+    // lenses: ["campaign_type","brand","funnel_stage","match_type"]  // (default = all four)
+    compare: true
+  });
+</script>

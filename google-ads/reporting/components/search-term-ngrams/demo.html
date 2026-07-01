@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>search-term-ngrams — demo (fictional Acme Insurance)</title>
+  <!--
+    DEMO-ONLY styling below. It is NOT the component's CSS — per the repo split,
+    this component ships zero CSS and porter-design owns all appearance. These
+    rules only exist so the component is legible when opened standalone. They
+    define the porter-design TOKENS the component references (the --cf heat ramp,
+    --good/--bad) plus minimal table/chip chrome. Do not treat as the real theme.
+  -->
+  <style>
+    :root{
+      --surface-bg:#f6f7f9; --surface-card:#fff; --text-title:#1c2024; --text-muted:#6b7280; --line:#e6e8eb;
+      --good:#137a4b; --bad:#c0392b; --flat:#9aa0a6;
+      --cf-1:#fde8e6; --cf-2:#fdeede; --cf-3:#fbf5da; --cf-4:#eef6e3; --cf-5:#e3f3e8;
+    }
+    body{background:var(--surface-bg);color:var(--text-title);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;margin:0;padding:24px}
+    .wrap{max-width:1080px;margin:0 auto}
+    h1{font-size:18px;margin:0 0 4px} .sub{color:var(--text-muted);margin:0 0 18px;font-size:13px}
+    /* control bar */
+    .sng-controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
+    .sng-filter{font-size:12px;color:var(--text-muted);display:flex;gap:5px;align-items:center}
+    .sng-filter select,.sng-search{padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:#fff;font-size:13px}
+    .sng-search{min-width:220px}
+    /* table */
+    .sng{width:100%;border-collapse:collapse;background:var(--surface-card);border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:13px}
+    .sng thead th{text-align:right;padding:9px 10px;background:#fafbfc;border-bottom:1px solid var(--line);font-size:11px;text-transform:uppercase;letter-spacing:.03em;color:var(--text-muted)}
+    .sng thead th.sng-term{text-align:left}
+    .sng td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+    .sng td.sng-term{text-align:left;white-space:normal} .sng-gram{font-weight:600}
+    .sng-cost{font-variant-numeric:tabular-nums}
+    .sng-nbadge{font-size:11px;color:var(--text-muted);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+    .sng-bucket,.sng-flag,.sng-action{font-size:11px;font-weight:700;border-radius:999px;padding:1px 7px}
+    .sng-bucket--waste{background:#fdeae6;color:#b23b27} .sng-bucket--winning{background:#e3f3e8;color:#137a4b}
+    .sng-bucket--brand{background:#e8efff;color:#1e40af} .sng-bucket--competitor{background:#fdeee2;color:#a4520f}
+    .sng-bucket--neutral{background:#f0f1f3;color:#6b7280}
+    .sng-flag{background:#fff4d6;color:#92600a;border:1px solid #f0d89a}
+    .sng-action--winning{color:var(--good)} .sng-action--waste{color:var(--bad)} .sng-action--review{color:#92600a}
+    .sng-action--brand{color:#1e40af} .sng-action--competitor{color:#a4520f} .sng-action--neutral{color:var(--text-muted)}
+    .sng-delta--good{color:var(--good)} .sng-delta--bad{color:var(--bad)} .sng-delta--flat{color:var(--flat)}
+    .sng-delta{font-size:11px;font-weight:600}
+    .sng-empty{padding:20px;color:var(--text-muted)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Search-term N-gram Mining <span style="font-weight:400;color:var(--text-muted)">— component demo</span></h1>
+    <p class="sub">Fictional <strong>Acme Insurance</strong> (lead-gen), May 2026 vs prior period. Filter by n-gram size / bucket / brand, sort, search. Flag chips on waste rows = confirm before negativing. <em>Styling here is demo-only; porter-design owns the real appearance.</em></p>
+    <div id="host"></div>
+  </div>
+  <script src="./search-term-ngrams.js"></script>
+  <script src="./example.data.js"></script>
+  <script>
+    var D = window.SNG_EXAMPLE;
+    window.PorterReporting.searchTermNgrams.mount("#host", {
+      rows: D.rows, previousRows: D.previousRows,
+      brandTerms: D.brandTerms, competitorTerms: D.competitorTerms, targetCpa: D.targetCpa,
+      sort: "cost"
+    });
+  </script>
+</body>
+</html>
