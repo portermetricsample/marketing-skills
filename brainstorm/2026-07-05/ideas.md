@@ -175,5 +175,16 @@ Otras aristas del sistema:
 
 - Una vez esté conectado Gleap con el MCP de Porter Metrics, se abren opciones de autonomía (que el sistema actúe solo en ciertas situaciones).
 - Problema: faltan los **skills** o la **capa de inteligencia** que sepa qué hacer en cada situación — sin eso, la autonomía no es viable todavía.
+- **Corrección/actualización**: esta capa de inteligencia **ya existe** — es el **Help Center de Gleap**. Gleap ya permite alimentarlo con información del Help Center.
+
+### Nuevo proyecto: Gleap proactivo → temas de soporte → backlog de documentación
+
+- Idea: que Gleap, de forma proactiva, le informe al equipo de soporte cuáles son los temas más preguntados por los usuarios, y dé seguimiento al estado de la documentación.
+- Cómo funcionaría la gestión:
+  1. Gleap va recibiendo todas las preguntas/consultas de los usuarios.
+  2. Computa y prioriza cuáles son los tickets más comunes.
+  3. Esto genera un **roadmap/backlog** para que soporte cree la documentación correspondiente.
+  4. Esa documentación se integra al **Help Center**.
+  5. El Help Center, a su vez, ayuda a que cada vez se reciban menos preguntas repetidas (ciclo de mejora continua).
 
 <!-- Las ideas se irán agregando aquí, agrupadas por categoría -->
