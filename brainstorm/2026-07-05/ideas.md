@@ -82,6 +82,14 @@ Problemas a corregir:
 3. Quitar el wireframe/mockup de la derecha para que las integraciones tengan más visibilidad.
 4. Bajar el peso/grosor del texto para que quepan más integraciones visibles en la misma pantalla — hoy cada caja ocupa demasiado espacio (ancho y alto), obliga a hacer scroll, y el padding se ve mal en pantallas más pequeñas.
 
+### Vista de Billing / Suscripción
+
+> Nota: el dictado registró "Beelink" — probablemente se refiere a **"Billing"** (posible glitch de transcripción, revisar al volver).
+
+- La parte de "comprar suscripción" / gestionar suscripción está muy mal (dicho literalmente: "asquerosa").
+- Hay que trabajarla con mucho cuidado/dedicación ("con harto amor").
+- (Falta detalle específico de qué cambiar — pendiente de que el usuario profundice.)
+
 ## Marketing (retomar de lleno)
 
 - Después de las tareas de Admin/reports, volver de lleno a marketing.
