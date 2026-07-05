@@ -187,4 +187,14 @@ Otras aristas del sistema:
   4. Esa documentación se integra al **Help Center**.
   5. El Help Center, a su vez, ayuda a que cada vez se reciban menos preguntas repetidas (ciclo de mejora continua).
 
+### Pregunta clave: si ya existe documentación, ¿por qué el usuario sigue preguntando?
+
+Dos escenarios posibles:
+1. La documentación no es suficientemente buena, y por eso Gleap no responde bien.
+2. El usuario simplemente no sigue la documentación/instrucciones y pide directamente hablar con un humano.
+
+- Prioridad por ahora: enfocarse en el escenario 1 — mejorar la calidad de la documentación.
+- Ya que el MCP de Gleap está conectado, se puede alimentar automáticamente los artículos del Help Center para que la documentación "se haga sola" (incluyendo campos, etc.) — hay mucho trabajo por hacer aquí.
+- Idea concreta: conectar con **GitHub** (o algo similar) para obtener los **changelogs/change blocks** del equipo de desarrollo, y usarlos como fuente para alimentar/actualizar la documentación automáticamente.
+
 <!-- Las ideas se irán agregando aquí, agrupadas por categoría -->
