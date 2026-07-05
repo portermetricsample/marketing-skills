@@ -39,6 +39,35 @@
 - También debe vivir ahí la selección de Data Sources: es decir, cuando un usuario hace onboarding y va a conectar sus fuentes de datos, ese flujo de onboarding debe mostrar las integraciones...
 - (Idea cortada aquí — "debe mostrar las integraciones ah..." quedó incompleto, falta continuar.)
 
+### Nota de priorización
+
+- El usuario señaló que se estaba yendo "por las ramas" — lo siguiente es la prioridad real dentro del proyecto de Admin: **empezar por el Home**.
+
+### Home del Admin
+
+- El Home es la navegación principal de todo lo que el usuario puede hacer con Porter Metrics.
+- En el área principal, destacar la **integración con Cloud (MCP)** y sus casos de uso — este es el **call to action principal** de la página (el producto más destacado).
+- Debajo del destacado principal, poner accesos para:
+  - Conectar a Cloud
+  - Conectar a Data Studio
+  - Conectar a Google Sheets
+  - Conectar a BigQuery
+- Estos CTAs de "Conectar a X" deben ser **secundarios** frente al CTA principal del MCP.
+- Debajo de todo eso: link items hacia tutoriales, webinars, skills, etc.
+- **Jerarquía propuesta**:
+  1. CTA principal → MCP / Cloud (producto más destacado).
+  2. CTAs secundarios → "Conectar" cada destino (llevan a la ruta de onboarding específica de cada destino).
+  3. Link items → tutoriales, webinars, skills.
+- Falta hoy: en la interfaz actual, con los destinos ya listados, no existe un botón/CTA de "Conectar" para cada uno.
+- El onboarding de cada destino tiene diferencias y matices propios — hay que ajustarlos individualmente.
+
+### Onboarding de Integraciones (vista actual muy confusa)
+
+Problemas a corregir:
+- **Single connections**: aparece un problema generalizado con la extensión de Google Sheets — esa extensión manda al usuario a la extensión oficial de la galería de Google Sheets, cuando ya no debería porque los usuarios conectan Google Sheets desde la interfaz propia de Porter.
+- **Vista "Integraciones" (columna derecha)**: hay un wireframe completamente inútil ahí. La idea es que esa vista no tenga wireframe y que todas las integraciones queden visibles directamente.
+- **Regla de integraciones condicionales**: según el destino, se muestran o no ciertas integraciones (ej. Gmail o Google Drive). Posible mejora: destacarlas mejor cuando se trata de integrar fuentes de información.
+
 ## Marketing (retomar de lleno)
 
 - Después de las tareas de Admin/reports, volver de lleno a marketing.
