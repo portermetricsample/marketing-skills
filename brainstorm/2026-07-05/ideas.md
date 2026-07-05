@@ -126,4 +126,31 @@ Otras aristas del sistema:
 - La forma en que ese feedback se ingiere, se recibe y se prioriza hoy es **muy manual**.
 - Próximo paso: en esta sesión de brainstorming, planear y mapear mejor cómo mejorar la gestión de este proyecto (ingesta → priorización → roadmap).
 
+### Caso de uso: discrepancias de información — arquitectura con Gleap + MCP de Porter Metrics
+
+> Nota: el dictado registró "Glyph" — casi seguro se refiere a **Gleap** (la plataforma de tickets/chat de soporte, ya disponible como MCP en esta sesión). Confirmar nombre al volver.
+
+- **Paso 1 — recibir los chats de Gleap**: conectar Gleap al MCP de Claude para poder recibir los mensajes.
+  - Preocupación: Gleap no funciona por webhook (o al menos no de forma confiable para esto) — hay que hacer requests de forma proactiva a los últimos chats.
+  - Posible solución: un loop/cron que chequee periódicamente (ej. cada 10 minutos o cada hora) los últimos N tickets (ej. últimos 10) y gestione lo que corresponda.
+  - Alternativa a explorar: ver si Gleap sí tiene webhook y puede enviar eso directo a una IA que haga el procesamiento.
+
+- **Paso 2 — información que se necesita del usuario** (para el caso de uso de discrepancias de datos):
+  - La query y los parámetros de la query
+  - Qué data espera
+  - Qué métrica espera
+  - Qué filtros espera
+  - En qué destino está corriendo
+  - Cuál es la cuenta exacta y el data source exacto
+
+- **Paso 3 — validación vía MCP de Porter Metrics**:
+  - Si el dato está relacionado con query o con licencias — algo que el MCP de Porter Metrics pueda detectar — el MCP va a intentar replicar lo que el usuario está intentando hacer desde su lado.
+  - Esto permite validar: problemas de licencia, discrepancias de datos, o bugs de la información.
+
+- **Paso 0 (antes de todo) — asegurar información completa**: hay que resolver que el usuario entregue toda la información necesaria, evitando el sesgo de que falten datos. Solo así el flujo completo funciona: chat de Gleap → Claude → MCP de Porter Metrics → validación de la query.
+
+- **Paso 4 — resultado de la validación**, dos caminos posibles:
+  1. Responder directo al cliente explicando el problema.
+  2. Si es un error del lado del producto (bug): notificar al equipo de desarrollo — debe crearse tanto un issue en **GitHub** como un ticket nuevo en **Jira** o **Slack**.
+
 <!-- Las ideas se irán agregando aquí, agrupadas por categoría -->
