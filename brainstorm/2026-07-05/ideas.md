@@ -153,4 +153,14 @@ Otras aristas del sistema:
   1. Responder directo al cliente explicando el problema.
   2. Si es un error del lado del producto (bug): notificar al equipo de desarrollo — debe crearse tanto un issue en **GitHub** como un ticket nuevo en **Jira** o **Slack**.
 
+### Pendientes de permisos/acceso para el flujo de Gleap + Porter MCP
+
+> (El usuario dijo "dos puntos más" pero dictó tres — se registran los tres tal cual.)
+
+1. **Permisos de Gleap**: Gleap debe solicitar/declarar permiso al usuario para que Porter tenga acceso a sus datos y pueda hacer las validaciones.
+2. **Acceso por defecto del correo de soporte**: el correo `juanjose@portermetrics.com` debe tener por defecto accesos y permisos a los datos de los usuarios, para poder ejecutar el request de validación en su nombre.
+3. **Bug de "source companies" / "source users"**: cuando se comparte una licencia a un usuario, se rompen esas tablas — se rompe el "source user" y el request no se puede hacer, apareciendo un error de autenticación. Hay que corregir este bug.
+
+**Advertencia/riesgo señalado**: si se hacen estas conexiones (dar acceso al correo de soporte / a Gleap), eso **deshabilita** que el mismo MCP de Porter Metrics pueda retornar y responder preguntas para los usuarios directamente. (Pendiente de resolver este trade-off.)
+
 <!-- Las ideas se irán agregando aquí, agrupadas por categoría -->
