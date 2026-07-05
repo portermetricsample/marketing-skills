@@ -27,6 +27,18 @@
   - **"Connections"**
 - Pendiente: una vez definida esa lógica, pensar cómo resolverlo mejor (a desarrollar).
 
+### Rediseño: "Data Sources" → "Integrations"
+
+- **Renombrar** la pestaña "Data Sources" a **"Integrations"**.
+  - Razón: "Data Sources" da a entender que solo son fuentes de datos para conectar reportes, pero ya hay más que eso: integraciones tipo Gmail, Google Drive, Slack; destinos como Google BigQuery, Google Sheets, Power BI, Cloud, SMCP.
+- En la nueva pestaña **Integrations** se van a agregar todas las integraciones existentes, por ejemplo:
+  - Gmail
+  - BigQuery
+  - Data Studio
+  - (y en general todos los destinos actuales)
+- También debe vivir ahí la selección de Data Sources: es decir, cuando un usuario hace onboarding y va a conectar sus fuentes de datos, ese flujo de onboarding debe mostrar las integraciones...
+- (Idea cortada aquí — "debe mostrar las integraciones ah..." quedó incompleto, falta continuar.)
+
 ## Marketing (retomar de lleno)
 
 - Después de las tareas de Admin/reports, volver de lleno a marketing.
