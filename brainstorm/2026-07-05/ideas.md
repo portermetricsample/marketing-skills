@@ -163,4 +163,17 @@ Otras aristas del sistema:
 
 **Advertencia/riesgo señalado**: si se hacen estas conexiones (dar acceso al correo de soporte / a Gleap), eso **deshabilita** que el mismo MCP de Porter Metrics pueda retornar y responder preguntas para los usuarios directamente. (Pendiente de resolver este trade-off.)
 
+## Bugs de producto
+
+### Visibilidad de cuentas para usuarios invitados/conectados
+
+- Escenario: un usuario dueño de la licencia comparte la licencia con otro usuario.
+- Ese usuario invitado, al listar cuentas, ve solo **las cuentas que él mismo conectó**, no las cuentas totales de la licencia.
+- Esto es extremadamente confuso — es un problema de visibilidad de cuentas en Porter Metrics.
+
+### Falta capa de inteligencia/skills para autonomía
+
+- Una vez esté conectado Gleap con el MCP de Porter Metrics, se abren opciones de autonomía (que el sistema actúe solo en ciertas situaciones).
+- Problema: faltan los **skills** o la **capa de inteligencia** que sepa qué hacer en cada situación — sin eso, la autonomía no es viable todavía.
+
 <!-- Las ideas se irán agregando aquí, agrupadas por categoría -->
