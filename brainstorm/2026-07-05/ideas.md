@@ -99,6 +99,31 @@ Problemas a corregir:
 - Sincronizar los tickets de soporte y el feedback de producto en un repositorio de GitHub.
 - Que el equipo de soporte automatice más la gestión de: tickets, bugs y feature requests.
 - Que todo esto quede mejor sincronizado con el equipo (marketing/producto).
-- (Idea quedó cortada en "Entonces..." — falta el resto.)
+
+### El embudo de soporte — aristas
+
+El sistema de soporte tiene varias aristas, funciona como un embudo. Hay que automatizar desde el inicio:
+
+1. **Chats que llegan** (entrada del embudo).
+2. **Triaje** de esos chats, por tipo:
+   - Chats de spam
+   - Chats de navegación / preguntas de pricing
+   - Chats de ayuda para montar reportes
+   - Chats de "books"
+   - Chats de request (feature requests)
+   - Chats de gestión de licencia
+3. Automatizar caso de uso por caso de uso, incrementalmente.
+
+Otras aristas del sistema:
+- Gestión de tickets
+- Gestión de "books"
+- Gestión de chats
+
+### Prioridad crítica: gestión del Product Roadmap
+
+- La arista que el usuario considera **más crítica**: la gestión real de "books" y de feature requests → alimenta el **Product Roadmap**.
+- Problema actual: se está perdiendo mucho feedback valioso que llega por llamadas, chats y emails, y que no llega rápido a los desarrolladores.
+- La forma en que ese feedback se ingiere, se recibe y se prioriza hoy es **muy manual**.
+- Próximo paso: en esta sesión de brainstorming, planear y mapear mejor cómo mejorar la gestión de este proyecto (ingesta → priorización → roadmap).
 
 <!-- Las ideas se irán agregando aquí, agrupadas por categoría -->
