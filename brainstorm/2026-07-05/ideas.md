@@ -68,6 +68,20 @@ Problemas a corregir:
 - **Vista "Integraciones" (columna derecha)**: hay un wireframe completamente inútil ahí. La idea es que esa vista no tenga wireframe y que todas las integraciones queden visibles directamente.
 - **Regla de integraciones condicionales**: según el destino, se muestran o no ciertas integraciones (ej. Gmail o Google Drive). Posible mejora: destacarlas mejor cuando se trata de integrar fuentes de información.
 
+### Onboarding — conexiones "single" (toggle Looker/Data Studio)
+
+> Nota: el dictado por voz registró "LUCEL STUDIO ON SITS" — probablemente se refiere a **"Looker Studio"** (posible glitch de transcripción). Revisar/confirmar el nombre exacto al volver.
+
+1. Renombrar de vuelta a **"Studio"** en toda la interfaz (tanto el logo como el nombre), donde hoy aparece como "Looker/Lucel Studio ON SITS" en el toggle.
+2. **Quitar el toggle** de ese "Looker/Lucel Studio ON SITS" en la vista de onboarding de conexiones single (data studio) — no se necesita, y quitarlo limpia la interfaz.
+
+### Onboarding — vista de integraciones (ajustes adicionales)
+
+1. Añadir las integraciones de **Gmail** y **Drive** en las vistas de IAE (revisar a qué se refiere "IAE" al volver — posible glitch de transcripción).
+2. Quitar el toggle de "Data Studio" / "Looker Studio" en las conexiones single — solo debe figurar "Studio".
+3. Quitar el wireframe/mockup de la derecha para que las integraciones tengan más visibilidad.
+4. Bajar el peso/grosor del texto para que quepan más integraciones visibles en la misma pantalla — hoy cada caja ocupa demasiado espacio (ancho y alto), obliga a hacer scroll, y el padding se ve mal en pantallas más pequeñas.
+
 ## Marketing (retomar de lleno)
 
 - Después de las tareas de Admin/reports, volver de lleno a marketing.
