@@ -197,4 +197,19 @@ Dos escenarios posibles:
 - Ya que el MCP de Gleap está conectado, se puede alimentar automáticamente los artículos del Help Center para que la documentación "se haga sola" (incluyendo campos, etc.) — hay mucho trabajo por hacer aquí.
 - Idea concreta: conectar con **GitHub** (o algo similar) para obtener los **changelogs/change blocks** del equipo de desarrollo, y usarlos como fuente para alimentar/actualizar la documentación automáticamente.
 
+### Skill de auditoría del Help Center (primer paso a resolver)
+
+- Prioridad inmediata: resolver el **backlog del Help Center** y determinar si el Help Center actual es realmente útil / suficiente.
+- Propuesta: un **skill** que compare, por cada interacción:
+  1. Cuál fue la query / intención del usuario.
+  2. Cuál fue el artículo del Help Center que se mostró para responder esa intención.
+  3. Que la misma IA determine si ese artículo respondía bien la intención del usuario, con información correcta y precisa.
+  4. Además, evaluar la respuesta que dio Gleap directamente (no solo el artículo) y que la IA valide si esa respuesta fue buena y concisa.
+- Con ambas validaciones (calidad del artículo + calidad de la respuesta de Gleap), se puede determinar si faltan artículos o si hay que mejorar los existentes.
+- **Escala de evaluación en 3 grados** (para evitar subjetividad):
+  1. Objetivamente bien respondido.
+  2. Ambiguo.
+  3. Definitivamente mal respondido.
+- Resultado esperado: un sistema que identifique claramente qué documentación falta para que Gleap responda mejor en el chat.
+
 <!-- Las ideas se irán agregando aquí, agrupadas por categoría -->
