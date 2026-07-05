@@ -212,4 +212,28 @@ Dos escenarios posibles:
   3. Definitivamente mal respondido.
 - Resultado esperado: un sistema que identifique claramente qué documentación falta para que Gleap responda mejor en el chat.
 
+### Recapitulación del sistema (4 elementos de entrada)
+
+El skill de auditoría recibe/evalúa 4 elementos:
+1. La **intención de búsqueda** del usuario (el ticket / lo que la persona pidió).
+2. Lo que **respondió Gleap**.
+3. El/los **artículo(s)** que Gleap referenció para responder.
+4. (Implícito) El resultado de si el usuario quedó satisfecho.
+
+Con esos 4 elementos, el skill determina:
+- Si se respondió correctamente la intención de búsqueda del usuario.
+- Si el usuario quedó contento o no con la respuesta.
+- Si tanto el chat respondió bien **como** si el artículo ya tenía la información disponible.
+- Si el artículo está bien, o si hay **gaps** (artículo incompleto o falta documentación sobre ese punto).
+
+**Ambigüedad / edge cases**: hay mucha ambigüedad en la IA para interpretar edge cases. Mejora propuesta: mejorar la documentación limitando/incluyendo más ejemplos y casos de uso, independientemente del escenario específico del usuario, para que la IA pueda responder mejor.
+
+### Dashboard, alertas y OKR de soporte
+
+- Con este check se puede construir un **dashboard**:
+  - **Alerta en tiempo real**: cada vez que llega un chat mal respondido, notificar de inmediato.
+  - **Recap diario o semanal**: notificación con el resumen de la semana — qué falta, qué ya existe — dando seguimiento al performance del Help Center.
+- Ese seguimiento se puede convertir en **tareas para soporte** (crear tarea en GitHub, "Klik" u otra herramienta que se use — confirmar nombre exacto, posible glitch de transcripción, ¿ClickUp?).
+- Esto convierte la calidad del Help Center en un **OKR medible** para el equipo de soporte: con IA se puede determinar objetivamente si el Help Center está completo o no.
+
 <!-- Las ideas se irán agregando aquí, agrupadas por categoría -->
