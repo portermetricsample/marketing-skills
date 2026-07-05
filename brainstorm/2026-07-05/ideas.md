@@ -13,7 +13,19 @@
 ## Admin / Producto (UX para IA)
 
 - Cambiar la experiencia de usuario del Admin para acomodarla más al producto de IA.
-- (Nota: se cortó la idea aquí — "lo primero que voy a hacer es..." quedó incompleto, falta detalle sobre el primer paso.)
+
+### Ideas concretas para el Admin
+
+1. **Pestaña "Create" desorganizada**: actualmente muestra "dashboard", "look at studio", "export", "google search and query", "cloud". Limpiarla para que quede simplemente con 4 ítems.
+2. **Quitar el toggle "blendable" / "single"** en la lista de "data sources": este toggle dejaba elegir el tipo de cuenta (si se convertía o no), pero esa lógica ya no existe, así que el toggle ya no es necesario. Quitarlo deja la vista más limpia.
+3. **Pestaña de conexión (puntos verdes)**: hoy muestra con puntos verdes si una cuenta está conectada a tu estudio, Google Sheets y Bitcoin. Ya no tiene tanto sentido tal cual — es confuso porque no refleja cómo se conectan los MCPs. Falta esa lista/vista de conexión a MCPs.
+
+### Próximo paso
+
+- Definir/rediseñar la lógica de dos pestañas relacionadas:
+  - **"Data sources"**
+  - **"Connections"**
+- Pendiente: una vez definida esa lógica, pensar cómo resolverlo mejor (a desarrollar).
 
 ## Marketing (retomar de lleno)
 
