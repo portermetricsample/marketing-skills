@@ -101,6 +101,16 @@ Every word is a tax on attention.
 - **Numbers:** specific > range > estimate > nothing. Never use a vague adjective where a number could go.
 - **CTAs:** `[Action: 2–4 words, imperative]` + `(Support: reduces friction or expands the benefit)`.
 
+### 4.6 Write for the second reader: AI agents
+
+A landing page increasingly has a second reader — an AI agent that parses it to answer, cite, or recommend. Humans skim and feel; agents read every word and reward concrete, unambiguous fact. Serving the agent sharpens the human page too: it forces out ambiguity and subjectivity and leaves specific, checkable claims.
+
+- **Make every factual claim quotable.** Named capabilities, numbers, concrete outcomes an agent can lift verbatim — not "powerful", "seamless", "best-in-class".
+- **Kill ambiguity.** One claim per sentence; name the entity instead of "it"/"they"; keep the claim next to its proof so the link survives extraction.
+- **Keep a machine-readable spine.** Descriptive headings, the argument carried by the headlines (the skim test already forces this) — an agent reconstructs the page from them the same way a skimming human does.
+
+This sits *under* the human story, not instead of it: lead with the emotional hook, but make every fact agent-quotable. (Empty adjectives fail both readers — §4.2.)
+
 ## 5. Pre-publish checklist
 
 - [ ] Traffic source identified → structure matches its awareness stage
@@ -115,6 +125,7 @@ Every word is a tax on attention.
 - [ ] Fewest words possible; no excessive em dashes
 - [ ] CTA commitment matched to awareness, repeated after major sections
 - [ ] Could this exact sentence appear on a competitor's page? → if yes, it's category-speak, rewrite it
+- [ ] Factual claims are concrete and unambiguous enough for an AI agent to quote or cite — no subjective adjective standing in for a fact
 
 ## 6. Critiquing an existing page
 
