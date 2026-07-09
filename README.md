@@ -15,6 +15,7 @@ No API keys. No client data. Only reusable recipes.
 | [`seo/`](seo/) | 12 organic search skills — content gaps, keyword value, AI visibility, traffic drop detection, featured snippets, and more |
 | [`creative/`](creative/) | Hook writing and ad diagnostics |
 | [`analytics/`](analytics/) | Cross-channel performance decay — labels pages and ads by their real trend at scale |
+| [`strategy/`](strategy/) | Strategy → copy stack: STP (segmentation, targeting, positioning), positioning → narrative → messaging, and landing-page structure + copy. Company- and industry-agnostic thinking frameworks — no MCP required |
 
 ## Reference
 
@@ -25,4 +26,4 @@ No API keys. No client data. Only reusable recipes.
 
 ## Requirements
 
-All skills require the Porter Metrics MCP connected to Claude Code. See [porter-setup](https://portermetrics.com/en/tutorial/claude/) to get started.
+Most skills require the Porter Metrics MCP connected to Claude Code (the `strategy/` frameworks are the exception — they need no data connection). See [porter-setup](https://portermetrics.com/en/tutorial/claude/) to get started.
