@@ -1,0 +1,15 @@
+{"_doc":"FICTIONAL Acme Insurance negatives (no real data).",
+ "campaign":[{"results":[
+  {"campaign":{"name":"Acme_Life_SEM"},"campaignCriterion":{"keyword":{"text":"free","matchType":"BROAD"},"status":"ENABLED"}},
+  {"campaign":{"name":"Acme_Life_SEM"},"campaignCriterion":{"keyword":{"text":"jobs","matchType":"BROAD"},"status":"ENABLED"}},
+  {"campaign":{"name":"Acme_Life_SEM"},"campaignCriterion":{"keyword":{"text":"cheap","matchType":"BROAD"},"status":"ENABLED"}}
+ ]}],
+ "ad_group":[{"results":[
+  {"campaign":{"name":"Acme_Life_SEM"},"adGroup":{"name":"Term"},"adGroupCriterion":{"keyword":{"text":"life insurance jobs","matchType":"PHRASE"},"status":"ENABLED"}}
+ ]}],
+ "shared":[{"results":[
+  {"sharedSet":{"name":"Acme Account Negatives"},"sharedCriterion":{"keyword":{"text":"salary","matchType":"BROAD"}}}
+ ]}],
+ "links":[{"results":[
+  {"campaign":{"name":"Acme_Life_SEM"},"sharedSet":{"name":"Acme Account Negatives"}}
+ ]}]}

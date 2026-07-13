@@ -1,0 +1,54 @@
+{
+  "skill": "negative-keywords",
+  "doc": "Negatives are config, not metrics -> read via the connector-action GAQL path (keyword.list), NOT query_data. Reads route through the `execute` meta-tool (the dispatcher is flagged destructive; a *.list is non-mutating). Account params go inside `params`. MCP paths: ../../../../_framework/porter-mcp-calls.md",
+  "discovery": {
+    "account": { "via": "fetch", "tool_id": "tool:porter-accounts:list_accounts",
+      "args": { "component_name": "google-ads", "query": "<ACCOUNT_HINT>" },
+      "use": "FULL object -> source_user_id, company_id, and id '<CUSTOMER_ID>-<LOGIN_CUSTOMER_ID>'" }
+  },
+  "queries": [
+    {
+      "id": "neg_campaign", "via": "execute", "tool_id": "tool:porter-automations:execute_connector_action",
+      "args": { "connector": "google-ads", "action_id": "keyword.list",
+        "source_user_id": "<SOURCE_USER_ID>", "company_id": "<COMPANY_ID>",
+        "params": { "customer_id": "<CUSTOMER_ID>", "login_customer_id": "<LOGIN_CUSTOMER_ID>",
+          "query": "SELECT campaign.name, campaign_criterion.keyword.text, campaign_criterion.keyword.match_type, campaign_criterion.status FROM campaign_criterion WHERE campaign_criterion.type = 'KEYWORD' AND campaign_criterion.negative = TRUE" } },
+      "save": "negatives_raw.json#campaign"
+    },
+    {
+      "id": "neg_ad_group", "via": "execute", "tool_id": "tool:porter-automations:execute_connector_action",
+      "args": { "connector": "google-ads", "action_id": "keyword.list",
+        "source_user_id": "<SOURCE_USER_ID>", "company_id": "<COMPANY_ID>",
+        "params": { "customer_id": "<CUSTOMER_ID>", "login_customer_id": "<LOGIN_CUSTOMER_ID>",
+          "query": "SELECT campaign.name, ad_group.name, ad_group_criterion.keyword.text, ad_group_criterion.keyword.match_type, ad_group_criterion.status FROM ad_group_criterion WHERE ad_group_criterion.type = 'KEYWORD' AND ad_group_criterion.negative = TRUE AND ad_group_criterion.status != 'REMOVED'" } },
+      "save": "negatives_raw.json#ad_group"
+    },
+    {
+      "id": "neg_shared", "via": "execute", "tool_id": "tool:porter-automations:execute_connector_action",
+      "args": { "connector": "google-ads", "action_id": "keyword.list",
+        "source_user_id": "<SOURCE_USER_ID>", "company_id": "<COMPANY_ID>",
+        "params": { "customer_id": "<CUSTOMER_ID>", "login_customer_id": "<LOGIN_CUSTOMER_ID>",
+          "query": "SELECT shared_set.name, shared_set.type, shared_criterion.keyword.text, shared_criterion.keyword.match_type FROM shared_criterion" } },
+      "save": "negatives_raw.json#shared"
+    },
+    {
+      "id": "shared_links", "via": "execute", "tool_id": "tool:porter-automations:execute_connector_action",
+      "args": { "connector": "google-ads", "action_id": "keyword.list",
+        "source_user_id": "<SOURCE_USER_ID>", "company_id": "<COMPANY_ID>",
+        "params": { "customer_id": "<CUSTOMER_ID>", "login_customer_id": "<LOGIN_CUSTOMER_ID>",
+          "query": "SELECT campaign.name, shared_set.name FROM campaign_shared_set" } },
+      "save": "negatives_raw.json#links"
+    },
+    {
+      "id": "positive_keywords", "via": "execute", "tool_id": "tool:porter-automations:execute_connector_action",
+      "note": "ONLY for the conflict audit — active positive keywords (negative = FALSE)",
+      "args": { "connector": "google-ads", "action_id": "keyword.list",
+        "source_user_id": "<SOURCE_USER_ID>", "company_id": "<COMPANY_ID>",
+        "params": { "customer_id": "<CUSTOMER_ID>", "login_customer_id": "<LOGIN_CUSTOMER_ID>",
+          "query": "SELECT campaign.name, ad_group.name, ad_group_criterion.keyword.text, ad_group_criterion.keyword.match_type FROM ad_group_criterion WHERE ad_group_criterion.type = 'KEYWORD' AND ad_group_criterion.negative = FALSE AND ad_group_criterion.status = 'ENABLED'" } },
+      "save": "negatives_raw.json#positive_keywords"
+    }
+  ],
+  "process": "assemble the 4 bodies into negatives_raw.json {campaign, ad_group, shared, links}; process.py negatives_raw.json [candidates.json] -> { summary, inventory, candidates? }",
+  "output": "see ../references/output.md"
+}

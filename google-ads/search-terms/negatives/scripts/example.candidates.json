@@ -1,0 +1,5 @@
+[
+ {"text":"free","match_type":"BROAD","campaign":"Acme_Life_SEM"},
+ {"text":"insurance salary calculator","match_type":"PHRASE","campaign":"Acme_Life_SEM"},
+ {"text":"life insurance reddit","match_type":"PHRASE","campaign":"Acme_Life_SEM"}
+]
