@@ -29,7 +29,7 @@ page (the tables are the input the AI reads; this card is what it concludes).
 > **Why Wasteful is its own lane (the whole point):** a term that is *right for the keyword* but
 > *losing money* must NOT be tagged `Irrelevant` — that would tell the user to block a real customer
 > search. The `Irrelevant` lane is matching-only (`leak`); the money problem lives here. See
-> [`relevance`](../relevance/references/framework.md) → "How the verdict drives the dashboard tag".
+> [`relevance`](../classifier/relevance/references/framework.md) → "How the verdict drives the dashboard tag".
 
 ## The honesty rule (measured vs estimated)
 Every row carries a `basis`: **measured** (a sum of real spend you can act on) or **estimated** (a

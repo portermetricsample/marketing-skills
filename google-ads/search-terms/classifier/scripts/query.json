@@ -1,0 +1,45 @@
+{
+  "skill": "search-term-labeling",
+  "doc": "Declarative spec. The agent substitutes <placeholders> and EXECUTES. One superset query feeds every axis. MCP paths: ../../../../_framework/porter-mcp-calls.md",
+  "discovery": {
+    "account": {
+      "via": "fetch",
+      "tool_id": "tool:porter-accounts:list_accounts",
+      "args": { "component_name": "google-ads", "query": "<ACCOUNT_HINT>" },
+      "use": "FULL object as <ACCOUNT_OBJECT>"
+    }
+  },
+  "queries": [
+    {
+      "id": "search_terms_superset",
+      "via": "execute",
+      "tool_id": "tool:porter-reporting:query_data",
+      "args": {
+        "accounts": ["<ACCOUNT_OBJECT>"],
+        "fields": [
+          "google_ads_search_term",
+          "google_ads_keyword_info_text",
+          "google_ads_keyword_info_match_type",
+          "google_ads_campaign_name",
+          "google_ads_ad_group_name",
+          "google_ads_cost_micros",
+          "google_ads_impressions",
+          "google_ads_clicks",
+          "google_ads_conversions"
+        ],
+        "date_range": { "preset": "last_month" },
+        "sort": [{ "field": "google_ads_cost_micros", "direction": "desc" }],
+        "limit": 5000
+      },
+      "big_result": "persisted to file as data.json {columns, rows}"
+    }
+  ],
+  "context": {
+    "doc": "Per-account input — never hardcoded. Build from account signals first (brand campaign names, company name, regions served); confirm the doubtful; ask only what can't be inferred.",
+    "file": "context.json",
+    "shape": { "brand_terms": ["<brand/product names>"], "competitor_terms": ["<rival names>"], "geo_terms": ["<regions served>"] }
+  },
+  "process": "process.py data.json context.json [account_profile.json]  ->  { terms:[multi-label cards], rollup } ; it RUNS ../duplicates/scripts/process.py as a subprocess for the cannibalization axis (reuse, not fork).",
+  "llm_step": "fill each term's relevance[] verdict (apply ../../relevance rubric), resolve intent:null, finalize recommended_action on the framework ladder, write action_detail + the 3-string synthesis.",
+  "output": "see ../references/output.md"
+}

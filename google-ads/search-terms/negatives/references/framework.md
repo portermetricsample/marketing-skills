@@ -15,8 +15,8 @@ positive keywords):
 | **BROAD** `x` | the query contains **all** of `x`'s words (any order) |
 
 Normalize both sides: lowercase, strip punctuation, split into words. (`process.py::blocks()`.)
-Example: broad negative `cheap` blocks `cheap membership rates`; phrase `tee times` blocks
-`book tee times near me`; exact `[east point country club]` blocks only that exact query.
+Example: broad negative `cheap` blocks `cheap life insurance rates`; phrase `insurance jobs` blocks
+`life insurance jobs near me`; exact `[acme life insurance]` blocks only that exact query.
 
 ## Scope resolution — which negatives apply where
 A query in (campaign C, ad group G) is filtered by:

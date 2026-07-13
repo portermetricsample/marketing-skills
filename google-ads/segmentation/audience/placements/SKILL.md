@@ -60,9 +60,9 @@ ordered exclusion list). **Pure data — no emojis, tables, markdown, or colors 
 > the heading is a question the data answers; the first sentence answers it then names the driver;
 > plain language for a non-technical owner; the figure carried as data, never spelled out in prose.
 
-## Example (illustrative — OnePuttPro Demand Gen, NOT rules)
+## Example (illustrative — fictional Acme Golf Demand Gen, NOT rules)
 - A YouTube Demand-Gen golf campaign: `detail_placement_view` returned `youtube.com` + a list of video
-  ids. Reading `display_name`: ~half were golf ("Jon Rahm's home course…", "Charles Schwab Challenge…")
-  → `on_topic`; the rest were **true-crime and finance** ("Son Murders Mom…", "Once Your Portfolio
-  Hits This Number…") → `off_topic` / `sensitive`. Rollup ≈ the off-topic share of spend → an
+  ids. Reading `display_name`: ~half were golf ("Fix Your Putting Stroke in 10 Minutes…", "Final Round
+  Highlights…") → `on_topic`; the rest were **true-crime and finance** ("True Crime: The Cabin Case…",
+  "Turn $1,000 Into $100,000…") → `off_topic` / `sensitive`. Rollup ≈ the off-topic share of spend → an
   exclusion list, and the audience read: "the realized audience skews general-entertainment, not just golfers."

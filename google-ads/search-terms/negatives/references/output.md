@@ -18,30 +18,30 @@ redundancy wiring) and by [`porter-reporting`](https://github.com/portermetricsa
     "by_scope": { "campaign": 12, "ad_group": 1 },
     "by_match_type": { "BROAD": 9, "PHRASE": 3, "EXACT": 1 },
     "shared_lists": [],
-    "campaigns_with_negatives": ["EPCC_Search_Form_Submits"]
+    "campaigns_with_negatives": ["Acme_Life_SEM"]
   },
 
   // the full normalized inventory — one entry per existing negative
   "inventory": [
-    { "text": "free", "match_type": "BROAD", "scope": "campaign", "campaign": "EPCC_Search_Form_Submits", "ad_group": null, "shared_set": null, "status": "ENABLED" },
-    { "text": "east point country club", "match_type": "EXACT", "scope": "ad_group", "campaign": "EPCC_Search_Form_Submits", "ad_group": "Club Memberships", "shared_set": null, "status": "ENABLED" }
+    { "text": "free", "match_type": "BROAD", "scope": "campaign", "campaign": "Acme_Life_SEM", "ad_group": null, "shared_set": null, "status": "ENABLED" },
+    { "text": "acme life insurance", "match_type": "EXACT", "scope": "ad_group", "campaign": "Acme_Life_SEM", "ad_group": "Term", "shared_set": null, "status": "ENABLED" }
   ],
 
   // present only when candidates.json was passed — the redundancy wiring
   "candidates": [
-    { "text": "free", "match_type": "BROAD", "campaign": "EPCC_Search_Form_Submits",
+    { "text": "free", "match_type": "BROAD", "campaign": "Acme_Life_SEM",
       "already_covered": true,
-      "covered_by": { "text": "free", "match_type": "BROAD", "scope": "campaign", "campaign": "EPCC_Search_Form_Submits" } },
-    { "text": "membership cost", "match_type": "PHRASE", "campaign": "EPCC_Search_Form_Submits",
+      "covered_by": { "text": "free", "match_type": "BROAD", "scope": "campaign", "campaign": "Acme_Life_SEM" } },
+    { "text": "life insurance reddit", "match_type": "PHRASE", "campaign": "Acme_Life_SEM",
       "already_covered": false, "covered_by": null }
   ],
   "candidates_summary": { "checked": 6, "already_covered": 5, "net_new": 1 },
 
   // present only when negatives_raw.positive_keywords was provided — the CONFLICT audit
   "conflicts": [
-    { "keyword": "public golf membership", "keyword_match": "PHRASE",
-      "campaign": "EPCC_Search_Memberships_Snowbird", "ad_group": "Memberships",
-      "blocked_by": { "text": "public", "match_type": "BROAD", "scope": "campaign", "campaign": "EPCC_Search_Memberships_Snowbird" } }
+    { "keyword": "affordable dental insurance", "keyword_match": "PHRASE",
+      "campaign": "Acme_Health_SEM", "ad_group": "Dental",
+      "blocked_by": { "text": "affordable", "match_type": "BROAD", "scope": "campaign", "campaign": "Acme_Health_SEM" } }
   ],
   "conflicts_summary": { "active_keywords_checked": 142, "blocked": 1 }
 }

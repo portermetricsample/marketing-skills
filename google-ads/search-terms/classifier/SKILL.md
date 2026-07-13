@@ -26,15 +26,15 @@ joining their outputs in your head, you get every tag on every term in one pass.
   [`term-routing`](../term-routing/) (its engine is run as a sub-step), intent from the
   [`intent-discovery`](../intent-discovery/) modifier dictionaries, brand from
   [`brand-vs-nonbrand`](../../../_framework/brand-vs-nonbrand.md), relevance from the
-  [`relevance`](../relevance/) rubric. If a tag's logic must change, change it in the **owner**
+  [`relevance`](relevance/) rubric. If a tag's logic must change, change it in the **owner**
   skill — this layer stays a merge.
 - It is **not** the orchestrator. The orchestrator decides which skills a *request* needs; this is
   one specific analytical artifact (the term × tag matrix).
 
 ## Scope
 - ✅ **Tag every term across all axes** + a per-keyword relevance list + a rolled-up disposition.
-- ✅ **Brand containment + misspellings:** a brand search (including a typo like `policym` for
-  "policyme") served **outside the brand campaign** is flagged `contain_brand` — a distinct check
+- ✅ **Brand containment + misspellings:** a brand search (including a typo like `acmelfe` for
+  "acmelife") served **outside the brand campaign** is flagged `contain_brand` — a distinct check
   from cannibalization (it fires even when only **one** keyword catches the leak).
 - ✅ **Respect the grain:** brand / intent / cannibalized are **term-level** (one tag); relevance is
   **(term × keyword)-level** (a nested list — one verdict per triggering keyword).
@@ -66,7 +66,7 @@ account signals first; confirm the doubtful; ask only what can't be inferred.
    intentional-segmentation flag, and a preliminary `disposition_hint`. It also emits the
    **(term × keyword) pairs** that still need a relevance verdict.
 3. The **LLM** half fills the part code can't: the **relevance verdict per pair** (apply the
-   [`relevance` rubric](../relevance/references/framework.md)), it resolves any `intent: null`
+   [`relevance` rubric](relevance/references/framework.md)), it resolves any `intent: null`
    ambiguous terms, and it **finalizes `recommended_action`** using the disposition ladder in
    [`references/framework.md`](references/framework.md) (a `leak` relevance verdict overrides
    everything → add a negative).

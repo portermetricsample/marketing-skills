@@ -1,0 +1,4 @@
+{
+  "target_cpa": 40,
+  "_doc": "Fictional Acme Insurance, lead-gen. target_cpa pins the benchmark at $40 so the fixture is deterministic; omit it on a real account to use the median CPA across converting terms."
+}

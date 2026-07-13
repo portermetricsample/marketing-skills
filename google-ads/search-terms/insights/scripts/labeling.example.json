@@ -1,0 +1,67 @@
+{
+  "meta": { "account": "Acme Insurance", "connector": "google-ads", "skill": "search-term-labeling" },
+  "synthesis": { "headline": "…", "diagnosis": "…", "action": "…" },
+  "terms": [
+    {
+      "term": "term life insurance", "cost": 380, "clicks": 210, "conversions": 14,
+      "tags": {
+        "brand_class": "generic", "brand_contained": null, "cannibalized": true,
+        "cannibalization": {
+          "owner": { "keyword": "term life insurance", "match": "EXACT" },
+          "competing_keywords": ["term life insurance", "best term life insurance"],
+          "negatives": [{ "ad_group": "Best Life", "keyword": "best term life insurance" }],
+          "needs_own_keyword": false
+        },
+        "relevance": [
+          { "keyword": "term life insurance", "match_type": "EXACT", "relevance": "justified" },
+          { "keyword": "best term life insurance", "match_type": "PHRASE", "relevance": "loose" }
+        ]
+      },
+      "recommended_action": "route_to_owner"
+    },
+    {
+      "term": "acme life insurance", "cost": 120, "clicks": 60, "conversions": 8,
+      "tags": {
+        "brand_class": "brand", "brand_match_kind": "exact", "brand_contained": false,
+        "brand_leak": [{ "campaign": "Acme_Generic_SEM", "ad_group": "Generic", "keyword": "life insurance", "match": "BROAD" }],
+        "cannibalized": false, "cannibalization": null,
+        "relevance": [{ "keyword": "life insurance", "match_type": "BROAD", "relevance": "brand" }]
+      },
+      "recommended_action": "contain_brand"
+    },
+    {
+      "term": "rival life insurance quote", "cost": 70, "clicks": 28, "conversions": 1,
+      "tags": {
+        "brand_class": "competitor", "brand_match_kind": "exact", "brand_contained": null,
+        "cannibalized": false, "cannibalization": null,
+        "relevance": [{ "keyword": "life insurance", "match_type": "BROAD", "relevance": "competitor" }]
+      },
+      "recommended_action": "brand_policy"
+    },
+    {
+      "term": "life insurance jobs", "cost": 90, "clicks": 45, "conversions": 0,
+      "tags": {
+        "brand_class": "generic", "brand_contained": null, "cannibalized": false, "cannibalization": null,
+        "relevance": [{ "keyword": "life insurance", "match_type": "BROAD", "relevance": "leak" }]
+      },
+      "recommended_action": "add_negative"
+    },
+    {
+      "term": "free life insurance", "cost": 60, "clicks": 38, "conversions": 0,
+      "tags": {
+        "brand_class": "generic", "brand_contained": null, "cannibalized": false, "cannibalization": null,
+        "relevance": [{ "keyword": "life insurance", "match_type": "BROAD", "relevance": "loose" }]
+      },
+      "recommended_action": "review"
+    },
+    {
+      "term": "how much is life insurance", "cost": 60, "clicks": 140, "conversions": 0,
+      "tags": {
+        "brand_class": "generic", "intent": "cost", "brand_contained": null,
+        "cannibalized": false, "cannibalization": null,
+        "relevance": [{ "keyword": "life insurance cost", "match_type": "PHRASE", "relevance": "loose" }]
+      },
+      "recommended_action": "hand_to_content"
+    }
+  ]
+}

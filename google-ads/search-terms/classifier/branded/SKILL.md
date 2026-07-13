@@ -51,8 +51,8 @@ for each term:
   else  →  class = "generic"
 ```
 
-**Misspelling rule:** apply a fuzzy match (edit-distance ≤ 2) for the brand lexicon — `policym`,
-`polycyme`, `policyyme` all fire `brand`. Competitor names are exact-match only (too many false
+**Misspelling rule:** apply a fuzzy match (edit-distance ≤ 2) for the brand lexicon — `acmelfe`,
+`acmelyfe`, `acmellife` all fire `brand`. Competitor names are exact-match only (too many false
 positives from fuzzy).
 
 **Partial match is enough:** `acme life insurance quote` contains `acme` → `brand`. The term does
@@ -92,7 +92,7 @@ Summary:
 5. Emit the per-term JSON + summary.
 
 ## Gotchas
-- **Eastpointe trap:** an account that sells to *leads* (not ecommerce) still has brand searches. Do
+- **Valued-lead trap:** an account that sells to *leads* (not ecommerce) still has brand searches. Do
   not skip brand classification because the business model is lead-gen.
 - **Competitor misspellings:** do NOT fuzzy-match competitor names. `rivalco` close to `rivalcom` is
   too likely a false positive. Exact only.

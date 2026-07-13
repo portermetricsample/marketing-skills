@@ -32,7 +32,7 @@ In the rendered standalone HTML:
   safest. This is the one transform that makes the design-system template Porter-chrome-safe.
 
 ## Step 2 — build the 3-file bundle
-Run [`../../scripts/to_porter_bundle.py`](../../scripts/to_porter_bundle.py) `<audit.html> <out-dir>`.
+Run [`to_porter_bundle.py`](../../../scripts/to_porter_bundle.py) `<audit.html> <out-dir>`.
 It produces the reports-v2 bundle:
 - **`style.css`** = `porter-tokens.css` (inlined verbatim — its `[data-theme]` rules drive the theme)
   **+** the audit `<style>` block (scoped under `#audit`).

@@ -1,0 +1,5 @@
+{"_doc":"FICTIONAL per-account context for the example fixture. Real runs build this from account signals (brand = company + product names; competitors = known rivals; target_cpa from the account goal).",
+"brand_terms":["acme"],
+"competitor_terms":["manulife","sun life"],
+"target_cpa":40,
+"min_terms":2}

@@ -1,0 +1,35 @@
+{
+  "skill": "creative-health",
+  "doc": "Declarative spec. Replace <placeholders> and RUN per account, then aggregate. Uses GAQL via report.query (call shape + customer_id/login_customer_id gotcha: ../../inventory/references/tools.md). Goal = the two creative money-losers only: broken URLs + disapproved ads.",
+  "discovery": {
+    "accounts": { "via": "fetch", "tool_id": "tool:porter-accounts:list_accounts",
+      "args": { "component_name": "google-ads" },
+      "use": "loop per account; keep source_user_id, company_id, id (split '-' -> customer_id, login_customer_id)" }
+  },
+  "per_account": {
+    "ads_pull": {
+      "via": "execute", "tool_id": "tool:porter-automations:execute_connector_action",
+      "args": { "connector": "google-ads", "action_id": "report.query",
+        "source_user_id": "<SOURCE_USER_ID>", "company_id": "<COMPANY_ID>",
+        "params": { "customer_id": "<CUSTOMER_ID>", "login_customer_id": "<LOGIN_CUSTOMER_ID>",
+          "query": "SELECT campaign.name, ad_group.name, ad_group_ad.ad.id, ad_group_ad.ad.type, ad_group_ad.ad.final_urls, ad_group_ad.policy_summary.approval_status FROM ad_group_ad WHERE ad_group_ad.status = 'ENABLED'" } },
+      "why": "every enabled ad + final URLs + approval status (no metrics filter -> catches latent broken URLs)",
+      "save_as": "ads.json"
+    },
+    "url_check": {
+      "tool": "bash/curl (foreground)",
+      "cmd": "for each UNIQUE final_url: curl -sSL -o /dev/null --max-time 25 -w '%{http_code}' -A 'creative-health-bot' \"<url>\"  -> write url_health.json = {url: code} (0 = no response)",
+      "save_as": "url_health.json"
+    },
+    "cost_pull_optional": {
+      "via": "execute", "tool_id": "tool:porter-automations:execute_connector_action",
+      "args": { "connector": "google-ads", "action_id": "report.query",
+        "params": { "query": "SELECT ad_group_ad.ad.id, metrics.cost_micros FROM ad_group_ad WHERE ad_group_ad.status = 'ENABLED' AND segments.date DURING LAST_30_DAYS" } },
+      "why": "OPTIONAL: mark broken/disapproved ads that are actively spending (urgency)",
+      "note": "convert ad_id -> cost (micros/1e6) into cost.json before process.py"
+    }
+  },
+  "process": "build manifest.json {accounts:[{account, account_id, ads_file, url_health_file, cost_file?}]} then: process.py manifest.json > findings.json",
+  "llm_step": "the model ONLY writes the 3-line synthesis (lead with the broken+spending fix). It does NOT re-scan.",
+  "output": "see ../references/output.md"
+}

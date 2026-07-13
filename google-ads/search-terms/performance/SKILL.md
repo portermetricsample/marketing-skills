@@ -39,7 +39,7 @@ its budget**: Winning, Watch, or Waste — ranked by spend, so the biggest dolla
 conversions / value** (one query — [`references/tools.md`](references/tools.md)). Optional context:
 `target_cpa` (the account tCPA, if known — overrides the median benchmark), `roas_target` (ecommerce
 break-even), `min_clicks_floor`, and **`model`** (`lead_gen`/`ecommerce` — force the business model
-when an account that **values its leads** would fool the value-present auto-detect; verified on Eastpointe).
+when an account that **values its leads** would fool the value-present auto-detect; verified on a live lead-gen account).
 
 **Process (deterministic — `process.py`):**
 1. Acquire the data ([`scripts/query.json`](scripts/query.json)).
@@ -56,7 +56,7 @@ floor) + `terms[]` (sorted by spend; class + destination + `dollars_at_risk`) + 
 (porter-reporting) turns it into the spend-ranked read. Emit **pure data** — no emojis/tables.
 
 > ⚠️ **Cost scale:** `google_ads_cost_micros` is returned **already in currency units** (Porter
-> pre-converts — verified live 2026-06-23 on Eastpointe: it reads `166.01`, not `166007841`). Do **NOT**
+> pre-converts — verified live 2026-06-23 on a production account: it reads `166.01`, not `166007841`). Do **NOT**
 > divide by 1e6.
 
 ## How it feeds the Search Terms dashboard

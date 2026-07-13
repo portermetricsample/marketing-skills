@@ -1,0 +1,40 @@
+{
+  "skill": "creative-inventory",
+  "doc": "Declarative spec. Replace <placeholders> and RUN. Uses GAQL via report.query (NOT query_data) because asset text is not in the reporting fields. STRUCTURE comes from the ad's own responsive_search_ad arrays (authoritative ≤15 H/≤4 D); the asset_view is used ONLY for per-asset metrics (it over-reports an ad's headlines). MCP paths: ../../../_framework/porter-mcp-calls.md ; call shape + why: ../references/tools.md",
+  "discovery": {
+    "account": { "via": "fetch", "tool_id": "tool:porter-accounts:list_accounts",
+      "args": { "component_name": "google-ads", "query": "<ACCOUNT_HINT>" },
+      "use": "keep source_user_id, company_id, and id (split on '-' -> customer_id, login_customer_id)" }
+  },
+  "call_template": {
+    "via": "execute",
+    "tool_id": "tool:porter-automations:execute_connector_action",
+    "args": {
+      "connector": "google-ads",
+      "action_id": "report.query",
+      "source_user_id": "<SOURCE_USER_ID>",
+      "company_id": "<COMPANY_ID>",
+      "params": { "customer_id": "<CUSTOMER_ID>", "login_customer_id": "<LOGIN_CUSTOMER_ID>", "query": "<GAQL>" }
+    }
+  },
+  "queries": [
+    { "id": "probe",
+      "gaql": "SELECT metrics.impressions FROM customer WHERE segments.date DURING LAST_30_DAYS",
+      "why": "confirm the account is live; ~0 impressions -> stop" },
+    { "id": "creative",
+      "gaql": "SELECT campaign.name, ad_group.id, ad_group.name, ad_group_ad.ad.id, ad_group_ad.ad.type, ad_group_ad.ad_strength, ad_group_ad.ad.final_urls, ad_group_ad.ad.final_url_suffix, ad_group_ad.ad.responsive_search_ad.headlines, ad_group_ad.ad.responsive_search_ad.descriptions FROM ad_group_ad WHERE ad_group_ad.status = 'ENABLED' AND segments.date DURING LAST_30_DAYS AND metrics.impressions > 0",
+      "why": "AUTHORITATIVE structure: the ad's own ≤15 headlines / ≤4 descriptions, each with pinnedField + assetPerformanceLabel + policySummaryInfo.approvalStatus. This builds the tree.",
+      "save_as": "creative.json" },
+    { "id": "metrics",
+      "gaql": "SELECT ad_group_ad.ad.id, ad_group_ad_asset_view.field_type, asset.text_asset.text, metrics.impressions, metrics.clicks, metrics.conversions, metrics.cost_micros FROM ad_group_ad_asset_view WHERE segments.date DURING LAST_30_DAYS AND ad_group_ad_asset_view.field_type IN ('HEADLINE','DESCRIPTION') AND metrics.impressions > 0",
+      "why": "per-asset metrics ONLY. process.py joins these onto the tree by (ad_id, field, text). Do NOT use this for the asset LIST: asset_view over-reports (returns churned / auto-created assets, 40+ for a 15-headline ad).",
+      "save_as": "metrics.json" },
+    { "id": "extensions",
+      "gaql": "SELECT campaign.name, campaign_asset.field_type, asset.sitelink_asset.link_text, asset.callout_asset.callout_text, asset.structured_snippet_asset.header, asset.structured_snippet_asset.values FROM campaign_asset WHERE campaign_asset.status = 'ENABLED' AND campaign_asset.field_type IN ('SITELINK','CALLOUT','STRUCTURED_SNIPPET')",
+      "why": "extensions linked to campaigns",
+      "save_as": "extensions.json" }
+  ],
+  "process": "process.py creative.json metrics.json extensions.json [account_profile.json] > creative_graph.json  (tree from ad arrays + metrics joined by text + rollup + extensions + coverage; segment tagged if profile given)",
+  "llm_step": "the model ONLY writes the 3-line synthesis and may upgrade segment_source 'none' -> 'inferred'. It does NOT re-structure.",
+  "output": "see ../references/output.md"
+}

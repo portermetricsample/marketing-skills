@@ -1,0 +1,6 @@
+{
+  "_doc": "FICTIONAL per-account context for the example fixture. Real runs build this from account signals (brand = company + product names; competitors = known rival names; geo = the regions served). Never hardcode advertiser vocabulary in process.py — it lives here.",
+  "brand_terms": ["acme"],
+  "competitor_terms": ["rival"],
+  "geo_terms": ["canada", "ontario", "quebec"]
+}

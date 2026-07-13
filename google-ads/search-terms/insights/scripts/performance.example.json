@@ -1,0 +1,180 @@
+{
+  "meta": {
+    "skill": "search-term-performance",
+    "account_type": "lead_gen",
+    "benchmark_cpa": 40,
+    "benchmark_source": "target_cpa",
+    "thin_data_floor_clicks": 20,
+    "account_conv_rate": 0.0505,
+    "roas_target": null,
+    "totals": {
+      "cost": 1522.0,
+      "clicks": 773,
+      "conversions": 39.0,
+      "value": null
+    }
+  },
+  "terms": [
+    {
+      "term": "life insurance online",
+      "match_types": [
+        "EXACT"
+      ],
+      "campaigns": [
+        "Acme_Life_SEM"
+      ],
+      "cost": 420.0,
+      "clicks": 180,
+      "conversions": 14.0,
+      "value": null,
+      "cpa": 30.0,
+      "conv_rate": 0.0778,
+      "roas": null,
+      "class": "winning",
+      "destination": "leave",
+      "dollars_at_risk": 0.0,
+      "below_floor": false
+    },
+    {
+      "term": "term life insurance",
+      "match_types": [
+        "BROAD",
+        "PHRASE"
+      ],
+      "campaigns": [
+        "Acme_Life_SEM"
+      ],
+      "cost": 380.0,
+      "clicks": 210,
+      "conversions": 14.0,
+      "value": null,
+      "cpa": 27.14,
+      "conv_rate": 0.0667,
+      "roas": null,
+      "class": "winning",
+      "destination": "promote_to_exact",
+      "dollars_at_risk": 0.0,
+      "below_floor": false
+    },
+    {
+      "term": "cheap life insurance",
+      "match_types": [
+        "PHRASE"
+      ],
+      "campaigns": [
+        "Acme_Life_SEM"
+      ],
+      "cost": 300.0,
+      "clicks": 200,
+      "conversions": 1.0,
+      "value": null,
+      "cpa": 300.0,
+      "conv_rate": 0.005,
+      "roas": null,
+      "class": "watch",
+      "destination": "leave",
+      "dollars_at_risk": 0.0,
+      "below_floor": false
+    },
+    {
+      "term": "whole life insurance quote",
+      "match_types": [
+        "EXACT"
+      ],
+      "campaigns": [
+        "Acme_Life_SEM"
+      ],
+      "cost": 260.0,
+      "clicks": 95,
+      "conversions": 10.0,
+      "value": null,
+      "cpa": 26.0,
+      "conv_rate": 0.1053,
+      "roas": null,
+      "class": "winning",
+      "destination": "leave",
+      "dollars_at_risk": 0.0,
+      "below_floor": false
+    },
+    {
+      "term": "life insurance jobs",
+      "match_types": [
+        "BROAD"
+      ],
+      "campaigns": [
+        "Acme_Life_SEM"
+      ],
+      "cost": 90.0,
+      "clicks": 45,
+      "conversions": 0.0,
+      "value": null,
+      "cpa": null,
+      "conv_rate": 0.0,
+      "roas": null,
+      "class": "waste",
+      "destination": "add_negative",
+      "dollars_at_risk": 90.0,
+      "below_floor": false
+    },
+    {
+      "term": "free life insurance",
+      "match_types": [
+        "BROAD"
+      ],
+      "campaigns": [
+        "Acme_Life_SEM"
+      ],
+      "cost": 60.0,
+      "clicks": 38,
+      "conversions": 0.0,
+      "value": null,
+      "cpa": null,
+      "conv_rate": 0.0,
+      "roas": null,
+      "class": "waste",
+      "destination": "add_negative",
+      "dollars_at_risk": 60.0,
+      "below_floor": false
+    },
+    {
+      "term": "is life insurance worth it",
+      "match_types": [
+        "BROAD"
+      ],
+      "campaigns": [
+        "Acme_Life_SEM"
+      ],
+      "cost": 12.0,
+      "clicks": 5,
+      "conversions": 0.0,
+      "value": null,
+      "cpa": null,
+      "conv_rate": 0.0,
+      "roas": null,
+      "class": "watch",
+      "destination": "leave",
+      "dollars_at_risk": 0.0,
+      "below_floor": true
+    }
+  ],
+  "rollup": {
+    "terms_count": 7,
+    "byClass": {
+      "winning": {
+        "count": 3,
+        "cost": 1060.0
+      },
+      "watch": {
+        "count": 2,
+        "cost": 312.0
+      },
+      "waste": {
+        "count": 2,
+        "cost": 150.0
+      }
+    },
+    "waste_cost": 150.0,
+    "winning_cost": 1060.0,
+    "watch_cost": 312.0
+  }
+}

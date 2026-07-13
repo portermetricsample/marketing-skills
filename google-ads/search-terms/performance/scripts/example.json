@@ -1,0 +1,21 @@
+{
+  "columns": [
+    "google_ads_search_term",
+    "google_ads_keyword_info_match_type",
+    "google_ads_campaign_name",
+    "google_ads_cost_micros",
+    "google_ads_clicks",
+    "google_ads_conversions",
+    "google_ads_conversions_value"
+  ],
+  "rows": [
+    ["life insurance online",        "EXACT",  "Acme_Life_SEM", "420", "180", "14", "0"],
+    ["term life insurance",          "PHRASE", "Acme_Life_SEM", "260", "140", "9",  "0"],
+    ["term life insurance",          "BROAD",  "Acme_Life_SEM", "120", "70",  "5",  "0"],
+    ["whole life insurance quote",   "EXACT",  "Acme_Life_SEM", "260", "95",  "10", "0"],
+    ["cheap life insurance",         "PHRASE", "Acme_Life_SEM", "300", "200", "1",  "0"],
+    ["life insurance jobs",          "BROAD",  "Acme_Life_SEM", "90",  "45",  "0",  "0"],
+    ["free life insurance",          "BROAD",  "Acme_Life_SEM", "60",  "38",  "0",  "0"],
+    ["is life insurance worth it",   "BROAD",  "Acme_Life_SEM", "12",  "5",   "0",  "0"]
+  ]
+}
