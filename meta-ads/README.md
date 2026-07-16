@@ -13,9 +13,12 @@ meta-ads/
 │   ├── asset-upload/     audiences/     leadform/
 │   ├── _budget/          (helper de presupuesto currency-aware)
 │   └── README.md
-├── creative_performance/ ← análisis de rendimiento de creativos (Unicorn/Winning/…)
-├── meta-ads-research/    ← extracción de ads de la competencia (Ad Library)
-├── porter-meta-ads-dashboard/ ← dashboard de Meta Ads
+├── analysis/            ← análisis
+│   └── creative_performance/  (rendimiento de creativos: Unicorn/Winning/…)
+├── research/            ← research
+│   └── meta-ads-research/     (extracción de ads de la competencia, Ad Library)
+├── dashboard/           ← dashboards
+│   └── porter-meta-ads-dashboard/
 │
 ├── MASTER-CHECKLIST.md   ← flujo en orden + estado de las 30 acciones del MCP + trampas
 └── PARAMETERS-REFERENCE.md ← todas las variables y opciones (objetivos, pujas, targeting, CTA, UTMs, audiencias, insights, specs de creativos)
@@ -31,8 +34,8 @@ meta-ads/
 - El `account_id` es el **ref firmado** de `list_accounts`, nunca el `act_` crudo.
 - Bugs/gaps del MCP se documentan en el repo [`porter-mcp-feedback`](https://github.com/portermetricsample/porter-mcp-feedback) (gaps 31–42 / issues #2–#12).
 
-## Nota de consistencia (roadmap)
-Para igualar el patrón de `google-ads/` (todo bajo paraguas por función), los skills sueltos
-(`creative_performance`, `meta-ads-research`, `porter-meta-ads-dashboard`) deberían moverse a
-paraguas hermanos de `campaigns/` (p. ej. `analysis/`, `research/`, `dashboard/`). Pendiente de
-confirmar por ser skills preexistentes.
+## Consistencia
+Todo el vertical está bajo **paraguas por función** (`campaigns/`, `analysis/`, `research/`,
+`dashboard/`), igual que `google-ads/`. Los nombres de invocación de los skills (`name:` en cada
+SKILL.md) no cambiaron al reorganizar — se conservan `creative_performance`, `meta-ads-research`,
+`porter-meta-ads-dashboard`.
