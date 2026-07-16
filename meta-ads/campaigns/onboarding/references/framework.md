@@ -33,7 +33,7 @@
 3. **Advantage+ vs edad:** con `1` no se permite `age_max` < 65 (1870189) → si el usuario quiere tope de edad, cambia a manual (`0`).
 4. **Presupuesto:**
    - **Campaña (CBO):** `campaign_create.daily_budget_amount` va en **unidades MÍNIMAS** (centavos: 5000 = 50.00). Convierte `monto × offset`.
-   - **Ad set (no CBO):** `adset_create.daily_budget_amount` va en **unidad MAYOR** (el connector convierte).
+   - **Ad set (no CBO):** `adset_create.daily_budget_amount` va en **unidades MÍNIMAS** también (×offset; el connector NO convierte — verificado 2026-07-16 por read-back; el schema del ad set MIENTE al decir "unidad mayor").
    - Valida ≥ mínimo de la cuenta (Meta lo reporta en el error). Haz **read-back** para confirmar (gap 33/35).
 5. **bid_strategy** siempre explícita (si no, queda `WITH_BID_CAP` inentregable — gap 32).
 6. **special_ad_categories** siempre presente (`[]` o la categoría).

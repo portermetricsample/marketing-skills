@@ -69,8 +69,9 @@
 ## 4. Trampas a tener SIEMPRE presente (el "cheat sheet")
 
 - [ ] **account_id = ref firmado de `list_accounts`**, nunca el `act_` crudo (gap 31).
-- [ ] **Presupuesto: campaña en unidades MÍNIMAS (centavos), ad set en unidad MAYOR** (gaps 33/35). Usar el helper `_budget/budget.md`.
+- [ ] **Presupuesto: AMBOS niveles en unidades MÍNIMAS (centavos), ×offset — el connector NO convierte** (verificado 2026-07-16; el schema del ad set dice "mayor/convierte" pero es FALSO). Ej.: `30.000 COP/día` = `3000000`. **Read-back obligatorio.** Helper `_budget/budget.md`.
 - [ ] **`bid_strategy` explícito** (`LOWEST_COST_WITHOUT_CAP`); si no, queda inentregable y bloquea el ad set (gap 32).
+- [ ] **`bid_strategy` a nivel campaña SOLO con presupuesto de campaña (CBO)** — sin CBO, ponerla en el campaign_create falla (subcode 1885737 "No Budget for Campaign"); ahí la puja va en el ad set.
 - [ ] **`special_ad_categories` obligatorio** (`[]` o HOUSING/EMPLOYMENT/CREDIT/POLITICS).
 - [ ] **`targeting_advantage_audience` explícito (0 o 1)** o el ad set no se crea (gap 38).
 - [ ] **Advantage+ audience (`1`) NO permite `age_max` < 65** (subcode 1870189) → para tope de edad real usa manual (`0`).

@@ -22,7 +22,7 @@ con `list_accounts`) y crea todo en **PAUSED**.
 | [`ad-setup/`](ad-setup/) | Anuncio | Creativo + copy + CTA + link/UTMs + lead form. Router por tipo de creativo. | ✅ validado |
 | [`audiences/`](audiences/) | Audiencia | Custom + subir clientes + lookalike + retargeting. | ✅ (lookalike bloqueado #11) |
 | [`leadform/`](leadform/) | Lead form | Formulario instantáneo + recuperar leads. | ✅ (update bloqueado #12) |
-| [`_budget/budget.md`](_budget/budget.md) | Helper | Presupuesto currency-aware (campaña=centavos, ad set=unidad mayor). | ✅ |
+| [`_budget/budget.md`](_budget/budget.md) | Helper | Presupuesto currency-aware (**ambos niveles = centavos; ×offset; el connector NO convierte**). | ✅ |
 
 ## Orden de uso (el flujo)
 

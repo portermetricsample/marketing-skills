@@ -53,7 +53,7 @@ the audience/placement intent. Required before writing: `optimization_goal` and 
 3. **Resolve targeting keys** (`geolocation_search` for cities/regions, `interest_search` for
    interests, `customaudience_list` for retargeting/lookalike ids).
 4. **Decide budget placement:** CBO campaign → NO budget on the ad set. Non-CBO → set the ad-set
-   budget (⚠️ **MAJOR units**) and an explicit `bid_strategy`.
+   budget (⚠️ **MINOR units** — ×offset, via `_budget/budget.md`) and an explicit `bid_strategy`.
 5. **Set `is_dynamic_creative`** if a multi-format / DCA ad will follow (see gotchas).
 6. **Create** with `facebook_ads.adset_create`, `status: "PAUSED"`. Verify with `object_read`.
 
@@ -63,8 +63,9 @@ non-technical owner.
 ## Safety rules
 - **Always PAUSED.**
 - **Account-agnostic** — resolve via `list_accounts`; the `account_id` is the SIGNED blob, never `act_…`.
-- **Budget = MAJOR units here** (the connector converts) — the OPPOSITE of the campaign skill. Do not
-  ×100. (Feedback gap 35.)
+- **Budget = MINOR units here too** (×offset yourself; the connector does NOT convert — the schema's
+  "MAJOR/converts" text is WRONG, verified 2026-07-16 by read-back). Same convention as the campaign
+  skill. Always via `_budget/budget.md` + a read-back self-check.
 - **Never retry-storm a Meta throttle** (`subcode 2859015 — account restricted / temporarily
   blocked`): back off, tell the user, retry later. Automations must respect rate limits.
 

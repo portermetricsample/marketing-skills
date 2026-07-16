@@ -20,7 +20,7 @@ a Pixel + event. If those don't exist on the account yet, that is a blocker to s
 
 ## 2. Budget placement — the CBO rule
 - **Campaign is CBO** → the budget lives on the campaign. **Do NOT put a budget on the ad set.**
-- **Campaign is NOT CBO** → set the ad-set budget (⚠️ MAJOR units, connector converts) AND an explicit
+- **Campaign is NOT CBO** → set the ad-set budget (⚠️ **MINOR units** — ×offset yourself; the connector does NOT convert, verified 2026-07-16; use `../_budget/budget.md`) AND an explicit
   `bid_strategy` (`LOWEST_COST_WITHOUT_CAP` unless the user has a CPA/ROAS target).
 Read the campaign's CBO flag before deciding — never assume.
 
@@ -50,7 +50,7 @@ recreating the ad set. Coordinate with the creative decision before creating the
 ## 6. Safety gate (before writing)
 1. Read the campaign: objective, CBO, bid_strategy known?
 2. optimization_goal + destination_type + promoted object match the objective?
-3. Budget placed on the right level (campaign if CBO, ad set if not), in MAJOR units?
+3. Budget placed on the right level (campaign if CBO, ad set if not), in **MINOR units** (×offset, verified by read-back)?
 4. At least one geo set?
 5. `is_dynamic_creative` decided per the coming creative?
 6. `status: "PAUSED"`, account resolved from `list_accounts`?

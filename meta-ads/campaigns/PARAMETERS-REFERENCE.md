@@ -31,7 +31,7 @@ Referencia única de TODOS los parámetros y opciones del pipeline de Meta Ads s
 | `billing_event` | `IMPRESSIONS` (default, sirve para todos) · `LINK_CLICKS` · `THRUPLAY` · … |
 | `destination_type` | `ON_AD` (LEADS) · `WEBSITE` (TRAFFIC/SALES) · omitir (AWARENESS/ENGAGEMENT). |
 | `daily_budget_amount` / `lifetime_budget_amount` | ⚠️ **MINOR units** (centavos), IGUAL que la campaña — el connector **NO** convierte (verificado read-back 2026-07-16; el schema dice "major/convierte", es **falso**). `3000000` = 30.000 COP. Solo si la campaña NO es CBO. Ver §5. |
-| `bid_strategy` + `bid_value` | Explícito para presupuesto de ad set; `COST_CAP`/`BID_CAP`/`MINIMUM_ROAS` requieren `bid_value` (MAJOR units). |
+| `bid_strategy` + `bid_value` | Explícito para presupuesto de ad set; `COST_CAP`/`BID_CAP`/`MINIMUM_ROAS` requieren `bid_value` (MINOR units, ×offset). |
 | `targeting_advantage_audience` | **`0` (manual) o `1` (Advantage+). OBLIGATORIO** — omitirlo → `1870227 "Advantage Audience Flag Required"` (gap 38). |
 | `targeting_countries` / `_cities` / `_regions` / `_zips` | ≥1 geo obligatorio. Ciudades/regiones = keys de `geolocation_search`. |
 | `targeting_age_min` / `_age_max` / `_genders` | 18–65 · `[0]` todos / `[1]` H / `[2]` M. |

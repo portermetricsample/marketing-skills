@@ -26,9 +26,9 @@ injected from the signed blob).
 | `billing_event` | Default `IMPRESSIONS` (works with all objectives). |
 | `destination_type` | `ON_AD` for LEADS, `WEBSITE` for TRAFFIC/SALES; omit for AWARENESS/ENGAGEMENT. |
 | `status` | Always `"PAUSED"`. |
-| `daily_budget_amount` / `lifetime_budget_amount` | ⚠️ **MAJOR units** (connector converts — `300000` = 300,000 COP; `30` = $30.00). **Only if the campaign is NOT CBO.** Guard huge values with `confirm_large_budget`. All budget math via the shared helper [`../../_budget/budget.md`](../../_budget/budget.md). |
+| `daily_budget_amount` / `lifetime_budget_amount` | ⚠️ **MINOR units** (centavos, ×offset — the connector does NOT convert; verified 2026-07-16). **Only if the campaign is NOT CBO.** Guard huge values with `confirm_large_budget`. All budget math via [`../../_budget/budget.md`](../../_budget/budget.md). |
 | `bid_strategy` | Explicit for non-CBO ad-set budgets: `LOWEST_COST_WITHOUT_CAP` (default), `COST_CAP`, `BID_CAP`, `MINIMUM_ROAS`. `*_CAP`/`MINIMUM_ROAS` require `bid_value`. |
-| `bid_value` | MAJOR units. Required for `COST_CAP`/`BID_CAP`. |
+| `bid_value` | MINOR units (×offset). Required for `COST_CAP`/`BID_CAP`. |
 | `targeting_countries` / `_cities` / `_regions` / `_zips` | At least ONE geo type required. Cities/regions need keys from `geolocation_search`. |
 | `targeting_age_min` / `_age_max` / `_genders` | 18–65; genders `[0]` all / `[1]` male / `[2]` female. |
 | `targeting_interests` / `_custom_audiences` / `_excluded_custom_audiences` | Objects with ids from `interest_search` / `customaudience_list`. |
@@ -45,7 +45,7 @@ injected from the signed blob).
 - **Campaign bid_strategy propagates:** if the campaign is `LOWEST_COST_WITH_BID_CAP`/`COST_CAP`,
   `adset_create` fails with `subcode 1815857 "Bid amount required"`. Fix the campaign's strategy
   (`campaign_update` → `LOWEST_COST_WITHOUT_CAP`) or pass a `bid_value`. (Feedback gap 32.)
-- **Budget unit is MAJOR here** — opposite of `campaign_create` (minor). Do NOT ×100. (Gap 35.)
+- **Budget unit is MINOR here too** (centavos) — verified 2026-07-16 by read-back: sent `12345` → stored `12345`. The schema's "MAJOR unit / connector converts / do NOT ×100" is **WRONG**. Same as campaign: **×offset yourself**. Use [`../_budget/budget.md`](../_budget/budget.md). (Gap 35 corrected.)
 - **CBO campaign → no ad-set budget.** Putting a budget on the ad set of a CBO campaign is wrong;
   the budget lives on the campaign.
 - **Meta throttle:** rapid automated writes (or an account without a payment method) can return

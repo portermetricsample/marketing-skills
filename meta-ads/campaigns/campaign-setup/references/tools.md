@@ -49,9 +49,10 @@ currency's **minor units** — NOT whole currency. Test: sent `20000` on a COP a
 `daily_budget: "20000"` (= 200.00 COP/day; COP offset is 100). So `5000` = $50.00 on a USD account.
 
 > 🚨 **INCONSISTENCY with the ad-set skill (feedback gap 35):** `adset_create` does the OPPOSITE —
-> its `daily_budget_amount` is in the **MAJOR** unit (the connector converts; you pass `300000` for
-> 300,000 COP, do NOT ×100). So: **campaign budget = minor units (×offset yourself); ad-set budget =
-> major units (connector converts).** Do not carry one convention into the other skill.
+> its `daily_budget_amount` is ALSO in **MINOR units** (verified 2026-07-16 by read-back — sent `12345`
+> → stored `12345`; the schema's "MAJOR unit / connector converts" text is **WRONG**). So there is NO
+> inconsistency: **BOTH campaign and ad-set budgets = minor units — ×offset yourself, the connector
+> never converts.** Always via [`../_budget/budget.md`](../_budget/budget.md) + a read-back self-check.
 - **There is a per-account MINIMUM the API enforces and reports.** Sending `50` on the COP sandbox
   returned: `"daily budget 50 COP is below the account minimum (3319 COP in minor units); raise it"`.
   Read the minimum from that error (or from the account) and never send below it.
