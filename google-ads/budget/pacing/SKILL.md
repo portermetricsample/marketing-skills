@@ -62,7 +62,7 @@ A renderer (the orchestrator's `formats/*`) turns this JSON into the human docum
 data — no emojis, tables, markdown, or colors in the output.**
 
 > **Voice (don't copy the rules, link them):** write every narrative line per
-> [`_framework/writing.md`](../../_framework/writing.md) — a question heading the data answers
+> [`_framework/writing.md`](../../../_framework/writing.md) — a question heading the data answers
 > yes/no; the metric+delta carried as data, never spelled out in prose; first sentence answers the
 > heading, then names the driver; one bridge line to the next section. Plain language for a
 > non-technical owner.

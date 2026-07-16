@@ -1,98 +1,78 @@
 # Tools — Budget Pacing
 
-> 🔌 Portal mechanics (how to invoke `execute_connector_action` via the Porter Metrics MCP):
-> [`../../../_framework/porter-mcp-calls.md`](../../../_framework/porter-mcp-calls.md).
+The ordered plan of MCP tool calls this skill makes to acquire its inputs. The "query" is the
+**arguments of `query_data`**, nested below — not raw GAQL.
 
-All calls go through the **Porter Metrics MCP** → `execute_connector_action`, connector `google-ads`,
-action `report.query` (a read-only GAQL query; account params go inside `params`).
+> 🔌 Portal mechanics (fetch vs execute, tool-ids, the 7 meta-tools): see
+> [`../../../../_framework/porter-mcp-calls.md`](../../../../_framework/porter-mcp-calls.md).
 
-## ⚠️ The budget-field gotcha (why this is TWO queries, not one)
+## ⚠️ The budget-field gotcha (why budgets come from the connector action, not `query_data`)
 
-`campaign_budget.amount_micros` lives on the **`campaign_budget`** resource. When you SELECT it in the
-**same** query as a per-date performance metric (`metrics.cost_micros` segmented by `segments.date`),
-Google Ads returns the budget **multiplied/duplicated per segment row** or an outright incompatible-field
-error — the amount you read back is wrong. **Never** put `campaign_budget.amount_micros` and a
-date-segmented metric in one query. Pull the budget once (no metrics, no date segment), and the daily
-spend separately, then join in code on `campaign.id`.
+`query_data` **fan-out corrupts** the budget/target fields: `campaign_budget.amount_micros` returns a
+DIFFERENT value depending on which other fields share the query (a join that multiplies the
+non-additive budget by the joined rows). The number you read back is non-deterministic by query shape
+and matches nothing. **Never read the budget from `query_data`.** Read it from the connector action
+(`budget.list`), which hits the Google Ads API directly with no join layer. Read the daily *spend*
+from `query_data` (spend is additive and aggregates correctly), then join the two in code on the
+campaign.
 
-## Query 1 — Budgets (no metrics, no date segment)
+## Tool plan (ordered)
 
-- **Action**: `report.query` · **Connector**: `google-ads`
-- **GAQL**:
+| # | Tool | Meta-tool | Args | Why |
+|---|------|-----------|------|-----|
+| 1 | `tool:porter-accounts:list_accounts` | `fetch` | `component_name="google-ads"` | Discover the account **object** (not just the id). Never invent the id. |
+| 2 | `tool:porter-automations:execute_connector_action` | `execute` | `action_id="budget.list"` | The **daily budget** per campaign (amount_micros) — from the API directly, NOT `query_data` (see gotcha). Also gives `explicitly_shared`. |
+| 3 | `tool:porter-reporting:query_data` | `execute` | daily-spend fields (below) | The **actual daily spend** per campaign across the period. `accounts` = the full object from step 1. |
+| 4 | `tool:porter-reporting:query_data` | `execute` | cap fields (below) | Period totals to confirm an over-pacer is really budget-capped. |
 
-```sql
-SELECT
-  campaign.id,
-  campaign.name,
-  campaign.status,
-  campaign_budget.amount_micros,
-  campaign_budget.period,
-  campaign_budget.explicitly_shared
-FROM campaign
-WHERE campaign.status = 'ENABLED'
-```
+## Step 3 — daily-spend `query_data` args
 
-- Notes: `campaign_budget.period` is almost always `DAILY` (Google Ads budgets are daily). Convert to
-  a period budget in the framework (daily × days-in-period). `explicitly_shared = TRUE` means several
-  campaigns share ONE budget — flag it; their pace is joint, not per-campaign.
+- `google_ads_campaign_name` — the entity to join to its budget + name in the recommendation.
+- `google_ads_date` — the day (time series across the pacing window). *(Validate the exact date
+  dimension name with `list_fields(search="date")` if a query fails.)*
+- `google_ads_cost_micros` — the daily spend (account currency).
 
-## Query 2 — Daily spend across the period (no budget field)
+Filter: `google_ads_campaign_status equals ENABLED`. Period: the pacing window
+(`{date_from, date_to}` — current month-to-date for a live check, or a closed month). Sort:
+`google_ads_campaign_name`, `google_ads_date`. Sum spend per campaign = spend-to-date; the count of
+distinct dates (or `today − date_from + 1`) = days elapsed.
 
-- **Action**: `report.query` · **Connector**: `google-ads`
-- **GAQL**:
+## Step 4 — budget-cap confirmation `query_data` args (period totals, NO date)
 
-```sql
-SELECT
-  campaign.id,
-  segments.date,
-  metrics.cost_micros
-FROM campaign
-WHERE campaign.status = 'ENABLED'
-  AND segments.date BETWEEN '{{period_start}}' AND '{{period_end}}'
-ORDER BY campaign.id, segments.date
-```
+- `google_ads_campaign_name`
+- `google_ads_cost_micros`
+- `google_ads_search_budget_lost_impression_share` — the **budget cap** signal (> 0 on an over-pacer
+  = a real cap, more budget buys more).
+- `google_ads_search_rank_lost_impression_share` — the **rank cap** signal (raising budget won't help).
 
-- `{{period_start}}`/`{{period_end}}` = the pacing window (the current month-to-date for a live check,
-  or a closed month). Sum `cost_micros / 1e6` per campaign = spend-to-date; the number of distinct
-  dates with data (or `today − period_start + 1`) = days elapsed.
-
-## Query 3 — Budget-cap confirmation (period totals, no date segment)
-
-- **Action**: `report.query` · **Connector**: `google-ads`
-- **GAQL**:
-
-```sql
-SELECT
-  campaign.id,
-  metrics.cost_micros,
-  metrics.search_budget_lost_impression_share,
-  metrics.search_rank_lost_impression_share
-FROM campaign
-WHERE campaign.status = 'ENABLED'
-  AND segments.date BETWEEN '{{period_start}}' AND '{{period_end}}'
-```
-
-- `search_budget_lost_impression_share > 0` on an over-pacer = a **real budget cap** (it is losing
-  impressions it could buy → throttle or fund). Distinguish from `search_rank_lost_impression_share`
-  (rank cap — more budget won't help). These IS fields are period totals — do NOT segment them by date
-  (they aggregate wrong per-day).
+Filter: `google_ads_campaign_advertising_channel_type equals SEARCH` (impression share is Search-only).
+Do NOT add `google_ads_date` here — the IS fields aggregate wrong when segmented by day; read them as
+period totals. Use the **overall** IS field, not the `_top_` / `_absolute_top_` variants.
 
 ## Fields read (chips)
 
-`campaign.id` · `campaign.name` · `campaign.status` · `campaign_budget.amount_micros` ·
-`campaign_budget.period` · `campaign_budget.explicitly_shared` · `segments.date` ·
-`metrics.cost_micros` · `metrics.search_budget_lost_impression_share` ·
-`metrics.search_rank_lost_impression_share`
+`google_ads_campaign_name` · `google_ads_campaign_status` · `google_ads_date` ·
+`google_ads_cost_micros` · `google_ads_search_budget_lost_impression_share` ·
+`google_ads_search_rank_lost_impression_share` · `budget.list` → daily budget (amount_micros) +
+`explicitly_shared`.
 
 ## Data pulls (3)
 
-1. Budgets per campaign (budget-only query).
-2. Daily spend per campaign across the period.
-3. Period budget/rank lost impression share (cap confirmation).
+1. Daily budgets per campaign — via `budget.list` (connector action).
+2. Daily spend per campaign across the period — via `query_data`.
+3. Period budget/rank lost impression share — via `query_data` (cap confirmation).
 
-## Not needed here
+## Tools NOT needed here (keep it minimal)
 
+- `scrape` / `crawl` — pacing is numeric.
 - No conversion / value fields — pacing is about *timing of spend*, not its return (that is
   `spend-allocation` / `funnel-metrics`).
-- No `process.py` — the join + projection is small; the framework does it inline. (If an account has
-  thousands of campaigns, cache the daily-spend pull.)
+- `list_fields` / `list_custom_fields` — only to re-validate a field name if a query fails.
+
+## Gotchas
+
+- **Budget is campaign-level** (or shared — `budget.list` `explicitly_shared = true` means several
+  campaigns draw from ONE budget; their pace is joint, compute it on the combined budget/spend).
+- **Impression share is Search-only** and must be a period total, never date-segmented.
+- **Spend is additive** (safe in `query_data`); **budget is not** (use `budget.list`) — never mix them
+  in one query.
