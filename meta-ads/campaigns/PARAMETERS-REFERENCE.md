@@ -30,7 +30,7 @@ Referencia única de TODOS los parámetros y opciones del pipeline de Meta Ads s
 | `optimization_goal` | Debe calzar con el objetivo: `LEAD_GENERATION` (LEADS) · `LINK_CLICKS`/`LANDING_PAGE_VIEWS` (TRAFFIC) · `OFFSITE_CONVERSIONS` (SALES) · `REACH`/`IMPRESSIONS` (AWARENESS) · `POST_ENGAGEMENT`/`THRUPLAY`/`PAGE_LIKES` (ENGAGEMENT). |
 | `billing_event` | `IMPRESSIONS` (default, sirve para todos) · `LINK_CLICKS` · `THRUPLAY` · … |
 | `destination_type` | `ON_AD` (LEADS) · `WEBSITE` (TRAFFIC/SALES) · omitir (AWARENESS/ENGAGEMENT). |
-| `daily_budget_amount` / `lifetime_budget_amount` | ⚠️ **MAJOR units** aquí (el connector convierte): `300000` = 300.000 COP. Solo si la campaña NO es CBO. Ver §5. |
+| `daily_budget_amount` / `lifetime_budget_amount` | ⚠️ **MINOR units** (centavos), IGUAL que la campaña — el connector **NO** convierte (verificado read-back 2026-07-16; el schema dice "major/convierte", es **falso**). `3000000` = 30.000 COP. Solo si la campaña NO es CBO. Ver §5. |
 | `bid_strategy` + `bid_value` | Explícito para presupuesto de ad set; `COST_CAP`/`BID_CAP`/`MINIMUM_ROAS` requieren `bid_value` (MAJOR units). |
 | `targeting_advantage_audience` | **`0` (manual) o `1` (Advantage+). OBLIGATORIO** — omitirlo → `1870227 "Advantage Audience Flag Required"` (gap 38). |
 | `targeting_countries` / `_cities` / `_regions` / `_zips` | ≥1 geo obligatorio. Ciudades/regiones = keys de `geolocation_search`. |
@@ -64,9 +64,10 @@ Referencia única de TODOS los parámetros y opciones del pipeline de Meta Ads s
 Dos transportes: (A) `image_upload`/`video_upload` con **`url`** público; (B) local/Drive → **`prepare_upload` + POST JSON** (`account_id` nativo + `image_base64`/`video_base64` generado en código). **Nunca** base64 grande como argumento de `execute_action` (se trunca). Detalle completo: [`asset-upload/references/tools.md`](asset-upload/references/tools.md).
 
 ## §5 — Presupuesto por moneda (helper compartido)
-Campaña = **minor units** (tú multiplicas × offset). Ad set = **major units** (el connector convierte).
-Leer moneda de la cuenta + offset (COP=100 validado; JPY/KRW/etc=1). El `max_size_bytes`/mínimos: ver
-[`_budget/budget.md`](_budget/budget.md). Mínimo por cuenta lo reporta el error de Meta.
+**Campaña Y ad set = minor units (centavos): tú multiplicas × offset; el connector NO convierte en
+ningún nivel** (verificado read-back 2026-07-16; el schema del ad set dice "major/convierte" pero es
+falso — seguirlo gasta 100× mal). Leer moneda de la cuenta + offset (COP=100 validado; JPY/KRW/etc=1).
+Detalle + self-check: [`_budget/budget.md`](_budget/budget.md). Mínimo por cuenta lo reporta Meta en el error.
 
 ## §6 — Especificaciones de creativo por formato (Meta)
 | Placement | Ratio | Píxeles recomendados |
