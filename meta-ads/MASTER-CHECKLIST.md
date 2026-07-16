@@ -73,6 +73,9 @@
 - [ ] **`bid_strategy` explícito** (`LOWEST_COST_WITHOUT_CAP`); si no, queda inentregable y bloquea el ad set (gap 32).
 - [ ] **`special_ad_categories` obligatorio** (`[]` o HOUSING/EMPLOYMENT/CREDIT/POLITICS).
 - [ ] **`targeting_advantage_audience` explícito (0 o 1)** o el ad set no se crea (gap 38).
+- [ ] **Advantage+ audience (`1`) NO permite `age_max` < 65** (subcode 1870189) → para tope de edad real usa manual (`0`).
+- [ ] **La cuádrupla (objetivo · optimization · billing · destination) debe ser válida** o Meta rechaza (subcode 1772103); `billing_event: IMPRESSIONS` es el más compatible.
+- [ ] **Muéstrale al usuario cada decisión y trampa** en lenguaje claro antes de crear (no ejecutar en silencio).
 - [ ] **CBO on → presupuesto en la campaña, NO en el ad set.**
 - [ ] **Objetivo y buying_type son irreversibles** (se fijan al crear).
 - [ ] **promoted_object por objetivo:** LEADS→page+lead_form · SALES→pixel+evento · TRAFFIC→link en el anuncio.

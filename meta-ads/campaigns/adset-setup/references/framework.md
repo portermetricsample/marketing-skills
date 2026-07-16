@@ -26,7 +26,8 @@ Read the campaign's CBO flag before deciding — never assume.
 
 ## 3. Targeting — a sane default, then narrow
 - **Geo:** required. Start from the business's market (country, or cities via `geolocation_search`).
-- **Age/gender:** narrow only with a real reason; over-narrowing starves delivery.
+- **`targeting_advantage_audience` es OBLIGATORIO (`0` ó `1`)** — omitirlo → Meta rechaza (subcode 1870227). **Explícaselo al usuario** como una elección: `1` = Advantage+ (Meta amplía tu audiencia) · `0` = manual (respeta exactamente lo que definas).
+- **Age/gender:** narrow only with a real reason; over-narrowing starves delivery. ⚠️ **Validado (2026-07-16):** con **Advantage+ (`1`) NO puedes poner `age_max` < 65** (subcode 1870189 — lo trata como "sugerencia"). Si el usuario quiere un tope de edad real (p. ej. 25–55), usa targeting **manual (`0`)**. Dile este trade-off antes de decidir.
 - **Broad vs detailed:** for a new account with no signal, **broad + let Meta's Advantage+ audience
   learn** usually beats hand-picked interests. Layer `targeting_interests` only when there's a clear,
   proven audience. (This is where the *clone-winner* skill's empirical audience beats a guess.)
@@ -55,6 +56,19 @@ recreating the ad set. Coordinate with the creative decision before creating the
 6. `status: "PAUSED"`, account resolved from `list_accounts`?
 If the campaign's bid_strategy is a `*_CAP`, either fix it on the campaign or provide `bid_value` here
 (else Meta blocks the create — gap 32).
+
+## 7. La combinación (objetivo · optimization · billing · destination) debe ser VÁLIDA
+Meta solo acepta ciertas **cuádruplas** `(objective, optimization_goal, billing_event, destination_type)`.
+Una combinación inválida → rechazo con **subcode 1772103**. La tabla del §1 cubre los casos comunes; ante
+la duda, `billing_event: IMPRESSIONS` es el más compatible. No inventes combinaciones "creativas".
+
+## Regla de comunicación — MUÉSTRALE al usuario las decisiones y trampas
+Este skill no debe ejecutar en silencio. Antes de crear el ad set, **dile al usuario en lenguaje claro**:
+- El objetivo → qué optimization/destination implica (y qué promoted object necesita).
+- La elección Advantage+ vs manual (y el límite de edad si aplica).
+- Dónde va el presupuesto (campaña si CBO, ad set si no) y en qué unidad.
+- Que se crea **PAUSED** y activar es decisión suya.
+Así el usuario entiende qué está eligiendo, no solo qué se creó.
 
 ## Out of scope
 - Campaign objective/CBO/budget-model → campaign-setup. Creative/copy/CTA → ad-setup.

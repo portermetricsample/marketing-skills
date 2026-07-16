@@ -29,6 +29,7 @@ Report the created ad compactly. Structured data; no emojis.
 - Confirm `url_tags` is present and separate from `link` (tracking wired).
 - For LEADS, confirm `lead_gen_form_id` is set (and `link` is null).
 - On video, note `ready` vs `pending`.
+- **Validado (2026-07-16):** un anuncio recién creado suele quedar en `effective_status: IN_PROCESS` (Meta lo está revisando tras crearlo). Repórtalo y aclara que, al estar `status: PAUSED`, **no corre** — la revisión no lo activa.
 
 ## Plain-language summary
 > "Created the PAUSED ad «…» under the Traffic ad set. Single image, CTA 'Learn more', links to
