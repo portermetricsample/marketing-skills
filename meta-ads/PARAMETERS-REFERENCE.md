@@ -153,6 +153,26 @@ Con esto extraes rendimiento por **demografía, plataforma, posición, dispositi
 
 ---
 
+## 8. Especificaciones de creativos por formato (para producir los assets)
+
+Referencia de Meta (verificar en la clase; Meta ajusta specs con el tiempo).
+
+| Ubicación | Relación | Píxeles recomendados | Formato |
+|---|---|---|---|
+| Feed (FB/IG) cuadrado | 1:1 | **1080 × 1080** | JPG/PNG · video MP4/MOV |
+| Feed vertical | 4:5 | **1080 × 1350** | idem |
+| Stories / Reels | 9:16 | **1080 × 1920** | idem |
+| Horizontal / video landscape | 16:9 (o 1.91:1) | **1920 × 1080** / 1200 × 628 | idem |
+| Carrusel (cada tarjeta) | 1:1 | 1080 × 1080 | idem |
+
+- **Imagen:** JPG/PNG, mínimo 600px de ancho, hasta ~30 MB. GIF/WebP no válidos para ads.
+- **Video:** MP4/MOV/H.264, hasta 4 GB. Reels/Stories ≤ 90s (9:16); feed admite más largo. **Se procesa async** — el `video_id` no sirve hasta que Meta termina.
+- **Límites de texto (recomendado):** `message` (texto principal) ~125 caracteres · `headline` ~40 · `description` ~30. Meta trunca lo que exceda según el placement.
+- **Multi-formato en un solo anuncio:** subir una versión por relación (1:1, 4:5, 9:16, 16:9) y mapearlas a placements con `dca_images`/`dca_videos` + `asset_customization_rules` (ver §3).
+
+---
+
 ## Notas de cobertura
+- ✅ **Subir creativo: RESUELTO** — `image_upload(url=…)` público, o `prepare_upload` (`purpose=action`) + POST **cuerpo JSON** (`{account_id, image_base64, filename, mime}`) desde **código** (nunca base64 por el modelo, se trunca).
 - ❌ **No expuesto:** duplicar campañas, reach estimate, reglas automatizadas, borrar audiencias, `object_story_id` (impulsar post existente), Audience Insights/demografía de audiencia.
-- ❌ **Roto hoy:** `interest_search` (#10), `lookalike_create` (#11), subir creativo propio salvo por URL pública (#3).
+- ❌ **Roto hoy:** `interest_search` (#10), `lookalike_create` (#11).

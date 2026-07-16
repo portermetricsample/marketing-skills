@@ -31,7 +31,7 @@
 | 6 | Audiencias: crear semilla → subir usuarios → verificar | `customaudience_create` → `_add_users` → `_get` | (futuro `audiences`) | ✅ |
 | 6b | Audiencias: lookalike | `lookalike_create` | — | ❌ **#** (gap 41) |
 | 7 | Lead form (si objetivo LEADS) | `leadform_create` → `leadform_list` | (futuro `leadform`) | ✅ |
-| 8 | **Subir creativo** (imagen/video) | `image_upload` / `video_upload` | `meta-ads-asset-upload` | ⚠️ solo por `url` ✅ · base64/presigned ❌ **#3** |
+| 8 | **Subir creativo** (imagen/video) | `image_upload` / `video_upload` | `meta-ads-asset-upload` | ✅ 2 vías: `url` pública, o `prepare_upload` + POST **cuerpo JSON** (`account_id`+`image_base64`) desde código. NUNCA base64 por el modelo. |
 | 9 | **Crear anuncio** (page_id + creativo + copy + CTA + link) | `ad_create` | (futuro `ad-setup`) | ✅ |
 | 10 | Verificar | `object_read` / `insights_get` | — | ✅ |
 | 11 | **Activar** (pasar a ACTIVE) | — decisión HUMANA, nunca automática | — | — |
@@ -44,7 +44,7 @@
 **Campaña:** `campaign_create` ✅ · `campaign_update` ✅ · `campaign_delete` ⚠️ · `campaign_list` ✅
 **Ad set:** `adset_create` ✅ · `adset_update` ✅ · `adset_delete` ⚠️ · `adset_list` ✅
 **Anuncio:** `ad_create` ✅ · `ad_update` ⚠️ · `ad_delete` ⚠️ · `ad_list` ✅
-**Assets:** `image_upload` ⚠️(url ✅ / base64 ❌) · `video_upload` ⚠️(sin validar; mismo transporte)
+**Assets:** `image_upload` ✅ (`url` pública, o `prepare_upload`+POST JSON desde código) · `video_upload` ⚠️(mismo transporte; el video se procesa async)
 **Audiencias:** `customaudience_create` ✅ · `_add_users` ✅ · `_get` ✅ · `_list` ✅ · `_update` ⚠️ · `lookalike_create` ❌
 **Lead gen:** `leadform_create` ✅ · `leadform_list` ✅ · `leadform_update` ⚠️ · `lead_list` ⚠️(requiere page token)
 **Lectura:** `object_read` ✅ · `insights_get` ✅
@@ -58,7 +58,7 @@
 
 | # | Bloqueo | Impacto | Issue |
 |---|---------|---------|-------|
-| 37+39 | Subir creativo propio (base64 se trunca / presigned falla por account_id) | **No hay vía chat-only para subir el creativo** — solo si ya está en URL pública | #3 |
+| ~~37+39~~ | ✅ **RESUELTO** — subir creativo funciona (`url` o `prepare_upload`+JSON POST desde código). Solo queda: no streamear base64 por el modelo. | — | #3 (docs) |
 | 40 | `interest_search` 500 | Sin targeting por intereses | #10 |
 | 41 | `lookalike_create` sin location | Sin lookalikes | (gap 41) |
 | 36 | Sin `object_story_id` | No se puede impulsar un post orgánico existente | #2 |
@@ -102,7 +102,7 @@
 - ✅ **Crear una campaña completa en vivo** (campaña→ad set→anuncio), todo PAUSED, con el MCP — YA VALIDADO en `act_794709130739347`.
 - ✅ Audiencias (crear + subir clientes) y lead forms — validado.
 - ✅ Lecturas (listar, insights, píxeles, conversiones) — validado.
-- ⚠️ **Subir el creativo propio queda pendiente del fix #3** — para la demo se usa un creativo ya hospedado en URL pública, o se muestra el bloqueo como "feedback en vivo al equipo".
+- ✅ **Subir el creativo propio funciona** (`url` pública, o `prepare_upload` + POST JSON desde código). Para la demo se genera el creativo HTML→PNG y se sube en vivo.
 - ❌ Intereses y lookalikes: mostrar como "en el roadmap / issues abiertos".
 
 ---
