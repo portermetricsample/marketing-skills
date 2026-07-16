@@ -20,7 +20,7 @@ Turn a customer/lead list into a usable Meta audience, and scale it with a looka
 - ✅ **Lookalike:** `lookalike_create` (⚠️ hoy bloqueado — falta parámetro de ubicación, [issue #11](https://github.com/portermetricsample/porter-mcp-feedback/issues/11)).
 - ✅ **Leer / retargeting:** `customaudience_list` / `_get` para reusar audiencias existentes.
 - ✅ `customaudience_update` (nombre/descripción).
-- ❌ **Borrar audiencias** → el MCP no expone `customaudience_delete`; hazlo en Ads Manager.
+- ✅ **Borrar audiencia:** `customaudience_delete` (destructive; borra también sus lookalikes) — validado 2026-07-16 (también en Ads Manager).
 - ❌ **Usar la audiencia en un ad set** → `meta-ads-adset-setup` (`targeting_custom_audiences`).
 
 ## Components
@@ -30,7 +30,7 @@ Turn a customer/lead list into a usable Meta audience, and scale it with a looka
 ## Operate
 1. **Crear semilla:** `customaudience_create` (`subtype:CUSTOM`, `customer_file_source`).
 2. **Subir datos:** `customaudience_add_users` — `schema` = tipos de columna en orden (EMAIL, PHONE, …); el connector normaliza y **hashea SHA-256** server-side.
-3. **Verificar:** `customaudience_get` → `operation_status.code==200` = lista; `approximate_count` = tamaño.
+3. **Verificar:** `customaudience_get` → `operation_status.code==200` = lista (300 = updating, sigue polleando); `delivery_status` dice si es usable (`300` = demasiado chica, <~100). ⚠️ NO pidas `approximate_count` (da `#100 nonexisting field`).
 4. **Escalar (cuando #11 se arregle):** `lookalike_create` desde la semilla (ratio 1–20%, similarity/reach).
 5. **Entregar** los ids a `adset-setup`.
 
