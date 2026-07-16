@@ -1,47 +1,84 @@
-# Tools — Meta Ads Asset Upload (Drive / URL → Meta)
+# Tools — Meta Ads Asset Upload (image & video → Meta)
 
-Chain across TWO connectors: `storage` (Google Drive) to get the bytes, `facebook-ads` to register
-them. Validated 2026-07-15.
+How to get a creative file INTO a Meta ad account and get back the `image_hash` / `video_id` an ad
+needs. **Everything here is live-validated (2026-07-15) against the `facebook-ads` connector.**
 
-> 🔌 Action ids/schemas are dynamic — confirm with `list_actions`. The Drive actions live under the
-> **`storage`** connector namespace (the Porter `google-drive` connector). `storage.*` actions have
-> `requires_account: false` (the single connected Drive account is implicit). The Meta actions need the
-> **signed** ad-account blob from `list_accounts` (feedback gap 31).
+> 🔑 Golden rule: **never stream a large base64 through the model.** It truncates and Meta rejects it
+> ("Invalid image format", subcode 2446496). Encode in CODE and use one of the two transports below.
 
-## Tool plan (ordered)
+## The two transports
 
-| # | Tool | Kind | Args | Why |
-|---|------|------|------|-----|
-| 1 | `list_connectors` | read | `query="drive"` | (optional) confirm `google-drive` → `connected: true`. |
-| 2 | `execute_action` `storage.list_files` | read | `q`, `pageSize`, `orderBy`, `fields` | Find the file id when given a name/folder. Drive query syntax, e.g. `q="name contains 'hero' and mimeType contains 'image/' and trashed = false"`. |
-| 3 | `execute_action` `storage.get_file` | read | `file_id`, `fields="id,name,mimeType,size"` | Read mime + size to validate BEFORE downloading. |
-| 4 | `execute_action` `storage.download_file` | read | `file_id` | Returns `{ base64 bytes, filename, mime_type }`. **30 MiB cap; native Google files rejected.** |
-| 5 | `execute_action` `facebook_ads.image_upload` | **write** | `account_id`=<signed blob>, `image_base64`, `filename`, `mime` | Register the image → returns `image_hash`. |
-| 5' | `execute_action` `facebook_ads.video_upload` | **write** | `account_id`, `video_base64` (or `url`), `filename`, `mime` | For video → returns `video_id`. Video is processed **async** — not usable in an ad until Meta finishes processing. |
+### A) Public URL (simplest) — `image_upload` / `video_upload` with `url`
+If the asset is already at a public URL, pass it to `execute_action`:
+```
+execute_action(action="facebook_ads.image_upload", account_id=<SIGNED ref>,
+  params={"url":"https://…/creative.jpg", "filename":"creative.jpg", "mime":"image/jpeg"})
+→ {images:{<filename>:{hash:"…", width, height}}}
+```
+Meta fetches the URL server-side — no size worry on our side (up to Meta's own limits). Same for
+`video_upload` with `url`. ⚠️ The URL must be **publicly reachable and passed VERBATIM** — if it's a
+signed Meta CDN URL (scontent…), do NOT edit any query param or you get `403 failed to download`.
 
-## Two transports (pick one)
-- **Drive file → base64** (the reliable default): steps 4 → 5. `download_file` gives base64; pass it as
-  `image_base64`. Provide EXACTLY ONE of `image_base64` or `url` to `image_upload`.
-- **Public URL → Meta fetches it**: skip Drive; call `image_upload(url="https://…")` directly. ⚠️ A
-  Google Drive **share link is NOT a direct-image URL** — Meta cannot reliably fetch `drive.google.com`
-  view links (interstitials/auth). So for Drive, use the base64 transport, NOT `share_file` + url.
+### B) Local file → `prepare_upload` + JSON POST (the validated recipe for local bytes)
+1. Reserve a single-use upload URL:
+```
+prepare_upload(purpose="action", action="facebook_ads.image_upload", account_id=<SIGNED ref>)
+→ { upload_url, method:"POST", headers:{}, max_size_bytes, input_schema }
+```
+2. From **code** (Bash/curl — NOT the model), base64-encode locally and POST a **JSON body**:
+```
+POST <upload_url>    Content-Type: application/json
+{"account_id":"act_XXXXXXXXXXXX", "image_base64":"<local base64, NO data: prefix>",
+ "filename":"creative.png", "mime":"image/png"}
+→ {"status":200,"body":{"images":{"creative.png":{"hash":"…"}}}}
+```
+Reference curl:
+```bash
+python3 -c "import base64,json;json.dump({'account_id':'act_XXXX','image_base64':base64.b64encode(open('f.png','rb').read()).decode(),'filename':'f.png','mime':'image/png'},open('p.json','w'))"
+curl -s -X POST -H "Content-Type: application/json" --data-binary @p.json "<upload_url>"
+```
+For **video**: same, but `action="facebook_ads.video_upload"` and the field is **`video_base64`**
+(`mime` `video/mp4` or `video/quicktime`). Returns `{"body":{"id":"<video_id>"}}`.
 
-## Meta `image_upload` params
-`url` XOR `image_base64` (exactly one), `filename`, `mime`. Returns an `image_hash` used in
-`ad_create` (`image_hash`, `image_hashes` for DCA, or per-card in `child_attachments`).
+## ⚠️ `account_id` — the #1 thing that makes people fail (validated error → fix)
+- In **`prepare_upload`** and in **`execute_action`**, `account_id` = the **SIGNED blob** from
+  `list_accounts` (feedback gap 31).
+- In the **JSON body POSTed to the presigned URL**, `account_id` = the **native `act_…` id** (the
+  token already carries source_user/company).
+- **The error you'll hit if you get the POST shape wrong:** `HTTP 502 → "missing URL parameter
+  account_id"`. It appears if you POST multipart form-data, raw binary, or put account_id in the query
+  string. **Fix: POST a JSON body** with `account_id` + `image_base64`/`video_base64` as above. (Gap 39.)
 
-## Limits & gotchas (validated)
-- **`storage.download_file`: 30 MiB cap.** Fine for images. Large videos exceed it and Drive has no
-  clean direct-download URL → **this skill cannot move big videos; say so, don't truncate.**
-- **Native Google files rejected** (`application/vnd.google-apps.*` — Docs/Sheets/Slides/Drawings). A
-  "design" living as a Google Drawing/Slide must be exported to png/jpg first (out of scope here).
-- **Meta image formats:** JPG/PNG for ads. GIF/WebP are generally not accepted as ad images — validate
-  mime and reject early with a clear message.
-- **Aspect ratio / resolution per placement** is NOT checked here — that's `ad-setup`'s job (it knows
-  the placements). This skill only guarantees a valid, uploaded asset.
-- **Throttle:** `image_upload`/`video_upload` are writes on the ad account; a rapid burst can hit
-  `subcode 2859015` (temporary block). Back off, retry later.
+## Format support (live-tested)
+| Type | Result |
+|---|---|
+| JPG, PNG | ✅ upload |
+| GIF | ✅ accepted at upload (behaves as static at ad level) |
+| **WebP** | ❌ `subcode 1487411 "FileTypeNotSupported"` — convert to JPG/PNG first |
+| Video MP4, MOV | ✅ upload (video processed **async** → `video_status` goes to `ready`) |
+| Any aspect ratio (1:1, 9:16, 4:5, 1.91:1, 16:9) | ✅ upload — ratio is validated at the AD/placement step, not here |
+| Tiny (100×100) | ✅ upload — Meta does not enforce a minimum here (it does at ad level) |
 
-## Not needed here
-- `storage.share_file` / `upload_file` / `copy_file` / `delete_file` — not part of the ingest path.
-- `query_data` / `list_fields` — reporting, unrelated.
+## Size — the `max_size_bytes` (2 MB) is MISLEADING (validated, feedback gap 40)
+`prepare_upload` returns `max_size_bytes: 2097152` (2 MB) but it is **NOT enforced**: a **6 MB image**
+and a **3.35 MB video** uploaded fine via the JSON POST. The real ceiling is **Meta's** — a 29 MB image
+failed with `subcode 1885355 "Resized Image Too Large"`. Guidance: for very large files prefer the
+**`url`** transport (no base64 inflation); base64-via-presigned is fine well past 2 MB but not for
+tens of MB.
+
+## Cross-account reuse (validated)
+To republish a creative from another account you have access to: read its creative's media URL
+(`ad_list` → `object_read` on the ad → `creative`), then `image_upload(url=…)` into the target account.
+- ✅ Works — but pass the source URL **verbatim** (editing a signed CDN URL → 403).
+- ⚠️ **SHARE-type creatives** (built from a page post via `object_story_id`) only expose a **64×64
+  `thumbnail_url`**, not full-res media. For full quality read the underlying post's `full_picture` /
+  attachments (deeper), or the ad account's `adimages` full URL.
+
+## Single-use token gotcha
+The presigned token is **single-use and burns on ANY POST, even a failed one (400)**. On a failure,
+request a fresh `prepare_upload` — don't reuse the URL.
+
+## Chain to discover a Drive file (when the source is Google Drive)
+`storage.list_files`/`get_file` (validate mime/size; native Google files rejected) →
+`storage.download_file(file_id)` gives base64 → but **don't pass that base64 through the model**;
+write it to a file in code and use transport **B** (or, if you can get a public URL, transport A).

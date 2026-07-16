@@ -19,14 +19,17 @@ ready for `meta-ads-ad-setup`.
   an ad, or in bulk when preparing a set of creatives.
 - **Decision it drives:** which concrete asset id(s) the ad will use.
 - **The differentiator:** it validates the file (real image type, not a native Google file, within the
-  size cap) BEFORE uploading, and picks the reliable transport (base64), so the ad step never fails on
-  a bad asset.
+  size limits) BEFORE uploading, and picks the reliable transport — a public **URL**, or **`prepare_upload`
+  + a JSON POST** for local/Drive bytes (NOT base64 streamed through the model, which truncates) — so the
+  ad step never fails on a bad asset.
 
 ## Scope
 - ✅ **Locate + validate** a Drive file (`storage.list_files` / `get_file`).
-- ✅ **Download** its bytes (`storage.download_file` → base64) and **upload** to Meta
-  (`facebook_ads.image_upload` / `video_upload`) → return `image_hash` / `video_id`.
-- ✅ Also accept a **public URL** source (pass straight to Meta's `url` param).
+- ✅ **Upload** the bytes to Meta → return `image_hash` / `video_id`, via `prepare_upload` + a JSON POST
+  (local/Drive bytes) or `image_upload`/`video_upload` with a public `url`. (For Drive, fetch bytes with
+  `storage.download_file`, but POST them from code — never as a model argument.)
+- ✅ Source can be a **local file on disk**, a **Drive file**, or a **public URL** — not only Drive.
+  Local/Drive bytes go via `prepare_upload` + JSON POST; a public URL goes straight to Meta's `url` param.
 - ❌ **Ad assembly** (copy, headline, CTA, link, placements, per-placement formats, carousel/DCA
   structure) → `meta-ads-ad-setup`.
 - ❌ Image editing / resizing / format conversion.
@@ -47,22 +50,32 @@ image URL.
    `mimeType` + `size`.
 2. **Validate** (see [`references/framework.md`](references/framework.md)): supported image type
    (`image/jpeg`, `image/png`) or a video within limits; NOT a native Google type; size ≤ 30 MiB.
-3. **Transport:**
-   - Drive file → `storage.download_file(file_id)` → base64 → `facebook_ads.image_upload(image_base64,
-     filename, mime)`.
-   - Public URL → `facebook_ads.image_upload(url=…)` directly (skip Drive).
-   - Video → `facebook_ads.video_upload` (base64 or url); remember video is processed **async**.
+3. **Transport** — the exact recipe is in [`references/tools.md`](references/tools.md) §"two transports":
+   - **Public URL** → `facebook_ads.image_upload(url=…)` via `execute_action` (Meta fetches it).
+   - **Local file / Drive bytes** → `prepare_upload` (SIGNED account ref) → then, in CODE, base64-encode
+     and POST a **JSON body** (`account_id` = the **native `act_…`**, `image_base64`, `filename`, `mime`)
+     to the returned `upload_url`. **Never** pass a large base64 as an `execute_action` argument — it truncates.
+   - **Video** → same, via `facebook_ads.video_upload` / `video_base64`; video is processed **async**.
 4. **Return** the `image_hash` / `video_id` for `meta-ads-ad-setup`.
 
 **Emit** the payload in [`references/output.md`](references/output.md).
 
 ## Safety / limits
-- **Account-agnostic:** the Meta `account_id` is the SIGNED blob from `list_accounts`, never `act_…`.
-- **30 MiB cap** on `storage.download_file` — images fine; large videos are NOT downloadable this way
-  (Drive gives no clean direct-download URL either → flag as a limitation, don't silently truncate).
-- **Native Google files rejected** by `download_file` — validate mime first.
-- **Meta write throttle** (`subcode 2859015`): if `image_upload` returns a temporary block, back off
-  and retry later — never retry-storm.
+- **`account_id` — the two-place rule (the #1 failure point):** in `prepare_upload` / `execute_action`
+  it's the **SIGNED blob** from `list_accounts` (never bare `act_…`); but inside the **JSON body POSTed
+  to the presigned URL** it's the **native `act_…`** id. See [`references/tools.md`](references/tools.md).
+- **Execution model:** the assistant runs the base64-encode + `curl` POST — a non-technical user only
+  supplies the file and names the account. The presigned token is **single-use and ~600 s-lived**, so
+  call `prepare_upload` immediately before the POST.
+- **Size:** don't trust `prepare_upload`'s `max_size_bytes` (2 MB, not enforced); the real cap is Meta's
+  (~29 MB image = "too large"). Very large files → `url` transport. (The 30 MiB cap is only on
+  `storage.download_file` for Drive, not the Meta upload.)
+- **Formats:** **WebP rejected** by Meta (`FileTypeNotSupported`); native Google files rejected by
+  `download_file` — validate mime first.
+- **Account disambiguation:** `list_accounts` can return the **same `native_account_id` more than once**
+  (different `company_id` under the same `source_user_id`). Disambiguate by `source_user_id` **and**
+  `company_id`, and prefer the `status:"connected"` row.
+- **Meta write throttle** (`subcode 2859015`): back off and retry later — never retry-storm.
 
 ## Example (illustrative — NOT rules)
 > "Sube `business-restaurantes.jpg` de mi Drive a la cuenta Acme POS." → `list_files` (find id) →
