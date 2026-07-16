@@ -15,6 +15,7 @@ con `list_accounts`) y crea todo en **PAUSED**.
 
 | Skill | Nivel | Qué hace | Estado |
 |-------|-------|----------|--------|
+| [`onboarding/`](onboarding/) | 🧠 **Wizard** | **Empieza aquí.** Entrevista al usuario, valida, explica opciones/trampas, arma la ficha, pide OK y crea todo en PAUSED (despacha los ejecutores). | ✅ |
 | [`campaign-setup/`](campaign-setup/) | Campaña | Objetivo, CBO, presupuesto, puja, categoría especial. | ✅ validado |
 | [`adset-setup/`](adset-setup/) | Ad set | Optimización, targeting, placements, promoted object, schedule. | ✅ validado |
 | [`asset-upload/`](asset-upload/) | Asset | Imagen/video desde Drive/URL → `image_hash`/`video_id`. | ✅ (url o `prepare_upload`+JSON POST) |
@@ -34,10 +35,13 @@ con `list_accounts`) y crea todo en **PAUSED**.
 
 Toda la cadena **campaña → ad set → anuncio** + audiencias + lead form + borrado está **validada en vivo** (2026-07-16, cuenta Porter, PAUSED). Ver [checklist maestro](../MASTER-CHECKLIST.md).
 
+> 🧠 Para el usuario no-técnico, el punto de entrada es **`onboarding/`** — hace toda la entrevista y
+> luego llama a los ejecutores de arriba. Los ejecutores también sirven sueltos si ya sabes qué quieres.
+
 ## Pendientes (roadmap)
 
-- [ ] `onboarding` — wizard/checklist que valida todo antes de escribir (el "cerebro").
 - [ ] `clone-winner` — defaults empíricos clonando la mejor campaña existente.
+- [ ] skill de reporting/insights (jalar rendimiento + breakdowns).
 
 ## Convenciones (compartidas por todos los skills)
 
