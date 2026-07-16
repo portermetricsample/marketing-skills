@@ -1,6 +1,10 @@
 # Framework — Meta Ads Onboarding (validación, defaults, naming, despacho)
 
-## Convención de nombres (default Porter — el usuario puede sobreescribir)
+## Convención de nombres → usa el skill `naming-conventions`
+La fuente canónica de nomenclatura + UTMs es el skill [`meta-ads/naming-conventions`](../../../naming-conventions/SKILL.md).
+Refiérelo desde aquí; el default de abajo es solo el fallback si ese skill no está.
+
+### Default Porter (fallback — el usuario puede sobreescribir)
 - **Campaña:** `[Marca] · [Objetivo] · [Audiencia/Geo] · [MesAño]` → `Porter · Leads · CO · Jul2026`.
 - **Ad set:** `[Geo] · [Edad] · [Audiencia]` → `CO · 25-55 · Broad`.
 - **Anuncio:** `[Formato] · [Gancho]` → `1x1 · Pregúntale a tus datos`.

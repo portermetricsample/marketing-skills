@@ -22,7 +22,10 @@ respuesta rompe una regla — explícalo y ofrece alternativa.
 ⚠️ Dile: **el objetivo NO se puede cambiar después** — si dudas, elige por "cómo se ve un resultado".
 
 ## 2. Nombre (naming) — propón, no preguntes en frío
-- Propón el nombre con la convención por defecto (ver `framework.md`): `[Marca] · Objetivo · Audiencia/Geo · MesAño`.
+- **Usa el skill [`meta-ads/naming-conventions`](../../../naming-conventions/SKILL.md)** como fuente de la
+  convención (nomenclatura de campaña/ad set/anuncio + plantilla de UTMs). Si no está disponible, usa el
+  default de `framework.md`.
+- Propón el nombre con esa convención: `[Marca] · Objetivo · Audiencia/Geo · MesAño`.
   Ej.: **`Porter · Leads · CO · Jul2026`**.
 - "Le puse este nombre para que sea fácil de encontrar y ordenar: `…`. ¿Lo dejamos o lo ajustas?"
 - Deriva también el nombre del ad set (`Geo · Edad · Audiencia`) y del anuncio (`Formato · Gancho`).

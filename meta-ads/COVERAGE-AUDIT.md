@@ -25,7 +25,7 @@ cubren. Objetivo: mapear los faltantes de **skills** y los **gaps de capacidad**
 | Subir creativo (imagen/video, url/presigned) | `campaigns/asset-upload` | ✅ (endurecido por eval) |
 | Presupuesto por moneda | `campaigns/_budget` | ✅ |
 | Lead forms + bajar leads | `campaigns/leadform` | ✅ |
-| Mapa de parámetros | `campaigns/PARAMETERS-REFERENCE.md` | ✅ |
+| Mapa de parámetros | `PARAMETERS-REFERENCE.md` | ✅ |
 | Análisis de creativos | `meta-ads/creative_performance` | ✅ |
 | Research de competidores | `meta-ads/meta-ads-research` | ✅ |
 | Dashboard/reporte | `meta-ads/porter-meta-ads-dashboard` | ✅ |

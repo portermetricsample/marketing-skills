@@ -4,7 +4,11 @@
 > cada uno en lenguaje de negocio. Sacado de los esquemas reales del conector `facebook-ads` (2026-07-16).
 > Úsalo para la clase, para declararlo en los skills y para crear contenido.
 
-**Dueño de cada bloque (qué skill lo implementa):** §1 Campaña → `campaign-setup` ✅ · §2 Ad set → `adset-setup` ✅ · §3 Anuncio + §7 UTMs → `ad-setup` (pendiente) · §8 Creativos → `asset-upload` ✅ · §4 Audiencias → `audiences` (pendiente) · §5 Lead form → `leadform` (pendiente) · §6 Insights → reporting (pendiente). Los bloques "pendientes" están mapeados aquí y se meterán en su skill cuando lo construyamos.
+**Dueño de cada bloque (qué skill lo implementa):** §1 Campaña → `campaign-setup` ✅ · §2 Ad set → `adset-setup` ✅ · §3 Anuncio + §7 UTMs → `ad-setup` ✅ · §8 Creativos → `asset-upload` ✅ · §4 Audiencias → `audiences` ✅ · §5 Lead form → `leadform` ✅ · §6 Insights → reporting (pendiente). Nomenclatura + UTMs → skill `naming-conventions`.
+
+> **Regla transversal de `account_id`:** en `prepare_upload` / `execute_action` = el **blob FIRMADO** de
+> `list_accounts` (nunca `act_…` pelado). SOLO dentro del **cuerpo JSON POSTeado al presigned** = el
+> **`act_…` nativo**. Confundirlos es el error #1 (`missing account_id` / `invalid_account`).
 
 ---
 
@@ -175,6 +179,9 @@ Referencia de Meta (verificar en la clase; Meta ajusta specs con el tiempo).
 - **Multi-formato en un solo anuncio:** subir una versión por relación (1:1, 4:5, 9:16, 16:9) y mapearlas a placements con `dca_images`/`dca_videos` + `asset_customization_rules` (ver §3).
 
 ---
+
+## Gotchas validados (por subcode de Meta)
+`1772103` cuádrupla (objetivo·optimization·billing·destination) inválida · `1815857` bid amount requerido (campaña con `*_CAP`) · `1885737` bid_strategy en campaña sin presupuesto de campaña (CBO) · `2859015` cuenta restringida/throttle (backoff; suele ser falta de método de pago) · `1870227` falta `advantage_audience` · `1870189` Advantage+ con `age_max` < 65 · `1885998` ad DCA en ad set no-DCA · `1885553` ad set DCA admite 1 solo ad · `1487411` WebP no soportado · `1885355` imagen muy grande · `2446496` base64 truncado / formato inválido · `1885923`/`1487664`/`1885373`/`2446485` cadena de requisitos del multi-formato por placement.
 
 ## Notas de cobertura
 - ✅ **Subir creativo: RESUELTO** — `image_upload(url=…)` público, o `prepare_upload` (`purpose=action`) + POST **cuerpo JSON** (`{account_id, image_base64, filename, mime}`) desde **código** (nunca base64 por el modelo, se trunca).
