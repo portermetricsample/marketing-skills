@@ -28,7 +28,7 @@ Refiérelo desde aquí; el default de abajo es solo el fallback si ese skill no 
 2. **Cuádrupla válida** (objetivo · optimization_goal · destination_type · promoted_object):
    | Objetivo | optimization_goal | destination_type | promoted_object |
    |---|---|---|---|
-   | LEADS | `LEAD_GENERATION` | `ON_AD` | página + lead form |
+   | LEADS | `LEAD_GENERATION` | `ON_AD` | **solo Página** en el ad set (el lead form va en el ANUNCIO vía `ad_create.lead_gen_form_id`, NO en el ad set — Meta lo rechaza ahí) |
    | SALES | `OFFSITE_CONVERSIONS` | `WEBSITE` | píxel + evento |
    | TRAFFIC | `LINK_CLICKS` / `LANDING_PAGE_VIEWS` | `WEBSITE` | — (link en el anuncio) |
    | AWARENESS | `REACH` / `IMPRESSIONS` | — | página |
@@ -53,6 +53,12 @@ Crea en PAUSED, en orden, pasando la ficha:
 5. `meta-ads-ad-setup` → anuncio (creativo + copy + CTA + link + UTMs / lead form).
 6. Verifica con `object_read` y entrega el link de Ads Manager:
    `https://adsmanager.facebook.com/adsmanager/manage/campaigns?act=<digits>&selected_campaign_ids=<id>`.
+
+## Timeout en los creates (validado 2026-07-16)
+Un `*_create` puede dar **timeout del lado del cliente pero completarse en el servidor** (pasó con
+`leadform_create` y `adset_create`). **Ante un timeout, NO reintentes a ciegas** — verifica con el `_list`
+correspondiente (`leadform_list`, `adset_list`, `campaign_list`, `ad_list`) si el objeto ya existe, y sigue
+desde ahí. Reintentar sin verificar crea duplicados.
 
 ## Regla de comunicación
 No ejecutes en silencio. En cada paso dile al usuario **qué está eligiendo y por qué**, y avísale de cada
