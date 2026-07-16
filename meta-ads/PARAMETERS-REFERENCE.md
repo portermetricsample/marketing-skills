@@ -4,6 +4,8 @@
 > cada uno en lenguaje de negocio. Sacado de los esquemas reales del conector `facebook-ads` (2026-07-16).
 > Úsalo para la clase, para declararlo en los skills y para crear contenido.
 
+**Dueño de cada bloque (qué skill lo implementa):** §1 Campaña → `campaign-setup` ✅ · §2 Ad set → `adset-setup` ✅ · §3 Anuncio + §7 UTMs → `ad-setup` (pendiente) · §8 Creativos → `asset-upload` ✅ · §4 Audiencias → `audiences` (pendiente) · §5 Lead form → `leadform` (pendiente) · §6 Insights → reporting (pendiente). Los bloques "pendientes" están mapeados aquí y se meterán en su skill cuando lo construyamos.
+
 ---
 
 ## 1. Campaña (`campaign_create`)

@@ -6,6 +6,10 @@ con `list_accounts`) y crea todo en **PAUSED**.
 
 > 📋 **Empieza por el [checklist maestro](../MASTER-CHECKLIST.md)** — el flujo en orden, el estado
 > validado de las 30 acciones del MCP, las trampas y qué está bloqueado.
+>
+> 📖 **[Referencia exhaustiva de parámetros](../PARAMETERS-REFERENCE.md)** — TODAS las variables y opciones
+> (objetivos, pujas, optimización, placements, CTA, UTMs, audiencias, insights, specs de creativos). Cada
+> skill enlaza a su bloque; los bloques sin skill aún (ad-setup, audiences, leadform, reporting) ya están mapeados ahí.
 
 ## Skills en este folder
 

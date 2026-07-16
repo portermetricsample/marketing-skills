@@ -32,6 +32,7 @@ so an ad can attach and the set can deliver once turned on.
 - ❌ **Ad / creative** (image, video, carousel, copy, CTA) → `meta-ads-ad-setup`.
 
 ## Components (read these references as needed)
+- **📖 Mapa exhaustivo de TODOS los parámetros y opciones (todos los niveles):** [`../../PARAMETERS-REFERENCE.md`](../../PARAMETERS-REFERENCE.md) — objetivos, pujas, optimización, placements, CTA, UTMs, audiencias, insights. Esta skill es dueña del bloque **§2 Ad set** (targeting, placements, promoted object).
 - **Tools / action plan:** [`references/tools.md`](references/tools.md) — exact calls, the full param
   map, the validated gotchas.
 - **Framework / rubric:** [`references/framework.md`](references/framework.md) — how to match

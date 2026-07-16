@@ -32,6 +32,7 @@ ready for `meta-ads-ad-setup`.
 - ❌ Image editing / resizing / format conversion.
 
 ## Components (read as needed)
+- **📖 Mapa exhaustivo de TODOS los parámetros y opciones (todos los niveles):** [`../../PARAMETERS-REFERENCE.md`](../../PARAMETERS-REFERENCE.md) — incluye **§8 Especificaciones de creativos por formato** (relaciones, píxeles, límites de peso/texto), que es lo que esta skill produce/sube.
 - **Tools / chain:** [`references/tools.md`](references/tools.md) — the exact 3-step call chain + limits.
 - **Framework / validation:** [`references/framework.md`](references/framework.md) — what to accept,
   reject, and which transport to use.

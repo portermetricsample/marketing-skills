@@ -40,6 +40,7 @@ chosen deliberately, not by accident.
 - ❌ **Performance optimization** (pause by CPA, shift budget to winners) → a future rules skill.
 
 ## Components (read these references as needed)
+- **📖 Mapa exhaustivo de TODOS los parámetros y opciones (todos los niveles):** [`../../PARAMETERS-REFERENCE.md`](../../PARAMETERS-REFERENCE.md) — objetivos, estrategias de puja, optimización, placements, CTA, UTMs, audiencias, insights. Esta skill es dueña del bloque **§1 Campaña**.
 - **Tools / action plan:** [`references/tools.md`](references/tools.md) — the exact MCP calls,
   action ids, and how to resolve the account.
 - **Framework / decision rubric:** [`references/framework.md`](references/framework.md) — how to
