@@ -8,7 +8,7 @@ Read the campaign first (`object_read` → `objective`). Then:
 
 | Campaign objective | optimization_goal | destination_type | promoted object REQUIRED |
 |---|---|---|---|
-| OUTCOME_LEADS | `LEAD_GENERATION` | `ON_AD` | `promoted_object_page_id` (+ `lead_gen_form_id`) |
+| OUTCOME_LEADS | `LEAD_GENERATION` | `ON_AD` | `promoted_object_page_id` **only** (the lead form is NOT here — it attaches on the ad via `ad_create.lead_gen_form_id`; Meta rejects it in the ad set's promoted_object) |
 | OUTCOME_SALES | `OFFSITE_CONVERSIONS` | `WEBSITE` | `promoted_object_pixel_id` + `custom_event_type` (e.g. PURCHASE) |
 | OUTCOME_TRAFFIC | `LINK_CLICKS` or `LANDING_PAGE_VIEWS` | `WEBSITE` | — (link lives on the ad) |
 | OUTCOME_AWARENESS | `REACH` or `IMPRESSIONS` | omit | `promoted_object_page_id` |

@@ -31,10 +31,15 @@ to TRAFFIC because it's easy. The wrong objective wastes the whole campaign and 
 `LOWEST_COST_WITHOUT_CAP` (a.k.a. Highest Volume) is what you want by default: Meta spends the
 budget for max results, no bid value needed.
 
-**Validated gotcha (2026-07-15):** creating a campaign WITHOUT passing `bid_strategy` came back as
-`LOWEST_COST_WITH_BID_CAP` — a strategy that **requires a bid cap** the campaign didn't have, so it
-could not launch. The safe default is NOT applied for you. **Always pass `bid_strategy` explicitly**
-(`LOWEST_COST_WITHOUT_CAP` unless the user asked for a cap).
+**⚠️ bid_strategy lives WHERE the budget lives (validated 2026-07-16):**
+- **CBO campaign** (budget on the campaign): pass `bid_strategy` **on the campaign**. Do it explicitly —
+  omitting it can default to `LOWEST_COST_WITH_BID_CAP`, which needs a bid cap and can't launch.
+- **Non-CBO campaign** (budget on the ad set): do **NOT** pass `bid_strategy` on the campaign. Meta
+  rejects it with `subcode 1885737 "This campaign doesn't have a budget. Add a budget to edit the bid
+  strategy."` The bid strategy goes on the **ad set** instead (see adset-setup).
+
+So: only set `bid_strategy` at this (campaign) level when this campaign is CBO. Default is
+`LOWEST_COST_WITHOUT_CAP` unless the user asked for a cap.
 - `COST_CAP` — target an average cost per result (set the cap on the ad set).
 - `LOWEST_COST_WITH_BID_CAP` — hard ceiling per auction bid (advanced; needs a bid value on the ad
   set — do NOT use without one).

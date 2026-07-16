@@ -36,7 +36,7 @@ Related actions this skill also uses:
 | `daily_budget_amount` | — | Set here only for CBO (campaign-level budget). Otherwise the budget lives on the ad set. |
 | `lifetime_budget_amount` | — | Campaign-level lifetime budget (needs a schedule on the ad set). Mutually exclusive with daily. |
 | `is_campaign_budget_optimization` | — | `true` = CBO (Meta splits one campaign budget across ad sets). `false`/omit = each ad set carries its own budget. |
-| `bid_strategy` | — | e.g. `LOWEST_COST_WITHOUT_CAP` (default), `LOWEST_COST_WITH_BID_CAP`, `COST_CAP`. Bid caps require a value on the ad set. |
+| `bid_strategy` | — | e.g. `LOWEST_COST_WITHOUT_CAP` (default), `LOWEST_COST_WITH_BID_CAP`, `COST_CAP`. Bid caps require a value on the ad set. ⚠️ **Only pass this on a CBO campaign** (budget on the campaign). On a **non-CBO** campaign it errors `1885737 "No Budget for Campaign"` — the bid strategy then lives on the ad set. |
 | `buying_type` | — | `AUCTION` (default) or `RESERVED`. **Frozen after create.** |
 | `confirm_large_budget` | — | `true` to acknowledge a large budget — pass only after the human confirms. |
 

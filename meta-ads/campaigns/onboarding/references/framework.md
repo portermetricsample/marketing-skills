@@ -39,7 +39,7 @@ Refiérelo desde aquí; el default de abajo es solo el fallback si ese skill no 
    - **Campaña (CBO):** `campaign_create.daily_budget_amount` va en **unidades MÍNIMAS** (centavos: 5000 = 50.00). Convierte `monto × offset`.
    - **Ad set (no CBO):** `adset_create.daily_budget_amount` va en **unidades MÍNIMAS** también (×offset; el connector NO convierte — verificado 2026-07-16 por read-back; el schema del ad set MIENTE al decir "unidad mayor").
    - Valida ≥ mínimo de la cuenta (Meta lo reporta en el error). Haz **read-back** para confirmar (gap 33/35).
-5. **bid_strategy** siempre explícita (si no, queda `WITH_BID_CAP` inentregable — gap 32).
+5. **bid_strategy** va DONDE está el presupuesto: en la **campaña solo si es CBO** (explícita, o queda `WITH_BID_CAP` inentregable — gap 32); en **no-CBO NO se pone en la campaña** (falla subcode 1885737 "No Budget for Campaign") → va en el **ad set**.
 6. **special_ad_categories** siempre presente (`[]` o la categoría).
 7. **is_dynamic_creative** se fija al crear el ad set según el creativo (multi-formato/DCA → `true`).
 8. **LEADS** requiere lead form; **SALES** requiere píxel + evento — si no existen, **es un bloqueo que se explica**, no se adivina.

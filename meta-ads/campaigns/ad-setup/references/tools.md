@@ -15,8 +15,8 @@ Read the ad set, then one `execute_action facebook_ads.ad_create`. Validated 202
 ## `ad_create` — the param map (required: name, adset_id, page_id)
 
 ### Copy + destino (todos los tipos)
-- `message` — texto principal (~125). `headline` — título (~40). `description` — (~30).
-- `link` — URL destino (TRAFFIC/SALES). `cta_type` — botón (enum, ver §3 de la referencia). `cta_link` — URL del botón.
+- `message` — texto principal (~125). `headline` — título (~40). `description` — (~30). ⚠️ `description` **NO** se soporta en anuncios de **video** (subcode 1443050 "description not supported in video_data"); úsalo solo en imagen/link/carrusel.
+- `link` — URL destino. ⚠️ **Obligatorio para TODOS los anuncios con imagen/link, incluido LEADS** — omitirlo en un lead ad con imagen falla `subcode 2061015 "The link field is required"` (validado 2026-07-16). `cta_type` — botón (enum, ver §3 de la referencia). `cta_link` — URL del botón.
 - **`url_tags` — UTMs** como query string SIN `?`: `utm_source=facebook&utm_medium=paid_social&utm_campaign=…&utm_content=…`. Meta lo añade al clic; **NO lo metas dentro de `link`**.
 - `lead_gen_form_id` — OBLIGATORIO para OUTCOME_LEADS.
 
@@ -24,7 +24,7 @@ Read the ad set, then one `execute_action facebook_ads.ad_create`. Validated 202
 | Tipo | Params | Nota |
 |------|--------|------|
 | Imagen simple | `image_hash` (o `picture` = URL) | Mutuamente excluyente con video. |
-| Video simple | `video_id` | Debe estar `ready` (async). |
+| Video simple | `video_id` (+ `image_hash` opcional = thumbnail) | Debe estar `ready` (async). ⚠️ **Sin `description`** (subcode 1443050). Igual necesita `link`. |
 | Carrusel | `child_attachments` (2–10: `{link,name,description,image_hash,call_to_action}`) + `multi_share_optimized`/`multi_share_end_card` | Subir cada imagen antes. |
 | Dynamic Creative (DCA) | `image_hashes[]` + `dca_bodies[]`/`dca_titles[]`/`dca_descriptions[]`/`dca_call_to_action_types[]`/`dca_link_urls[]`/`dca_ad_formats[]` (exactamente 1 formato) | ⚠️ el ad set debe tener `is_dynamic_creative:true`. |
 | Multi-formato por placement | `dca_images`/`dca_videos` (etiquetados) + `asset_customization_rules` (mapea 1:1/9:16/4:5/16:9 a placements; una regla catch-all) | ⚠️ requiere `is_dynamic_creative:true`; Meta valida cobertura estricta. |
@@ -33,7 +33,8 @@ Read the ad set, then one `execute_action facebook_ads.ad_create`. Validated 202
 ## Gotchas (validados)
 - **DCA/multi-formato sin `is_dynamic_creative` en el ad set** → subcode 1885998. Coordinar con `adset-setup`.
 - **Video async:** crear el anuncio antes de que el `video_id` esté `ready` falla. Poll `object_read(video_id, fields="status")`.
-- **LEADS sin `lead_gen_form_id`** → Meta rechaza.
+- **LEADS sin `lead_gen_form_id`** → Meta rechaza. Y el lead ad con imagen **también exige `link`** (subcode 2061015) — pásalo aunque el destino sea el form nativo.
+- **`description` en video** → subcode 1443050. Quítalo para creativos de video.
 - `image_hash` / `picture` / `video_id` son mutuamente excluyentes.
 - Todo PAUSED; activar es humano.
 

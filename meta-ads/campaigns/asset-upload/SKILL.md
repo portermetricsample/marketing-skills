@@ -67,9 +67,14 @@ image URL.
 - **Execution model:** the assistant runs the base64-encode + `curl` POST — a non-technical user only
   supplies the file and names the account. The presigned token is **single-use and ~600 s-lived**, so
   call `prepare_upload` immediately before the POST.
-- **Size:** don't trust `prepare_upload`'s `max_size_bytes` (2 MB, not enforced); the real cap is Meta's
-  (~29 MB image = "too large"). Very large files → `url` transport. (The 30 MiB cap is only on
-  `storage.download_file` for Drive, not the Meta upload.)
+- **Size:** don't trust `prepare_upload`'s `max_size_bytes` (2 MB, not enforced — a 2.46 MB video and a
+  6 MB image POSTed fine); the real upload cap is Meta's (~29 MB image = "too large"). The binding limit
+  is UPSTREAM, on the Drive **download**: the standalone Google-Drive MCP `download_file_content`
+  **hard-caps at 10 MB** (validated 2026-07-16; a 49 MB file errors *"over limit of 10 MB"*). Porter's
+  `storage.download_file` connector caps higher (~30 MiB). **Either way, any Drive file too big to
+  download must reach Meta by the `url` transport** — see the end-to-end recipe (share "Anyone with the
+  link" + `drive.usercontent.google.com/download?id=…&export=download&confirm=t`) in
+  [`../drive-to-meta/references/pipeline.md`](../drive-to-meta/references/pipeline.md).
 - **Formats:** **WebP rejected** by Meta (`FileTypeNotSupported`); native Google files rejected by
   `download_file` — validate mime first.
 - **Account disambiguation:** `list_accounts` can return the **same `native_account_id` more than once**

@@ -71,6 +71,6 @@ non-technical owner.
 
 ## Example (illustrative — NOT rules)
 > Campaign is OUTCOME_LEADS + CBO. Ad set: `optimization_goal: LEAD_GENERATION`, `destination_type:
-> ON_AD`, `promoted_object_page_id: <page>`, `promoted_object_lead_gen_form_id: <form>`, geo
-> `["CO"]`, age 25–55, placements feed + stories, NO budget (CBO), PAUSED. Report id + "next: attach
+> ON_AD`, `promoted_object_page_id: <page>` (Page only — the lead form is attached on the AD, not
+> here), `targeting_advantage_audience: 0`, geo `["CO"]`, age 25–55, NO budget (CBO), PAUSED. Report id + "next: attach
 > an ad with the lead form."

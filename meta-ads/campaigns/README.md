@@ -16,6 +16,7 @@ con `list_accounts`) y crea todo en **PAUSED**.
 | Skill | Nivel | Qué hace | Estado |
 |-------|-------|----------|--------|
 | [`onboarding/`](onboarding/) | 🧠 **Wizard** | **Empieza aquí.** Entrevista al usuario, valida, explica opciones/trampas, arma la ficha, pide OK y crea todo en PAUSED (despacha los ejecutores). | ✅ |
+| [`drive-to-meta/`](drive-to-meta/) | 🔗 **Orquestador** | **Google Drive → anuncio en PAUSA**, de punta a punta (asset→campaña→adset→ad). Decide el transporte por tamaño (bytes ≤10 MB vs `url`) y cablea los ids. | ✅ validado 2026-07-16 (create→verify→delete) |
 | [`campaign-setup/`](campaign-setup/) | Campaña | Objetivo, CBO, presupuesto, puja, categoría especial. | ✅ validado |
 | [`adset-setup/`](adset-setup/) | Ad set | Optimización, targeting, placements, promoted object, schedule. | ✅ validado |
 | [`asset-upload/`](asset-upload/) | Asset | Imagen/video desde Drive/URL → `image_hash`/`video_id`. | ✅ (url o `prepare_upload`+JSON POST) |

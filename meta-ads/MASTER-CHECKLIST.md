@@ -79,7 +79,8 @@
 - [ ] **Muéstrale al usuario cada decisión y trampa** en lenguaje claro antes de crear (no ejecutar en silencio).
 - [ ] **CBO on → presupuesto en la campaña, NO en el ad set.**
 - [ ] **Objetivo y buying_type son irreversibles** (se fijan al crear).
-- [ ] **promoted_object por objetivo:** LEADS→page+lead_form · SALES→pixel+evento · TRAFFIC→link en el anuncio.
+- [ ] **promoted_object por objetivo:** LEADS→**page** (el lead form NO va en el promoted_object del ad set — Meta lo rechaza; va en el **anuncio** vía `ad_create.lead_gen_form_id`) · SALES→pixel+evento · TRAFFIC→sin promoted_object (el `link` va en el anuncio).
+- [ ] **`link` obligatorio en TODO anuncio con imagen, incluido LEADS** (subcode 2061015). **`description` NO va en anuncios de video** (subcode 1443050).
 - [ ] **Todo se crea PAUSED.** Activar es decisión humana.
 - [ ] **Video: procesamiento asíncrono** (el `video_id` no sirve hasta que Meta termine).
 - [ ] **Throttle de Meta (`2859015`): backoff, nunca reintentar en ráfaga.**

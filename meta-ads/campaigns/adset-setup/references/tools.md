@@ -32,11 +32,11 @@ injected from the signed blob).
 | `targeting_countries` / `_cities` / `_regions` / `_zips` | At least ONE geo type required. Cities/regions need keys from `geolocation_search`. |
 | `targeting_age_min` / `_age_max` / `_genders` | 18–65; genders `[0]` all / `[1]` male / `[2]` female. |
 | `targeting_interests` / `_custom_audiences` / `_excluded_custom_audiences` | Objects with ids from `interest_search` / `customaudience_list`. |
-| `targeting_advantage_audience` | `1` = Advantage+ audience, `0` = manual; omit for Meta default. |
+| `targeting_advantage_audience` | `1` = Advantage+ audience, `0` = manual. ⚠️ **REQUIRED explicitly** — omitting it errors `subcode 1870227 "Advantage Audience Flag Required"`. Note: `1` disallows `age_max < 65` (subcode 1870189); for a real age cap use `0`. |
 | `targeting_publisher_platforms` + `_facebook_positions` / `_instagram_positions` / … | Placements. Omit for automatic (Advantage+) placements. A position array requires its platform in `publisher_platforms`. |
 | `promoted_object_page_id` | Required for LEADS, AWARENESS, ENGAGEMENT. |
 | `promoted_object_pixel_id` + `_custom_event_type` (e.g. `PURCHASE`) | Required for SALES. Or `promoted_object_custom_conversion_id` for a specific custom conversion. |
-| `promoted_object_lead_gen_form_id` | LEADS — the lead form, at ad-set level (alt to the creative). |
+| ~~`promoted_object_lead_gen_form_id`~~ | ❌ **NOT here.** Meta rejects a lead form in the ad set's `promoted_object` (`Invalid keys "lead_gen_form_id" were found in param "promoted_object"`, validated 2026-07-16). For LEADS the ad set's promoted object is the **Page only** (`promoted_object_page_id`); the lead form is attached on the **ad** via `ad_create.lead_gen_form_id` (see ad-setup). |
 | `is_dynamic_creative` | `true` = DCA/Advantage+ creative ad set. **Fixed at create.** REQUIRED before a DCA / multi-format ad (`image_hashes`/`asset_feed_spec`) can attach — else Meta rejects the ad with subcode 1885998. |
 | `start_time` / `end_time` | ISO 8601. Lifetime budget needs a schedule. |
 | `frequency_cap_max` / `_interval_days` | e.g. 2 per 7 days. |

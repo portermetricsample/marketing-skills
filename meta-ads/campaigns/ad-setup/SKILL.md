@@ -46,7 +46,7 @@ structured, PAUSED ad ready for a human to turn on.
 2. **Route by creative type** (see [`references/framework.md`](references/framework.md)): one `image_hash` /
    one `video_id` / `child_attachments` (carousel) / `image_hashes`+`dca_*` (DCA) / `dca_images`+`asset_customization_rules` (multi-format).
    ⚠️ DCA/multi-format REQUIRE `is_dynamic_creative:true` on the ad set (else Meta rejects, subcode 1885998).
-3. **Wire copy + destination:** `message`/`headline`/`description`; `link` (TRAFFIC/SALES) or `lead_gen_form_id` (LEADS);
+3. **Wire copy + destination:** `message`/`headline`/`description` (⚠️ no `description` on video ads — subcode 1443050); `link` is required for **all image/link ads including LEADS** (subcode 2061015 if missing), plus `lead_gen_form_id` for LEADS;
    `cta_type`; and **`url_tags` for UTMs — never baked into `link`**.
 4. **Create** `facebook_ads.ad_create` with `status:"PAUSED"`. Verify with `object_read`.
 
