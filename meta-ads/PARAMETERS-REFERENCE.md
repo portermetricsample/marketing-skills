@@ -148,6 +148,8 @@ Con esto extraes rendimiento por **demografía, plataforma, posición, dispositi
 
 ## 7. UTMs y URLs (para trackear conversiones)
 
+> **Convención completa de nombres + UTMs:** ver el skill [`naming-conventions/`](naming-conventions/SKILL.md). Ahí está la plantilla `url_tags` recomendada (con params dinámicos `{{campaign.name}}`, etc.), la regla de minúsculas + delimitadores (`_` entre campos, `-` dentro de un campo) y por qué `paid-social` (no `paid_social`).
+
 - El destino va en `link` (anuncio) o `cta_link`.
 - Los **UTMs van en `url_tags`** como query string sin `?`. Meta los añade al clic y los mantiene separados del `link`. Plantilla sugerida:
   `utm_source=facebook&utm_medium=paid_social&utm_campaign={campaña}&utm_content={ad}&utm_term={adset}`.

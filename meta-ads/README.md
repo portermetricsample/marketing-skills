@@ -8,6 +8,7 @@ skills de un mismo tipo de trabajo.
 
 ```
 meta-ads/
+├── naming-conventions/   ← planificar la nomenclatura + UTMs (campaña/ad set/anuncio)
 ├── campaigns/            ← construir y gestionar campañas (build/write)
 │   ├── campaign-setup/   adset-setup/   ad-setup/
 │   ├── asset-upload/     audiences/     leadform/
@@ -25,6 +26,7 @@ meta-ads/
 ```
 
 ## Por dónde empezar
+0. **[naming-conventions/](naming-conventions/SKILL.md)** — define la nomenclatura y los UTMs ANTES de construir: una palanca (SUMAS) por nivel, todo minúsculas, nombres que se parten en columnas, y los UTMs se autogeneran del nombre.
 1. **[campaigns/README.md](campaigns/README.md)** — los skills de creación de campañas y su orden de uso.
 2. **[MASTER-CHECKLIST.md](MASTER-CHECKLIST.md)** — el flujo completo y qué está validado/bloqueado.
 3. **[PARAMETERS-REFERENCE.md](PARAMETERS-REFERENCE.md)** — el diccionario de todos los parámetros.

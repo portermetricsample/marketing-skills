@@ -1,0 +1,60 @@
+# Naming spec — <account/brand>
+# -----------------------------------------------------------------------------
+# COPY THIS FILE OUT of the shared skills repo into YOUR client workspace, fill
+# it, and hand it to Claude. Never commit a real, filled client spec into the
+# shared marketing-skills repo — it contains account data.
+# -----------------------------------------------------------------------------
+
+brand: acme            # short brand/account code — lowercase, no spaces (e.g. acme)
+
+# Which levers are active, per level. Only "true" levers appear in names.
+# Turn a lever off and it drops out; the field order of the rest is preserved.
+levers:
+  campaign:
+    funnel: true       # tofu | mofu | bofu
+    objective: true    # awareness | traffic | engagement | leads | app | sales
+    offer: true        # the product / offer being promoted
+    market: false      # optional — turn on ONLY if you run one campaign per market
+  adset:
+    audience_type: true    # broad | int | lal | rt | ca
+    audience_detail: true  # the specific saved audience, coded
+    geo: true
+    language: true
+    placement: false       # optional — usually 'auto' with Advantage+ placements
+  ad:
+    angle: true        # the SUMAS creative angle (see default-taxonomy.md)
+    format: true       # img | vid | car | ugc | col | dco
+    hook: true         # short copy/hook descriptor
+    variation: true    # v1 | v2 | a | b ...
+
+# Optional: move a lever's home level (see lever-map.md "Configurable home levels").
+# Most common override — one campaign per market:
+#   geo_home: campaign      # default is 'adset'
+
+# This account's controlled vocabulary. Extend the Porter defaults for THIS brand.
+# Keep one value = one code (see rules.md §6).
+vocab:
+  offers:
+    - summer-sale
+    - free-trial
+    - annual-plan
+  audiences:
+    types: [broad, int, lal, rt, ca]
+    details:
+      - purchasers-1pct
+      - cart-abandoners-30d
+      - ig-engagers-365d
+      - email-list-active
+  geos: [us, ca, mx]
+  languages: [en, es]
+  angles:            # extend the starter angle library for this brand
+    - pain
+    - proof
+    - offer
+    - founder
+    - compare
+
+# UTM template (from utm-system.md) — usually the same for every account.
+# Goes in the ad's `url_tags` field, WITHOUT a leading '?'.
+url_tags: >-
+  utm_source={{site_source_name}}&utm_medium=paid-social&utm_campaign={{campaign.name}}&utm_content={{ad.name}}&utm_term={{adset.name}}&placement={{placement}}
