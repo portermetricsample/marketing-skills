@@ -35,7 +35,7 @@
 | 9 | **Crear anuncio** (page_id + creativo + copy + CTA + link) | `ad_create` | (futuro `ad-setup`) | ✅ |
 | 10 | Verificar | `object_read` / `insights_get` | — | ✅ |
 | 11 | **Activar** (pasar a ACTIVE) | — decisión HUMANA, nunca automática | — | — |
-| 12 | Gestión: pausar / editar / borrar | `*_update` / `*_delete` | — | update ✅ · delete ⚠️ (validar en teardown) |
+| 12 | Gestión: pausar / editar / borrar | `*_update` / `*_delete` | — | update ✅ · **delete ✅ validado** (ad→adset→campaign) |
 
 ---
 
@@ -89,9 +89,9 @@
 - [x] `meta-ads-adset-setup` — nivel ad set ✅
 - [x] `meta-ads-asset-upload` — subir creativo (Drive/URL → hash) ⚠️ (depende de fix #3)
 - [x] `_budget/budget.md` — helper de presupuesto currency-aware ✅
-- [ ] `meta-ads-ad-setup` — nivel anuncio (router de creativo: imagen→video→carrusel→multi-formato→DCA) — PENDIENTE
-- [ ] `meta-ads-audiences` — custom + add_users + lookalike (bloqueado por gap 41)
-- [ ] `meta-ads-leadform` — lead form + lead_list
+- [x] `meta-ads-ad-setup` — nivel anuncio (router de creativo: imagen→video→carrusel→multi-formato→DCA) ✅
+- [x] `meta-ads-audiences` — custom + add_users + lookalike (lookalike bloqueado #11) ✅
+- [x] `meta-ads-leadform` — lead form + lead_list (update bloqueado #12) ✅
 - [ ] `meta-ads-onboarding` — wizard/checklist (el cerebro)
 - [ ] `meta-ads-clone-winner` — defaults empíricos del mejor performer
 

@@ -17,21 +17,25 @@ con `list_accounts`) y crea todo en **PAUSED**.
 |-------|-------|----------|--------|
 | [`campaign-setup/`](campaign-setup/) | Campaña | Objetivo, CBO, presupuesto, puja, categoría especial. | ✅ validado |
 | [`adset-setup/`](adset-setup/) | Ad set | Optimización, targeting, placements, promoted object, schedule. | ✅ validado |
-| [`asset-upload/`](asset-upload/) | Asset | Imagen/video desde Drive/URL → `image_hash`/`video_id`. | ⚠️ solo por URL (subida propia bloqueada por [issue #3](https://github.com/portermetricsample/porter-mcp-feedback/issues/3)) |
+| [`asset-upload/`](asset-upload/) | Asset | Imagen/video desde Drive/URL → `image_hash`/`video_id`. | ✅ (url o `prepare_upload`+JSON POST) |
+| [`ad-setup/`](ad-setup/) | Anuncio | Creativo + copy + CTA + link/UTMs + lead form. Router por tipo de creativo. | ✅ validado |
+| [`audiences/`](audiences/) | Audiencia | Custom + subir clientes + lookalike + retargeting. | ✅ (lookalike bloqueado #11) |
+| [`leadform/`](leadform/) | Lead form | Formulario instantáneo + recuperar leads. | ✅ (update bloqueado #12) |
 | [`_budget/budget.md`](_budget/budget.md) | Helper | Presupuesto currency-aware (campaña=centavos, ad set=unidad mayor). | ✅ |
 
 ## Orden de uso (el flujo)
 
 1. `campaign-setup` → crea la campaña (PAUSED).
 2. `adset-setup` → crea el ad set (targeting, presupuesto, promoted object).
-3. `asset-upload` → sube el creativo (hoy: desde una URL pública).
-4. `ad-setup` *(pendiente)* → arma el anuncio (creativo + copy + CTA).
+3. `audiences` / `leadform` → según objetivo (retargeting / captación de leads).
+4. `asset-upload` → sube el creativo (URL pública o `prepare_upload`+JSON POST).
+5. `ad-setup` → arma el anuncio (creativo + copy + CTA + UTMs).
+6. Verificar y (humano) activar.
+
+Toda la cadena **campaña → ad set → anuncio** + audiencias + lead form + borrado está **validada en vivo** (2026-07-16, cuenta Porter, PAUSED). Ver [checklist maestro](../MASTER-CHECKLIST.md).
 
 ## Pendientes (roadmap)
 
-- [ ] `ad-setup` — router de creativo (imagen → video → carrusel → multi-formato → DCA).
-- [ ] `audiences` — custom + add_users + lookalike *(lookalike bloqueado, [issue #11](https://github.com/portermetricsample/porter-mcp-feedback/issues/11))*.
-- [ ] `leadform` — lead form + recuperación de leads.
 - [ ] `onboarding` — wizard/checklist que valida todo antes de escribir (el "cerebro").
 - [ ] `clone-winner` — defaults empíricos clonando la mejor campaña existente.
 
