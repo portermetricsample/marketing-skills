@@ -93,7 +93,7 @@ The skill emits ONE JSON object. Pure data — no emojis, markdown, tables, or c
 |-------|------|-------------|
 | `daily_budget` | number | `campaign_budget.amount_micros / 1e6` |
 | `expected_period_spend` | number | `daily_budget × days_in_period` |
-| `spend_to_date` | number | Σ daily `cost_micros / 1e6` over elapsed days |
+| `spend_to_date` | number | Σ daily `cost_micros` (query_data → already currency, no /1e6) over elapsed days |
 | `run_rate` | number | `spend_to_date / days_elapsed` |
 | `projected_period_spend` | number | `run_rate × days_in_period` |
 | `pace` | number | `projected / expected` (1.00 = on plan) |

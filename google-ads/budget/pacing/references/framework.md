@@ -17,7 +17,7 @@ For each campaign, over the pacing window:
   campaign is "meant to" spend ≈ the daily budget each day. Google may overspend up to 2× on a given
   day and true-up over the month, so treat the daily budget as the *monthly ÷ days* target, not a hard
   daily ceiling.)
-- **`spend_to_date`** = Σ `cost_micros / 1e6` over the elapsed days.
+- **`spend_to_date`** = Σ `cost_micros` over the elapsed days.
 - **`run_rate`** = `spend_to_date / days_elapsed` (avg daily spend so far).
 - **`projected_period_spend`** = `run_rate × days_in_period`.
 - **`pace`** = `projected_period_spend / expected_period_spend` (1.00 = perfectly on plan).
