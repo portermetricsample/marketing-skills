@@ -1,6 +1,6 @@
 ---
 name: meta-ads-research
-description: Extrae ads activos de la Biblioteca de Anuncios de Meta para un brand (videos E imágenes), deduplica por SHA256, transcribe audio, extrae frames, hace OCR + análisis visual. Activar con /meta-ads-research o cuando el usuario pida "scrape ads de meta de X", "research creativo de Y", "trae los ads activos de Z", "auditar competidor en Meta" o similar. Output: JSON canónico + brand_brief.md, listos para agentes IA sin transformación adicional. Usa Apify + Deepgram + Anthropic vision + PaddleOCR + ffmpeg.
+description: Análisis completo de competidor en Meta Ads a partir del solo nombre. Extrae ads activos de la Biblioteca de Anuncios de Meta para un brand (videos E imágenes), deduplica por SHA256, transcribe audio, extrae frames, hace OCR + análisis visual, y arma un REPORTE VISUAL Porter (HTML autocontenido). Activar con /meta-ads-research o cuando el usuario pida "scrape ads de meta de X", "research creativo de Y", "trae los ads activos de Z", "auditar competidor en Meta", "analiza al competidor X" o similar. Output: JSON canónico + brand_brief.md + reporte HTML estilo Porter. Usa Apify + Deepgram + Anthropic vision + PaddleOCR + ffmpeg.
 ---
 
 # Meta Ads Research
@@ -19,7 +19,7 @@ Pipeline de extracción limpia y deduplicada de creativos activos en la Bibliote
 ## Credenciales
 
 ```bash
-export APIFY_TOKEN=your_apify_token_here
+export APIFY_TOKEN=apify_api_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 export DEEPGRAM_TOKEN=your_deepgram_token_here
 # ANTHROPIC_API_KEY ← pendiente para vision pass
 ```
@@ -49,12 +49,80 @@ python3 03_dedup_creatives.py --page-id <ID>
 # 4. Enrich (default: enrich-all, customer paga por completeness)
 python3 04_enrich_creatives.py --page-id <ID> --top-n 999
 
-# 5. Build canonical output
-python3 run_audit.py --page-id <ID> --auto-confirm
-python3 generate_brief.py --page-id <ID>
+# 5. Build canonical output — --formats all es OBLIGATORIO
+#    (default es 'summary' → AUDIT.json sin hooks/creatives/media → reporte vacío)
+python3 run_audit.py --page-id <ID> --auto-confirm --formats all
+python3 generate_brief.py --page-id <ID>   # run_audit NO genera el brief; correrlo aparte
+
+# 6. Reporte visual Porter (HTML autocontenido) — ver sección abajo
+#    --brand SIEMPRE (con --page-id directo, page_name viene null → header "—")
+python3 generate_report.py --page-id <ID> --brand "<Name>" --narrative data/<ID>/narrative.json
 ```
 
-Output: `data/<page_id>/AUDIT.json` (envelope FireCrawl-shaped, schema v2.0) + `data/<page_id>/brand_brief.md` (companion agente-friendly, incluye billing block). Schema completo en `docs/SCHEMA.md`. Tiempo end-to-end: 1-5 min según tamaño.
+### Gotchas verificados (test PolicyMe, 2026-07-16)
+
+- **`--formats all` obligatorio** en run_audit. Sin él, el AUDIT.json solo trae `summary` y el reporte queda sin creativos ni ángulos.
+- **`--brand "<Name>"` obligatorio** en generate_report cuando entrás por `--page-id` (el pipeline no resuelve `page_name` → sale null). Usar el nombre que dio el usuario.
+- **run_audit NO corre generate_brief.** Son pasos separados. El brief es la fuente para escribir `narrative.json`.
+- **Ángulos:** el clasificador (`generate_brief.py` → `ANGLE_RULES`) es rule-based bilingüe EN+ES. Si una marca nueva cae mucho en `uncategorized`, expandir `ANGLE_RULES` con sus patrones (es la fuente compartida por AUDIT.json y brief). DCO sin copy real → etiqueta `DCO — sin copy`, no uncategorized.
+- **Costo real PolicyMe:** 80 ads → 45 únicos → 31 videos enriquecidos ≈ $3.38. Regla: avisar si un run va a pasar $5.
+
+Output: `data/<page_id>/AUDIT.json` (envelope FireCrawl-shaped, schema v2.0) + `data/<page_id>/brand_brief.md` (companion agente-friendly, incluye billing block) + `dist/<slug>/index.html` (reporte visual Porter). Schema completo en `docs/SCHEMA.md`. Tiempo end-to-end: 1-5 min según tamaño.
+
+## Reporte visual Porter (paso final)
+
+`generate_report.py` convierte `AUDIT.json` en un `index.html` autocontenido (imágenes en base64, se abre sin internet) con el sistema de diseño Porter. Es la entrega presentable para el cliente. **El reporte se renderiza en INGLÉS por default** (labels, secciones y narrativa).
+
+**Dos capas:**
+- **Datos (automático):** KPIs, ángulos de hook, elegibilidad por plataforma, grid de top-24 creativos con thumbnail + modal (hook + transcript), landings (host + path, para que se vean páginas distintas), transparencia. Sale del `AUDIT.json` sin intervención.
+- **Narrativa cualitativa (Claude la escribe):** subtítulo, patrones transversales, deep-dive por creativo (script + capa visual + estrategia) y hallazgos accionables. Van en `narrative.json` opcional. SIN él, el reporte sale completo, solo omite esas secciones.
+
+**Flujo obligatorio para el deep-dive (así queda consistente y NO inventado):**
+1. LEER `data/<ID>/brand_brief.md` y los transcripts en `AUDIT.json → scripts[]`.
+2. Para cada creativo del deep-dive, **ABRIR sus 3 frames** con la tool Read (imágenes): `data/<ID>/thumbs/<fingerprint>_hook.jpg`, `_mid.jpg`, `_end.jpg`. Describir actores, setting y qué muestra cada frame a partir de lo que se VE — nunca inventar.
+3. Escribir `data/<ID>/narrative.json` con esta forma (inglés):
+
+```json
+{
+  "subtitle": "One line thesis of the brand's Meta strategy (HTML inline ok).",
+  "patterns": [
+    {"title": "3-6 word pattern", "body": "1-2 sentences on what repeats across every ad."}
+  ],
+  "deep_dives": [
+    {
+      "fingerprint": "<full fingerprint from AUDIT>",
+      "title": "Concept name",
+      "format": "e.g. UGC selfie + product screen",
+      "hook_type": "e.g. Bold numeric price claim",
+      "angle": "e.g. price anchor",
+      "funnel_stage": "TOF | MOF | BOF (+ short label)",
+      "persona": "who it targets",
+      "actors": "who APPEARS in the video (grounded on the frames)",
+      "copy_levers": ["lever1", "lever2"],
+      "delivery": {"voice": "Yes", "music": "optional"},
+      "script_stages": [
+        {"stage": "HOOK", "time": "0-3s", "text": "…"},
+        {"stage": "BODY", "time": "3-15s", "text": "…"},
+        {"stage": "CTA",  "time": "15-19s", "text": "…"}
+      ],
+      "frame_notes": {"hook": "what's on screen", "mid": "…", "end": "…"},
+      "why_it_works": "1-2 sentences"
+    }
+  ],
+  "findings": [
+    {"title": "Actionable finding", "body": "Implication for a competitor of this brand."}
+  ]
+}
+```
+
+- **`duration` y `pace` (w/s) se calculan solos** en el generador desde `scripts[]` — NO los escribas.
+- Default: **6-8 deep_dives** (los de más `variants_total` con transcript). El grid + modal cubren el resto. Para brands con muchos creativos NO hagas los 30+ a mano: top 6-8 y listo.
+- 3-6 patterns, 3-5 findings.
+- Reglas de honestidad: SOLO afirmar lo que brief/AUDIT/frames respaldan. Meta NO expone performance (CTR/spend/impresiones) → nunca inventarlas (ver Limitations).
+
+**Colores:** default toda la paleta Porter (violeta/aqua/rosa). Para teñir el acento con el color del competidor: `--accent "#hex"`. El resto se mantiene Porter.
+
+**Por qué HTML y no dashboard de report.portermetrics.com:** esos dashboards se alimentan de conectores Porter (cuenta del cliente vía API). Estos datos vienen de la Biblioteca pública de Meta vía Apify — no son un conector, así que no pueden ser un dashboard nativo. El HTML Porter autocontenido es la vía correcta.
 
 ## Reglas de comportamiento (obligatorias)
 
