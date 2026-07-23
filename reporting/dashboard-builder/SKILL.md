@@ -64,19 +64,25 @@ this phase — fewer, better-chosen metrics; funnel-ordered; always with context
 
 Detailed rules: `references/design-recipe.md`.
 
-- **D1 Brand tokens.** Porter mode → bundled kit as-is
-  (`assets/design-kit/`). White-label mode → extraction chain: a web-search
-  action to find the site, then a scrape action with `formats:["branding"]`
-  (colors, fonts, logo + confidence scores) → override the token values.
-  Always discover the current action ids via `list_actions` (at last check:
-  `search.perplexity_search`, `web_scraping.firecrawl_scrape` — ids can
-  evolve). Fallbacks and confidence rules in the reference.
+- **D1 Client design system.** Porter mode → bundled kit as-is
+  (`assets/design-kit/`). White-label mode → five sub-steps (W1–W5 in the
+  reference): company research (identity brief via a web-search action) →
+  site exploration (homepage + 2–3 revealing pages: pricing/product, where
+  structured information lives) → rigorous multi-page extraction (branding
+  format + rawHtml; keep what repeats, discard one-offs) → the **design
+  system doc** with its **derivation layer** (chart-series palette, heat
+  ramp, semantic up/down — semantics are ALWAYS universal green/red on a
+  visibly different scale than any brand color) → projection to the report
+  tokens. Discover action ids via `list_actions` (ids can evolve).
 - **D2 Report Design Kit — HARD STOP #2.** Generate the approval page from
-  `assets/kit-template.html` with the chosen tokens and sample data; the user
+  `assets/kit-template.html`: brand tokens, the derived data palettes
+  (series/heat/semantics shown side by side with brand swatches for the
+  collision check), and sample charts/tables with sample data. The user
   gives a visual OK (iterate HERE — never propagate an unapproved brand).
-  The kit's output is exactly the **8 template CSS variables** that phase B
-  consumes (`--bg --panel --ink --muted --accent --accent-2 --lime --grid`)
-  plus a theme choice (light/dark) that will be **brand-locked in code**.
+  The kit is the **visual reference contract**: Phase B copies its token
+  block (8 vars + derived layer) into the report verbatim, and every real
+  chart uses those palettes — no per-chart color improvisation. Theme choice
+  (light/dark) is **brand-locked in code**.
 - **D3 Mockup path choice.** Default: go straight to Phase B and use the
   template's local dev build as the living mockup. Alternative when the user
   wants richer visual iteration: Claude Design handoff

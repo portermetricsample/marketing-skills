@@ -25,6 +25,26 @@
   --grid: #e9e2d6;
   --accent-line: var(--accent); /* chart primitives paint from this */
   --area-fill: color-mix(in srgb, var(--accent) 14%, transparent);
+  /* ---- DERIVED LAYER (auto-computed from the tokens above; override only
+     if the client's site defines its own data palette) ---- */
+  --series-1: var(--accent);
+  --series-2: var(--accent-2);
+  --series-3: color-mix(in srgb, var(--accent) 55%, var(--panel));
+  --series-4: color-mix(in srgb, var(--accent-2) 55%, var(--panel));
+  --series-5: color-mix(in srgb, var(--accent) 35%, var(--ink));
+  --heat-0: color-mix(in srgb, var(--accent) 8%, var(--panel));
+  --heat-1: color-mix(in srgb, var(--accent) 25%, var(--panel));
+  --heat-2: color-mix(in srgb, var(--accent) 45%, var(--panel));
+  --heat-3: color-mix(in srgb, var(--accent) 70%, var(--panel));
+  --heat-4: var(--accent);
+  /* Semantics are UNIVERSAL green/red — never brand colors. COLLISION RULE:
+     if a brand color is in the red/green family, shift these shades
+     (lightness/saturation) until clearly distinguishable from the brand —
+     different scale, same meaning. The same check applies to the derived
+     series: if a series swatch lands too close to --pos/--neg (common with
+     red/green brands), shift THAT series step toward a neutral. */
+  --pos: #15803d;
+  --neg: #b91c1c;
 }
 /* kit page chrome (not part of the report) */
 body { background: var(--bg); color: var(--ink); font-family: 'Hanken Grotesk', system-ui, sans-serif; margin: 0; padding: 32px; }
@@ -42,7 +62,7 @@ body { background: var(--bg); color: var(--ink); font-family: 'Hanken Grotesk', 
 .kpi .t { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .kpi .v { font-family: 'Bricolage Grotesque', sans-serif; font-size: 28px; font-weight: 700; margin: 2px 0; }
 .kpi .d { font-size: 12px; }
-.up { color: #16a34a; } .down { color: #dc2626; }
+.up { color: var(--pos); } .down { color: var(--neg); }
 .tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
 .tbl th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); padding: 8px 10px; border-bottom: 1px solid var(--grid); }
 .tbl td { padding: 8px 10px; border-bottom: 1px solid var(--grid); }
@@ -63,6 +83,21 @@ svg text { font-family: 'Hanken Grotesk', sans-serif; }
 
   <h2>Colors (the 8 report tokens)</h2>
   <div class="row" id="swatches"></div>
+
+  <h2>Derived for data: chart palette · heat ramp · semantics</h2>
+  <div class="card">
+    <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Chart series (used by every real chart — no per-chart improvisation)</div>
+    <div class="row" id="series-swatches" style="margin-bottom:14px;"></div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Heat ramp (SUMAS tables)</div>
+    <div style="display:flex;height:26px;border-radius:8px;overflow:hidden;max-width:420px;margin-bottom:14px;" id="heat-strip"></div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Semantics — universal, on a different scale than the brand (collision check: must be distinguishable from every brand swatch above)</div>
+    <div style="display:flex;gap:24px;font-size:15px;">
+      <span class="up">▲ 12.4% improving</span>
+      <span class="down">▼ 8.2% declining</span>
+      <span><span class="dot" style="background:#16a34a"></span>Active</span>
+      <span><span class="dot" style="background:#f59e0b"></span>Paused</span>
+    </div>
+  </div>
 
   <h2>Typography</h2>
   <div class="card type-scale">
@@ -108,6 +143,8 @@ svg text { font-family: 'Hanken Grotesk', sans-serif; }
         <text x="60" y="65" text-anchor="middle" font-size="16" font-weight="700" fill="var(--ink)">55%</text>
         <text x="130" y="52" font-size="10" fill="var(--muted)">● Search 55%</text>
         <text x="130" y="70" font-size="10" fill="var(--muted)">● PMax 25%</text>
+        <circle cx="60" cy="60" r="42" fill="none" stroke="var(--series-3)" stroke-width="16" stroke-dasharray="40 264" stroke-dashoffset="-211" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+        <text x="130" y="88" font-size="10" fill="var(--muted)">● Display 15%</text>
       </svg>
     </div>
     <div class="card" style="flex:1;min-width:260px;">
@@ -138,6 +175,10 @@ document.getElementById('swatches').innerHTML = TOKENS.map(t => {
   const v = cs.getPropertyValue(t).trim();
   return `<div class="sw"><div class="chip" style="background:${v}"></div><div class="lbl">${t.slice(2)}<code>${v}</code></div></div>`;
 }).join('');
+document.getElementById('series-swatches').innerHTML = ['--series-1','--series-2','--series-3','--series-4','--series-5'].map(t =>
+  `<div class="sw" style="width:84px"><div class="chip" style="height:40px;background:var(${t})"></div><div class="lbl">${t.slice(2)}</div></div>`).join('');
+document.getElementById('heat-strip').innerHTML = ['--heat-0','--heat-1','--heat-2','--heat-3','--heat-4'].map(t =>
+  `<div style="flex:1;background:var(${t})"></div>`).join('');
 </script>
 </body>
 </html>
