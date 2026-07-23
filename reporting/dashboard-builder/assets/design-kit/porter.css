@@ -1,0 +1,210 @@
+/* ============================================================================
+   Porter Design System (Koho-inspired) — brand kit
+   Tokens + component classes. Source of truth for color/type lives here.
+   ============================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Hanken+Grotesk:wght@400;500;600&family=Inter:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root {
+  /* ━━━━━━━━ CORE ━━━━━━━━ */
+  --porter-purple: #6701e6;
+  --porter-dark:   #1a0340;
+  --porter-pink:   #EC4899;
+  --porter-yellow: #fbbf24;
+  --porter-aqua:   #2DD4BF;
+  --porter-cream:  #fdf8f0;
+  --porter-black:  #0a0a0a;
+  --porter-white:  #ffffff;
+  --porter-muted:  #6b7280;
+
+  /* ━━━━━━━━ PURPLES ━━━━━━━━ */
+  --purple-950: #12022f;
+  --purple-900: #1a0340;
+  --purple-800: #3a0a80;
+  --purple-600: #6701e6;
+  --purple-500: #8b5cf6;
+  --purple-300: #c4b5fd;
+  --purple-100: #ede9fe;
+
+  /* ━━━━━━━━ PINKS ━━━━━━━━ */
+  --pink-700: #be185d;
+  --pink-500: #EC4899;
+  --pink-400: #F472B6;
+  --pink-200: #FBCFE8;
+  --pink-100: #FCE7F3;
+
+  /* ━━━━━━━━ AQUAS ━━━━━━━━ */
+  --aqua-700: #0d9488;
+  --aqua-500: #14B8A6;
+  --aqua-400: #2DD4BF;
+  --aqua-300: #5EEAD4;
+  --aqua-200: #99F6E4;
+  --aqua-100: #ccfbf1;
+
+  /* ━━━━━━━━ YELLOWS + NEUTRALS ━━━━━━━━ */
+  --yellow-400: #fbbf24;
+  --yellow-100: #fef3c7;
+  --cream:      #fdf8f0;
+  --neutral-50:  #fafafa;
+  --neutral-950: #0a0a0a;
+
+  /* ━━━━━━━━ TYPOGRAPHY ━━━━━━━━ */
+  /* DEFAULT pairing (unchanged): Inter display + IBM Plex Mono accents. */
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-alt: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+
+  /* ALTERNATE faces (opt in via the .pds-editorial theme below, or use
+     these tokens directly). Both are modern grotesques. */
+  --font-bricolage: 'Bricolage Grotesque', 'Inter', system-ui, sans-serif; /* expressive display: headings, cover titles, KPI numbers, chart titles (600–800) */
+  --font-hanken: 'Hanken Grotesk', -apple-system, system-ui, sans-serif;   /* quiet workhorse: body, labels, table data, captions (400–600) */
+
+  /* ━━━━━━━━ SPACING ━━━━━━━━ */
+  /* Porter uses generous whitespace: 96px+ on full slides, 120px+ on hero. */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;   /* full-slide padding */
+  --space-30: 120px;  /* hero / landing section padding */
+
+  /* ━━━━━━━━ RADIUS ━━━━━━━━ */
+  --radius-sm:   10px;
+  --radius-md:   12px;
+  --radius-lg:   14px;
+  --radius-card: 20px;
+  --radius-pill: 999px;
+}
+
+/* ============================================================================
+   EDITORIAL THEME (optional pairing — does NOT change the default)
+   Wrap any subtree in class="pds-editorial" to switch from the default
+   Inter + IBM Plex Mono pairing to Bricolage Grotesque (display) +
+   Hanken Grotesk (body/labels). No monospace. Because every component reads
+   --font-display / --font-alt, this one class re-skins the whole kit.
+   ============================================================================ */
+.pds-editorial {
+  --font-display: var(--font-bricolage);
+  --font-alt: var(--font-hanken);
+  font-family: var(--font-hanken);
+}
+
+/* ============================================================================
+   BUTTON  —  .pds-btn
+   ============================================================================ */
+.pds-btn {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.08s ease, opacity 0.15s ease;
+  text-decoration: none;
+  line-height: 1;
+}
+.pds-btn:active { transform: translateY(1px); }
+.pds-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* sizes */
+.pds-btn--sm { font-size: 14px; padding: 10px 18px; border-radius: 10px; }
+.pds-btn--md { font-size: 16px; padding: 14px 26px; }
+.pds-btn--lg { font-size: 19px; padding: 18px 34px; border-radius: 14px; }
+
+/* variants */
+.pds-btn--purple  { background: var(--porter-purple); color: #fff; }
+.pds-btn--pink    { background: var(--porter-pink);   color: #fff; }
+.pds-btn--aqua    { background: var(--porter-aqua);   color: var(--porter-dark); }
+.pds-btn--yellow  { background: var(--porter-yellow); color: var(--porter-dark); }
+.pds-btn--dark    { background: var(--porter-dark);   color: #fff; }
+.pds-btn--outline {
+  background: transparent;
+  color: var(--porter-purple);
+  box-shadow: inset 0 0 0 2px var(--porter-purple);
+}
+
+/* ============================================================================
+   CARD  —  .pds-card
+   ============================================================================ */
+.pds-card {
+  font-family: var(--font-display);
+  border-radius: 20px;
+  padding: 32px;
+  background: var(--porter-white);
+  color: var(--porter-black);
+}
+.pds-card--cream    { background: var(--porter-cream); }
+.pds-card--lavender { background: var(--purple-100); }
+.pds-card--dark     { background: var(--porter-dark); color: #fff; }
+.pds-card--purple   { background: var(--porter-purple); color: #fff; }
+.pds-card--bordered { box-shadow: inset 0 0 0 1px #e5e7eb; }
+
+/* ============================================================================
+   BADGE  —  .pds-badge
+   ============================================================================ */
+.pds-badge {
+  font-family: var(--font-alt);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+.pds-badge--purple { background: var(--purple-100); color: var(--porter-purple); }
+.pds-badge--pink   { background: var(--pink-100);   color: var(--pink-700); }
+.pds-badge--aqua   { background: var(--aqua-100);   color: var(--aqua-700); }
+.pds-badge--yellow { background: var(--yellow-100); color: #92400e; }
+.pds-badge--dark   { background: var(--porter-dark); color: #fff; }
+
+/* ============================================================================
+   EYEBROW  —  .pds-eyebrow
+   ============================================================================ */
+.pds-eyebrow {
+  font-family: var(--font-alt);
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--porter-purple);
+  display: block;
+}
+
+/* ============================================================================
+   HEADING  —  .pds-heading
+   ============================================================================ */
+.pds-heading {
+  font-family: var(--font-display);
+  color: var(--porter-black);
+  margin: 0;
+}
+.pds-heading--display {
+  font-size: clamp(72px, 10vw, 140px);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -4px;
+  text-transform: uppercase;
+}
+.pds-heading--h1 {
+  font-size: clamp(48px, 6vw, 88px);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -2.5px;
+}
+.pds-heading--h2 {
+  font-size: clamp(32px, 4vw, 56px);
+  font-weight: 800;
+  line-height: 1.0;
+  letter-spacing: -1.5px;
+}
+.pds-heading strong { color: var(--porter-purple); font-weight: 900; }

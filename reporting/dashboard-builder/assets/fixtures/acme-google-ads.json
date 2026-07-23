@@ -1,0 +1,19 @@
+{
+  "_comment": "Fictional sample rows (Acme Insurance) for kit/mockup previews. Shapes mirror real Porter output: dates YYYYMMDD strings, metrics as strings.",
+  "kpis": { "impressions": 48210, "clicks": 2760, "conversions": 128, "spend": 6540.5, "prev": { "impressions": 41830, "clicks": 2510, "conversions": 141, "spend": 7120.0 } },
+  "daily": [
+    { "date": "20260601", "impressions": "1610", "clicks": "92", "conversions": "4", "cost": "218.40" },
+    { "date": "20260602", "impressions": "1755", "clicks": "101", "conversions": "5", "cost": "231.10" },
+    { "date": "20260603", "impressions": "1490", "clicks": "83", "conversions": "3", "cost": "199.75" },
+    { "date": "20260604", "impressions": "1832", "clicks": "108", "conversions": "6", "cost": "246.20" },
+    { "date": "20260605", "impressions": "1701", "clicks": "97", "conversions": "4", "cost": "225.90" },
+    { "date": "20260606", "impressions": "1288", "clicks": "71", "conversions": "2", "cost": "168.30" },
+    { "date": "20260607", "impressions": "1194", "clicks": "64", "conversions": "2", "cost": "154.60" }
+  ],
+  "campaigns": [
+    { "campaign_name": "Acme_Search_Brand", "type": "SEARCH", "status": "ENABLED", "impressions": "9410", "clicks": "880", "conversions": "52", "cost": "980.20" },
+    { "campaign_name": "Acme_Search_Auto_Insurance", "type": "SEARCH", "status": "ENABLED", "impressions": "15230", "clicks": "820", "conversions": "38", "cost": "2140.75" },
+    { "campaign_name": "Acme_PMax_Home_Quotes", "type": "PERFORMANCE_MAX", "status": "ENABLED", "impressions": "18960", "clicks": "760", "conversions": "31", "cost": "2610.35" },
+    { "campaign_name": "Acme_Display_Retargeting", "type": "DISPLAY", "status": "PAUSED", "impressions": "4610", "clicks": "300", "conversions": "7", "cost": "809.20" }
+  ]
+}

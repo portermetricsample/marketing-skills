@@ -16,6 +16,7 @@ No API keys. No client data. Only reusable recipes.
 | [`creative/`](creative/) | Hook writing and ad diagnostics |
 | [`analytics/`](analytics/) | Cross-channel performance decay — labels pages and ads by their real trend at scale |
 | [`strategy/`](strategy/) | Strategy → copy stack: STP (segmentation, targeting, positioning), positioning → narrative → messaging, and landing-page structure + copy. Company- and industry-agnostic thinking frameworks — no MCP required |
+| [`reporting/`](reporting/) | Cross-channel deliverable builders — `dashboard-builder` creates a complete hosted Porter dashboard end-to-end: SUMAS planning → brand-approved design kit (Porter or white-label) → live published report URL |
 
 ## Reference
 

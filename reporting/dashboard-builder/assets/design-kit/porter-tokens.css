@@ -1,0 +1,638 @@
+/* ============================================================================
+   Porter Metrics Design System — STANDALONE TOKENS (flattened)
+   ----------------------------------------------------------------------------
+   For plain HTML reports/dashboards opened directly in a browser.
+   Link this ONE file — no JS bundle, no @import chain, no build step:
+
+       <link rel="stylesheet" href="dist/porter-tokens.css">
+       <body data-theme="cream">   <!-- cream | white | blue | purple -->
+
+   body must paint the surface:  body{ background:var(--surface-bg); color:var(--text-body); }
+   This file is GENERATED from tokens/*.css — edit those, then regenerate.
+   ============================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap');
+
+
+/* ===== tokens/colors.css ===== */
+/* ============================================================================
+   Porter Metrics — Color tokens
+   Solid brand colors only. Never gradients. Max 3 colors per surface.
+   ============================================================================ */
+
+:root {
+  /* ━━━━━━━━ CORE BRAND ━━━━━━━━ */
+  --porter-purple: #6701e6; /* primary */
+  --porter-dark:   #1a0340; /* signature dark */
+  --porter-pink:   #ec4899;
+  --porter-yellow: #fbbf24;
+  --porter-aqua:   #2dd4bf;
+  --porter-cream:  #fdf8f0; /* soft paper background */
+  --porter-black:  #0a0a0a;
+  --porter-white:  #ffffff;
+  --porter-muted:  #6b7280; /* secondary text */
+
+  /* ━━━━━━━━ ELECTRIC LIME ACCENT ━━━━━━━━ */
+  --accent:      #cdfb52; /* highlight — best on dark/purple surfaces */
+  --accent-deep: #9bc400; /* pair for text/borders on light surfaces */
+
+  /* ━━━━━━━━ CHART AREA FILL ━━━━━━━━
+     Subtle wash under sparklines / time-series area. color-mix resolves against
+     the in-scope --accent-line, so it tints correctly per theme. */
+  --area-fill: color-mix(in srgb, var(--accent-line, var(--porter-purple)) 14%, transparent);
+
+  /* ━━━━━━━━ LIME SCALE ━━━━━━━━ */
+  --lime-100: #f2fdcf;
+  --lime-200: #e3fba6;
+  --lime-300: #d6fc73;
+  --lime-400: #cdfb52; /* = --accent */
+  --lime-600: #9bc400; /* = --accent-deep */
+  --lime-700: #7a9b00; /* text on light surfaces */
+
+  /* ━━━━━━━━ INK / JEWEL (refresh text palette) ━━━━━━━━ */
+  --ink:      #1a0340; /* primary text (= porter-dark) */
+  --ink-soft: #4a4458; /* body text, softer */
+  --ink-mute: #8b85a0; /* labels, captions, meta */
+  --jewel:    #6701e6; /* eyebrow / jewel accent (= porter-purple) */
+
+  /* ━━━━━━━━ PURPLES ━━━━━━━━ */
+  --purple-950: #12022f;
+  --purple-900: #1a0340;
+  --purple-800: #3a0a80;
+  --purple-600: #6701e6;
+  --purple-500: #8b5cf6;
+  --purple-300: #c4b5fd;
+  --purple-100: #ede9fe;
+
+  /* ━━━━━━━━ PINKS ━━━━━━━━ */
+  --pink-700: #be185d;
+  --pink-500: #ec4899;
+  --pink-400: #f472b6;
+  --pink-200: #fbcfe8;
+  --pink-100: #fce7f3;
+
+  /* ━━━━━━━━ AQUAS ━━━━━━━━ */
+  --aqua-700: #0d9488;
+  --aqua-500: #14b8a6;
+  --aqua-400: #2dd4bf;
+  --aqua-300: #5eead4;
+  --aqua-200: #99f6e4;
+  --aqua-100: #ccfbf1;
+
+  /* ━━━━━━━━ YELLOWS + NEUTRALS ━━━━━━━━ */
+  --yellow-400: #fbbf24;
+  --yellow-100: #fef3c7;
+  --cream:      #fdf8f0;
+  --neutral-50:  #fafafa;
+  --neutral-200: #e5e7eb;
+  --neutral-950: #0a0a0a;
+
+  /* ━━━━━━━━ SEMANTIC ALIASES ━━━━━━━━ */
+  --text-strong:    var(--porter-black);
+  --text-body:      var(--porter-dark);
+  --text-muted:     var(--porter-muted);
+  --text-on-dark:   var(--porter-white);
+  --text-accent:    var(--porter-purple);
+  --highlight:         var(--accent);      /* positive emphasis on dark */
+  --highlight-on-light: var(--accent-deep); /* same role on light surfaces */
+
+  --surface-page:   var(--porter-white);
+  --surface-paper:  var(--porter-cream);
+  --surface-card:   var(--porter-white);
+  --surface-lavender: var(--purple-100);
+  --surface-dark:   var(--porter-dark);
+  --surface-brand:  var(--porter-purple);
+
+  --border-hairline: var(--neutral-200);
+}
+
+
+/* ===== tokens/themes.css ===== */
+/* ============================================================================
+   Porter Metrics — THEME tokens (the 4 official surfaces)
+   ----------------------------------------------------------------------------
+   Single source of truth for the 4 report/dashboard themes. Apply ONE of these
+   on a wrapping element (or <body>):
+
+       <body data-theme="cream">     light · soft paper  (DEFAULT)
+       <body data-theme="white">     light · pure white
+       <body data-theme="blue">      dark  · deep indigo
+       <body data-theme="purple">    dark  · deep purple
+
+   Always paint from these semantic vars — NEVER hard-code a hex in a template.
+   Brand SERIES colors (Meta / Google / Instagram / Shopify) are theme-agnostic
+   and live at the bottom; reuse them verbatim in every theme.
+   Values below are lifted verbatim from the approved reference templates.
+   ============================================================================ */
+
+/* ━━━━━━━━ LIGHT · CREAM (default) ━━━━━━━━ */
+:root,
+[data-theme="cream"] {
+  --surface-bg:     #fdf8f0; /* porter-cream */
+  --surface-card:   #ffffff;
+  --card-border:    #e5e7eb; /* neutral-200 hairline */
+  --text-title:     #1a0340; /* porter-dark */
+  --text-body:      #4a4458; /* ink-soft */
+  --text-muted:     #8b85a0; /* ink-mute */
+  --eyebrow-color:  #6701e6; /* porter-purple */
+  --accent-line:    #6701e6; /* primary chart line */
+  --grid-line:      #ece6f5;
+  --highlight-fill: #9bc400; /* lime-deep — emphasis on light */
+  --area-fill:      #ede9fe; /* fill under chart line */
+  --delta-up:       #0d9488; /* aqua-700 — positive delta on light */
+  --tint-a-bg:#ede9fe; --tint-a-text:#6701e6; /* group A · purple */
+  --tint-b-bg:#ccf5ef; --tint-b-text:#0f766e; /* group B · aqua  */
+  --chip-bg:#ede9fe; --chip-text:#6701e6;     /* pills */
+  --total-accent:#6701e6;                     /* total row / accent column */
+  --btn-outline:#6701e6;                      /* outline/secondary button */
+  --tip-bg:#1a0340; --tip-text:#ffffff; --tip-border:#1a0340; /* dark tooltip on light */
+  --stat-bg:#faf7ff; --stat-border:#d9ccf7; /* tinted stat card — present on light */
+  --surface-sunken:#f6f1e6;                  /* inset sub-surface, below the card */
+  --good:#0d9488; --bad:#d6155f;             /* MEANING-based (decoupled from arrow) */
+  --callout-info-bg:#ede9fe; --callout-info-tx:#6701e6; /* Insight / Note */
+  --callout-win-bg:#e6f3cd;  --callout-win-tx:#5e7c00;  /* Win */
+  --callout-warn-bg:#fcecbf; --callout-warn-tx:#8a5a00; /* Watch out */
+  --callout-risk-bg:#fbd3e1; --callout-risk-tx:#be205f; /* Risk */
+}
+
+/* ━━━━━━━━ LIGHT · WHITE ━━━━━━━━ */
+[data-theme="white"] {
+  --surface-bg:     #ffffff;
+  --surface-card:   #ffffff;
+  --card-border:    #e5e7eb;
+  --text-title:     #1a0340;
+  --text-body:      #4a4458;
+  --text-muted:     #8b85a0;
+  --eyebrow-color:  #6701e6;
+  --accent-line:    #6701e6;
+  --grid-line:      #eef0f3;
+  --highlight-fill: #9bc400;
+  --area-fill:      #ede9fe;
+  --delta-up:       #0d9488;
+  --tint-a-bg:#ede9fe; --tint-a-text:#6701e6;
+  --tint-b-bg:#ccf5ef; --tint-b-text:#0f766e;
+  --chip-bg:#ede9fe; --chip-text:#6701e6;
+  --total-accent:#6701e6;
+  --btn-outline:#6701e6;
+  --tip-bg:#1a0340; --tip-text:#ffffff; --tip-border:#1a0340;
+  --stat-bg:#faf7ff; --stat-border:#d9ccf7;
+  --surface-sunken:#f6f4fb;
+  --good:#0d9488; --bad:#d6155f;
+  --callout-info-bg:#ede9fe; --callout-info-tx:#6701e6;
+  --callout-win-bg:#e6f3cd;  --callout-win-tx:#5e7c00;
+  --callout-warn-bg:#fcecbf; --callout-warn-tx:#8a5a00;
+  --callout-risk-bg:#fbd3e1; --callout-risk-tx:#be205f;
+}
+
+/* ━━━━━━━━ DARK · BLUE (deep indigo) ━━━━━━━━ */
+[data-theme="blue"] {
+  --surface-bg:     #100225;
+  --surface-card:   #1c0942;
+  --card-border:    rgba(167,139,250,0.16); /* soft lavender hairline — not white */
+  --text-title:     #ffffff;
+  --text-body:      #d9d2ee;
+  --text-muted:     #a79fce;
+  --eyebrow-color:  #a78bfa; /* purple-light */
+  --accent-line:    #a78bfa;
+  --grid-line:      rgba(167,139,250,0.16); /* soft lavender rule — not white, not invisible */
+  --highlight-fill: #cdfb52; /* electric lime — emphasis on dark */
+  --area-fill:      rgba(167,139,250,0.18);
+  --delta-up:       #2dd4bf; /* aqua-400 — positive delta on dark */
+  --tint-a-bg:rgba(167,139,250,0.15); --tint-a-text:#cabdf2;
+  --tint-b-bg:rgba(45,212,191,0.13); --tint-b-text:#76e3d3;
+  --chip-bg:rgba(167,139,250,0.15); --chip-text:#cabdf2;
+  --total-accent:#a78bfa;
+  --btn-outline:#c4b5fd; /* light lavender — reads on dark */
+  --tip-bg:#34206b; --tip-text:#ffffff; --tip-border:rgba(167,139,250,0.42); /* elevated tooltip on dark */
+  --stat-bg:rgba(167,139,250,0.12); --stat-border:rgba(167,139,250,0.30);
+  --surface-sunken:rgba(255,255,255,0.04);
+  --good:#2dd4bf; --bad:#f472b6;
+  --delta-down:#f472b6;                      /* brighter pink — reads on dark */
+  --callout-info-bg:rgba(167,139,250,0.16); --callout-info-tx:#cabdf2;
+  --callout-win-bg:rgba(63,190,134,0.18);   --callout-win-tx:#8fe3b6;
+  --callout-warn-bg:rgba(251,191,36,0.16);  --callout-warn-tx:#f4cd7a;
+  --callout-risk-bg:rgba(236,72,153,0.18);  --callout-risk-tx:#f9a8cf;
+}
+
+/* ━━━━━━━━ DARK · PURPLE (deep purple) ━━━━━━━━ */
+[data-theme="purple"] {
+  --surface-bg:     #1b0e36;
+  --surface-card:   #2a1850;
+  --card-border:    #3d2a5e;
+  --text-title:     #fff8ec; /* warm cream ink */
+  --text-body:      #cdbfe8;
+  --text-muted:     #9c8dc0;
+  --eyebrow-color:  #3fbe86; /* green eyebrow — signature of purple theme */
+  --accent-line:    #b79cf0; /* lavender chart line */
+  --grid-line:      rgba(183,156,240,0.16); /* soft lavender rule */
+  --highlight-fill: #cdfb52;
+  --area-fill:      rgba(138,95,192,0.22);
+  --delta-up:       #2dd4bf;
+  --tint-a-bg:rgba(138,95,192,0.24); --tint-a-text:#dccbf7;
+  --tint-b-bg:rgba(63,190,134,0.16); --tint-b-text:#84ddb2;
+  --chip-bg:rgba(138,95,192,0.24); --chip-text:#dccbf7;
+  --total-accent:#b79cf0;
+  --btn-outline:#d6c7f5; /* light lavender */
+  --tip-bg:#3a2566; --tip-text:#fff8ec; --tip-border:rgba(183,156,240,0.42);
+  --stat-bg:rgba(138,95,192,0.20); --stat-border:rgba(183,156,240,0.32);
+  --surface-sunken:rgba(255,255,255,0.045);
+  --good:#2dd4bf; --bad:#f472b6;
+  --delta-down:#f472b6;
+  --callout-info-bg:rgba(138,95,192,0.24); --callout-info-tx:#dccbf7;
+  --callout-win-bg:rgba(63,190,134,0.18);  --callout-win-tx:#8fe3b6;
+  --callout-warn-bg:rgba(251,191,36,0.16); --callout-warn-tx:#f4cd7a;
+  --callout-risk-bg:rgba(236,72,153,0.20); --callout-risk-tx:#f9a8cf;
+}
+
+/* ━━━━━━━━ BRAND SERIES (theme-agnostic — same in all 4) ━━━━━━━━
+   Use these for data-series swatches/lines so channels read consistently. */
+:root {
+  --series-meta:      #6701e6; /* purple  */
+  --series-google:    #2dd4bf; /* aqua    */
+  --series-instagram: #ec4899; /* pink    */
+  --series-shopify:   #fbbf24; /* yellow  */
+  --series-other:     #1a0340; /* dark    */
+
+  /* ━━━━━━━━ CATEGORICAL SEQUENCE (non-channel dims: device / geo / product) ━━━━━━━━
+     Use when a breakdown ISN'T by channel. Saturated, legible on light AND dark. */
+  --cat-1: #6701e6; /* purple */
+  --cat-2: #2dd4bf; /* aqua   */
+  --cat-3: #fbbf24; /* yellow */
+  --cat-4: #ec4899; /* pink   */
+  --cat-5: #9bc400; /* lime   */
+  --cat-6: #8b5cf6; /* violet */
+
+  /* ━━━━━━━━ SEQUENTIAL SCALE (heat maps / conditional formatting / choropleth) ━━━━━━━━
+     Light→dark purple ramp. Theme-agnostic: cells stay tinted on any surface. */
+  --heat-1: #f4f0fe; /* lowest  */
+  --heat-2: #ede9fe;
+  --heat-3: #c4b5fd;
+  --heat-4: #8b5cf6;
+  --heat-5: #6701e6;
+  --heat-6: #3a0a80; /* highest */
+
+  /* ━━━━━━━━ DIVERGING SCALE (conditional formatting / stoplight: bad→good) ━━━━━━━━
+     Anchored to brand STATUS colors so "bad" is always cherry (#ec4899) and
+     "good" is always green — consistent with the delta pills used elsewhere.
+     Pastel tints, theme-agnostic (designed on light surfaces). */
+  --cf-1: #f7c7d5; /* worst  · cherry tint  (#ec4899) */
+  --cf-2: #fbdcc4; /* low    · coral-peach */
+  --cf-3: #fcecbf; /* mid    · yellow tint  (#fbbf24) */
+  --cf-4: #dcefb6; /* high   · yellow-green */
+  --cf-5: #bbe6b0; /* best   · green */
+
+  /* ━━━━━━━━ DELTA / TOOLTIP (shared) ━━━━━━━━ */
+  --delta-down: #ec4899; /* porter-pink — negative delta, all themes */
+}
+
+
+/* ===== tokens/typography.css ===== */
+/* ============================================================================
+   Porter Metrics — Typography tokens
+   Bricolage Grotesque is the protagonist (display/headings/big numbers),
+   Hanken Grotesk for body/labels/meta/legends. IBM Plex Mono (--font-alt) is
+   reserved for badges/chips/code ONLY — never data labels. Inter/IBM Plex Mono
+   are legacy: do not use for new work. Fonts load from Google Fonts at runtime.
+   ============================================================================ */
+
+:root {
+  /* ━━━━━━━━ FAMILIES ━━━━━━━━ */
+  /* Brand pairing — Bricolage (display/headings/numbers) + Hanken (body/meta). */
+  --font-bricolage: 'Bricolage Grotesque', 'Inter', sans-serif;
+  --font-hanken:    'Hanken Grotesk', 'Inter', sans-serif;
+  /* Aliases the .pds-* primitives read — point at the BRAND fonts, not Inter. */
+  --font-display: var(--font-bricolage); /* display, headings, big numbers */
+  --font-body:    var(--font-hanken);    /* body, labels, meta, legends */
+  /* --font-alt / --font-mono: reserved for badges/chips/code ONLY. */
+  --font-alt:     'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --font-mono:    'IBM Plex Mono', ui-monospace, Menlo, monospace;
+
+  /* ━━━━━━━━ WEIGHTS ━━━━━━━━ */
+  --weight-regular: 400;
+  --weight-medium:  500;
+  --weight-semibold: 600;
+  --weight-bold:    700;
+  --weight-heavy:   800;
+  --weight-black:   900;
+
+  /* ━━━━━━━━ DISPLAY SCALE (tight, heavy, uppercase covers) ━━━━━━━━ */
+  --type-display-size: clamp(72px, 10vw, 140px);
+  --type-display-weight: 900;
+  --type-display-leading: 0.9;
+  --type-display-tracking: -4px;
+
+  --type-h1-size: clamp(48px, 6vw, 88px);
+  --type-h1-weight: 800;
+  --type-h1-leading: 0.95;
+  --type-h1-tracking: -2.5px;
+
+  --type-h2-size: clamp(32px, 4vw, 56px);
+  --type-h2-weight: 800;
+  --type-h2-leading: 1;
+  --type-h2-tracking: -1.5px;
+
+  /* ━━━━━━━━ BODY + META ━━━━━━━━ */
+  --type-body-size: 18px;
+  --type-body-leading: 1.55;
+  --type-small-size: 15px;
+
+  --type-eyebrow-size: 14px;
+  --type-eyebrow-tracking: 2px;
+  --type-badge-size: 12px;
+  --type-badge-tracking: 1.5px;
+}
+
+
+/* ===== tokens/spacing.css ===== */
+/* ============================================================================
+   Porter Metrics — Spacing, radius & layout tokens
+   Generous, even spacing. Rounded (but not pill) corners on surfaces.
+   No drop shadows anywhere in the system.
+   ============================================================================ */
+
+:root {
+  /* ━━━━━━━━ SPACE SCALE ━━━━━━━━ */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+
+  /* ━━━━━━━━ RADIUS ━━━━━━━━ */
+  --radius-sm: 10px;  /* small buttons */
+  --radius-md: 12px;  /* buttons */
+  --radius-lg: 14px;  /* large buttons */
+  --radius-xl: 20px;  /* cards */
+  --radius-2xl: 28px; /* large feature surfaces */
+  --radius-pill: 999px; /* badges only */
+
+  /* ━━━━━━━━ LAYOUT ━━━━━━━━ */
+  --container-max: 1200px;
+  --section-pad-y: 96px;
+
+  /* No shadow system by design — surfaces use color + border only. */
+  --border-width: 2px;
+}
+
+
+/* ===== tokens/components.css ===== */
+/* ============================================================================
+   Porter Metrics — Component classes (.pds-*)
+   Consumed by the React primitives. Solid colors, no shadows, zero decoration.
+   ============================================================================ */
+
+/* ── BUTTON ───────────────────────────────────────────────────────────── */
+.pds-btn {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.08s ease, opacity 0.15s ease;
+  text-decoration: none;
+  line-height: 1;
+}
+.pds-btn:active { transform: translateY(1px); }
+.pds-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.pds-btn--sm { font-size: 14px; padding: 10px 18px; border-radius: var(--radius-sm); }
+.pds-btn--md { font-size: 16px; padding: 14px 26px; }
+.pds-btn--lg { font-size: 19px; padding: 18px 34px; border-radius: var(--radius-lg); }
+
+.pds-btn--purple  { background: var(--porter-purple); color: #fff; }
+.pds-btn--pink    { background: var(--porter-pink);   color: #fff; }
+.pds-btn--aqua    { background: var(--porter-aqua);   color: var(--porter-dark); }
+.pds-btn--yellow  { background: var(--porter-yellow); color: var(--porter-dark); }
+.pds-btn--dark    { background: var(--porter-dark);   color: #fff; }
+.pds-btn--outline {
+  background: transparent;
+  color: var(--btn-outline, var(--porter-purple));
+  box-shadow: inset 0 0 0 2px var(--btn-outline, var(--porter-purple));
+}
+
+/* ── CARD ─────────────────────────────────────────────────────────────── */
+.pds-card {
+  font-family: var(--font-display);
+  border-radius: var(--radius-xl);
+  padding: 32px;
+  background: var(--porter-white);
+  color: var(--porter-black);
+}
+.pds-card--cream    { background: var(--porter-cream); }
+.pds-card--lavender { background: var(--purple-100); }
+.pds-card--dark     { background: var(--porter-dark); color: #fff; }
+.pds-card--purple   { background: var(--porter-purple); color: #fff; }
+.pds-card--bordered { box-shadow: inset 0 0 0 1px var(--border-hairline); }
+
+/* ── BADGE ────────────────────────────────────────────────────────────── */
+.pds-badge {
+  font-family: var(--font-alt);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+.pds-badge--purple { background: var(--purple-100); color: var(--porter-purple); }
+.pds-badge--pink   { background: var(--pink-100);   color: var(--pink-700); }
+.pds-badge--aqua   { background: var(--aqua-100);   color: var(--aqua-700); }
+.pds-badge--yellow { background: var(--yellow-100); color: #92400e; }
+.pds-badge--dark   { background: var(--porter-dark); color: #fff; }
+
+/* ── INLINE TEXT (metric chips / highlight / underline) ───────────────────
+   Editorial emphasis inside running copy. Theme-aware: chips reuse the delta
+   tokens so "good/bad" reads the same as the pills in tables & scorecards. */
+.pds-chip {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-family: var(--font-alt); font-weight: 700;
+  font-size: 0.78em; letter-spacing: 0.01em;
+  padding: 2px 9px; border-radius: var(--radius-pill);
+  line-height: 1.5; vertical-align: baseline; white-space: nowrap;
+}
+.pds-chip--pos     { color: var(--delta-up);   background: color-mix(in srgb, var(--delta-up) 15%, transparent); }
+.pds-chip--neg     { color: var(--delta-down); background: color-mix(in srgb, var(--delta-down) 15%, transparent); }
+.pds-chip--neutral { color: var(--chip-text);  background: var(--chip-bg); }
+.pds-chip--brand   { color: #fff;              background: var(--series-meta); }
+.pds-hl {
+  background: color-mix(in srgb, var(--highlight-fill) 32%, transparent);
+  padding: 0 3px; border-radius: 3px;
+  font-weight: 600; color: var(--text-title);
+}
+.pds-u {
+  text-decoration: underline; text-decoration-color: var(--porter-aqua-300, #5eead4);
+  text-decoration-thickness: 3px; text-underline-offset: 3px;
+  font-weight: 600; color: var(--text-title);
+}
+
+/* ── TOOLTIP (hover popover for chart points) ─────────────────────────────
+   Put `.pds-hotspot` on the point wrapper and a `.pds-tooltip` inside it.
+   Reuses --tip-* theme tokens (dark on light themes, elevated on dark). */
+.pds-hotspot { position: relative; }
+.pds-tooltip {
+  position: absolute; left: 50%; bottom: calc(100% + 12px);
+  transform: translateX(-50%);
+  background: var(--tip-bg); color: var(--tip-text);
+  box-shadow: inset 0 0 0 1px var(--tip-border, transparent);
+  font-family: var(--font-alt);
+  padding: 9px 12px; border-radius: 9px; white-space: nowrap;
+  display: flex; flex-direction: column; gap: 2px;
+  opacity: 0; pointer-events: none; transition: opacity 0.12s ease; z-index: 5;
+}
+.pds-tooltip::after {
+  content: ""; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent; border-top-color: var(--tip-bg);
+}
+.pds-tooltip__date { font-size: 10.5px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; opacity: 0.72; }
+.pds-tooltip__val  { font-family: var(--font-display); font-weight: 700; font-size: 15px; }
+.pds-hotspot:hover .pds-tooltip,
+.pds-tooltip--show { opacity: 1; }
+
+/* ── TABLE TAG / IN-CELL CHIP ─────────────────────────────────────────────
+   A chip used inside table cells (campaign names, match types, labels). */
+.pds-tag {
+  display: inline-flex; align-items: center;
+  font-family: var(--font-alt); font-weight: 600; font-size: 0.85em; letter-spacing: 0.01em;
+  background: var(--chip-bg); color: var(--chip-text);
+  padding: 3px 8px; border-radius: 6px; white-space: nowrap;
+}
+
+/* ── STAT CARD (tinted) ───────────────────────────────────────────────────
+   Tinted KPI/creative card. Theme-aware so it has presence on light AND dark
+   (light = defined lavender border + faint fill; dark = translucent accent). */
+.pds-stat-card {
+  background: var(--stat-bg);
+  box-shadow: inset 0 0 0 1px var(--stat-border);
+  border-radius: var(--radius-lg); padding: 16px 18px;
+}
+
+/* ── SCORECARD (rhythm) ───────────────────────────────────────────────────
+   Fixed vertical rhythm: label · value · full-width sparkline · delta.
+   Sparkline = a SMOOTHED, area-filled path (never a raw <polyline>). Drive it
+   with dist/porter-charts.js via data-spark="v,v,…" / PorterCharts.sparkline().
+   ≥5-point guard: under 5 points it renders nothing — show context text. */
+.pds-scorecard { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.pds-scorecard__label { font-family: var(--font-alt); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
+.pds-scorecard__value { font-family: var(--font-display); font-weight: 800; font-size: 28px; line-height: 1; color: var(--text-title); }
+.pds-scorecard__spark { width: 100%; height: 26px; display: block; }
+
+/* ════════════════════════════════════════════════════════════════════════
+   CHART & TABLE PRIMITIVES — framework-free, theme-aware, copy-paste.
+   Static scaffolds in CSS; per-datum values go inline (height/width %, conic
+   stops). Paint only from theme tokens so all 4 themes work automatically.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ── COLUMN / BAR CHART ───────────────────────────────────────────────────
+   <div class="pds-bars" style="--chart-h:220px">
+     <div class="pds-bar" style="height:68%"></div> …  (48px-wide bars, grouped left)
+   Container is width:max-content — it hugs the bar group, never stretches to fill.
+   Labels go in a sibling row with the same gap. */
+.pds-bars { display: flex; align-items: flex-end; gap: 28px; width: max-content; height: var(--chart-h, 220px); }
+.pds-bar  { flex: 0 0 48px; min-height: 3px; background: var(--accent-line); border-radius: 6px 6px 0 0; }
+.pds-bar--alt { background: var(--cat-2); }
+
+/* ── HORIZONTAL BREAKDOWN BARS ────────────────────────────────────────────
+   <div class="pds-breakdown__row"><span>Label</span>
+     <div class="pds-breakdown__track"><div class="pds-breakdown__fill" style="width:72%"></div></div>
+     <span>72%</span></div> */
+.pds-breakdown { display: flex; flex-direction: column; gap: 14px; }
+.pds-breakdown__row { display: grid; grid-template-columns: 130px 1fr auto; align-items: center; gap: 14px; font-family: var(--font-body); color: var(--text-body); }
+.pds-breakdown__track { height: 10px; border-radius: 999px; background: var(--surface-sunken, var(--grid-line)); overflow: hidden; }
+.pds-breakdown__fill  { height: 100%; border-radius: 999px; background: var(--accent-line); }
+
+/* ── DONUT (conic-gradient — no SVG dasharray math) ────────────────────────
+   <div class="pds-donut" style="background:conic-gradient(
+        var(--series-meta) 0 52%, var(--series-google) 52% 78%, var(--series-shopify) 78% 100%)"></div>
+   The mask cuts the hole; set segment stops inline. */
+.pds-donut { width: var(--donut-size, 160px); aspect-ratio: 1; border-radius: 50%;
+  -webkit-mask: radial-gradient(circle, transparent 56%, #000 57%);
+          mask: radial-gradient(circle, transparent 56%, #000 57%); }
+
+/* ── CONDITIONAL-FORMAT (STOPLIGHT) CELL ──────────────────────────────────
+   Uses the DIVERGING ramp (bad→good). Pastel tints always carry DARK text
+   (the ramp is light on every theme — this is the documented assumption). */
+.pds-cf { font-family: var(--font-alt); font-weight: 700; text-align: center;
+  padding: 8px 12px; border-radius: 8px; color: var(--porter-dark); }
+.pds-cf--1 { background: var(--cf-1); } /* worst · cherry  */
+.pds-cf--2 { background: var(--cf-2); }
+.pds-cf--3 { background: var(--cf-3); } /* mid · yellow   */
+.pds-cf--4 { background: var(--cf-4); }
+.pds-cf--5 { background: var(--cf-5); } /* best · green    */
+
+/* ── FUNNEL / CONVERSION PATH ──────────────────────────────────────────────
+   Label + value go ABOVE the bar — NEVER inside it. On steep ad funnels
+   (Impressions→Clicks <3%) text-in-bar overflows the thin fill; min-width does
+   not fix it. The fill shows proportion only.
+   <div class="pds-funnel__stage">
+     <div class="pds-funnel__head"><span class="pds-funnel__name">Clicks</span>
+       <span class="pds-funnel__value">53,400</span></div>
+     <div class="pds-funnel__track"><div class="pds-funnel__fill" style="width:42%"></div></div>
+   </div>
+   Print the step rate (↓ x%) between stages with .pds-funnel__rate. */
+.pds-funnel { display: flex; flex-direction: column; gap: 10px; }
+.pds-funnel__stage { display: flex; flex-direction: column; gap: 6px; }
+.pds-funnel__head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; }
+.pds-funnel__name { font-family: var(--font-body); font-weight: 600; color: var(--text-title); }
+.pds-funnel__value { font-family: var(--font-display); font-weight: 700; color: var(--text-title); font-variant-numeric: tabular-nums; }
+.pds-funnel__track { height: 14px; border-radius: 999px; background: var(--surface-sunken, var(--grid-line)); overflow: hidden; }
+.pds-funnel__fill { height: 100%; border-radius: 999px; background: var(--accent-line); min-width: 4px; }
+.pds-funnel__rate { font-family: var(--font-alt); font-size: 12px; color: var(--text-muted); }
+.pds-funnel__step { background: var(--surface-sunken, var(--surface-card)); box-shadow: inset 0 0 0 1px var(--card-border);
+  border-radius: var(--radius-md); padding: 14px 18px; }
+/* LEGACY — text-in-bar. Back-compat only; do NOT emit for new funnels. */
+.pds-funnel__bar { height: 42px; min-width: 72px; background: var(--accent-line);
+  border-radius: 8px; display: flex; align-items: center; padding: 0 16px;
+  color: #fff; font-family: var(--font-display); font-weight: 700; }
+
+/* ── EYEBROW ──────────────────────────────────────────────────────────── */
+.pds-eyebrow {
+  font-family: var(--font-alt);
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--porter-purple);
+  display: block;
+}
+
+/* ── HEADING ──────────────────────────────────────────────────────────── */
+.pds-heading {
+  font-family: var(--font-display);
+  color: var(--porter-black);
+  margin: 0;
+}
+.pds-heading--display {
+  font-size: clamp(72px, 10vw, 140px);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -4px;
+  text-transform: uppercase;
+}
+.pds-heading--h1 {
+  font-size: clamp(48px, 6vw, 88px);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -2.5px;
+}
+.pds-heading--h2 {
+  font-size: clamp(32px, 4vw, 56px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -1.5px;
+}
+.pds-heading strong { color: var(--porter-purple); font-weight: 900; }
