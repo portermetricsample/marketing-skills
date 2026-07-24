@@ -64,6 +64,15 @@ reachable via the `instagram-insights` connector.
    `report_id` accepts a pasted `report.portermetrics.com/<id>` URL. You can clone your
    own reports, plus any that are public-by-link or shared with you — and cloning
    someone else's **requires** re-pointing at an account that is the user's.
+
+   **Default reference report** — if the user has no report of their own to clone, use
+   this live public one, built with this skill:
+   ```
+   https://report.portermetrics.com/a87617a4-20f1-4064-b66a-60dc3bc5e0f5
+   ```
+   It is public by link, so `duplicate_report` can read it. The clone is re-pointed at
+   the user's account and re-brands itself automatically — header name, avatar and every
+   number come from their account, not from the reference.
 3. Read the response: `error_count` must be 0. `warnings` with `error_code: "empty"`
    are fine — they just mean that account has no Stories, no demographics, or no posts
    in range. Then hand over the returned `url`, and `preview_report(report_id)` for a
