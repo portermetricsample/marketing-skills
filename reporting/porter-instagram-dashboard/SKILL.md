@@ -75,8 +75,27 @@ reachable via the `instagram-insights` connector.
    number come from their account, not from the reference.
 3. Read the response: `error_count` must be 0. `warnings` with `error_code: "empty"`
    are fine — they just mean that account has no Stories, no demographics, or no posts
-   in range. Then hand over the returned `url`, and `preview_report(report_id)` for a
-   no-login preview.
+   in range.
+4. **Verify the re-pointing actually stuck — do not skip this.**
+   ```
+   get_report(<new report_id>)      → bundle_manifest.account_ids
+   ```
+   That list must contain the user's account. Observed in practice: a duplicate ran its
+   audit *and* rendered its preview against the new account, yet the stored metadata
+   kept the **reference report's** account — so the live dashboard quietly showed
+   someone else's data. Treat the duplicate response as unconfirmed until `get_report`
+   agrees.
+
+   If it points at the wrong account, re-point it (a metadata-only edit, applied
+   inline — no rebuild):
+   ```
+   edit_report(<new report_id>, accounts_used=["<account_id from step 1>"])
+   ```
+   Then call `get_report` again and confirm before moving on.
+5. Confirm what it renders with `preview_report(report_id)` — the header name, the
+   avatar and the numbers all come from the account's own data, so they are the
+   giveaway: if they aren't the user's, the report is still bound to the wrong account.
+   Then hand over the `url` plus that no-login `preview_url`.
 
 The copy is owned by the user, named "Copy of …", and starts **private** — it never
 inherits the original's audience. Making it public is the user's call (the Share button
