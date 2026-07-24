@@ -1,5 +1,5 @@
 ---
-name: instagram-dashboard
+name: porter-instagram-dashboard
 description: >-
   Build a polished, hosted Instagram Insights dashboard for any Instagram account
   using the PorterMetrics MCP — a 4-page report (Overview, Posts, Stories, Audience)
