@@ -1,0 +1,263 @@
+<!-- @dsCard group="Components" viewport="1400x1080" name="Performance drivers — diagnostic tree" subtitle="Why did a metric move? LMDI lever strip (Conversions = Impressions × CTR × CVR) + a segment contribution tree; click a node to recompute the levers for it" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="../../styles.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400..700&display=swap" rel="stylesheet" />
+<style>
+  /* card-specific LAYOUT + class hooks. Colours from styles.css tokens; the
+     helped/hurt node tints reuse the --cf ramp ends (good=cf-5 green, bad=cf-1 red). */
+  :root {
+    --dt-good: var(--cf-5); --dt-bad: var(--cf-1); --dt-na: var(--card-border);
+    --dt-root-bg: var(--surface-lavender, #eef4ff); --dt-root-border: var(--accent-line, #aecbfa);
+    --dt-link: var(--grid-line, rgba(128,134,142,0.5));
+  }
+  html, body { margin: 0; background: var(--surface-bg); color: var(--text-body); font-family: var(--font-hanken); }
+  .wrap { padding: 28px 30px 40px; }
+  .appbar { display: flex; align-items: center; gap: 10px; }
+  .appbar .word { font-weight: 700; color: var(--text-title); } .appbar .acct { color: var(--text-muted); font-size: 13px; }
+  h1 { font-family: var(--font-bricolage), var(--font-hanken); font-size: 23px; margin: 6px 0 4px; color: var(--text-title); }
+  .sub { color: var(--text-muted); margin: 0 0 16px; font-size: 13.5px; max-width: 900px; }
+
+  .pd-controls { display: flex; flex-wrap: wrap; gap: 18px; margin: 4px 0 16px; }
+  .pd-seg { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .pd-seg-lab { font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--text-muted); font-weight: 600; margin-right: 2px; }
+  .pd-seg-btn { font: inherit; font-size: 12px; padding: 5px 11px; border: 1px solid var(--card-border); background: var(--surface-card); color: var(--text-body); border-radius: 999px; cursor: pointer; }
+  .pd-seg-btn:hover { background: var(--surface-sunken, #f1f3f4); }
+  .pd-seg-btn.is-active { background: var(--surface-lavender, #e8f0fe); border-color: var(--accent-line, #c6dafc); color: var(--accent); font-weight: 600; }
+
+  .pd-levers { background: var(--surface-card); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px 16px; margin-bottom: 22px; }
+  .pd-levers-head { font-size: 14px; color: var(--text-body); margin-bottom: 10px; }
+  .pd-levers-head strong { color: var(--text-title); }
+  .pd-h-delta { font-weight: 700; } .pd-h-delta--good { color: var(--good); } .pd-h-delta--bad { color: var(--bad); }
+  .pd-h-node { color: var(--text-muted); } .pd-h-vals { float: right; color: var(--text-muted); font-size: 12px; }
+  .pd-lever-rows { display: flex; flex-direction: column; gap: 7px; }
+  .pd-lever { display: grid; grid-template-columns: 120px 1fr 150px; align-items: center; gap: 10px; }
+  .pd-lever-lab { font-size: 12px; color: var(--text-body); }
+  .pd-lever-track { height: 10px; background: var(--surface-sunken, #eef1f4); border-radius: 5px; overflow: hidden; }
+  .pd-lever-fill { display: block; height: 100%; border-radius: 5px; }
+  .pd-lever--good .pd-lever-fill { background: var(--good); } .pd-lever--bad .pd-lever-fill { background: var(--bad); } .pd-lever--flat .pd-lever-fill { background: var(--text-muted); }
+  .pd-lever-val { font-size: 12px; font-weight: 600; color: var(--text-title); text-align: right; }
+  .pd-lever--good .pd-lever-val { color: var(--good); } .pd-lever--bad .pd-lever-val { color: var(--bad); }
+  .pd-lever-sh { color: var(--text-muted); font-weight: 500; margin-left: 4px; }
+
+  /* driver-tree structural + appearance */
+  .dt-wrap { position: relative; overflow-x: auto; padding: 6px 2px 10px; }
+  .dt-links { position: absolute; top: 0; left: 0; pointer-events: none; z-index: 0; }
+  .dt-hdrs, .dt-cols { position: relative; z-index: 1; display: flex; gap: 46px; min-width: max-content; }
+  .dt-hdrs { align-items: flex-end; margin-bottom: 10px; } .dt-cols { align-items: flex-start; }
+  .dt-col { display: flex; flex-direction: column; gap: 12px; justify-content: center; }
+  .dt-node { width: 232px; box-sizing: border-box; padding: 9px 11px; border: 1px solid var(--dt-na); border-radius: 10px; background: var(--surface-card); }
+  .dt-colhdr { width: 232px; box-sizing: border-box; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--text-muted); padding: 0 2px; }
+  .dt-node.dt-good { background: var(--dt-good); } .dt-node.dt-bad { background: var(--dt-bad); } .dt-node.dt-na { background: var(--surface-card); }
+  .dt-node.dt-root { background: var(--dt-root-bg); border-color: var(--dt-root-border); }
+  .dt-node.dt-exp { cursor: pointer; } .dt-node.dt-exp:hover { border-color: var(--accent); }
+  .dt-node.dt-sel { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .dt-node.dt-ph { opacity: .6; font-style: italic; border-style: dashed; }
+  .dt-top { display: flex; align-items: flex-start; gap: 5px; }
+  .dt-caret { color: var(--text-muted); font-size: 11px; width: 10px; }
+  .dt-name { font-size: 13px; font-weight: 600; color: var(--text-title); flex: 1; min-width: 0; overflow-wrap: anywhere; }
+  .dt-ext { color: var(--accent); text-decoration: none; flex: none; }
+  .dt-headline { margin-top: 7px; display: flex; align-items: baseline; gap: 7px; }
+  .dt-h-val { font-size: 17px; font-weight: 700; color: var(--text-title); }
+  .dt-headline--good .dt-h-val { color: var(--good); } .dt-headline--bad .dt-h-val { color: var(--bad); }
+  .dt-h-sub { font-size: 11px; color: var(--text-muted); }
+  .dt-krows { margin-top: 6px; }
+  .dt-krow { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 2px 0; }
+  .dt-k { font-size: 11px; color: var(--text-muted); } .dt-v { font-size: 12px; font-weight: 500; color: var(--text-body); }
+  .dt-delta { font-size: 10px; font-weight: 700; margin-left: 4px; } .dt-delta--good { color: var(--good); } .dt-delta--bad { color: var(--bad); }
+  .dt-empty { padding: 24px; color: var(--text-muted); font-size: 13px; }
+</style>
+</head>
+<body data-theme="white">
+  <div class="wrap">
+    <div class="appbar"><span class="word">Google Ads</span> <span class="acct">· Acme Insurance · 123-456-7890</span></div>
+    <h1>Performance drivers — why did it move?</h1>
+    <p class="sub"><strong>Explain</strong> picks the metric. The strip splits its change into the math <strong>levers</strong> (Conversions = Impressions × CTR × CVR). The tree splits the same change across segments — each node = its <strong>contribution to the move</strong>, ranked, colored helped/hurt. <strong>Click a node</strong> → the levers recompute for it. Fictional demo · synthetic numbers.</p>
+    <div id="host"></div>
+  </div>
+
+<!-- ====================== driver-tree ENGINE (with contribution mode) ====================== -->
+<script>
+(function (root, factory) { root.PorterReporting = root.PorterReporting || {}; root.PorterReporting.driverTree = factory(); })(window, function () {
+  "use strict";
+  function num(v){return Number(v)||0;} function grp(v,dp){var f=Math.pow(10,dp),s=(Math.round(num(v)*f)/f).toFixed(dp),p=s.split(".");p[0]=p[0].replace(/\B(?=(\d{3})+(?!\d))/g,",");return p.join(".");}
+  function tz(s){return s.indexOf(".")===-1?s:s.replace(/\.?0+$/,"");}
+  var FORMATS={money:function(v){return "$"+tz(grp(v,2));},int:function(v){return grp(Math.round(num(v)),0);},dec:function(v){return tz(grp(num(v),2));},pct2:function(v){return (num(v)*100).toFixed(2)+"%";},ratio:function(v){return num(v).toFixed(2)+"x";}};
+  function fmt(v,f){return (FORMATS[f]||FORMATS.dec)(v);}
+  function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+  function delta(cur,prev,invert){if(prev==null||prev===0||!isFinite(prev))return "";var d=(num(cur)-prev)/prev;if(!isFinite(d)||d===0)return "";var a=d>0?"▲":"▼",dir=(d>0)!==!!invert?"good":"bad";return ' <span class="dt-delta dt-delta--'+dir+'">'+a+Math.abs(d*100).toFixed(0)+"%</span>";}
+  function nodeHtml(node,depth,opts){
+    var expandable=node.children===null||(node.children&&node.children.length), open=!!node._open, sel=opts.selectedId&&node._id===opts.selectedId, cls="dt-node";
+    if(node.isRoot)cls+=" dt-root";
+    else if(opts.colorBy==="direction")cls+=" "+(node.direction==="good"?"dt-good":(node.direction==="bad"?"dt-bad":"dt-na"));
+    else cls+=" "+(node.eff||"dt-na");
+    if(expandable)cls+=" dt-exp"; if(node.placeholder)cls+=" dt-ph"; if(sel)cls+=" dt-sel";
+    var attrs=' class="'+cls+'" data-dt-id="'+esc(node._id)+'"'+(node._parent!=null?' data-dt-parent="'+esc(node._parent)+'"':"")+(expandable?' data-dt-expandable="1"':"")+((expandable||opts.selectable)?' role="button" tabindex="0"':"");
+    if(node.placeholder)return '<div'+attrs+'><div class="dt-name">'+esc(node.name)+"</div></div>";
+    var caret=expandable?'<span class="dt-caret">'+(open?"▾":"▸")+"</span>":"";
+    var head=node.headline?'<div class="dt-headline dt-headline--'+(node.headline.tone||"flat")+'"><span class="dt-h-val">'+esc(node.headline.value)+"</span>"+(node.headline.sub?'<span class="dt-h-sub">'+esc(node.headline.sub)+"</span>":"")+"</div>":"";
+    var krows="",metrics=opts.metrics||[];
+    for(var i=0;i<metrics.length;i++){var m=metrics[i],v=node.metrics?node.metrics[m.key]:null,pv=(opts.compare&&node.prev)?node.prev[m.key]:null;var valStr=(v==null)?"—":fmt(v,m.format);var d=(pv!=null)?delta(v,pv,m.invert):"";krows+='<div class="dt-krow"><span class="dt-k">'+esc(m.label)+'</span><span class="dt-v">'+valStr+d+"</span></div>";}
+    return '<div'+attrs+'><div class="dt-top">'+caret+'<span class="dt-name" title="'+esc(node.full||node.name)+'">'+esc(node.name)+"</span></div>"+head+(krows?'<div class="dt-krows">'+krows+"</div>":"")+"</div>";
+  }
+  function layout(rootNode,opts){var cols=[],open=opts._open||{};
+    function visit(node,depth,parentId,path){node._id=path;node._parent=parentId;node.isRoot=depth===0;node._open=node.isRoot?true:!!open[path];
+      (cols[depth]=cols[depth]||[]).push(node);
+      if(node._open&&node.children&&node.children.length){for(var i=0;i<node.children.length;i++)visit(node.children[i],depth+1,path,path+"/"+i);}
+    } visit(rootNode,0,null,"r"); return cols;}
+  function build(opts){opts=opts||{};if(!opts.tree)return '<div class="dt-empty">'+esc(opts.emptyMessage||"No data")+"</div>";
+    var cols=layout(opts.tree,opts),headers=opts.columns||[];
+    var hdr='<div class="dt-hdrs">';for(var c=0;c<cols.length;c++){if(!cols[c]||!cols[c].length)continue;hdr+='<div class="dt-colhdr">'+esc(headers[c]||"")+"</div>";}hdr+="</div>";
+    var body='<div class="dt-cols">';for(var c2=0;c2<cols.length;c2++){if(!cols[c2]||!cols[c2].length)continue;body+='<div class="dt-col">';for(var i=0;i<cols[c2].length;i++)body+=nodeHtml(cols[c2][i],c2,opts);body+="</div>";}body+="</div>";
+    return '<div class="dt-wrap"><svg class="dt-links" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>'+hdr+body+"</div>";}
+  function drawConnectors(hostEl){if(!hostEl)return;var wrap=hostEl.querySelector(".dt-wrap"),svg=hostEl.querySelector(".dt-links");if(!wrap||!svg)return;
+    var nodes=wrap.querySelectorAll(".dt-node[data-dt-id]"),map={},k;for(k=0;k<nodes.length;k++)map[nodes[k].getAttribute("data-dt-id")]=nodes[k];
+    var W=wrap.scrollWidth,H=wrap.scrollHeight;svg.setAttribute("width",W);svg.setAttribute("height",H);svg.style.width=W+"px";svg.style.height=H+"px";var wr=wrap.getBoundingClientRect(),paths="";
+    for(k=0;k<nodes.length;k++){var ce=nodes[k],pid=ce.getAttribute("data-dt-parent");if(!pid||!map[pid])continue;var pe=map[pid],pr=pe.getBoundingClientRect(),cr=ce.getBoundingClientRect();var x1=pr.right-wr.left,y1=pr.top-wr.top+pr.height/2,x2=cr.left-wr.left,y2=cr.top-wr.top+cr.height/2,mx=(x1+x2)/2;paths+="<path d='M"+x1.toFixed(1)+" "+y1.toFixed(1)+" C "+mx.toFixed(1)+" "+y1.toFixed(1)+" "+mx.toFixed(1)+" "+y2.toFixed(1)+" "+x2.toFixed(1)+" "+y2.toFixed(1)+"' fill='none' stroke='var(--dt-link, rgba(128,134,142,0.55))' stroke-width='1.4'/>";}
+    svg.innerHTML=paths;}
+  function mount(target,opts){opts=opts||{};var el=typeof target==="string"?document.querySelector(target):target;if(!el)return null;var open={},selectedId=opts.selectedId||null,rt;
+    function render(){el.innerHTML=build({tree:opts.tree,columns:opts.columns,metrics:opts.metrics,compare:opts.compare,colorBy:opts.colorBy,selectable:opts.selectable,selectedId:selectedId,_open:open});drawConnectors(el);}
+    function findNode(node,id){if(node._id===id)return node;if(node.children&&node.children.length){for(var i=0;i<node.children.length;i++){var f=findNode(node.children[i],id);if(f)return f;}}return null;}
+    function toggle(id){open[id]=!open[id];render();}
+    function select(id){selectedId=id;var node=opts.tree?findNode(opts.tree,id):null;if(typeof opts.onSelect==="function")opts.onSelect(id,node);render();}
+    function onActivate(n){var id=n.getAttribute("data-dt-id");if(opts.selectable)select(id);if(n.getAttribute("data-dt-expandable"))toggle(id);}
+    el.addEventListener("click",function(e){var n=e.target.closest?e.target.closest(".dt-node[data-dt-id]"):null;if(n&&!n.classList.contains("dt-ph"))onActivate(n);});
+    el.addEventListener("keydown",function(e){if(e.key!=="Enter"&&e.key!==" ")return;var n=e.target.closest?e.target.closest(".dt-node[data-dt-id]"):null;if(n&&!n.classList.contains("dt-ph")){e.preventDefault();onActivate(n);}});
+    window.addEventListener("resize",function(){clearTimeout(rt);rt=setTimeout(function(){drawConnectors(el);},150);});
+    render();return {el:el,rerender:render,redraw:function(){drawConnectors(el);},select:select};
+  }
+  return {build:build,mount:mount,drawConnectors:drawConnectors,fmt:fmt};
+});
+</script>
+
+<!-- ====================== performance-drivers use case ====================== -->
+<script>
+(function (root, factory) { var api=factory(root.PorterReporting.driverTree); root.PorterReporting.performanceDrivers=api; })(window, function (DT) {
+  "use strict";
+  function num(v){return Number(v)||0;} function div(a,b){return b?a/b:0;}
+  function grp(v,dp){var f=Math.pow(10,dp),s=(Math.round(num(v)*f)/f).toFixed(dp),p=s.split(".");p[0]=p[0].replace(/\B(?=(\d{3})+(?!\d))/g,",");return p.join(".");}
+  function tz(s){return s.indexOf(".")===-1?s:s.replace(/\.?0+$/,"");}
+  function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+  function titleCase(v){return String(v).split("_").map(function(w){return w.charAt(0)+w.slice(1).toLowerCase();}).join(" ");}
+  var TYPE_LABELS={SEARCH:"Search",PERFORMANCE_MAX:"Performance Max",DEMAND_GEN:"Demand Gen",VIDEO:"Video",SHOPPING:"Shopping",DISPLAY:"Display",APP:"App"};
+  function typeOf(c){var k=String(c||"").toUpperCase();return TYPE_LABELS[k]||(c?titleCase(c):"Other");}
+  function fmtVal(v,f){if(f==="money")return "$"+tz(grp(v,2));if(f==="int")return grp(Math.round(num(v)),0);if(f==="pct2")return (num(v)*100).toFixed(2)+"%";if(f==="ratio")return num(v).toFixed(2)+"x";return tz(grp(num(v),2));}
+  function fmtSigned(v,f){var s=v>=0?"+":"−",a=Math.abs(v);if(f==="money")return s+"$"+tz(grp(a,2));if(f==="int")return s+grp(Math.round(a),0);if(f==="pct2")return s+(a*100).toFixed(2)+" pts";if(f==="ratio")return s+a.toFixed(2)+"x";return s+tz(grp(a,2));}
+  var METRICS={
+    conversions:{label:"Conversions",kind:"count",base:"conv",goodDir:1,fmt:"dec",factors:[{key:"impr",label:"Impressions"},{key:"ctr",label:"CTR"},{key:"cvr",label:"CVR"}]},
+    value:{label:"Conv. value",kind:"count",base:"value",goodDir:1,fmt:"money",factors:[{key:"conv",label:"Conversions"},{key:"aov",label:"AOV"}]},
+    cost:{label:"Cost",kind:"count",base:"cost",goodDir:-1,fmt:"money",factors:[{key:"impr",label:"Impressions"},{key:"ctr",label:"CTR"},{key:"cpc",label:"CPC"}]},
+    clicks:{label:"Clicks",kind:"count",base:"clk",goodDir:1,fmt:"int",factors:[{key:"impr",label:"Impressions"},{key:"ctr",label:"CTR"}]},
+    cpa:{label:"Cost / conv.",kind:"ratio",num:"cost",den:"conv",goodDir:-1,fmt:"money",factors:[{key:"cost",label:"Cost",exp:1},{key:"conv",label:"Conversions",exp:-1}]},
+    roas:{label:"ROAS",kind:"ratio",num:"value",den:"cost",goodDir:1,fmt:"ratio",factors:[{key:"value",label:"Conv. value",exp:1},{key:"cost",label:"Cost",exp:-1}]},
+    ctr:{label:"CTR",kind:"ratio",num:"clk",den:"impr",goodDir:1,fmt:"pct2",factors:[{key:"clk",label:"Clicks",exp:1},{key:"impr",label:"Impressions",exp:-1}]},
+    cvr:{label:"CVR",kind:"ratio",num:"conv",den:"clk",goodDir:1,fmt:"pct2",factors:[{key:"conv",label:"Conversions",exp:1},{key:"clk",label:"Clicks",exp:-1}]}
+  };
+  var METRIC_ORDER=["conversions","value","cost","clicks","cpa","roas","ctr","cvr"];
+  function emptyAgg(){return {impr:0,clk:0,conv:0,value:0,cost:0};}
+  function aggRows(rows){var a=emptyAgg();for(var i=0;i<rows.length;i++){var r=rows[i];a.impr+=num(r.__impr);a.clk+=num(r.__clk);a.conv+=num(r.__conv);a.value+=num(r.__value);a.cost+=num(r.__cost);}return a;}
+  function factorVal(a,key){if(key==="impr")return a.impr;if(key==="clk")return a.clk;if(key==="conv")return a.conv;if(key==="value")return a.value;if(key==="cost")return a.cost;if(key==="ctr")return div(a.clk,a.impr);if(key==="cvr")return div(a.conv,a.clk);if(key==="cpc")return div(a.cost,a.clk);if(key==="cpm")return div(a.cost,a.impr)*1000;if(key==="aov")return div(a.value,a.conv);return 0;}
+  function metricValue(a,m){return m.kind==="ratio"?div(a[m.num],a[m.den]):a[m.base];}
+  function logMean(a,b){if(a<=0||b<=0)return 0;if(a===b)return a;return (a-b)/(Math.log(a)-Math.log(b));}
+  function levers(m,aggCur,aggPrev){var P1=metricValue(aggCur,m),P0=metricValue(aggPrev,m),total=P1-P0,L=logMean(P1,P0),out=[],i,sum=0;
+    for(i=0;i<m.factors.length;i++){var f=m.factors[i],x1=factorVal(aggCur,f.key),x0=factorVal(aggPrev,f.key),exp=f.exp||1,c=0;if(L>0&&x1>0&&x0>0)c=L*exp*Math.log(x1/x0);out.push({key:f.key,label:f.label,contribution:c});sum+=c;}
+    var resid=total-sum;if(out.length){var bi=0;for(i=1;i<out.length;i++)if(Math.abs(out[i].contribution)>Math.abs(out[bi].contribution))bi=i;out[bi].contribution+=resid;}
+    return {total:total,P1:P1,P0:P0,factors:out};}
+  function dirOf(c,goodDir){if(!c)return "flat";return (c>0)===(goodDir>0)?"good":"bad";}
+  function enrich(adGroups,campaigns){var chan={};(campaigns||[]).forEach(function(c){chan[c.google_ads_campaign_name]=c.google_ads_campaign_advertising_channel_type;});
+    return (adGroups||[]).map(function(r){return {campaign:r.google_ads_campaign_name,adGroup:r.google_ads_ad_group_name,channel:chan[r.google_ads_campaign_name]||"",__impr:num(r.google_ads_impressions),__clk:num(r.google_ads_clicks),__conv:num(r.google_ads_conversions),__value:num(r.google_ads_conversions_value),__cost:num(r.google_ads_cost_micros)};});}
+  var DIMS={campaign_type:{label:"Campaign type",keyOf:function(r){return typeOf(r.channel);}},campaign:{label:"Campaign",keyOf:function(r){return r.campaign;}},ad_group:{label:"Ad group",keyOf:function(r){return r.adGroup||"(none)";}}};
+  var CHAINS={campaign_type:["campaign_type","campaign","ad_group"],campaign:["campaign","ad_group"],ad_group:["ad_group"]};
+  function buildTree(opts){
+    var m=METRICS[opts.metric]||METRICS.conversions,account=(opts.account&&opts.account.name)||"Account";
+    var baseCur=enrich(opts.adGroups,opts.campaigns),basePrev=enrich((opts.previous||{}).adGroups,(opts.previous||{}).campaigns),chain=CHAINS[opts.dimension]||CHAINS.campaign_type,TOPN=opts.topN||12;
+    function group(rows,keyFn){var map={},order=[];for(var i=0;i<rows.length;i++){var k=keyFn(rows[i]);if(!map[k]){map[k]=[];order.push(k);}map[k].push(rows[i]);}return {map:map,order:order};}
+    var rootCur=aggRows(baseCur),rootPrev=aggRows(basePrev);
+    var rootDelta=m.kind==="ratio"?(metricValue(rootCur,m)-metricValue(rootPrev,m)):(rootCur[m.base]-rootPrev[m.base]);
+    var rootR0=m.kind==="ratio"?div(rootPrev[m.num],rootPrev[m.den]):0,rootDcur=m.kind==="ratio"?rootCur[m.den]:0;
+    function contrib(ca,pa){return m.kind==="ratio"?(rootDcur?(ca[m.num]-rootR0*ca[m.den])/rootDcur:0):(ca[m.base]-pa[m.base]);}
+    function buildChildren(curRows,prevRows,depth,parentDelta){
+      if(depth>=chain.length)return null;
+      var dim=DIMS[chain[depth]],gC=group(curRows,dim.keyOf),gP=group(prevRows,dim.keyOf),keys={},list=[];
+      gC.order.concat(gP.order).forEach(function(k){if(!keys[k]){keys[k]=1;list.push(k);}});
+      var nodes=list.map(function(k){var cr=gC.map[k]||[],pr=gP.map[k]||[],ca=aggRows(cr),pa=aggRows(pr);return {key:k,name:k,curRows:cr,prevRows:pr,ca:ca,pa:pa,contribution:contrib(ca,pa)};});
+      nodes.sort(function(a,b){return Math.abs(b.contribution)-Math.abs(a.contribution);});
+      var shown=nodes,others=null;
+      if(nodes.length>TOPN){shown=nodes.slice(0,TOPN);var rest=nodes.slice(TOPN),oc=emptyAgg(),op=emptyAgg(),os=0,orows=[],oprows=[];rest.forEach(function(n){["impr","clk","conv","value","cost"].forEach(function(kk){oc[kk]+=n.ca[kk];op[kk]+=n.pa[kk];});os+=n.contribution;orows=orows.concat(n.curRows);oprows=oprows.concat(n.prevRows);});others={key:"__others",name:"Others ("+rest.length+")",curRows:orows,prevRows:oprows,ca:oc,pa:op,contribution:os};}
+      var finalList=others?shown.concat([others]):shown;
+      return finalList.map(function(n){
+        var node={name:n.name,headline:{value:fmtSigned(n.contribution,m.fmt),sub:(parentDelta?Math.round(n.contribution/parentDelta*100):0)+"% of move",tone:dirOf(n.contribution,m.goodDir)},direction:dirOf(n.contribution,m.goodDir),metrics:{now:metricValue(n.ca,m)},prev:{now:metricValue(n.pa,m)},_aggCur:n.ca,_aggPrev:n.pa,_contribution:n.contribution};
+        if(n.key!=="__others"){var kids=buildChildren(n.curRows,n.prevRows,depth+1,n.contribution);if(kids&&kids.length)node.children=kids;}
+        return node;
+      });
+    }
+    var tree={name:account,isRoot:true,headline:{value:fmtSigned(rootDelta,m.fmt),sub:"vs previous period",tone:dirOf(rootDelta,m.goodDir)},metrics:{now:metricValue(rootCur,m)},prev:{now:metricValue(rootPrev,m)},_aggCur:rootCur,_aggPrev:rootPrev,children:buildChildren(baseCur,basePrev,0,rootDelta)};
+    return {tree:tree,columns:["Account"].concat(chain.map(function(d){return DIMS[d].label;}))};
+  }
+  function leverStrip(metricId,aggCur,aggPrev,nodeName){
+    var m=METRICS[metricId]||METRICS.conversions,lv=levers(m,aggCur,aggPrev),maxAbs=0;lv.factors.forEach(function(f){if(Math.abs(f.contribution)>maxAbs)maxAbs=Math.abs(f.contribution);});
+    var dirTotal=dirOf(lv.total,m.goodDir);
+    var head='<div class="pd-levers-head">Why <strong>'+esc(m.label)+'</strong> <span class="pd-h-delta pd-h-delta--'+dirTotal+'">'+(lv.total>=0?"▲":"▼")+" "+fmtSigned(lv.total,m.fmt).replace(/^[+−]/,"")+'</span> · <span class="pd-h-node">'+esc(nodeName)+'</span><span class="pd-h-vals">'+fmtVal(lv.P0,m.fmt)+' → '+fmtVal(lv.P1,m.fmt)+'</span></div>';
+    var rows=lv.factors.map(function(f){var tone=dirOf(f.contribution,m.goodDir),w=maxAbs?Math.round(Math.abs(f.contribution)/maxAbs*100):0,sh=lv.total?Math.round(f.contribution/lv.total*100):0;
+      return '<div class="pd-lever pd-lever--'+tone+'"><span class="pd-lever-lab">'+esc(f.label)+'</span><span class="pd-lever-track"><span class="pd-lever-fill" style="width:'+w+'%"></span></span><span class="pd-lever-val">'+fmtSigned(f.contribution,m.fmt)+' <span class="pd-lever-sh">'+sh+'%</span></span></div>';}).join("");
+    return head+'<div class="pd-lever-rows">'+rows+'</div>';
+  }
+  function mBtns(a){return METRIC_ORDER.map(function(id){return '<button class="pd-seg-btn'+(id===a?" is-active":"")+'" data-metric="'+id+'">'+esc(METRICS[id].label)+"</button>";}).join("");}
+  function dBtns(a){return ["campaign_type","campaign","ad_group"].map(function(id){return '<button class="pd-seg-btn'+(id===a?" is-active":"")+'" data-dim="'+id+'">'+esc(DIMS[id].label)+"</button>";}).join("");}
+  function mount(target,opts){opts=opts||{};var el=typeof target==="string"?document.querySelector(target):target;if(!el)return null;if(!DT){el.innerHTML='<div class="dt-empty">engine not loaded</div>';return null;}
+    var state={metric:METRICS[opts.focusMetric]?opts.focusMetric:"conversions",dimension:DIMS[opts.dimension]?opts.dimension:"campaign_type"};
+    el.innerHTML='<div class="dt-component pd-component"><div class="pd-controls"><div class="pd-seg" data-role="metric"><span class="pd-seg-lab">Explain</span>'+mBtns(state.metric)+'</div><div class="pd-seg" data-role="dim"><span class="pd-seg-lab">Break down by</span>'+dBtns(state.dimension)+'</div></div><div class="pd-levers"></div><div class="pd-tree dt-host"></div></div>';
+    var leverHost=el.querySelector(".pd-levers"),treeHost=el.querySelector(".pd-tree");
+    function paintLevers(node){leverHost.innerHTML=leverStrip(state.metric,node._aggCur,node._aggPrev,node.name);}
+    function render(){
+      el.querySelectorAll('.pd-seg[data-role=metric] .pd-seg-btn').forEach(function(b){b.className="pd-seg-btn"+(b.getAttribute("data-metric")===state.metric?" is-active":"");});
+      el.querySelectorAll('.pd-seg[data-role=dim] .pd-seg-btn').forEach(function(b){b.className="pd-seg-btn"+(b.getAttribute("data-dim")===state.dimension?" is-active":"");});
+      var built=buildTree({metric:state.metric,dimension:state.dimension,account:opts.account,campaigns:opts.campaigns,adGroups:opts.adGroups,previous:opts.previous});
+      DT.mount(treeHost,{tree:built.tree,columns:built.columns,colorBy:"direction",selectable:true,selectedId:"r",compare:true,metrics:[{key:"now",label:METRICS[state.metric].label,format:METRICS[state.metric].fmt}],onSelect:function(id,node){if(node)paintLevers(node);}});
+      paintLevers(built.tree);
+    }
+    el.addEventListener("click",function(e){var mb=e.target.closest?e.target.closest(".pd-seg[data-role=metric] .pd-seg-btn"):null;if(mb){state.metric=mb.getAttribute("data-metric");render();return;}var db=e.target.closest?e.target.closest(".pd-seg[data-role=dim] .pd-seg-btn"):null;if(db){state.dimension=db.getAttribute("data-dim");render();return;}});
+    render();return {el:el,rerender:render};
+  }
+  return {mount:mount,buildTree:buildTree,leverStrip:leverStrip,METRICS:METRICS};
+});
+</script>
+
+<!-- ====================== fictional Acme data (campaigns + ad groups) ====================== -->
+<script>
+(function (root) {
+  function camp(name,id,ch,cost,impr,clk,conv,cval){return {google_ads_campaign_name:name,google_ads_campaign_id:id,google_ads_campaign_advertising_channel_type:ch,google_ads_cost_micros:cost,google_ads_impressions:impr,google_ads_clicks:clk,google_ads_conversions:conv,google_ads_conversions_value:cval};}
+  function ag(c,a,cost,impr,clk,conv,cval){return {google_ads_campaign_name:c,google_ads_ad_group_name:a,google_ads_cost_micros:cost,google_ads_impressions:impr,google_ads_clicks:clk,google_ads_conversions:conv,google_ads_conversions_value:cval};}
+  var C_B="11111111",C_T="22222222",C_C="33333333",C_W="44444444",C_P="55555555",C_D="66666666";
+  root.PorterReporting.gaExampleData={
+    account:{name:"Acme Insurance",id:"1234567890-1234567890"},
+    campaigns:[camp("Acme — Brand Search [BOFU]",C_B,"SEARCH",6200,41000,2100,142,58000),camp("Term Life — Generic Search [MOFU]",C_T,"SEARCH",9800,132000,2600,121,30000),camp("Competitor — Conquest Search [MOFU]",C_C,"SEARCH",5400,88000,1200,55,14000),camp("Whole Life — Generic Search [TOFU]",C_W,"SEARCH",10500,210000,2400,90,25000),camp("Performance Max — Prospecting",C_P,"PERFORMANCE_MAX",9300,480000,3100,128,47000),camp("Demand Gen — Awareness [TOFU]",C_D,"DEMAND_GEN",7000,620000,2900,84,19000)],
+    adGroups:[ag("Acme — Brand Search [BOFU]","Acme — Brand Exact",3800,24000,1300,96,41000),ag("Acme — Brand Search [BOFU]","Acme — Brand Phrase",2400,17000,800,46,17000),ag("Term Life — Generic Search [MOFU]","Term Life — Broad",4600,72000,1100,44,11000),ag("Term Life — Generic Search [MOFU]","Term Life — Phrase",3200,41000,980,49,13000),ag("Term Life — Generic Search [MOFU]","Term Life — Exact",2000,19000,520,28,6000),ag("Competitor — Conquest Search [MOFU]","Competitor — Broad",5400,88000,1200,55,14000),ag("Whole Life — Generic Search [TOFU]","Whole Life — Broad",6300,140000,1300,44,12000),ag("Whole Life — Generic Search [TOFU]","Whole Life — Phrase",4200,70000,1100,46,13000),ag("Performance Max — Prospecting","PMax — Asset group 1",9300,480000,3100,128,47000),ag("Demand Gen — Awareness [TOFU]","DemandGen — Lookalike",7000,620000,2900,84,19000)],
+    previous:{
+      campaigns:[camp("Acme — Brand Search [BOFU]",C_B,"SEARCH",5400,38000,1850,121,49000),camp("Term Life — Generic Search [MOFU]",C_T,"SEARCH",8600,119000,2300,104,27000),camp("Competitor — Conquest Search [MOFU]",C_C,"SEARCH",4900,81000,1300,61,16000),camp("Whole Life — Generic Search [TOFU]",C_W,"SEARCH",8800,186000,2100,81,22000),camp("Performance Max — Prospecting",C_P,"PERFORMANCE_MAX",8100,430000,2700,116,41000),camp("Demand Gen — Awareness [TOFU]",C_D,"DEMAND_GEN",6300,560000,2500,71,15000)],
+      adGroups:[ag("Acme — Brand Search [BOFU]","Acme — Brand Exact",3300,21000,1150,82,35000),ag("Acme — Brand Search [BOFU]","Acme — Brand Phrase",2100,15000,700,39,14000),ag("Term Life — Generic Search [MOFU]","Term Life — Broad",4100,65000,980,38,9000),ag("Term Life — Generic Search [MOFU]","Term Life — Phrase",2800,36000,870,43,11000),ag("Term Life — Generic Search [MOFU]","Term Life — Exact",1700,17000,470,23,5000),ag("Competitor — Conquest Search [MOFU]","Competitor — Broad",4900,81000,1300,61,16000),ag("Whole Life — Generic Search [TOFU]","Whole Life — Broad",5400,124000,1150,39,10000),ag("Whole Life — Generic Search [TOFU]","Whole Life — Phrase",3400,62000,950,42,12000),ag("Performance Max — Prospecting","PMax — Asset group 1",8100,430000,2700,116,41000),ag("Demand Gen — Awareness [TOFU]","DemandGen — Lookalike",6300,560000,2500,71,15000)]
+    }
+  };
+})(window);
+</script>
+
+<!-- ====================== init ====================== -->
+<script>
+(function () {
+  var pd = window.PorterReporting.performanceDrivers, d = window.PorterReporting.gaExampleData;
+  pd.mount("#host", { account: d.account, campaigns: d.campaigns, adGroups: d.adGroups, previous: d.previous, focusMetric: "conversions", dimension: "campaign_type" });
+  setTimeout(function () {
+    var host = document.querySelector("#host .pd-tree");
+    var col1 = host && host.querySelectorAll(".dt-col")[1];
+    var g = col1 && col1.querySelector(".dt-node[data-dt-expandable]");
+    if (g) g.click();
+  }, 60);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Alignment journey — demo (fictional Acme Insurance)</title>
+<!--
+  Labeled FICTIONAL demo. Open in a browser.
+
+  The CSS below is a clearly-marked DEMO-ONLY fallback so the component is
+  legible standalone — it is NOT the component's styling. In production every
+  class hook is styled by porter-design tokens (see README → "Styling hooks").
+  The component itself (keyword-ad-landing-alignment.js) ships ZERO CSS.
+-->
+<style>
+  /* ---- DEMO-ONLY fallback styling (stands in for porter-design tokens) ---- */
+  :root {
+    --good: #0f6e56; --bad: #a32d2d; --warn: #854f0b;
+    --card-border: #e3e3df; --surface-card: #fff; --surface-bg: #f6f6f4;
+    --text-title: #1c1c1a; --text-body: #2b2b28; --text-muted: #7a7a72; --link: #1a73e8;
+  }
+  body { margin: 0; padding: 28px; background: var(--surface-bg); color: var(--text-body);
+    font-family: "Hanken Grotesk", system-ui, sans-serif; }
+  h1 { font-size: 22px; margin: 0 0 2px; color: var(--text-title); }
+  .sub { color: var(--text-muted); font-size: 13px; margin: 0 0 20px; }
+
+  .alj-controls { display: flex; gap: 18px; margin-bottom: 14px; }
+  .alj-filter { font-size: 12px; color: var(--text-muted); }
+  .alj-filter select { margin-left: 6px; padding: 4px 8px; }
+
+  .alj-summary { background: var(--surface-card); border: 1px solid var(--card-border);
+    border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; }
+  .alj-sum-headline { font-size: 13.5px; color: var(--text-title); margin-bottom: 10px; }
+  .alj-sum-stats { display: flex; flex-wrap: wrap; gap: 16px; font-size: 13px; }
+  .alj-sum-stat--aligned strong { color: var(--good); }
+  .alj-sum-stat--review strong { color: var(--warn); }
+  .alj-sum-stat--broken strong { color: var(--bad); }
+  .alj-sum-spend { font-size: 13px; color: var(--text-muted); margin-top: 8px; }
+
+  /* campaign group + campaign-grain Impression Share header (shown ONCE per campaign) */
+  .alj-campaign { margin-bottom: 22px; }
+  .alj-campaign-head { display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 10px; padding: 9px 12px; margin-bottom: 12px;
+    background: var(--surface-card); border: 1px solid var(--card-border); border-radius: 10px; }
+  .alj-campaign-label { font-size: 10px; text-transform: uppercase; letter-spacing: .07em;
+    color: var(--text-muted); margin-right: 8px; }
+  .alj-campaign-name { font-size: 14px; color: var(--text-title); }
+  .alj-is { display: flex; flex-wrap: wrap; align-items: baseline; gap: 14px; font-size: 12px; color: var(--text-muted); }
+  .alj-is-label { font-size: 10px; text-transform: uppercase; letter-spacing: .04em; color: var(--text-muted); }
+  .alj-is-stat strong { color: var(--text-title); font-weight: 700; }
+  .alj-is-stat--lost-rank strong, .alj-is-stat--lost-budget strong { color: var(--warn); }
+  .alj-is-lost { background: var(--surface-bg); border: 1px solid var(--card-border);
+    border-radius: 8px; padding: 1px 8px; font-size: 10.5px; color: var(--text-muted); }
+
+  .alj-card { background: var(--surface-card); border: 1px solid var(--card-border);
+    border-left-width: 4px; border-radius: 12px; padding: 16px; margin-bottom: 14px; }
+  .alj-card--aligned { border-left-color: var(--good); }
+  .alj-card--review { border-left-color: var(--warn); }
+  .alj-card--broken { border-left-color: var(--bad); }
+
+  .alj-card-head { display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .alj-ag { font-size: 14px; color: var(--text-title); }
+  .alj-cmp { font-size: 12px; color: var(--text-muted); margin-left: 8px; }
+  .alj-perf { font-size: 12px; color: var(--text-muted); margin-right: 10px; }
+  .alj-thin { color: var(--warn); }
+  .alj-verdict { padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; color: #fff; }
+  .alj-verdict--aligned { background: var(--good); }
+  .alj-verdict--review { background: var(--warn); }
+  .alj-verdict--broken { background: var(--bad); }
+
+  .alj-grades { font-size: 12px; background: var(--surface-bg); border-radius: 8px;
+    padding: 6px 10px; margin-bottom: 10px; }
+  .alj-grades--none { color: var(--text-muted); opacity: .7; }
+  .alj-grades-label { color: var(--text-muted); }
+  .alj-qs { font-weight: 600; }
+  .alj-grade--above { color: var(--good); }
+  .alj-grade--avg { color: var(--warn); }
+  .alj-grade--below { color: var(--bad); }
+
+  .alj-links { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
+  .alj-link { border: 1px solid var(--card-border); border-radius: 8px; padding: 7px 9px; font-size: 11.5px; }
+  .alj-link-name { display: block; color: var(--text-muted); font-size: 10.5px; text-transform: uppercase; letter-spacing: .03em; }
+  .alj-link-grade { font-weight: 700; }
+  .alj-link--pass .alj-link-grade { color: var(--good); }
+  .alj-link--partial .alj-link-grade { color: var(--warn); }
+  .alj-link--fail .alj-link-grade { color: var(--bad); }
+  .alj-link--unknown .alj-link-grade { color: var(--text-muted); }
+  .alj-link-reason { display: block; color: var(--text-muted); margin-top: 3px; line-height: 1.35; }
+
+  .alj-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .alj-col { border: 1px solid var(--card-border); border-radius: 10px; padding: 10px 12px; }
+  .alj-col-label { font-size: 11px; text-transform: uppercase; letter-spacing: .04em;
+    color: var(--text-muted); margin-bottom: 7px; }
+  .alj-kw { margin-bottom: 7px; font-size: 12.5px; }
+  .alj-mt { font-size: 10px; color: var(--text-muted); }
+  .alj-kw-badge { font-size: 10px; }
+  .alj-term { padding-left: 14px; font-size: 11.5px; color: var(--text-muted); }
+  .alj-term--off { opacity: .6; font-style: italic; }
+  .alj-ad-headline { color: var(--link); font-size: 13px; line-height: 1.4; }
+  .alj-ad-sep { color: #bbb; }
+  .alj-ad-desc { color: #4d5156; font-size: 12px; margin-top: 5px; }
+  .alj-dest-url a { color: var(--link); text-decoration: none; font-size: 12px; }
+  .alj-mismatch, .alj-notscraped { color: var(--bad); font-size: 11px; }
+  .alj-h1 { font-size: 12.5px; margin-top: 5px; }
+  .alj-dest-summary { font-size: 12.5px; line-height: 1.5; margin-top: 4px; }
+  .alj-col-metric { margin-top: 8px; padding-top: 6px; border-top: 1px solid var(--card-border); font-size: 12px; font-weight: 600; color: var(--text-title); }
+  .alj-sum-stat--spend strong { color: var(--text-title); }
+
+  .alj-rec { margin-top: 10px; font-size: 12.5px; }
+  .alj-rec--broken { color: var(--bad); }
+  .alj-rec--review { color: var(--warn); }
+  .alj-rec--aligned { color: var(--good); }
+  .alj-rec-why { color: var(--text-muted); }
+  .alj-break { background: var(--bad); color: #fff; border-radius: 8px; padding: 1px 7px; font-size: 10.5px; }
+  .alj-empty, .alj-empty-col { color: var(--text-muted); font-size: 12px; }
+
+  /* ---- "N ads · M pages" badge + multi-ad → page sub-cards (new) ---- */
+  .alj-paircount { font-size: 10.5px; font-weight: 600; padding: 3px 9px; border-radius: 12px;
+    margin-right: 10px; white-space: nowrap; cursor: help; border: 1px solid var(--card-border); }
+  .alj-paircount--whole { color: var(--good); background: rgba(15,110,86,.08); border-color: rgba(15,110,86,.25); }
+  .alj-paircount--multi { color: var(--warn); background: rgba(133,79,11,.10); border-color: rgba(133,79,11,.30); }
+  .alj-grid--shared { grid-template-columns: 1fr; margin-bottom: 12px; }
+  .alj-pairings { display: flex; flex-direction: column; gap: 12px; }
+  .alj-pairing { border: 1px solid var(--card-border); border-left-width: 4px; border-radius: 10px; padding: 12px; }
+  .alj-pairing--aligned { border-left-color: var(--good); }
+  .alj-pairing--review { border-left-color: var(--warn); }
+  .alj-pairing--broken { border-left-color: var(--bad); }
+  .alj-pairing-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 9px; }
+  .alj-pairing-n { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-muted); font-weight: 600; }
+  .alj-grid--pairing { grid-template-columns: 1fr 1fr; }
+</style>
+</head>
+<body>
+  <h1>Alignment journey</h1>
+  <p class="sub">Fictional <strong>Acme Insurance</strong> · demo-only styling · the component ships no CSS</p>
+
+  <div id="host"></div>
+
+  <script src="./example.data.js"></script>
+  <script src="./keyword-ad-landing-alignment.js"></script>
+  <script>
+    var data = PorterReporting.exampleData;
+    PorterReporting.addAlignment("#host", { alignment: data.alignment, metrics: data.metrics });
+  </script>
+</body>
+</html>

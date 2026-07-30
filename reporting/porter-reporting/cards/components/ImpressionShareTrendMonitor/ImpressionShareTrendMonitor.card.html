@@ -1,0 +1,142 @@
+<!-- @dsCard group="Components" viewport="1180x820" name="Impression share — spend-ranked trend monitor" subtitle="Per Search campaign, ranked by spend: own-scale IS sparkline · 4-week change · the budget-vs-rank limiter · click a row for the week-by-week got/rank/budget breakdown. Your own account over time (not competitor Auction Insights)." -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- ONE shared dependency, project-local relative path only -->
+<link rel="stylesheet" href="../../styles.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400..700&display=swap" rel="stylesheet" />
+<style>
+  /* Every color/font comes from styles.css tokens — no literal hex.
+     Data colors (brand): got = aqua, rank = purple, budget = pink. */
+  html, body { margin: 0; background: var(--surface-bg); color: var(--text-body); font-family: var(--font-hanken); }
+  .wrap { padding: 28px; max-width: 1120px; }
+  .eyebrow { font-family: var(--font-bricolage); font-weight: 700; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--eyebrow-color); margin: 0 0 4px; }
+  .pist-h { font-family: var(--font-bricolage); font-weight: 700; font-size: 22px; color: var(--text-title); margin: 0; }
+  .pist-meta { font-size: 12.5px; color: var(--text-muted); margin: 4px 0 18px; }
+
+  .pist-component { font-family: var(--font-hanken); }
+  .pist-controls { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; margin: 0 0 14px; }
+  .pist-chips { display: inline-flex; gap: 8px; flex-wrap: wrap; }
+  .pist-chip { font-size: 12px; padding: 6px 13px; border-radius: 999px; border: 1.5px solid var(--card-border);
+    background: var(--surface-card); color: var(--text-body); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-hanken); }
+  .pist-chip--on { background: var(--porter-purple); color: var(--porter-white); border-color: var(--porter-purple); }
+  .pist-dot { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
+  .pist-dot--rank { background: var(--porter-purple); } .pist-dot--budget { background: var(--porter-pink); } .pist-dot--mixed { background: var(--text-muted); }
+  .pist-legend { display: flex; gap: 14px; font-size: 12px; color: var(--text-muted); flex-wrap: wrap; align-items: center; margin-left: auto; }
+  .pist-lg { display: flex; align-items: center; gap: 6px; } .pist-lg-label { opacity: .85; }
+  .pist-sw { width: 11px; height: 11px; border-radius: 2px; }
+  .pist-sw--got { background: var(--porter-aqua); } .pist-sw--rank { background: var(--porter-purple); } .pist-sw--budget { background: var(--porter-pink); }
+
+  .pist-head, .pist-rowhead { display: grid; grid-template-columns: 20px 210px 160px 92px 1fr; gap: 16px; align-items: center; }
+  .pist-head { font-size: 10.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-muted); padding: 0 0 6px; }
+  .pist-row { border-top: 1px solid var(--card-border); }
+  .pist-rowhead { width: 100%; text-align: left; background: none; border: 0; border-top: 0; padding: 13px 0; cursor: pointer; font: inherit; color: inherit; }
+  .pist-chev { color: var(--text-muted); font-size: 11px; }
+  .pist-camp { font-family: var(--font-bricolage); font-weight: 700; font-size: 15px; color: var(--text-title); display: block; }
+  .pist-spend { font-size: 12.5px; color: var(--text-muted); }
+  .pist-spark { display: flex; flex-direction: column; }
+  .pist-spark-line { stroke: var(--porter-purple); stroke-width: 2; fill: none; } .pist-spark-dot { fill: var(--text-title); }
+  .pist-window { font-size: 11.5px; color: var(--text-muted); margin-top: 1px; }
+  .pist-change { font-size: 14px; font-weight: 700; }
+  .pist-change--up { color: var(--good); } .pist-change--down { color: var(--bad); } .pist-change--flat { color: var(--text-muted); }
+  .pist-short { display: block; font-size: 10px; color: var(--text-muted); font-weight: 400; }
+  .pist-whybar { display: inline-flex; width: 100%; max-width: 170px; height: 11px; overflow: hidden; border-radius: 3px; vertical-align: middle; }
+  .pist-seg--got { background: var(--porter-aqua); } .pist-seg--rank { background: var(--porter-purple); } .pist-seg--budget { background: var(--porter-pink); }
+  .pist-limiter { display: block; font-size: 11.5px; font-weight: 700; margin-top: 4px; }
+  .pist-limiter--rank { color: var(--porter-purple); } .pist-limiter--budget { color: var(--porter-pink); } .pist-limiter--mixed { color: var(--text-muted); }
+
+  .pist-detail { padding: 4px 0 20px 34px; }
+  .pist-detail-note { font-size: 12px; color: var(--text-muted); margin: 0 0 8px; }
+  .pist-wkgrid { display: flex; gap: 6px; align-items: flex-end; max-width: 620px; }
+  .pist-wkcol { flex: 1; text-align: center; }
+  .pist-wkbar { display: flex; flex-direction: column-reverse; height: 140px; border-radius: 3px; overflow: hidden; background: var(--surface-sunken); }
+  .pist-wkseg--got { background: var(--porter-aqua); } .pist-wkseg--rank { background: var(--porter-purple); } .pist-wkseg--budget { background: var(--porter-pink); }
+  .pist-wklabel { font-size: 10px; color: var(--text-muted); margin-top: 4px; }
+  .pist-empty { color: var(--text-muted); font-size: 13px; }
+</style>
+</head>
+<body data-theme="white">
+  <div class="wrap">
+    <p class="eyebrow">Impression share</p>
+    <h2 class="pist-h">Visibility over time, ranked by spend</h2>
+    <p class="pist-meta">Acme Insurance &middot; sample data &middot; each campaign on its own scale &middot; not competitor Auction Insights</p>
+    <div id="pist-host" class="pist-component"></div>
+  </div>
+
+  <script>
+  /* Self-contained card. Mirrors components/google-ads/impression-share-trend-monitor (inlined so
+     the card renders with zero JS dependencies). Fictional Acme Insurance data only.
+     got + rank + budget = 100 per week. */
+  (function () {
+    function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
+    function r0(x){ return Math.round(x); }
+    function money(x){ return x>=1000 ? "$"+(x/1000).toFixed(1)+"k" : "$"+r0(x); }
+    function avg(a){ return a.reduce(function(s,x){return s+x;},0)/(a.length||1); }
+    var WEEKS=["W18","W19","W20","W21","W22","W23","W24","W25","W26","W27","W28","W29"];
+    function mk(c,sp,drv,got,rank){
+      var n=got.length, w=n>=8?4:Math.max(1,Math.floor(n/2));
+      var budget=got.map(function(g,i){return Math.round((100-g-rank[i])*10)/10;});
+      return { campaign:c, spend:sp, driver:drv, weeks:WEEKS.slice(0,n), got:got, rank:rank, budget:budget,
+        prior_is:Math.round(avg(got.slice(n-2*w,n-w))*10)/10, recent_is:Math.round(avg(got.slice(n-w))*10)/10, short:n<8 };
+    }
+    var ROWS=[
+      mk("Acme_Auto_SEM_(TL)",184200,"rank",[25,27,24,26,29,31,30,33,35,34,32,38],[55,52,58,54,50,48,49,45,44,46,47,41]),
+      mk("Acme_Home_SEM_(HD)",52400,"budget",[18,17,19,20,22,21,24,23,25,26,24,27],[12,14,11,10,9,12,8,10,7,9,11,8]),
+      mk("Acme_Life_SEM_(TL)",39800,"rank",[22,24,23,25,26,28,27,29,30,31,29,31],[60,58,61,56,55,52,54,51,50,49,52,50]),
+      mk("Acme_Health_SEM_(HD)",31100,"budget",[12,13,12,15,14,17,19,24,28,30,22,24],[11,18,14,12,16,13,10,9,8,12,14,10]),
+      mk("Acme_Renters_SEM_(HA)",19600,"mixed",[16,15,17,18,19,18,20,21,22,20,21,23],[42,45,40,38,36,41,35,33,34,40,38,36]),
+      mk("Acme_Pet_SEM_Test_(HA)",8900,"rank",[11,12,10,11,13],[70,66,74,68,60]),
+      mk("Acme_Brand_SEM_(BR)",7300,"rank",[86,83,84,82,85,81,84,83,82,80,83,84],[14,17,16,18,15,19,16,17,18,20,17,16])
+    ].sort(function(a,b){return b.spend-a.spend;});
+
+    function spark(g){
+      var w=150,h=34,p=4,lo=Math.min.apply(null,g),hi=Math.max.apply(null,g),rng=(hi-lo)||1,n=g.length,pts=[];
+      for(var i=0;i<n;i++){ pts.push((p+(w-2*p)*(n>1?i/(n-1):0)).toFixed(1)+","+(p+(h-2*p)*(1-(g[i]-lo)/rng)).toFixed(1)); }
+      var L=pts[pts.length-1].split(",");
+      return '<svg class="pist-spark-svg" width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'"><polyline class="pist-spark-line" points="'+pts.join(" ")+'"/><circle class="pist-spark-dot" cx="'+L[0]+'" cy="'+L[1]+'" r="3"/></svg>';
+    }
+    function whyBar(m){ var g=m.got[m.got.length-1],rk=m.rank[m.rank.length-1],b=m.budget[m.budget.length-1],t=(g+rk+b)||1;
+      function s(v,k){return '<span class="pist-seg pist-seg--'+k+'" style="width:'+(v/t*100).toFixed(1)+'%" title="'+k+': '+r0(v)+'%"></span>';}
+      return '<span class="pist-whybar">'+s(g,"got")+s(rk,"rank")+s(b,"budget")+'</span>'; }
+    function weekGrid(m){ var c="";
+      for(var i=0;i<m.weeks.length;i++){ var g=m.got[i],rk=m.rank[i],b=m.budget[i],t=(g+rk+b)||1;
+        c+='<div class="pist-wkcol"><div class="pist-wkbar">'+
+          '<span class="pist-wkseg pist-wkseg--budget" style="height:'+(b/t*100).toFixed(1)+'%" title="budget '+r0(b)+'%"></span>'+
+          '<span class="pist-wkseg pist-wkseg--rank" style="height:'+(rk/t*100).toFixed(1)+'%" title="rank '+r0(rk)+'%"></span>'+
+          '<span class="pist-wkseg pist-wkseg--got" style="height:'+(g/t*100).toFixed(1)+'%" title="got '+r0(g)+'%"></span>'+
+          '</div><div class="pist-wklabel">'+esc(m.weeks[i])+'</div></div>'; }
+      return '<div class="pist-detail-note">Weekly breakdown — the aqua "got" height is the impression share itself; purple/pink show where reach was lost.</div><div class="pist-wkgrid">'+c+'</div>'; }
+    function rowHtml(m,i){ var d=m.recent_is-m.prior_is, dir=d>1?"up":(d<-1?"down":"flat"), arr=d>1?"▲":(d<-1?"▼":"—"), lim=m.driver;
+      return '<div class="pist-row pist-row--'+lim+'" data-drv="'+lim+'">'+
+        '<button class="pist-rowhead" type="button" data-i="'+i+'" aria-expanded="false">'+
+        '<span class="pist-chev" aria-hidden="true">▸</span>'+
+        '<span class="pist-id"><span class="pist-camp">'+esc(m.campaign)+'</span><span class="pist-spend">'+money(m.spend)+'</span></span>'+
+        '<span class="pist-spark">'+spark(m.got)+'<span class="pist-window">'+r0(m.prior_is)+'% → '+r0(m.recent_is)+'%</span></span>'+
+        '<span class="pist-change pist-change--'+dir+'">'+arr+' '+Math.abs(r0(d))+' pts'+(m.short?'<span class="pist-short">short history</span>':'')+'</span>'+
+        '<span class="pist-why">'+whyBar(m)+'<span class="pist-limiter pist-limiter--'+lim+'">limited by '+lim+'</span></span>'+
+        '</button><div class="pist-detail" data-detail="'+i+'" hidden>'+weekGrid(m)+'</div></div>'; }
+    function chips(){ var cn={rank:0,budget:0,mixed:0}; ROWS.forEach(function(m){cn[m.driver]++;});
+      var o='<button class="pist-chip pist-chip--on" type="button" data-f="all">All ('+ROWS.length+')</button>';
+      ["rank","budget","mixed"].forEach(function(k){ if(cn[k]) o+='<button class="pist-chip pist-chip--'+k+'" type="button" data-f="'+k+'"><span class="pist-dot pist-dot--'+k+'"></span>'+k.charAt(0).toUpperCase()+k.slice(1)+' ('+cn[k]+')</button>'; });
+      return '<div class="pist-chips" role="group" aria-label="Filter by limiter">'+o+'</div>'; }
+    var LEG='<div class="pist-legend"><span class="pist-lg-label">where reach is lost</span><span class="pist-lg"><span class="pist-sw pist-sw--got"></span>got</span><span class="pist-lg"><span class="pist-sw pist-sw--rank"></span>rank (auction)</span><span class="pist-lg"><span class="pist-sw pist-sw--budget"></span>budget (money)</span></div>';
+    var HEAD='<div class="pist-head"><span></span><span>Campaign · spend</span><span>IS over time</span><span>change · 4w</span><span>where reach is lost</span></div>';
+
+    var host=document.getElementById("pist-host");
+    host.innerHTML='<div class="pist-controls">'+chips()+LEG+'</div>'+HEAD+ROWS.map(rowHtml).join("");
+    host.addEventListener("click",function(e){
+      var head=e.target.closest(".pist-rowhead");
+      if(head){ var i=head.getAttribute("data-i"), dt=host.querySelector('.pist-detail[data-detail="'+i+'"]'); if(dt){ var op=!dt.hasAttribute("hidden"); if(op)dt.setAttribute("hidden","");else dt.removeAttribute("hidden"); head.setAttribute("aria-expanded",String(!op)); var ch=head.querySelector(".pist-chev"); if(ch)ch.textContent=op?"▸":"▾"; } return; }
+      var chip=e.target.closest(".pist-chip");
+      if(chip){ var f=chip.getAttribute("data-f");
+        host.querySelectorAll(".pist-row").forEach(function(rw){ rw.style.display=(f==="all"||rw.getAttribute("data-drv")===f)?"":"none"; });
+        host.querySelectorAll(".pist-chip").forEach(function(c){ c.classList.toggle("pist-chip--on",c.getAttribute("data-f")===f); }); }
+    });
+  })();
+  </script>
+</body>
+</html>

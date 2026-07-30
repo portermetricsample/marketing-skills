@@ -1,0 +1,333 @@
+<!-- @dsCard group="Components" viewport="1400x1040" name="Account structure — driver tree" subtitle="Google Ads account as a driver tree — Group by campaign type / brand / funnel stage / match type, click to expand Campaign → Ad group → Ad" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- shared deps: project-local relative paths ONLY (no machine or sibling-repo paths) -->
+<link rel="stylesheet" href="../../styles.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400..700&display=swap" rel="stylesheet" />
+<style>
+  /* card-specific LAYOUT + the component's class hooks. Every colour/font comes
+     from styles.css tokens — the efficiency tints reuse the --cf-* red→green ramp
+     (good=cf-5 green, mid=cf-3 yellow, bad=cf-1 red); the connector reuses the
+     grid line. No raw hex that isn't a token fallback. */
+  :root {
+    --dt-good: var(--cf-5); --dt-mid: var(--cf-3); --dt-bad: var(--cf-1); --dt-na: var(--card-border);
+    --dt-root-bg: var(--surface-lavender, #eef4ff); --dt-root-border: var(--accent-line, #aecbfa);
+    --dt-link: var(--grid-line, rgba(128,134,142,0.5));
+  }
+  html, body { margin: 0; background: var(--surface-bg); color: var(--text-body); font-family: var(--font-hanken); }
+  .wrap { padding: 28px 30px 40px; }
+  .appbar { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+  .appbar .word { font-weight: 700; color: var(--text-title); }
+  .appbar .acct { color: var(--text-muted); font-size: 13px; }
+  h1 { font-family: var(--font-bricolage), var(--font-hanken); font-size: 24px; margin: 6px 0 4px; color: var(--text-title); }
+  .sub { color: var(--text-muted); margin: 0 0 16px; font-size: 13.5px; max-width: 880px; }
+
+  /* --- Group-by control bar --- */
+  .as-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 4px 0 18px; }
+  .as-seg { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .as-seg-lab { font-size: 12px; color: var(--text-muted); margin-right: 2px; }
+  .as-seg-btn { font: inherit; font-size: 12px; padding: 6px 12px; border: 1px solid var(--card-border); background: var(--surface-card); color: var(--text-body); border-radius: 999px; cursor: pointer; }
+  .as-seg-btn:hover { background: var(--surface-sunken, #f1f3f4); }
+  .as-seg-btn.is-active { background: var(--surface-lavender, #e8f0fe); border-color: var(--accent-line, #c6dafc); color: var(--accent); font-weight: 600; }
+  .as-cov { margin-left: auto; font-size: 12px; color: var(--text-muted); background: var(--surface-card); border: 1px solid var(--card-border); border-radius: 8px; padding: 6px 12px; }
+  .as-cov strong { color: var(--text-title); }
+
+  /* --- driver tree: structural (load-bearing for connectors) --- */
+  .dt-wrap { position: relative; overflow-x: auto; padding: 6px 2px 10px; }
+  .dt-links { position: absolute; top: 0; left: 0; pointer-events: none; z-index: 0; }
+  .dt-hdrs, .dt-cols { position: relative; z-index: 1; display: flex; gap: 46px; min-width: max-content; }
+  .dt-hdrs { align-items: flex-end; margin-bottom: 10px; }
+  .dt-cols { align-items: flex-start; }
+  .dt-col { display: flex; flex-direction: column; gap: 12px; justify-content: center; }
+  .dt-node { width: 240px; box-sizing: border-box; }
+  /* --- driver tree: appearance --- */
+  .dt-colhdr { width: 240px; box-sizing: border-box; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--text-muted); padding: 0 2px; }
+  .dt-node { padding: 9px 11px; border: 1px solid var(--dt-na); border-radius: 10px; background: var(--surface-card); }
+  .dt-node.dt-good { background: var(--dt-good); }
+  .dt-node.dt-mid  { background: var(--dt-mid); }
+  .dt-node.dt-bad  { background: var(--dt-bad); }
+  .dt-node.dt-root { background: var(--dt-root-bg); border-color: var(--dt-root-border); }
+  .dt-node.dt-exp { cursor: pointer; }
+  .dt-node.dt-exp:hover { border-color: var(--accent); }
+  .dt-node.dt-ph { opacity: .6; font-style: italic; border-style: dashed; }
+  .dt-top { display: flex; align-items: flex-start; gap: 5px; }
+  .dt-caret { color: var(--text-muted); font-size: 11px; width: 10px; }
+  .dt-name { font-size: 13px; font-weight: 600; color: var(--text-title); flex: 1; min-width: 0; overflow-wrap: anywhere; }
+  .dt-ext { color: var(--accent); text-decoration: none; flex: none; }
+  .dt-krows { margin-top: 8px; }
+  .dt-krow { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 3px 0; border-top: 1px solid rgba(0,0,0,.06); }
+  .dt-krow:first-child { border-top: none; }
+  .dt-k { font-size: 11px; color: var(--text-muted); white-space: nowrap; }
+  .dt-v { font-size: 13px; font-weight: 500; color: var(--text-title); text-align: right; }
+  .dt-delta { font-size: 10px; font-weight: 700; margin-left: 4px; white-space: nowrap; }
+  .dt-delta--good { color: var(--good); } .dt-delta--bad { color: var(--bad); } .dt-delta--flat { color: var(--text-muted); }
+  .dt-empty { padding: 24px; color: var(--text-muted); font-size: 13px; }
+
+  /* --- SUMAS breakdown table --- */
+  .as-breakdown { margin-top: 26px; }
+  .as-title { font-size: 13px; font-weight: 700; color: var(--text-title); margin: 0 0 8px; }
+  .as-tablewrap { overflow-x: auto; border: 1px solid var(--card-border); border-radius: 12px; background: var(--surface-card); }
+  .as-sumas { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .as-sumas th { text-align: left; padding: 10px 12px; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--text-muted); border-bottom: 2px solid var(--card-border); }
+  .as-sumas td { vertical-align: top; padding: 12px; border-bottom: 1px solid var(--card-border); }
+  .as-grp-col { min-width: 220px; }
+  .as-mv { font-size: 16px; font-weight: 700; color: var(--text-title); line-height: 1.2; }
+  .as-sub { display: block; font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+  .as-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 7px; background: var(--accent); vertical-align: middle; }
+  .as-badge { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 6px; margin-left: 4px; background: var(--surface-sunken, #eef1f4); color: var(--text-muted); }
+  .as-roas--good { color: var(--good); font-weight: 700; } .as-roas--bad { color: var(--bad); font-weight: 700; }
+</style>
+</head>
+<body data-theme="white">
+  <div class="wrap">
+    <div class="appbar"><span class="word">Google Ads</span> <span class="acct">· Acme Insurance · 123-456-7890</span></div>
+    <h1>Account Structure</h1>
+    <p class="sub">The account as a driver tree. <strong>Group by</strong> re-buckets the second column; click any node to expand Campaign → Ad group → Ad. Node colour = cost-per-conversion vs the account average; chips = vs the previous period. Fictional demo · synthetic numbers.</p>
+    <div id="host"></div>
+  </div>
+
+<!-- ====================== driver-tree ENGINE (connector-agnostic) ====================== -->
+<script>
+(function (root, factory) {
+  var api = factory();
+  root.PorterReporting = root.PorterReporting || {};
+  root.PorterReporting.driverTree = api;
+})(window, function () {
+  "use strict";
+  function num(v){ return Number(v)||0; }
+  function div(a,b){ return b?a/b:0; }
+  function group(v,dp){ var f=Math.pow(10,dp),s=(Math.round(num(v)*f)/f).toFixed(dp),p=s.split("."); p[0]=p[0].replace(/\B(?=(\d{3})+(?!\d))/g,","); return p.join("."); }
+  function trimZeros(s){ return s.indexOf(".")===-1?s:s.replace(/\.?0+$/,""); }
+  var FORMATS={ money:function(v){return "$"+trimZeros(group(v,2));}, int:function(v){return group(Math.round(num(v)),0);}, dec:function(v){return trimZeros(group(num(v),2));}, pct:function(v){return (num(v)*100).toFixed(1)+"%";}, pct2:function(v){return (num(v)*100).toFixed(2)+"%";}, share:function(v){var x=num(v); if(x<=1)x*=100; return x.toFixed(1)+"%";}, ratio:function(v){return num(v).toFixed(2)+"x";}, raw:function(v){return String(v==null?"":v);} };
+  function fmt(v,format){ return (FORMATS[format]||FORMATS.dec)(v); }
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
+  function delta(cur,prev,invert){ if(prev==null||prev===0||!isFinite(prev))return ""; var d=(num(cur)-prev)/prev; if(!isFinite(d)||d===0)return ""; var a=d>0?"▲":"▼", dir=(d>0)!==!!invert?"good":"bad"; return ' <span class="dt-delta dt-delta--'+dir+'">'+a+Math.abs(d*100).toFixed(0)+"%</span>"; }
+  function effClass(value,eff){ if(!eff||!value||!eff.baseline)return "dt-na"; var r=value/eff.baseline; if(eff.higherIsBetter)r=r?1/r:0; var good=eff.good!=null?eff.good:0.8, bad=eff.bad!=null?eff.bad:1.2; if(r<=good)return "dt-good"; if(r<=bad)return "dt-mid"; return "dt-bad"; }
+  function effValue(node,eff){ if(!eff)return 0; if(typeof eff.derive==="function")return num(eff.derive(node)); if(eff.metricKey)return num(node.metrics?node.metrics[eff.metricKey]:0); return 0; }
+  function nodeHtml(node,depth,opts){
+    var expandable = node.children===null||(node.children&&node.children.length);
+    var open=!!node._open, cls="dt-node";
+    if(node.isRoot)cls+=" dt-root"; else cls+=" "+(node.eff||"dt-na");
+    if(expandable)cls+=" dt-exp"; if(node.placeholder)cls+=" dt-ph";
+    var attrs=' class="'+cls+'" data-dt-id="'+esc(node._id)+'"'+(node._parent!=null?' data-dt-parent="'+esc(node._parent)+'"':"")+(expandable?' data-dt-expandable="1" role="button" tabindex="0"':"");
+    if(node.placeholder)return '<div'+attrs+'><div class="dt-name">'+esc(node.name)+"</div></div>";
+    var caret=expandable?'<span class="dt-caret">'+(open?"▾":"▸")+"</span>":"";
+    var link=node.link?' <a class="dt-ext" href="'+esc(node.link)+'" target="_blank" rel="noopener" title="Open in a new tab" aria-label="Open in a new tab">↗</a>':"";
+    var krows="", metrics=opts.metrics||[];
+    for(var i=0;i<metrics.length;i++){ var m=metrics[i], v=node.metrics?node.metrics[m.key]:null, pv=(opts.compare&&node.prev)?node.prev[m.key]:null;
+      var valStr=(v==null||(m.skipZero&&!num(v)))?"—":fmt(v,m.format); var d=(pv!=null)?delta(v,pv,m.invert):"";
+      krows+='<div class="dt-krow"><span class="dt-k">'+esc(m.label)+'</span><span class="dt-v">'+valStr+d+"</span></div>"; }
+    return '<div'+attrs+'><div class="dt-top">'+caret+'<span class="dt-name" title="'+esc(node.full||node.name)+'">'+esc(node.name)+"</span>"+link+"</div><div class=\"dt-krows\">"+krows+"</div></div>";
+  }
+  function layout(rootNode,opts){ var cols=[], open=opts._open||{};
+    function visit(node,depth,parentId,path){ node._id=path; node._parent=parentId; node.isRoot=depth===0; node._open=node.isRoot?true:!!open[path];
+      if(!node.isRoot&&opts.efficiency&&!node.eff&&!node.placeholder)node.eff=effClass(effValue(node,opts.efficiency),opts.efficiency);
+      (cols[depth]=cols[depth]||[]).push(node);
+      if(node._open&&node.children&&node.children.length){ for(var i=0;i<node.children.length;i++)visit(node.children[i],depth+1,path,path+"/"+i); }
+      else if(node._open&&node.children===null){ var ph={name:opts.loadingMessage||"Loading…",placeholder:true}; ph._id=path+"/_ph"; ph._parent=path; ph.isRoot=false; (cols[depth+1]=cols[depth+1]||[]).push(ph); }
+    } visit(rootNode,0,null,"r"); return cols;
+  }
+  function build(opts){ opts=opts||{}; if(!opts.tree)return '<div class="dt-empty">'+esc(opts.emptyMessage||"No data")+"</div>";
+    var cols=layout(opts.tree,opts), headers=opts.columns||[];
+    var hdr='<div class="dt-hdrs">'; for(var c=0;c<cols.length;c++){ if(!cols[c]||!cols[c].length)continue; hdr+='<div class="dt-colhdr">'+esc(headers[c]||"")+"</div>"; } hdr+="</div>";
+    var body='<div class="dt-cols">'; for(var c2=0;c2<cols.length;c2++){ if(!cols[c2]||!cols[c2].length)continue; body+='<div class="dt-col">'; for(var i=0;i<cols[c2].length;i++)body+=nodeHtml(cols[c2][i],c2,opts); body+="</div>"; } body+="</div>";
+    return '<div class="dt-wrap"><svg class="dt-links" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>'+hdr+body+"</div>";
+  }
+  function drawConnectors(hostEl){ if(!hostEl)return; var wrap=hostEl.querySelector(".dt-wrap"), svg=hostEl.querySelector(".dt-links"); if(!wrap||!svg)return;
+    var nodes=wrap.querySelectorAll(".dt-node[data-dt-id]"), map={}, k; for(k=0;k<nodes.length;k++)map[nodes[k].getAttribute("data-dt-id")]=nodes[k];
+    var W=wrap.scrollWidth,H=wrap.scrollHeight; svg.setAttribute("width",W); svg.setAttribute("height",H); svg.style.width=W+"px"; svg.style.height=H+"px";
+    var wr=wrap.getBoundingClientRect(), paths="";
+    for(k=0;k<nodes.length;k++){ var ce=nodes[k], pid=ce.getAttribute("data-dt-parent"); if(!pid||!map[pid])continue; var pe=map[pid], pr=pe.getBoundingClientRect(), cr=ce.getBoundingClientRect();
+      var x1=pr.right-wr.left,y1=pr.top-wr.top+pr.height/2,x2=cr.left-wr.left,y2=cr.top-wr.top+cr.height/2,mx=(x1+x2)/2;
+      paths+="<path d='M"+x1.toFixed(1)+" "+y1.toFixed(1)+" C "+mx.toFixed(1)+" "+y1.toFixed(1)+" "+mx.toFixed(1)+" "+y2.toFixed(1)+" "+x2.toFixed(1)+" "+y2.toFixed(1)+"' fill='none' stroke='var(--dt-link, rgba(128,134,142,0.55))' stroke-width='1.4'/>"; }
+    svg.innerHTML=paths;
+  }
+  function mount(target,opts){ opts=opts||{}; var el=typeof target==="string"?document.querySelector(target):target; if(!el)return null; var open={}, rt;
+    function render(){ el.innerHTML=build({tree:opts.tree,columns:opts.columns,metrics:opts.metrics,efficiency:opts.efficiency,compare:opts.compare,emptyMessage:opts.emptyMessage,loadingMessage:opts.loadingMessage,_open:open}); drawConnectors(el); }
+    function findNode(node,id){ if(node._id===id)return node; if(node.children&&node.children.length){ for(var i=0;i<node.children.length;i++){ var f=findNode(node.children[i],id); if(f)return f; } } return null; }
+    function toggle(id){ open[id]=!open[id]; var node=opts.tree?findNode(opts.tree,id):null; if(node&&open[id]&&node.children===null&&typeof opts.onExpand==="function"){ Promise.resolve(opts.onExpand(node)).then(function(ch){ if(ch!==undefined)node.children=ch; render(); }); } render(); }
+    el.addEventListener("click",function(e){ var ext=e.target.closest?e.target.closest(".dt-ext"):null; if(ext){e.stopPropagation();return;} var n=e.target.closest?e.target.closest(".dt-node[data-dt-expandable]"):null; if(n)toggle(n.getAttribute("data-dt-id")); });
+    el.addEventListener("keydown",function(e){ if(e.key!=="Enter"&&e.key!==" ")return; var n=e.target.closest?e.target.closest(".dt-node[data-dt-expandable]"):null; if(n){e.preventDefault();toggle(n.getAttribute("data-dt-id"));} });
+    window.addEventListener("resize",function(){ clearTimeout(rt); rt=setTimeout(function(){drawConnectors(el);},150); });
+    render(); return { el:el, rerender:render, redraw:function(){drawConnectors(el);}, open:open };
+  }
+  return { build:build, mount:mount, drawConnectors:drawConnectors, fmt:fmt };
+});
+</script>
+
+<!-- ====================== Google Ads use case + Acme data ====================== -->
+<script>
+(function (root, factory) {
+  var api = factory(root.PorterReporting.driverTree);
+  root.PorterReporting.accountStructureTree = api;
+})(window, function (DT) {
+  "use strict";
+  var BASE={ campaign:"google_ads_campaign_name", campaignId:"google_ads_campaign_id", channel:"google_ads_campaign_advertising_channel_type", adGroup:"google_ads_ad_group_name", adId:"google_ads_ad_group_ad_ad_id", adUrls:"google_ads_ad_group_ad_ad_final_urls", searchTerm:"google_ads_search_term", cost:"google_ads_cost_micros", impressions:"google_ads_impressions", clicks:"google_ads_clicks", conversions:"google_ads_conversions", convValue:"google_ads_conversions_value", impressionShare:"google_ads_search_impression_share", budget:"google_ads_campaign_budget_amount_micros" };
+  var ADS_C="https://ads.google.com/aw/campaigns?campaignId=", ADS_A="https://ads.google.com/aw/adgroups?campaignId=";
+  function num(v){return Number(v)||0;} function div(a,b){return b?a/b:0;}
+  function group(v,dp){var f=Math.pow(10,dp),s=(Math.round(num(v)*f)/f).toFixed(dp),p=s.split(".");p[0]=p[0].replace(/\B(?=(\d{3})+(?!\d))/g,",");return p.join(".");}
+  function tz(s){return s.indexOf(".")===-1?s:s.replace(/\.?0+$/,"");}
+  function money(v){return "$"+tz(group(v,2));} function int(v){return group(Math.round(num(v)),0);} function dec(v){return tz(group(num(v),2));}
+  function pct(v){return (num(v)*100).toFixed(2)+"%";} function share(v){var x=num(v);if(x<=1)x*=100;return x.toFixed(1)+"%";} function roasFmt(v){return num(v).toFixed(2)+"x";}
+  function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+  function titleCase(v){return String(v).split("_").map(function(w){return w.charAt(0)+w.slice(1).toLowerCase();}).join(" ");}
+  function delta(cur,prev,invert){if(prev==null||prev===0||!isFinite(prev))return "";var d=(num(cur)-prev)/prev;if(!isFinite(d)||d===0)return "";var a=d>0?"▲":"▼",dir=(d>0)!==!!invert?"good":"bad";return ' <span class="dt-delta dt-delta--'+dir+'">'+a+Math.abs(d*100).toFixed(0)+"%</span>";}
+  var TYPE_LABELS={SEARCH:"Search",PERFORMANCE_MAX:"Performance Max",DEMAND_GEN:"Demand Gen",VIDEO:"Video",SHOPPING:"Shopping",DISPLAY:"Display",APP:"App"};
+  function typeOf(c){var k=String(c||"").toUpperCase();return TYPE_LABELS[k]||(c?titleCase(c):"Other");}
+  function stageOf(n){var u=String(n||"").toUpperCase();if(u.indexOf("TOFU")>=0)return "TOFU";if(u.indexOf("MOFU")>=0)return "MOFU";if(u.indexOf("BOFU")>=0)return "BOFU";return "Unstaged";}
+  function matchOf(a){var u=String(a||"").toLowerCase();if(u.indexOf("phrase")>=0||u.indexOf("exact")>=0)return "Phrase / Exact";if(u.indexOf("broad")>=0)return "Broad";if(u.indexOf("brand")>=0)return "Brand";if(u.indexOf("dsa")>=0||u.indexOf("dynamic")>=0)return "Dynamic";return "Untagged";}
+  function brandOf(t,b){if(!b)return "Non-branded";return String(t||"").toLowerCase().indexOf(String(b).toLowerCase())>=0?"Branded":"Non-branded";}
+  var LENSES={ campaign_type:{id:"campaign_type",label:"Campaign type",source:"campaigns",columns:["Account","Campaign type","Campaign","Ad group","Ad"],groupOf:function(r,F){return typeOf(r[F.channel]);}},
+    funnel_stage:{id:"funnel_stage",label:"Funnel stage",source:"campaigns",columns:["Account","Funnel stage","Campaign","Ad group","Ad"],groupOf:function(r,F){return stageOf(r[F.campaign]);}},
+    match_type:{id:"match_type",label:"Match type",source:"adGroups",columns:["Account","Match type","Ad group"],groupOf:function(r,F){return matchOf(r[F.adGroup]);}},
+    brand:{id:"brand",label:"Brand vs non-brand",source:"searchTerms",columns:["Account","Brand intent","Search term"],groupOf:function(r,F,o){return brandOf(r[F.searchTerm],o.brandTerm);}} };
+  var LENS_ORDER=["campaign_type","brand","funnel_stage","match_type"];
+  function metricsOf(rows,F){var m={spend:0,impr:0,clk:0,conv:0,value:0,isw:0,budget:0};for(var i=0;i<rows.length;i++){var r=rows[i],im=num(r[F.impressions]);m.spend+=num(r[F.cost]);m.impr+=im;m.clk+=num(r[F.clicks]);m.conv+=num(r[F.conversions]);m.value+=num(r[F.convValue]);m.isw+=num(r[F.impressionShare])*im;m.budget+=num(r[F.budget]);}m.cpa=div(m.spend,m.conv);return m;}
+  function nodeMetrics(a){return {spend:a.spend,conv:a.conv,value:a.value,cpa:a.cpa};}
+  function groupBy(rows,keyFn){var m={},order=[];for(var i=0;i<rows.length;i++){var k=keyFn(rows[i]);if(!m[k]){m[k]=[];order.push(k);}m[k].push(rows[i]);}return {map:m,order:order};}
+  function firstUrl(s){s=String(s||"");var i=s.indexOf("http");if(i<0)return null;s=s.substring(i);var cut=s.length,stops=["'","]"," ",","];for(var k=0;k<stops.length;k++){var p=s.indexOf(stops[k]);if(p>=0&&p<cut)cut=p;}return s.substring(0,cut);}
+  function urlSlug(u){u=String(u||"");var i=u.indexOf("://");if(i>=0)u=u.substring(i+3);var q=u.indexOf("?");if(q>=0)u=u.substring(0,q);var parts=u.split("/"),last="";for(var k=parts.length-1;k>=0;k--){if(parts[k]){last=parts[k];break;}}last=last.split("-").join(" ").split("_").join(" ").trim();return last?last.charAt(0).toUpperCase()+last.slice(1):"(ad)";}
+  function adLabel(dr,F){var url=firstUrl(dr[F.adUrls]),slug=url?urlSlug(url):"(ad)",id=String(dr[F.adId]||"");return slug+(id?" · "+id.slice(-4):"");}
+  function buildTree(opts){
+    var F=opts.fields||BASE, lens=LENSES[opts.lens]||LENSES.campaign_type, accountName=(opts.account&&opts.account.name)||"Account";
+    var campaigns=opts.campaigns||[], adGroups=opts.adGroups||[], ads=opts.ads||[], searchTerms=opts.searchTerms||[], prev=opts.previous||{};
+    function sortDesc(arr){return arr.slice().sort(function(a,b){return num(b[F.cost])-num(a[F.cost]);});}
+    function prevAgg(rows,keyFn){var out={},g=groupBy(rows||[],keyFn);for(var i=0;i<g.order.length;i++)out[g.order[i]]=nodeMetrics(metricsOf(g.map[g.order[i]],F));return out;}
+    var rootMetrics,rootPrev,tree;
+    if(lens.source==="campaigns"){
+      var pGroup=prevAgg(prev.campaigns,function(r){return lens.groupOf(r,F,opts);}), pCamp=prevAgg(prev.campaigns,function(r){return r[F.campaign];}), pAg=prevAgg(prev.adGroups,function(r){return r[F.adGroup];});
+      rootMetrics=nodeMetrics(metricsOf(campaigns,F)); rootPrev=prev.campaigns?nodeMetrics(metricsOf(prev.campaigns,F)):null;
+      var g=groupBy(campaigns,function(r){return lens.groupOf(r,F,opts);}); g.order.sort(function(a,b){return metricsOf(g.map[b],F).spend-metricsOf(g.map[a],F).spend;});
+      var groupNodes=g.order.map(function(key){ var gm=nodeMetrics(metricsOf(g.map[key],F));
+        var campNodes=sortDesc(g.map[key]).map(function(cr){ var cname=cr[F.campaign];
+          var agRows=adGroups.filter(function(a){return a[F.campaign]===cname;});
+          var agNodes=sortDesc(agRows).slice(0,20).map(function(ar){ var agname=ar[F.adGroup]||"(none)";
+            var adRows=ads.filter(function(d){return d[F.campaign]===cname&&d[F.adGroup]===agname;});
+            var adNodes=sortDesc(adRows).slice(0,20).map(function(dr){return {name:adLabel(dr,F),full:firstUrl(dr[F.adUrls])||adLabel(dr,F),metrics:nodeMetrics(metricsOf([dr],F)),link:firstUrl(dr[F.adUrls])||null};});
+            return {name:agname,metrics:nodeMetrics(metricsOf([ar],F)),prev:pAg[agname]||null,link:ar[F.campaignId]?(ADS_A+ar[F.campaignId]):null,children:adNodes.length?adNodes:(ads.length?[]:null)};});
+          return {name:cname,full:cname,metrics:nodeMetrics(metricsOf([cr],F)),prev:pCamp[cname]||null,link:cr[F.campaignId]?(ADS_C+cr[F.campaignId]):null,children:agNodes.length?agNodes:(adGroups.length?[]:null)};});
+        return {name:key,metrics:gm,prev:pGroup[key]||null,children:campNodes};});
+      tree={name:accountName,metrics:rootMetrics,prev:rootPrev,children:groupNodes};
+    } else if(lens.source==="adGroups"){
+      var pmGroup=prevAgg(prev.adGroups,function(r){return lens.groupOf(r,F,opts);}), pmAg=prevAgg(prev.adGroups,function(r){return r[F.adGroup];});
+      rootMetrics=nodeMetrics(metricsOf(adGroups,F)); rootPrev=prev.adGroups?nodeMetrics(metricsOf(prev.adGroups,F)):null;
+      var gm2=groupBy(adGroups,function(r){return lens.groupOf(r,F,opts);}); gm2.order.sort(function(a,b){return metricsOf(gm2.map[b],F).spend-metricsOf(gm2.map[a],F).spend;});
+      tree={name:accountName,metrics:rootMetrics,prev:rootPrev,children:gm2.order.map(function(key){return {name:key,metrics:nodeMetrics(metricsOf(gm2.map[key],F)),prev:pmGroup[key]||null,children:sortDesc(gm2.map[key]).slice(0,20).map(function(ar){return {name:ar[F.adGroup]||"(none)",full:ar[F.campaign]?(ar[F.adGroup]+"  ·  "+ar[F.campaign]):ar[F.adGroup],metrics:nodeMetrics(metricsOf([ar],F)),prev:pmAg[ar[F.adGroup]]||null,link:ar[F.campaignId]?(ADS_A+ar[F.campaignId]):null};})};})};
+    } else {
+      var psGroup=prevAgg(prev.searchTerms,function(r){return lens.groupOf(r,F,opts);}), psTerm=prevAgg(prev.searchTerms,function(r){return r[F.searchTerm];});
+      rootMetrics=nodeMetrics(metricsOf(searchTerms,F)); rootPrev=prev.searchTerms?nodeMetrics(metricsOf(prev.searchTerms,F)):null;
+      var gs=groupBy(searchTerms,function(r){return lens.groupOf(r,F,opts);}); var orderBrand=["Branded","Non-branded"].filter(function(k){return gs.map[k];}); gs.order.forEach(function(k){if(orderBrand.indexOf(k)<0)orderBrand.push(k);});
+      tree={name:accountName,metrics:rootMetrics,prev:rootPrev,children:orderBrand.map(function(key){return {name:key,metrics:nodeMetrics(metricsOf(gs.map[key],F)),prev:psGroup[key]||null,children:sortDesc(gs.map[key]).slice(0,15).map(function(tr){return {name:tr[F.searchTerm]||"(empty)",metrics:nodeMetrics(metricsOf([tr],F)),prev:psTerm[tr[F.searchTerm]]||null};})};})};
+    }
+    return {tree:tree,columns:lens.columns,accountCpa:rootMetrics.cpa};
+  }
+  function breakdownTable(opts){
+    var F=opts.fields||BASE, lens=LENSES[opts.lens]||LENSES.campaign_type, src=opts[lens.source]||[], prevSrc=(opts.previous&&opts.previous[lens.source])||[], hasIS=lens.source==="campaigns", hasBudget=lens.source==="campaigns";
+    if(!src.length)return '<div class="dt-empty">No data for this range</div>';
+    var g=groupBy(src,function(r){return lens.groupOf(r,F,opts);}), pg=groupBy(prevSrc,function(r){return lens.groupOf(r,F,opts);}), pmap={};
+    for(var i=0;i<pg.order.length;i++)pmap[pg.order[i]]=metricsOf(pg.map[pg.order[i]],F);
+    var aggs=g.order.map(function(k){var a=metricsOf(g.map[k],F);a.key=k;a.n=g.map[k].length;return a;}); aggs.sort(function(a,b){return b.spend-a.spend;});
+    var totCost=0,totVal=0; aggs.forEach(function(a){totCost+=a.spend;totVal+=a.value;}); var ovRoas=div(totVal,totCost);
+    function rng(get){var mx=0,mn=null;aggs.forEach(function(a){var v=get(a);if(v>mx)mx=v;if(mn===null||v<mn)mn=v;});return {mn:mn||0,mx:mx};}
+    function heat(v,r){if(r.mx<=r.mn)return "var(--cf-5)";var s=1+Math.floor((v-r.mn)/(r.mx-r.mn)*5);s=s<1?1:(s>5?5:s);return "var(--cf-"+s+")";}
+    var rCost=rng(function(a){return a.spend;}),rImpr=rng(function(a){return a.impr;}),rClk=rng(function(a){return a.clk;}),rConv=rng(function(a){return a.conv;});
+    function cell(h,subs,bg){var s='<td class="as-cell" style="background:'+bg+'"><div class="as-mv">'+h+"</div>";for(var i=0;i<subs.length;i++)s+='<span class="as-sub">'+subs[i]+"</span>";return s+"</td>";}
+    var head='<tr><th class="as-grp-col">'+esc(lens.label)+"</th><th>Budget</th><th>Visibility</th><th>Engagement</th><th>Conversion</th></tr>", body="";
+    aggs.forEach(function(a){var p=pmap[a.key];
+      var is=div(a.isw,a.impr),cpm=div(a.spend,a.impr)*1000,ctr=div(a.clk,a.impr),cpc=div(a.spend,a.clk),cvr=div(a.conv,a.clk),cpa=div(a.spend,a.conv),roas=div(a.value,a.spend);
+      var pIS=p?div(p.isw,p.impr):null, unit=a.n===1?"item":"items";
+      var name='<span class="as-dot"></span>'+esc(a.key)+' <span class="as-badge">'+a.n+" "+unit+"</span>";
+      var budSubs=hasBudget?["Daily "+money(a.budget)+delta(a.budget,p?p.budget:null,false)]:[]; var visSubs=[];
+      if(hasIS)visSubs.push("IS "+share(is)+delta(is,pIS,false)); visSubs.push("CPM "+money(cpm)+delta(cpm,(p&&p.impr)?p.spend/p.impr*1000:null,true));
+      var roasCls=roas>=ovRoas?"good":"bad";
+      body+="<tr><td class=\"as-grp-col\">"+name+"</td>"+cell(money(a.spend)+delta(a.spend,p?p.spend:null,false),budSubs,heat(a.spend,rCost))+cell(int(a.impr)+delta(a.impr,p?p.impr:null,false),visSubs,heat(a.impr,rImpr))+cell(int(a.clk)+delta(a.clk,p?p.clk:null,false),["CTR "+pct(ctr)+delta(ctr,(p&&p.impr)?p.clk/p.impr:null,false),"CPC "+money(cpc)+delta(cpc,(p&&p.clk)?p.spend/p.clk:null,true)],heat(a.clk,rClk))+cell(dec(a.conv)+delta(a.conv,p?p.conv:null,false),["Cv. rate "+pct(cvr)+delta(cvr,(p&&p.clk)?p.conv/p.clk:null,false),"Cost/conv "+money(cpa)+delta(cpa,(p&&p.conv)?p.spend/p.conv:null,true),'ROAS <span class="as-roas--'+roasCls+'">'+roasFmt(roas)+"</span>"+delta(roas,(p&&p.spend)?p.value/p.spend:null,false)],heat(a.conv,rConv))+"</tr>";
+    });
+    return '<p class="as-title">Spend &amp; performance by '+esc(lens.label.toLowerCase())+'</p><div class="as-tablewrap"><table class="as-sumas">'+head+body+"</table></div>";
+  }
+  function coverage(opts){
+    var F=opts.fields||BASE, lens=LENSES[opts.lens]||LENSES.campaign_type, src=opts[lens.source]||[]; if(!src.length)return "";
+    var UNCL={campaign_type:"Other",funnel_stage:"Unstaged",match_type:"Untagged",brand:null}, bad=UNCL[lens.id], tot=0,cl=0,n=src.length;
+    for(var i=0;i<src.length;i++){var c=num(src[i][F.cost]);tot+=c;var k=lens.groupOf(src[i],F,opts);if(lens.id==="brand"){if(k==="Branded")cl+=c;}else if(k!==bad)cl+=c;}
+    var pctv=tot>0?Math.round(cl/tot*100):0;
+    if(lens.id==="brand")return "<strong>"+pctv+"%</strong> of search-term spend is branded · "+n+" terms";
+    var unit=lens.source==="adGroups"?"ad groups":(lens.source==="searchTerms"?"search terms":"campaigns");
+    return "<strong>"+pctv+"%</strong> of spend classified · "+n+" "+unit;
+  }
+  function scaffold(opts,shown){ var btns=shown.map(function(id){return '<button class="as-seg-btn" data-lens="'+id+'">'+esc(LENSES[id].label)+"</button>";}).join("");
+    return '<div class="dt-component as-component"><div class="dt-controls as-controls"><div class="as-seg"><span class="as-seg-lab">Group by</span>'+btns+'</div><div class="as-cov"></div></div><div class="as-tree dt-host"></div>'+(opts.showBreakdown===false?"":'<div class="as-breakdown"></div>')+"</div>";
+  }
+  function mount(target,opts){ opts=opts||{}; var el=typeof target==="string"?document.querySelector(target):target; if(!el)return null;
+    if(!DT){el.innerHTML='<div class="dt-empty">engine not loaded</div>';return null;}
+    var shown=(opts.lenses&&opts.lenses.length?opts.lenses:LENS_ORDER).filter(function(id){return LENSES[id];});
+    var state={lens:opts.lens&&LENSES[opts.lens]?opts.lens:shown[0]};
+    el.innerHTML=scaffold(opts,shown);
+    var treeHost=el.querySelector(".as-tree"), bdHost=el.querySelector(".as-breakdown"), covEl=el.querySelector(".as-cov"), btns=el.querySelectorAll(".as-seg-btn");
+    function metricsConfig(){return [{key:"spend",label:"Spend",format:"money"},{key:"conv",label:"Conversions",format:"dec"},{key:"cpa",label:"Cost/conv",format:"money",invert:true,skipZero:true},{key:"value",label:"Conv. value",format:"money"}];}
+    var treeHandle=null;
+    function render(){ for(var i=0;i<btns.length;i++)btns[i].className=btns[i].getAttribute("data-lens")===state.lens?"as-seg-btn is-active":"as-seg-btn";
+      var built=buildTree({lens:state.lens,fields:opts.fields,account:opts.account,brandTerm:opts.brandTerm,campaigns:opts.campaigns,adGroups:opts.adGroups,ads:opts.ads,searchTerms:opts.searchTerms,previous:opts.previous});
+      treeHandle=DT.mount(treeHost,{tree:built.tree,columns:built.columns,metrics:metricsConfig(),efficiency:{metricKey:"cpa",baseline:built.accountCpa,good:0.8,bad:1.2},compare:opts.compare!==false});
+      if(bdHost)bdHost.innerHTML=breakdownTable({lens:state.lens,fields:opts.fields,brandTerm:opts.brandTerm,campaigns:opts.campaigns,adGroups:opts.adGroups,ads:opts.ads,searchTerms:opts.searchTerms,previous:opts.previous});
+      if(covEl)covEl.innerHTML=coverage({lens:state.lens,fields:opts.fields,brandTerm:opts.brandTerm,campaigns:opts.campaigns,adGroups:opts.adGroups,ads:opts.ads,searchTerms:opts.searchTerms});
+    }
+    for(var b=0;b<btns.length;b++)btns[b].addEventListener("click",function(e){state.lens=e.currentTarget.getAttribute("data-lens");render();});
+    render(); return { el:el, rerender:render, tree:function(){return treeHandle;}, getState:function(){return state;} };
+  }
+  return { buildTree:buildTree, mount:mount, LENSES:LENSES, LENS_ORDER:LENS_ORDER };
+});
+</script>
+
+<!-- ====================== fictional Acme Insurance data ====================== -->
+<script>
+(function (root) {
+  function camp(name,id,ch,cost,impr,clk,conv,cval,is,bud){return {google_ads_campaign_name:name,google_ads_campaign_id:id,google_ads_campaign_advertising_channel_type:ch,google_ads_cost_micros:cost,google_ads_impressions:impr,google_ads_clicks:clk,google_ads_conversions:conv,google_ads_conversions_value:cval,google_ads_search_impression_share:is,google_ads_campaign_budget_amount_micros:bud};}
+  function ag(c,cid,a,cost,impr,clk,conv,cval){return {google_ads_campaign_name:c,google_ads_campaign_id:cid,google_ads_ad_group_name:a,google_ads_cost_micros:cost,google_ads_impressions:impr,google_ads_clicks:clk,google_ads_conversions:conv,google_ads_conversions_value:cval};}
+  function ad(c,a,id,url,cost,conv,cval){return {google_ads_campaign_name:c,google_ads_ad_group_name:a,google_ads_ad_group_ad_ad_id:id,google_ads_ad_group_ad_ad_final_urls:"['"+url+"']",google_ads_cost_micros:cost,google_ads_conversions:conv,google_ads_conversions_value:cval};}
+  function st(t,c,cost,impr,clk,conv,cval){return {google_ads_search_term:t,google_ads_campaign_name:c,google_ads_cost_micros:cost,google_ads_impressions:impr,google_ads_clicks:clk,google_ads_conversions:conv,google_ads_conversions_value:cval};}
+  var C_BRAND="11111111",C_TERM="22222222",C_COMP="33333333",C_WHOLE="44444444",C_PMAX="55555555",C_DG="66666666";
+  root.PorterReporting.gaExampleData = {
+    account:{name:"Acme Insurance",id:"1234567890-1234567890"}, brandTerm:"acme",
+    campaigns:[camp("Acme — Brand Search [BOFU]",C_BRAND,"SEARCH",6200,41000,2100,142,58000,0.82,240),camp("Term Life — Generic Search [MOFU]",C_TERM,"SEARCH",9800,132000,2600,121,30000,0.41,360),camp("Competitor — Conquest Search [MOFU]",C_COMP,"SEARCH",5400,88000,1200,55,14000,0.22,200),camp("Whole Life — Generic Search [TOFU]",C_WHOLE,"SEARCH",10500,210000,2400,90,25000,0.28,380),camp("Performance Max — Prospecting",C_PMAX,"PERFORMANCE_MAX",9300,480000,3100,128,47000,0,420),camp("Demand Gen — Awareness [TOFU]",C_DG,"DEMAND_GEN",7000,620000,2900,84,19000,0,300)],
+    adGroups:[ag("Acme — Brand Search [BOFU]",C_BRAND,"Acme — Brand Exact",3800,24000,1300,96,41000),ag("Acme — Brand Search [BOFU]",C_BRAND,"Acme — Brand Phrase",2400,17000,800,46,17000),ag("Term Life — Generic Search [MOFU]",C_TERM,"Term Life — Broad",4600,72000,1100,44,11000),ag("Term Life — Generic Search [MOFU]",C_TERM,"Term Life — Phrase",3200,41000,980,49,13000),ag("Term Life — Generic Search [MOFU]",C_TERM,"Term Life — Exact",2000,19000,520,28,6000),ag("Competitor — Conquest Search [MOFU]",C_COMP,"Competitor — Broad",5400,88000,1200,55,14000),ag("Whole Life — Generic Search [TOFU]",C_WHOLE,"Whole Life — Broad",6300,140000,1300,44,12000),ag("Whole Life — Generic Search [TOFU]",C_WHOLE,"Whole Life — Phrase",4200,70000,1100,46,13000),ag("Performance Max — Prospecting",C_PMAX,"PMax — Asset group 1",9300,480000,3100,128,47000),ag("Demand Gen — Awareness [TOFU]",C_DG,"DemandGen — Lookalike",7000,620000,2900,84,19000)],
+    ads:[ad("Acme — Brand Search [BOFU]","Acme — Brand Exact","9001","https://acme.example/brand-life-insurance",2100,54,23000),ad("Acme — Brand Search [BOFU]","Acme — Brand Exact","9002","https://acme.example/get-a-quote",1700,42,18000),ad("Term Life — Generic Search [MOFU]","Term Life — Broad","9003","https://acme.example/term-life-insurance",2600,24,6000),ad("Term Life — Generic Search [MOFU]","Term Life — Phrase","9004","https://acme.example/term-life-quote",1900,28,8000),ad("Whole Life — Generic Search [TOFU]","Whole Life — Broad","9005","https://acme.example/whole-life-insurance",3400,22,6000),ad("Performance Max — Prospecting","PMax — Asset group 1","9006","https://acme.example/life-insurance",9300,128,47000)],
+    searchTerms:[st("acme life insurance","Acme — Brand Search [BOFU]",2400,14000,980,78,33000),st("acme term life","Acme — Brand Search [BOFU]",1800,9000,620,48,19000),st("acme insurance reviews","Acme — Brand Search [BOFU]",900,6000,360,16,6000),st("term life insurance","Term Life — Generic Search [MOFU]",4200,61000,1100,41,11000),st("life insurance quote","Term Life — Generic Search [MOFU]",3300,38000,880,38,9000),st("cheap term life","Term Life — Generic Search [MOFU]",2300,22000,520,22,5000),st("whole life insurance","Whole Life — Generic Search [TOFU]",6300,140000,1300,44,12000),st("best life insurance 2026","Whole Life — Generic Search [TOFU]",4200,70000,1100,46,13000),st("northwind life insurance","Competitor — Conquest Search [MOFU]",3100,52000,700,31,8000),st("globex insurance","Competitor — Conquest Search [MOFU]",2300,36000,500,24,6000)],
+    previous:{
+      campaigns:[camp("Acme — Brand Search [BOFU]",C_BRAND,"SEARCH",5400,38000,1850,121,49000,0.79,240),camp("Term Life — Generic Search [MOFU]",C_TERM,"SEARCH",8600,119000,2300,104,27000,0.44,320),camp("Competitor — Conquest Search [MOFU]",C_COMP,"SEARCH",4900,81000,1300,61,16000,0.25,200),camp("Whole Life — Generic Search [TOFU]",C_WHOLE,"SEARCH",8800,186000,2100,81,22000,0.30,360),camp("Performance Max — Prospecting",C_PMAX,"PERFORMANCE_MAX",8100,430000,2700,116,41000,0,380),camp("Demand Gen — Awareness [TOFU]",C_DG,"DEMAND_GEN",6300,560000,2500,71,15000,0,300)],
+      adGroups:[ag("Acme — Brand Search [BOFU]",C_BRAND,"Acme — Brand Exact",3300,21000,1150,82,35000),ag("Acme — Brand Search [BOFU]",C_BRAND,"Acme — Brand Phrase",2100,15000,700,39,14000),ag("Term Life — Generic Search [MOFU]",C_TERM,"Term Life — Broad",4100,65000,980,38,9000),ag("Term Life — Generic Search [MOFU]",C_TERM,"Term Life — Phrase",2800,36000,870,43,11000),ag("Term Life — Generic Search [MOFU]",C_TERM,"Term Life — Exact",1700,17000,470,23,5000),ag("Competitor — Conquest Search [MOFU]",C_COMP,"Competitor — Broad",4900,81000,1300,61,16000),ag("Whole Life — Generic Search [TOFU]",C_WHOLE,"Whole Life — Broad",5400,124000,1150,39,10000),ag("Whole Life — Generic Search [TOFU]",C_WHOLE,"Whole Life — Phrase",3400,62000,950,42,12000),ag("Performance Max — Prospecting",C_PMAX,"PMax — Asset group 1",8100,430000,2700,116,41000),ag("Demand Gen — Awareness [TOFU]",C_DG,"DemandGen — Lookalike",6300,560000,2500,71,15000)],
+      ads:[ad("Acme — Brand Search [BOFU]","Acme — Brand Exact","9001","https://acme.example/brand-life-insurance",1800,47,20000),ad("Acme — Brand Search [BOFU]","Acme — Brand Exact","9002","https://acme.example/get-a-quote",1500,35,15000),ad("Term Life — Generic Search [MOFU]","Term Life — Broad","9003","https://acme.example/term-life-insurance",2200,19,5000),ad("Term Life — Generic Search [MOFU]","Term Life — Phrase","9004","https://acme.example/term-life-quote",1600,24,7000),ad("Whole Life — Generic Search [TOFU]","Whole Life — Broad","9005","https://acme.example/whole-life-insurance",2800,19,5000),ad("Performance Max — Prospecting","PMax — Asset group 1","9006","https://acme.example/life-insurance",8100,116,41000)],
+      searchTerms:[st("acme life insurance","Acme — Brand Search [BOFU]",2100,12000,860,67,28000),st("acme term life","Acme — Brand Search [BOFU]",1600,8000,540,41,16000),st("acme insurance reviews","Acme — Brand Search [BOFU]",800,5000,320,14,5000),st("term life insurance","Term Life — Generic Search [MOFU]",3700,54000,980,36,9000),st("life insurance quote","Term Life — Generic Search [MOFU]",2900,33000,780,31,8000),st("cheap term life","Term Life — Generic Search [MOFU]",2000,19000,470,19,5000),st("whole life insurance","Whole Life — Generic Search [TOFU]",5400,124000,1150,39,10000),st("best life insurance 2026","Whole Life — Generic Search [TOFU]",3400,62000,950,42,12000),st("northwind life insurance","Competitor — Conquest Search [MOFU]",2800,47000,760,35,9000),st("globex insurance","Competitor — Conquest Search [MOFU]",2100,33000,540,26,7000)]
+    }
+  };
+})(window);
+</script>
+
+<!-- ====================== init ====================== -->
+<script>
+(function () {
+  var ast = window.PorterReporting.accountStructureTree;
+  var d = window.PorterReporting.gaExampleData;
+  var handle = ast.mount("#host", {
+    account: d.account, brandTerm: d.brandTerm,
+    campaigns: d.campaigns, adGroups: d.adGroups, ads: d.ads, searchTerms: d.searchTerms,
+    previous: d.previous, lens: "campaign_type", compare: true
+  });
+  // Pre-expand one branch so the preview tile shows a populated tree.
+  setTimeout(function () {
+    var host = document.querySelector("#host .as-tree");
+    if (!host) return;
+    var col1 = host.querySelectorAll(".dt-col")[1];
+    var g = col1 && col1.querySelector(".dt-node[data-dt-expandable]");
+    if (g) g.click();
+    var col2 = host.querySelectorAll(".dt-col")[2];
+    var c = col2 && col2.querySelector(".dt-node[data-dt-expandable]");
+    if (c) c.click();
+  }, 60);
+})();
+</script>
+</body>
+</html>

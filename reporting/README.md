@@ -6,6 +6,7 @@ platform, the builders here are connector-agnostic.
 
 | Skill | What it builds | Status |
 |---|---|---|
+| [`porter-reporting/`](porter-reporting/) | The **assembly layer** underneath every deliverable: document types (report/dashboard/presentation/audit), the component contract (table, tooltip, scorecard, states, SUMAS render), reference templates and the design↔reporting boundary. Read this to decide how any data component should behave | ✅ Foundation library |
 | [`dashboard-builder/`](dashboard-builder/) | A complete hosted Porter dashboard, end-to-end: SUMAS planning → brand-approved design kit (Porter or white-label extracted from any client website) → live published report URL with real data | ✅ Built (stress-tested live) |
 | [`porter-instagram-dashboard/`](porter-instagram-dashboard/) | A specific, ready-made 4-page Instagram Insights dashboard (Overview · Posts · Stories · Audience), shipped as bundled report source so every run lands on the same design. Clone path reproduces it in one MCP call — no build tools, works in plain chat | ✅ Built (published + clone verified) |
 

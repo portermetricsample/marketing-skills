@@ -1,0 +1,27 @@
+<!-- @dsCard group="Components" viewport="900x400" name="REPLACE — card name" subtitle="REPLACE — one-line description of what this card shows" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- shared deps: project-local relative paths ONLY (never ~/ or ../../../) -->
+<link rel="stylesheet" href="../../styles.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400..700&display=swap" rel="stylesheet" />
+<style>
+  /* card-specific LAYOUT only — every color/font comes from styles.css tokens */
+  html, body { margin: 0; background: var(--surface-bg); color: var(--text-body); font-family: var(--font-hanken); }
+  .wrap { padding: 28px; }
+</style>
+</head>
+<body data-theme="white">
+  <div class="wrap">
+    <!-- build the card here; use .pds-* classes + var(--token) values from styles.css -->
+    <!-- logos: <img src="../../assets/connectors/meta.svg"> · charts: <div data-spark="1,2,3,4,5"></div> -->
+  </div>
+
+  <!-- include ONLY if the card uses data-spark / data-series -->
+  <script src="../../porter-charts.js"></script>
+</body>
+</html>

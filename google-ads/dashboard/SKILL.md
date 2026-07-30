@@ -6,7 +6,7 @@ description: Assemble a complete Porter live dashboard for a Google Ads account.
 # Google Ads Dashboard — Assembly Orchestrator
 
 ## What this builds
-A Porter v2 multipage live dashboard for a Google Ads account. Report template baseline: `~/gads-live-dashboard-template/`. Porter reporting components: `~/porter-reporting/components/google-ads/`.
+A Porter v2 multipage live dashboard for a Google Ads account. Report template baseline: `~/gads-live-dashboard-template/`. Porter reporting components: `~/marketing-skills/reporting/porter-reporting/components/google-ads/`.
 
 ---
 
@@ -136,6 +136,6 @@ Segmentation by when performance happened — all granularities on one page, coa
 
 ## Reference files
 - Dashboard template: `~/gads-live-dashboard-template/config.json`
-- Porter reporting components: `~/porter-reporting/components/google-ads/`
+- Porter reporting components: `~/marketing-skills/reporting/porter-reporting/components/google-ads/`
 - Design skin tokens: `~/porter-design/` (porter-design-system skill)
-- v2 report build recipe: `~/porter-reporting/_foundation/`
+- v2 report build recipe: `~/marketing-skills/reporting/porter-reporting/_foundation/`

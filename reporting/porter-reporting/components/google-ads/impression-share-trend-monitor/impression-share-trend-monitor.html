@@ -1,0 +1,48 @@
+<!-- Static scaffold for impression-share-trend-monitor — class hooks ONLY (no <style>, no logic).
+     The live component is built by impression-share-trend-monitor.js; this file exists so
+     porter-design can style the hooks against stable markup. Two rows shown (one expanded). -->
+<div class="pist-component">
+  <div class="pist-controls">
+    <div class="pist-chips" role="group" aria-label="Filter by what limits the campaign">
+      <button class="pist-chip pist-chip--on" type="button" data-f="all">All (7)</button>
+      <button class="pist-chip pist-chip--rank" type="button" data-f="rank"><span class="pist-dot pist-dot--rank"></span>Rank (4)</button>
+      <button class="pist-chip pist-chip--budget" type="button" data-f="budget"><span class="pist-dot pist-dot--budget"></span>Budget (2)</button>
+      <button class="pist-chip pist-chip--mixed" type="button" data-f="mixed"><span class="pist-dot pist-dot--mixed"></span>Mixed (1)</button>
+    </div>
+    <div class="pist-legend"><span class="pist-lg-label">where reach is lost</span>
+      <span class="pist-lg"><span class="pist-sw pist-sw--got"></span>got</span>
+      <span class="pist-lg"><span class="pist-sw pist-sw--rank"></span>rank (auction)</span>
+      <span class="pist-lg"><span class="pist-sw pist-sw--budget"></span>budget (money)</span>
+    </div>
+  </div>
+
+  <div class="pist-head"><span></span><span>Campaign · spend</span><span>IS over time</span><span>change · 4w</span><span>where reach is lost</span></div>
+
+  <div class="pist-row pist-row--rank" data-drv="rank">
+    <button class="pist-rowhead" type="button" data-i="0" aria-expanded="false">
+      <span class="pist-chev" aria-hidden="true">▸</span>
+      <span class="pist-id"><span class="pist-camp">Acme_Auto_SEM_(TL)</span><span class="pist-spend">$184.2k</span></span>
+      <span class="pist-spark"><!-- inline <svg class="pist-spark-svg"> --><span class="pist-window">31% → 35%</span></span>
+      <span class="pist-change pist-change--up">▲ 4 pts</span>
+      <span class="pist-why"><span class="pist-whybar"><span class="pist-seg pist-seg--got"></span><span class="pist-seg pist-seg--rank"></span><span class="pist-seg pist-seg--budget"></span></span><span class="pist-limiter pist-limiter--rank">limited by rank</span></span>
+    </button>
+    <div class="pist-detail" data-detail="0" hidden>
+      <div class="pist-detail-note">Weekly breakdown — the "got" height is the impression share itself; rank/budget show where reach was lost.</div>
+      <div class="pist-wkgrid">
+        <div class="pist-wkcol"><div class="pist-wkbar"><span class="pist-wkseg pist-wkseg--budget"></span><span class="pist-wkseg pist-wkseg--rank"></span><span class="pist-wkseg pist-wkseg--got"></span></div><div class="pist-wklabel">W18</div></div>
+        <!-- … one .pist-wkcol per week … -->
+      </div>
+    </div>
+  </div>
+
+  <div class="pist-row pist-row--budget" data-drv="budget">
+    <button class="pist-rowhead" type="button" data-i="1" aria-expanded="false">
+      <span class="pist-chev" aria-hidden="true">▸</span>
+      <span class="pist-id"><span class="pist-camp">Acme_Home_SEM_(HD)</span><span class="pist-spend">$52.4k</span></span>
+      <span class="pist-spark"><span class="pist-window">23% → 26%</span></span>
+      <span class="pist-change pist-change--up">▲ 3 pts</span>
+      <span class="pist-why"><span class="pist-whybar"><span class="pist-seg pist-seg--got"></span><span class="pist-seg pist-seg--rank"></span><span class="pist-seg pist-seg--budget"></span></span><span class="pist-limiter pist-limiter--budget">limited by budget</span></span>
+    </button>
+    <div class="pist-detail" data-detail="1" hidden></div>
+  </div>
+</div>

@@ -1,0 +1,26 @@
+<!--
+  charts/contribution-sankey — STATIC SCAFFOLD (structure only).
+
+  The sankey renders ITSELF into a host element — you do not hand-write the
+  columns / nodes / ribbons here. Two ways to use it:
+
+    1. Self-contained (demo / simple page): you do NOT need this file —
+       call PorterReporting.contributionSankey.mount("#target", { columns, metrics, nodes, links, … })
+       and it generates the whole chart (controls, columns, ribbons, tooltip) for you.
+
+    2. Live Porter report page: drop this host into the page, build your data into
+       nodes + links, then mount() into the host (see a use case, e.g.
+       ./google-ads/account-contribution.html, and its README). The host carries
+       `data-porter-chart` for that wiring.
+
+  Class hooks only — NO <style> and NO logic here. All appearance is owned by
+  porter-design (see README → "Styling hooks"); all behaviour by the .js.
+-->
+<div class="sk-component">
+  <!-- Optional control row (Flow-by; a use case may add Depth here too). The bare
+       engine renders its own Flow-by control unless metricToggle:false. -->
+  <div class="sk-controls"></div>
+
+  <!-- The sankey (columns + ribbons + tooltip) renders here. -->
+  <div class="sk-host" data-porter-chart="contribution_sankey"></div>
+</div>

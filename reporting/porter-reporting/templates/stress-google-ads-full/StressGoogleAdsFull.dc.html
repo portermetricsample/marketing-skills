@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../_shared/support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Stress Test — Google Ads Full Report" description="Exhaustive Google Ads executive report exercising every chart type, dense editorial text, and complex tables (campaigns, creatives, naming conventions, keywords, search terms) + final recommendations — all painting 100% from theme tokens across 4 themes." -->
+<helmet>
+<script src="./ds-base.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  .blk { background:var(--surface-card); border-radius:20px; padding:28px 30px; box-shadow:inset 0 0 0 1px var(--card-border); }
+  .lbl { font-family:var(--font-bricolage); font-weight:700; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--eyebrow-color); display:block; margin-bottom:8px; }
+  .ttl { font-family:var(--font-bricolage); font-weight:700; font-size:21px; letter-spacing:-0.015em; margin:0 0 20px; color:var(--text-title); }
+  .body { font-family:var(--font-hanken); font-size:15.5px; line-height:1.62; color:var(--text-body); }
+  .body strong { color:var(--text-title); font-weight:700; }
+  .cdot { position:absolute; width:11px; height:11px; border-radius:50%; background:var(--accent-line); box-shadow:0 0 0 3px var(--surface-card); transform:translate(-50%,-50%); }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  .th { font-family:var(--font-hanken); font-size:11px; letter-spacing:.07em; text-transform:uppercase; color:var(--text-muted); font-weight:500; }
+  .heat { border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:12px; height:30px; }
+  .name { font-family:var(--font-hanken); font-weight:600; font-size:13px; background:var(--chip-bg); color:var(--chip-text); padding:3px 8px; border-radius:6px; letter-spacing:.01em; }
+</style>
+</helmet>
+
+<div data-theme="cream" ref="{{ root }}" style="padding:44px 20px; min-height:100vh; font-family:var(--font-bricolage); color:var(--text-title); background:var(--surface-bg);">
+  <div style="max-width:900px; margin:0 auto; display:flex; flex-direction:column; gap:20px;">
+
+    <!-- ===== HEADER ===== -->
+    <header style="display:flex; flex-direction:column; gap:16px;">
+      <div style="display:flex; align-items:center; gap:11px;">
+        <img src="../../../porter-design/assets/connectors/google_ads-icon.svg" alt="Google Ads" style="width:30px; height:30px;" />
+        <span style="font-family:var(--font-hanken); font-weight:600; font-size:14px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-muted);">Google Ads &middot; Q1 2025 &middot; Northwind Co.</span>
+      </div>
+      <span class="lbl" style="margin:0;">Quarterly Performance Review</span>
+      <h1 style="font-family:var(--font-bricolage); font-weight:800; font-size:52px; line-height:1.0; letter-spacing:-0.03em; margin:0; color:var(--text-title);">The account is healthy &mdash;<br/>now it's a mix problem.</h1>
+      <p class="body" style="max-width:680px; font-size:18px; margin:4px 0 0;">Spend held at <strong>$45.8k</strong> while conversions grew <span class="pds-chip pds-chip--pos">&#9650;14%</span> and blended ROAS reached <strong>4.1x</strong>. The win came from <span class="pds-u">Search</span>; the drag is <span class="pds-u">broad prospecting</span>. This report walks campaigns &rarr; creatives &rarr; keywords &rarr; search terms, and closes with where to move budget next.</p>
+    </header>
+
+    <!-- ===== SCORECARDS w/ SPARKLINE ===== -->
+    <section style="display:grid; grid-template-columns:repeat(4,1fr); gap:14px;">
+      <div class="blk pds-scorecard" style="padding:20px;">
+        <span style="font-family:var(--font-hanken); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-muted);">Spend</span>
+        <div style="font-family:var(--font-bricolage); font-weight:800; font-size:27px; color:var(--text-title);">$45.8k</div>
+        <svg viewBox="0 0 120 28" style="width:100%; height:26px; display:block;"><polyline points="0,20 24,18 48,19 72,14 96,15 120,11" fill="none" stroke-width="2.5" style="stroke:var(--accent-line)"/></svg>
+        <span class="pds-chip pds-chip--pos">&#9650;6.0%</span>
+      </div>
+      <div class="blk pds-scorecard" style="padding:20px;">
+        <span style="font-family:var(--font-hanken); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-muted);">Conversions</span>
+        <div style="font-family:var(--font-bricolage); font-weight:800; font-size:27px; color:var(--text-title);">2,180</div>
+        <svg viewBox="0 0 120 28" style="width:100%; height:26px; display:block;"><polyline points="0,22 24,20 48,18 72,16 96,12 120,6" fill="none" stroke-width="2.5" style="stroke:var(--accent-line)"/></svg>
+        <span class="pds-chip pds-chip--pos">&#9650;14%</span>
+      </div>
+      <div class="blk pds-scorecard" style="padding:20px;">
+        <span style="font-family:var(--font-hanken); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-muted);">CPA</span>
+        <div style="font-family:var(--font-bricolage); font-weight:800; font-size:27px; color:var(--text-title);">$22.10</div>
+        <svg viewBox="0 0 120 28" style="width:100%; height:26px; display:block;"><polyline points="0,14 24,15 48,13 72,16 96,15 120,18" fill="none" stroke-width="2.5" style="stroke:var(--series-google)"/></svg>
+        <span class="pds-chip pds-chip--neg">&#9650;3.0%</span>
+      </div>
+      <div class="blk pds-scorecard" style="padding:20px;">
+        <span style="font-family:var(--font-hanken); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-muted);">ROAS</span>
+        <div style="font-family:var(--font-bricolage); font-weight:800; font-size:27px; color:var(--text-title);">4.1x</div>
+        <svg viewBox="0 0 120 28" style="width:100%; height:26px; display:block;"><polyline points="0,18 24,17 48,15 72,14 96,12 120,9" fill="none" stroke-width="2.5" style="stroke:var(--accent-line)"/></svg>
+        <span class="pds-chip pds-chip--pos">&#9650;0.6</span>
+      </div>
+    </section>
+
+    <!-- ===== TIME SERIES w/ TOOLTIP ===== -->
+    <section class="blk">
+      <span class="lbl">Time series</span>
+      <h3 class="ttl">Spend &amp; conversions, 12 weeks</h3>
+      <div style="position:relative;">
+        <svg viewBox="0 0 820 240" preserveAspectRatio="none" style="width:100%; height:220px; display:block;">
+          <line x1="0" y1="60" x2="820" y2="60" stroke-width="1" style="stroke:var(--grid-line)"/>
+          <line x1="0" y1="120" x2="820" y2="120" stroke-width="1" style="stroke:var(--grid-line)"/>
+          <line x1="0" y1="180" x2="820" y2="180" stroke-width="1" style="stroke:var(--grid-line)"/>
+          <path d="M0,170 L74,158 L149,164 L223,140 L298,148 L372,118 L447,108 L521,120 L596,92 L670,80 L745,86 L820,58 L820,240 L0,240 Z" style="fill:var(--area-fill)"/>
+          <polyline points="0,170 74,158 149,164 223,140 298,148 372,118 447,108 521,120 596,92 670,80 745,86 820,58" fill="none" stroke-width="3.5" style="stroke:var(--accent-line)"/>
+          <polyline points="0,200 74,196 149,190 223,192 298,184 372,176 447,178 521,170 596,166 670,170 745,160 820,156" fill="none" stroke-width="3" style="stroke:var(--series-google)"/>
+        </svg>
+        <div style="position:absolute; inset:0;"><div class="cdot pds-hotspot" style="left:72.68%; top:38.33%;"><div class="pds-tooltip"><span class="pds-tooltip__date">W9 &middot; Mar 3</span><span class="pds-tooltip__val">1,840 conv</span></div></div><div class="cdot pds-hotspot" style="left:90.85%; top:35.83%;"><div class="pds-tooltip"><span class="pds-tooltip__date">W11 &middot; Mar 17</span><span class="pds-tooltip__val">2,090 conv</span></div></div></div>
+      </div>
+      <div style="display:flex; gap:20px; margin-top:14px; font-family:var(--font-hanken); font-size:13px; color:var(--text-muted);">
+        <span style="display:inline-flex; align-items:center; gap:7px;"><span style="width:14px; height:3px; border-radius:2px; background:var(--accent-line);"></span>Conversions</span>
+        <span style="display:inline-flex; align-items:center; gap:7px;"><span style="width:14px; height:3px; border-radius:2px; background:var(--series-google);"></span>Spend</span>
+        <span style="margin-left:auto; font-style:italic;">Hover the points for detail &rarr;</span>
+      </div>
+    </section>
+
+    <!-- ===== DONUT + COLUMN ===== -->
+    <section class="grid2">
+      <div class="blk">
+        <span class="lbl">Pie / donut</span>
+        <h3 class="ttl">Spend by campaign type</h3>
+        <div style="display:flex; align-items:center; gap:26px;">
+          <div style="position:relative; flex:none;">
+            <svg viewBox="0 0 200 200" style="width:160px; height:160px;">
+              <g transform="rotate(-90 100 100)" fill="none" stroke-width="34">
+                <circle cx="100" cy="100" r="80" style="stroke:var(--series-meta)" stroke-dasharray="196 307" stroke-dashoffset="0"/>
+                <circle cx="100" cy="100" r="80" style="stroke:var(--series-google)" stroke-dasharray="151 352" stroke-dashoffset="-196"/>
+                <circle cx="100" cy="100" r="80" style="stroke:var(--series-shopify)" stroke-dasharray="101 402" stroke-dashoffset="-347"/>
+                <circle cx="100" cy="100" r="80" style="stroke:var(--series-instagram)" stroke-dasharray="55 448" stroke-dashoffset="-448"/>
+              </g>
+            </svg>
+            <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;"><div style="font-family:var(--font-bricolage); font-weight:800; font-size:23px; color:var(--text-title);">$45.8k</div><div style="font-family:var(--font-hanken); font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--text-muted);">total</div></div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:9px; font-family:var(--font-hanken); font-size:13.5px; color:var(--text-body);">
+            <span style="display:inline-flex; align-items:center; gap:8px;"><span style="width:11px; height:11px; border-radius:3px; background:var(--series-meta);"></span>Search <strong style="color:var(--text-title); margin-left:auto;">39%</strong></span>
+            <span style="display:inline-flex; align-items:center; gap:8px;"><span style="width:11px; height:11px; border-radius:3px; background:var(--series-google);"></span>Shopping <strong style="color:var(--text-title); margin-left:auto;">30%</strong></span>
+            <span style="display:inline-flex; align-items:center; gap:8px;"><span style="width:11px; height:11px; border-radius:3px; background:var(--series-shopify);"></span>PMax <strong style="color:var(--text-title); margin-left:auto;">20%</strong></span>
+            <span style="display:inline-flex; align-items:center; gap:8px;"><span style="width:11px; height:11px; border-radius:3px; background:var(--series-instagram);"></span>Display <strong style="color:var(--text-title); margin-left:auto;">11%</strong></span>
+          </div>
+        </div>
+      </div>
+      <div class="blk">
+        <span class="lbl">Column chart</span>
+        <h3 class="ttl">Conversions by month</h3>
+        <div style="display:flex; align-items:flex-end; justify-content:center; gap:34px; height:170px; padding-top:10px;">
+          <div style="display:flex; flex-direction:column; align-items:center; gap:8px; flex:none; width:60px;"><div style="width:48px; height:96px; background:var(--accent-line); border-radius:8px 8px 0 0;"></div><span class="th">Jan</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:8px; flex:none; width:60px;"><div style="width:48px; height:108px; background:var(--accent-line); border-radius:8px 8px 0 0;"></div><span class="th">Feb</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:8px; flex:none; width:60px;"><div style="width:48px; height:138px; background:var(--highlight-fill); border-radius:8px 8px 0 0;"></div><span class="th">Mar</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== HORIZONTAL BREAKDOWN + 100% STACKED ===== -->
+    <section class="grid2">
+      <div class="blk">
+        <span class="lbl">Breakdown</span>
+        <h3 class="ttl">Conversions by match type</h3>
+        <div style="display:flex; flex-direction:column; gap:15px;">
+          <div><div style="display:flex; justify-content:space-between; margin-bottom:7px; font-size:14px;"><span style="font-weight:600; color:var(--text-title);">Exact</span><span class="body" style="font-size:13px;">44%</span></div><div style="height:9px; border-radius:5px; background:var(--grid-line);"><div style="width:88%; height:100%; border-radius:5px; background:var(--accent-line);"></div></div></div>
+          <div><div style="display:flex; justify-content:space-between; margin-bottom:7px; font-size:14px;"><span style="font-weight:600; color:var(--text-title);">Phrase</span><span class="body" style="font-size:13px;">33%</span></div><div style="height:9px; border-radius:5px; background:var(--grid-line);"><div style="width:66%; height:100%; border-radius:5px; background:var(--accent-line);"></div></div></div>
+          <div><div style="display:flex; justify-content:space-between; margin-bottom:7px; font-size:14px;"><span style="font-weight:600; color:var(--text-title);">Broad</span><span class="body" style="font-size:13px;">23%</span></div><div style="height:9px; border-radius:5px; background:var(--grid-line);"><div style="width:46%; height:100%; border-radius:5px; background:var(--accent-line);"></div></div></div>
+        </div>
+      </div>
+      <div class="blk">
+        <span class="lbl">100% stacked</span>
+        <h3 class="ttl">Device mix by month</h3>
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <div><div class="th" style="margin-bottom:6px;">Jan</div><div style="display:flex; height:22px; border-radius:6px; overflow:hidden;"><div style="width:58%; background:var(--series-meta);"></div><div style="width:30%; background:var(--series-google);"></div><div style="width:12%; background:var(--series-shopify);"></div></div></div>
+          <div><div class="th" style="margin-bottom:6px;">Feb</div><div style="display:flex; height:22px; border-radius:6px; overflow:hidden;"><div style="width:54%; background:var(--series-meta);"></div><div style="width:33%; background:var(--series-google);"></div><div style="width:13%; background:var(--series-shopify);"></div></div></div>
+          <div><div class="th" style="margin-bottom:6px;">Mar</div><div style="display:flex; height:22px; border-radius:6px; overflow:hidden;"><div style="width:49%; background:var(--series-meta);"></div><div style="width:37%; background:var(--series-google);"></div><div style="width:14%; background:var(--series-shopify);"></div></div></div>
+          <div style="display:flex; gap:16px; font-family:var(--font-hanken); font-size:12px; color:var(--text-muted); margin-top:2px;"><span style="display:inline-flex; align-items:center; gap:6px;"><span style="width:10px; height:10px; border-radius:3px; background:var(--series-meta);"></span>Mobile</span><span style="display:inline-flex; align-items:center; gap:6px;"><span style="width:10px; height:10px; border-radius:3px; background:var(--series-google);"></span>Desktop</span><span style="display:inline-flex; align-items:center; gap:6px;"><span style="width:10px; height:10px; border-radius:3px; background:var(--series-shopify);"></span>Tablet</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CAMPAIGNS + NAMING CONVENTIONS ===== -->
+    <section class="blk">
+      <span class="lbl">Campaigns</span>
+      <h3 class="ttl">Performance by campaign</h3>
+      <p class="body" style="font-size:13.5px; margin:-10px 0 18px; color:var(--text-muted);">Naming convention: <span class="name">GEO_Type_Match_Theme</span> &mdash; e.g. <span class="name">US_SRCH_Exact_Brand</span></p>
+      <table style="width:100%; border-collapse:collapse; font-family:var(--font-hanken);">
+        <thead><tr style="text-align:right;"><th class="th" style="text-align:left; padding:0 0 12px;">Campaign</th><th class="th" style="padding:0 0 12px 16px;">Spend</th><th class="th" style="padding:0 0 12px 16px;">Conv.</th><th class="th" style="padding:0 0 12px 16px;">ROAS</th><th class="th" style="padding:0 0 12px 16px;">&Delta;</th></tr></thead>
+        <tbody style="font-size:14px;">
+          <tr style="border-top:1px solid var(--card-border);"><td style="padding:12px 0;"><span class="name">US_SRCH_Exact_Brand</span></td><td style="text-align:right; padding:12px 0 12px 16px; color:var(--text-body);">$9,240</td><td style="text-align:right; padding:12px 0 12px 16px; color:var(--text-body);">624</td><td style="text-align:right; padding:12px 0 12px 16px;"><span class="heat" style="display:inline-flex; padding:3px 10px; height:auto; background:var(--cf-5); color:#1a0340;">6.8x</span></td><td style="text-align:right; padding:12px 0 12px 16px;"><span class="pds-chip pds-chip--pos">&#9650;9.1%</span></td></tr>
+          <tr style="border-top:1px solid var(--card-border);"><td style="padding:12px 0;"><span class="name">US_SHOP_Catalog_All</span></td><td style="text-align:right; padding:12px 0 12px 16px; color:var(--text-body);">$14,180</td><td style="text-align:right; padding:12px 0 12px 16px; color:var(--text-body);">812</td><td style="text-align:right; padding:12px 0 12px 16px;"><span class="heat" style="display:inline-flex; padding:3px 10px; height:auto; background:var(--cf-4); color:#1a0340;">4.6x</span></td><td style="text-align:right; padding:12px 0 12px 16px;"><span class="pds-chip pds-chip--pos">&#9650;5.2%</span></td></tr>
+          <tr style="border-top:1px solid var(--card-border);"><td style="padding:12px 0;"><span class="name">US_PMAX_Prosp_Broad</span></td><td style="text-align:right; padding:12px 0 12px 16px; color:var(--text-body);">$13,140</td><td style="text-align:right; padding:12px 0 12px 16px; color:var(--text-body);">498</td><td style="text-align:right; padding:12px 0 12px 16px;"><span class="heat" style="display:inline-flex; padding:3px 10px; height:auto; background:var(--cf-3); color:#1a0340;">3.5x</span></td><td style="text-align:right; padding:12px 0 12px 16px;"><span class="pds-chip pds-chip--neg">&#9660;1.4%</span></td></tr>
+          <tr style="border-top:1px solid var(--card-border);"><td style="padding:12px 0;"><span class="name">US_SRCH_Broad_Generic</span></td><td style="text-align:right; padding:12px 0 12px 16px; color:var(--text-body);">$9,280</td><td style="text-align:right; padding:12px 0 12px 16px; color:var(--text-body);">246</td><td style="text-align:right; padding:12px 0 12px 16px;"><span class="heat" style="display:inline-flex; padding:3px 10px; height:auto; background:var(--cf-1); color:#1a0340;">2.9x</span></td><td style="text-align:right; padding:12px 0 12px 16px;"><span class="pds-chip pds-chip--neg">&#9660;4.1%</span></td></tr>
+          <tr style="border-top:2px solid var(--total-accent);"><td style="padding:13px 0; font-family:var(--font-bricolage); font-weight:800; color:var(--text-title);">Total</td><td style="text-align:right; padding:13px 0 13px 16px; font-weight:700; color:var(--text-title);">$45,840</td><td style="text-align:right; padding:13px 0 13px 16px; font-weight:700; color:var(--text-title);">2,180</td><td style="text-align:right; padding:13px 0 13px 16px; font-weight:800; color:var(--total-accent);">4.1x</td><td style="text-align:right; padding:13px 0 13px 16px;"><span class="pds-chip pds-chip--pos">&#9650;6.0%</span></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ===== CREATIVES ===== -->
+    <section class="blk">
+      <span class="lbl">Creatives</span>
+      <h3 class="ttl">Top creatives by ROAS</h3>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:14px;">
+        <div class="pds-stat-card"><div style="font-family:var(--font-hanken); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--tint-a-text); margin-bottom:8px;">Video &middot; 0:15</div><div style="font-family:var(--font-bricolage); font-weight:800; font-size:24px; color:var(--text-title);">7.2x</div><div class="body" style="font-size:12.5px; margin-top:4px;">&ldquo;Spring Refresh&rdquo; &middot; 312 conv</div><div style="margin-top:10px;"><span class="pds-chip pds-chip--pos">&#9650;18%</span></div></div>
+        <div class="pds-stat-card"><div style="font-family:var(--font-hanken); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--tint-a-text); margin-bottom:8px;">Image &middot; Carousel</div><div style="font-family:var(--font-bricolage); font-weight:800; font-size:24px; color:var(--text-title);">5.1x</div><div class="body" style="font-size:12.5px; margin-top:4px;">&ldquo;Best Sellers&rdquo; &middot; 284 conv</div><div style="margin-top:10px;"><span class="pds-chip pds-chip--pos">&#9650;6%</span></div></div>
+        <div class="pds-stat-card"><div style="font-family:var(--font-hanken); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--tint-a-text); margin-bottom:8px;">Responsive &middot; RSA</div><div style="font-family:var(--font-bricolage); font-weight:800; font-size:24px; color:var(--text-title);">3.0x</div><div class="body" style="font-size:12.5px; margin-top:4px;">&ldquo;Always-On&rdquo; &middot; 198 conv</div><div style="margin-top:10px;"><span class="pds-chip pds-chip--neg">&#9660;3%</span></div></div>
+      </div>
+    </section>
+
+    <!-- ===== KEYWORDS ===== -->
+    <section class="blk">
+      <span class="lbl">Keywords</span>
+      <h3 class="ttl">Top keywords &middot; quality &amp; efficiency</h3>
+      <table style="width:100%; border-collapse:collapse; font-family:var(--font-hanken);">
+        <thead><tr style="text-align:right;"><th class="th" style="text-align:left; padding:0 0 12px;">Keyword</th><th class="th" style="padding:0 0 12px 16px;">Match</th><th class="th" style="padding:0 0 12px 16px;">QS</th><th class="th" style="padding:0 0 12px 16px;">CPC</th><th class="th" style="padding:0 0 12px 16px;">Conv.</th></tr></thead>
+        <tbody style="font-size:14px;">
+          <tr style="border-top:1px solid var(--card-border);"><td style="padding:12px 0; font-weight:600; color:var(--text-title);">northwind running shoes</td><td style="text-align:right; padding:12px 0 12px 16px;"><span class="pds-chip pds-chip--neutral">Exact</span></td><td style="text-align:right; padding:12px 0 12px 16px;"><span class="heat" style="display:inline-flex; padding:3px 10px; height:auto; background:var(--cf-5); color:#1a0340;">9/10</span></td><td style="text-align:right; padding:12px 0 12px 16px; color:var(--text-body);">$1.20</td><td style="text-align:right; padding:12px 0 12px 16px; color:var(--text-body);">142</td></tr>
+          <tr style="border-top:1px solid var(--card-border);"><td style="padding:12px 0; font-weight:600; color:var(--text-title);">trail running shoes</td><td style="text-align:right; padding:12px 0 12px 16px;"><span class="pds-chip pds-chip--neutral">Phrase</span></td><td style="text-align:right; padding:12px 0 12px 16px;"><span class="heat" style="display:inline-flex; padding:3px 10px; height:auto; background:var(--cf-4); color:#1a0340;">7/10</span></td><td style="text-align:right; padding:12px 0 12px 16px; color:var(--text-body);">$2.40</td><td style="text-align:right; padding:12px 0 12px 16px; color:var(--text-body);">88</td></tr>
+          <tr style="border-top:1px solid var(--card-border);"><td style="padding:12px 0; font-weight:600; color:var(--text-title);">best shoes for marathon</td><td style="text-align:right; padding:12px 0 12px 16px;"><span class="pds-chip pds-chip--neutral">Phrase</span></td><td style="text-align:right; padding:12px 0 12px 16px;"><span class="heat" style="display:inline-flex; padding:3px 10px; height:auto; background:var(--cf-3); color:#1a0340;">5/10</span></td><td style="text-align:right; padding:12px 0 12px 16px; color:var(--text-body);">$3.10</td><td style="text-align:right; padding:12px 0 12px 16px; color:var(--text-body);">41</td></tr>
+          <tr style="border-top:1px solid var(--card-border);"><td style="padding:12px 0; font-weight:600; color:var(--text-title);">cheap sneakers</td><td style="text-align:right; padding:12px 0 12px 16px;"><span class="pds-chip pds-chip--neutral">Broad</span></td><td style="text-align:right; padding:12px 0 12px 16px;"><span class="heat" style="display:inline-flex; padding:3px 10px; height:auto; background:var(--cf-1); color:#1a0340;">3/10</span></td><td style="text-align:right; padding:12px 0 12px 16px; color:var(--text-body);">$4.80</td><td style="text-align:right; padding:12px 0 12px 16px; color:var(--text-body);">12</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ===== SEARCH TERMS ===== -->
+    <section class="blk">
+      <span class="lbl">Search terms</span>
+      <h3 class="ttl">What people actually typed</h3>
+      <table style="width:100%; border-collapse:collapse; font-family:var(--font-hanken);">
+        <thead><tr><th class="th" style="text-align:left; padding:0 0 12px;">Search term</th><th class="th" style="text-align:left; padding:0 0 12px 16px;">Matched keyword</th><th class="th" style="text-align:right; padding:0 0 12px 16px;">Conv.</th><th class="th" style="text-align:right; padding:0 0 12px 16px;">Action</th></tr></thead>
+        <tbody style="font-size:14px;">
+          <tr style="border-top:1px solid var(--card-border);"><td style="padding:12px 0; font-weight:600; color:var(--text-title);">northwind trail shoe review</td><td style="padding:12px 0 12px 16px; color:var(--text-body);">trail running shoes</td><td style="text-align:right; padding:12px 0 12px 16px; color:var(--text-body);">34</td><td style="text-align:right; padding:12px 0 12px 16px;"><span class="pds-chip pds-chip--pos">Add exact</span></td></tr>
+          <tr style="border-top:1px solid var(--card-border);"><td style="padding:12px 0; font-weight:600; color:var(--text-title);">waterproof running shoes</td><td style="padding:12px 0 12px 16px; color:var(--text-body);">trail running shoes</td><td style="text-align:right; padding:12px 0 12px 16px; color:var(--text-body);">19</td><td style="text-align:right; padding:12px 0 12px 16px;"><span class="pds-chip pds-chip--pos">Add phrase</span></td></tr>
+          <tr style="border-top:1px solid var(--card-border);"><td style="padding:12px 0; font-weight:600; color:var(--text-title);">free running shoes giveaway</td><td style="padding:12px 0 12px 16px; color:var(--text-body);">cheap sneakers</td><td style="text-align:right; padding:12px 0 12px 16px; color:var(--text-body);">0</td><td style="text-align:right; padding:12px 0 12px 16px;"><span class="pds-chip pds-chip--neg">Exclude</span></td></tr>
+          <tr style="border-top:1px solid var(--card-border);"><td style="padding:12px 0; font-weight:600; color:var(--text-title);">running shoes near me</td><td style="padding:12px 0 12px 16px; color:var(--text-body);">cheap sneakers</td><td style="text-align:right; padding:12px 0 12px 16px; color:var(--text-body);">7</td><td style="text-align:right; padding:12px 0 12px 16px;"><span class="pds-chip pds-chip--neutral">Monitor</span></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ===== HEAT MAP ===== -->
+    <section class="blk">
+      <span class="lbl">Heat map</span>
+      <h3 class="ttl">Conversions by day &times; daypart</h3>
+      <div style="display:grid; grid-template-columns:64px repeat(4,1fr); gap:6px; font-family:var(--font-hanken); font-size:12px;">
+        <span></span><span class="th" style="text-align:center;">Morning</span><span class="th" style="text-align:center;">Midday</span><span class="th" style="text-align:center;">Evening</span><span class="th" style="text-align:center;">Night</span>
+        <span style="display:flex; align-items:center; color:var(--text-muted);">Mon</span><span class="heat" style="background:var(--heat-2); color:#1a0340;">12</span><span class="heat" style="background:var(--heat-3); color:#1a0340;">28</span><span class="heat" style="background:var(--heat-5); color:#fff;">54</span><span class="heat" style="background:var(--heat-2); color:#1a0340;">9</span>
+        <span style="display:flex; align-items:center; color:var(--text-muted);">Wed</span><span class="heat" style="background:var(--heat-2); color:#1a0340;">14</span><span class="heat" style="background:var(--heat-4); color:#fff;">40</span><span class="heat" style="background:var(--heat-6); color:#fff;">71</span><span class="heat" style="background:var(--heat-2); color:#1a0340;">11</span>
+        <span style="display:flex; align-items:center; color:var(--text-muted);">Fri</span><span class="heat" style="background:var(--heat-3); color:#1a0340;">22</span><span class="heat" style="background:var(--heat-5); color:#fff;">58</span><span class="heat" style="background:var(--heat-6); color:#fff;">66</span><span class="heat" style="background:var(--heat-3); color:#1a0340;">18</span>
+        <span style="display:flex; align-items:center; color:var(--text-muted);">Sun</span><span class="heat" style="background:var(--heat-4); color:#fff;">38</span><span class="heat" style="background:var(--heat-5); color:#fff;">52</span><span class="heat" style="background:var(--heat-3); color:#1a0340;">26</span><span class="heat" style="background:var(--heat-2); color:#1a0340;">14</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px; margin-top:14px; font-family:var(--font-hanken); font-size:11px; color:var(--text-muted);">Fewer<span style="width:18px; height:12px; border-radius:3px; background:var(--heat-2);"></span><span style="width:18px; height:12px; border-radius:3px; background:var(--heat-3);"></span><span style="width:18px; height:12px; border-radius:3px; background:var(--heat-4);"></span><span style="width:18px; height:12px; border-radius:3px; background:var(--heat-5);"></span><span style="width:18px; height:12px; border-radius:3px; background:var(--heat-6);"></span>More</div>
+    </section>
+
+    <!-- ===== FUNNEL + INSIGHT ===== -->
+    <section class="grid2">
+      <div class="blk">
+        <span class="lbl">Funnel</span>
+        <h3 class="ttl">Path to purchase</h3>
+        <div style="display:flex; flex-direction:column; gap:9px;">
+          <div style="display:flex; align-items:center; gap:12px;"><div style="width:100%; height:38px; background:var(--accent-line); border-radius:8px; display:flex; align-items:center; padding:0 14px; color:#fff; font-family:var(--font-hanken); font-weight:700; font-size:13px;">Impressions</div><span class="body" style="font-size:13px; white-space:nowrap;">3.42M</span></div>
+          <div style="display:flex; align-items:center; gap:12px;"><div style="width:72%; height:38px; background:var(--accent-line); opacity:0.78; border-radius:8px; display:flex; align-items:center; padding:0 14px; color:#fff; font-family:var(--font-hanken); font-weight:700; font-size:13px;">Clicks</div><span class="body" style="font-size:13px; white-space:nowrap;">86.4k</span></div>
+          <div style="display:flex; align-items:center; gap:12px;"><div style="width:42%; height:38px; background:var(--accent-line); opacity:0.56; border-radius:8px; display:flex; align-items:center; padding:0 14px; color:#fff; font-family:var(--font-hanken); font-weight:700; font-size:13px;">Add to cart</div><span class="body" style="font-size:13px; white-space:nowrap;">9.8k</span></div>
+          <div style="display:flex; align-items:center; gap:12px;"><div style="width:24%; height:38px; background:var(--series-google); border-radius:8px; display:flex; align-items:center; padding:0 14px; color:var(--porter-dark); font-family:var(--font-hanken); font-weight:700; font-size:13px;">Purchase</div><span class="body" style="font-size:13px; white-space:nowrap;">2.18k</span></div>
+        </div>
+      </div>
+      <div style="border-radius:20px; padding:28px 30px; background:var(--tint-a-bg); box-shadow:inset 0 0 0 1px var(--card-border); display:flex; flex-direction:column; justify-content:center;">
+        <span style="font-family:var(--font-bricolage); font-weight:700; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--tint-a-text);">Key insight</span>
+        <p style="font-family:var(--font-bricolage); font-weight:700; font-size:21px; line-height:1.3; letter-spacing:-0.01em; margin:12px 0 0; color:var(--text-title);">Evening &amp; <span class="pds-u">midday</span> drive <strong style="color:var(--tint-a-text);">61%</strong> of conversions. Shift ad scheduling weight there.</p>
+      </div>
+    </section>
+
+    <!-- ===== RECOMMENDATIONS & ACTIONS ===== -->
+    <section class="blk" style="background:var(--surface-card);">
+      <span class="lbl">Recommendations</span>
+      <h3 class="ttl">What to do next</h3>
+      <div style="display:flex; flex-direction:column; gap:0;">
+        <div style="display:flex; gap:18px; padding:16px 0; border-top:1px solid var(--card-border);"><span style="flex:none; font-family:var(--font-bricolage); font-weight:800; font-size:20px; color:var(--total-accent); width:30px;">01</span><div><div style="font-family:var(--font-bricolage); font-weight:700; font-size:16px; color:var(--text-title); margin-bottom:4px;">Reallocate 15% of PMax budget to Search &amp; Shopping</div><p class="body" style="margin:0; font-size:14px;">Broad prospecting sits at <span class="pds-chip pds-chip--neg">2.9x</span>; Brand Exact returns <span class="pds-chip pds-chip--pos">6.8x</span>. Move ~$2k/mo. <strong>Owner: Maria</strong> &middot; ETA Apr 15.</p></div></div>
+        <div style="display:flex; gap:18px; padding:16px 0; border-top:1px solid var(--card-border);"><span style="flex:none; font-family:var(--font-bricolage); font-weight:800; font-size:20px; color:var(--total-accent); width:30px;">02</span><div><div style="font-family:var(--font-bricolage); font-weight:700; font-size:16px; color:var(--text-title); margin-bottom:4px;">Promote 2 search terms to exact, add 4 negatives</div><p class="body" style="margin:0; font-size:14px;">&ldquo;trail shoe review&rdquo; &amp; &ldquo;waterproof&rdquo; convert; exclude &ldquo;free&rdquo; &amp; &ldquo;giveaway&rdquo;. <strong>Owner: Dev</strong> &middot; ETA Apr 8.</p></div></div>
+        <div style="display:flex; gap:18px; padding:16px 0; border-top:1px solid var(--card-border);"><span style="flex:none; font-family:var(--font-bricolage); font-weight:800; font-size:20px; color:var(--total-accent); width:30px;">03</span><div><div style="font-family:var(--font-bricolage); font-weight:700; font-size:16px; color:var(--text-title); margin-bottom:4px;">Scale the &ldquo;Spring Refresh&rdquo; video creative</div><p class="body" style="margin:0; font-size:14px;">Top performer at <span class="pds-chip pds-chip--pos">7.2x</span>. Build 2 variants &amp; raise budget cap. <strong>Owner: Lena</strong> &middot; ETA Apr 22.</p></div></div>
+        <div style="display:flex; gap:18px; padding:16px 0; border-top:1px solid var(--card-border);"><span style="flex:none; font-family:var(--font-bricolage); font-weight:800; font-size:20px; color:var(--total-accent); width:30px;">04</span><div><div style="font-family:var(--font-bricolage); font-weight:700; font-size:16px; color:var(--text-title); margin-bottom:4px;">Weight ad scheduling to evening &amp; midday</div><p class="body" style="margin:0; font-size:14px;">61% of conversions land there. Apply +25% bid adjustment. <strong>Owner: Maria</strong> &middot; ETA Apr 10.</p></div></div>
+      </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer style="display:flex; align-items:center; justify-content:space-between; padding:4px 6px; font-family:var(--font-hanken); font-size:12.5px; color:var(--text-muted);">
+      <span>Northwind Co. &middot; Prepared by Porter</span>
+      <span>Q1 2025 &middot; Jan&ndash;Mar &middot; 7-day click attribution</span>
+    </footer>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;cream&quot;,&quot;white&quot;,&quot;blue&quot;,&quot;purple&quot;],&quot;default&quot;:&quot;cream&quot;,&quot;tsType&quot;:&quot;\&quot;cream\&quot;|\&quot;white\&quot;|\&quot;blue\&quot;|\&quot;purple\&quot;&quot;}}">
+class Component extends DCLogic {
+  rootRef = React.createRef();
+  applyTheme() {
+    const t = this.props.theme || 'cream';
+    if (this.rootRef.current) this.rootRef.current.setAttribute('data-theme', t);
+  }
+  componentDidMount() { this.applyTheme(); }
+  componentDidUpdate() { this.applyTheme(); }
+  renderVals() {
+    return { root: this.rootRef };
+  }
+}
+</script>
+</body>
+</html>

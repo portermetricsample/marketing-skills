@@ -1,0 +1,43 @@
+<!--
+  google-ads/campaign-performance-table — STATIC SCAFFOLD (structure only).
+
+  This is the markup the component animates: a control bar (filters / sort /
+  search) + an empty host. Two ways to use it:
+
+    1. Self-contained (demo / simple page): you do NOT need this file —
+       call PorterReporting.campaignPerformanceTable.mount("#target", {rows, previousRows})
+       and it generates this exact structure for you.
+
+    2. Live Porter report page: drop this markup into the page, then bind the
+       host as a chart and render into it (see README → "Wiring into a live
+       Porter report"). The host carries `data-porter-chart` for that wiring.
+
+  Class hooks only — NO <style> and NO logic here. All appearance is owned by
+  porter-design (see README → "Styling hooks"); all behaviour by the .js.
+-->
+<div class="cpt-component">
+  <div class="cpt-controls">
+    <label class="cpt-filter">Campaign
+      <select class="cpt-campaign"><option value="">All campaigns</option></select>
+    </label>
+    <label class="cpt-filter">Type
+      <select class="cpt-type"><option value="">All types</option></select>
+    </label>
+    <label class="cpt-filter">Bidding
+      <select class="cpt-bid"><option value="">All strategies</option></select>
+    </label>
+    <label class="cpt-filter">Sort by
+      <select class="cpt-sort">
+        <option value="conv">Conversions</option>
+        <option value="cpa">Cost / conv.</option>
+        <option value="budget">Budget</option>
+        <option value="alpha">Alphabetical (A–Z)</option>
+      </select>
+    </label>
+    <input class="cpt-search" type="text" placeholder="Search campaigns… press Enter" />
+  </div>
+
+  <!-- The table renders here. `data-porter-chart` is the live-report binding
+       point (the chart key is illustrative — match your report config). -->
+  <div class="cpt-host" data-porter-chart="cmp_table"></div>
+</div>

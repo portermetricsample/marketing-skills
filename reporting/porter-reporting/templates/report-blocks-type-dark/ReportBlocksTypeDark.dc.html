@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../_shared/support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Report Building Blocks — New Type Dark" description="A visualization library for Porter reports — donut/pie, time series, bar & stacked breakdowns, heat map, pivot table, funnel, KPI sparklines, and a downloads panel, all on-brand." -->
+<helmet>
+<script src="./ds-base.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #100225; }
+  .blk { background:#1c0942; border-radius:20px; padding:26px 28px; box-shadow:inset 0 0 0 1px rgba(255,255,255,0.10); }
+  .lbl { font-family:var(--font-bricolage); font-weight:700; font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:#a78bfa; display:block; margin-bottom:6px; }
+  .ttl { font-family:var(--font-bricolage); font-weight:700; font-size:21px; letter-spacing:-0.015em; margin:0 0 20px; color:#fff; }
+  .cdot { position:absolute; width:10px; height:10px; border-radius:50%; background:#a78bfa; box-shadow:0 0 0 2.5px #1c0942; transform:translate(-50%,-50%); cursor:pointer; transition:transform .12s; }
+  .cdot .tip { position:absolute; bottom:16px; left:50%; transform:translateX(-50%); background:#fff; color:var(--porter-dark); font-family:var(--font-hanken); font-weight:600; font-size:11px; padding:5px 9px; border-radius:7px; white-space:nowrap; opacity:0; pointer-events:none; transition:opacity .12s; }
+  .cdot:hover { transform:translate(-50%,-50%) scale(1.35); }
+  .cdot:hover .tip { opacity:1; }
+  .bar { cursor:pointer; }
+  .bartip { position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%); background:#fff; color:var(--porter-dark); font-family:var(--font-hanken); font-weight:600; font-size:11px; padding:5px 9px; border-radius:7px; white-space:nowrap; opacity:0; pointer-events:none; transition:opacity .12s; }
+  .bar:hover .bartip { opacity:1; }
+  @media print { body { background:#fff; } }
+</style>
+</helmet>
+
+<div style="padding:40px 20px; font-family:var(--font-bricolage); color:#e9e3ff;">
+  <div style="max-width:880px; margin:0 auto; display:flex; flex-direction:column; gap:20px;">
+
+    <!-- ===== COVER ===== -->
+    <header style="background:var(--porter-dark); color:#fff; padding:44px 48px; border-radius:24px;">
+      <div style="display:flex; align-items:center; gap:9px; margin-bottom:34px;">
+        <img src="../../../porter-design/assets/brand/porter-mark.png" alt="Porter" style="width:28px; height:28px; object-fit:contain;" />
+        <span style="font-weight:900; font-size:19px; letter-spacing:-0.8px;">porter</span>
+      </div>
+      <span style="font-family:var(--font-hanken); font-weight:500; font-size:13px; letter-spacing:2px; text-transform:uppercase; color:var(--porter-yellow); display:block; margin-bottom:16px;">Report library</span>
+      <h1 style="font-family:var(--font-bricolage); font-weight:900; font-size:72px; line-height:0.9; letter-spacing:-3px; margin:0;">Ways to<br/><span style="color:var(--purple-500);">visualize</span></h1>
+      <p style="font-family:var(--font-hanken); font-size:17px; line-height:1.5; color:rgba(255,255,255,0.7); max-width:48ch; margin:24px 0 0;">Every block below is built from the Porter brand kit — solid color, zero decoration — and drops straight into a dashboard or report.</p>
+    </header>
+
+    <!-- ===== TIME SERIES ===== -->
+    <section class="blk">
+      <span class="lbl">Time series</span>
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <h3 class="ttl">Spend &amp; revenue, 12 weeks</h3>
+        <div style="display:flex; gap:16px; align-items:center; font-family:var(--font-hanken); font-size:12px;">
+          <span style="display:flex; align-items:center; gap:6px;"><span style="width:14px; height:3px; border-radius:2px; background:var(--porter-purple);"></span>Revenue</span>
+          <span style="display:flex; align-items:center; gap:6px; color:#a79fce;"><span style="width:14px; height:3px; border-radius:2px; background:var(--porter-aqua);"></span>Spend</span>
+        </div>
+      </div>
+      <div style="position:relative;">
+      <svg viewBox="0 0 820 240" preserveAspectRatio="none" style="width:100%; height:220px; display:block;">
+        <line x1="0" y1="60" x2="820" y2="60" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+        <line x1="0" y1="120" x2="820" y2="120" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+        <line x1="0" y1="180" x2="820" y2="180" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+        <path d="M0,170 L74,158 L149,164 L223,140 L298,148 L372,118 L447,108 L521,120 L596,92 L670,80 L745,86 L820,58 L820,240 L0,240 Z" fill="rgba(139,92,246,0.20)"/>
+        <polyline points="0,170 74,158 149,164 223,140 298,148 372,118 447,108 521,120 596,92 670,80 745,86 820,58" fill="none" stroke="#8b5cf6" stroke-width="3.5"/>
+        <polyline points="0,200 74,196 149,190 223,192 298,184 372,176 447,178 521,170 596,166 670,170 745,160 820,156" fill="none" stroke="#2dd4bf" stroke-width="3"/>
+      </svg>
+      <div style="position:absolute; inset:0;"><div class="cdot" style="left:0.00%; top:70.83%;"><span class="tip">W1 &middot; $12.1k</span></div><div class="cdot" style="left:9.02%; top:65.83%;"><span class="tip">W2 &middot; $13.4k</span></div><div class="cdot" style="left:18.17%; top:68.33%;"><span class="tip">W3 &middot; $12.9k</span></div><div class="cdot" style="left:27.20%; top:58.33%;"><span class="tip">W4 &middot; $15.2k</span></div><div class="cdot" style="left:36.34%; top:61.67%;"><span class="tip">W5 &middot; $14.6k</span></div><div class="cdot" style="left:45.37%; top:49.17%;"><span class="tip">W6 &middot; $17.1k</span></div><div class="cdot" style="left:54.51%; top:45.00%;"><span class="tip">W7 &middot; $18.0k</span></div><div class="cdot" style="left:63.54%; top:50.00%;"><span class="tip">W8 &middot; $16.8k</span></div><div class="cdot" style="left:72.68%; top:38.33%;"><span class="tip">W9 &middot; $19.9k</span></div><div class="cdot" style="left:81.71%; top:33.33%;"><span class="tip">W10 &middot; $21.0k</span></div><div class="cdot" style="left:90.85%; top:35.83%;"><span class="tip">W11 &middot; $20.4k</span></div><div class="cdot" style="left:100.00%; top:24.17%;"><span class="tip">W12 &middot; $23.8k</span></div></div>
+      </div>
+      <div style="display:flex; justify-content:space-between; font-family:var(--font-hanken); font-size:11px; color:#a79fce; margin-top:10px;">
+        <span>W1</span><span>W3</span><span>W5</span><span>W7</span><span>W9</span><span>W11</span><span>W12</span>
+      </div>
+    </section>
+
+    <!-- ===== DONUT + COLUMN ===== -->
+    <section style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+      <div class="blk">
+        <span class="lbl">Pie / donut</span>
+        <h3 class="ttl">Spend by channel</h3>
+        <div style="display:flex; align-items:center; gap:24px;">
+          <div style="position:relative; width:170px; height:170px; flex:none;">
+            <svg viewBox="0 0 200 200" style="width:170px; height:170px;">
+              <g transform="rotate(-90 100 100)" fill="none" stroke-width="34">
+                <circle cx="100" cy="100" r="80" stroke="#8b5cf6" stroke-dasharray="211.1 291.5" stroke-dashoffset="0"/>
+                <circle cx="100" cy="100" r="80" stroke="#2dd4bf" stroke-dasharray="140.7 361.9" stroke-dashoffset="-211.1"/>
+                <circle cx="100" cy="100" r="80" stroke="#ec4899" stroke-dasharray="80.4 422.2" stroke-dashoffset="-351.9"/>
+                <circle cx="100" cy="100" r="80" stroke="#fbbf24" stroke-dasharray="45.2 457.4" stroke-dashoffset="-432.3"/>
+                <circle cx="100" cy="100" r="80" stroke="#6b6094" stroke-dasharray="25.1 477.5" stroke-dashoffset="-477.5"/>
+              </g>
+            </svg>
+            <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+              <div style="font-weight:900; font-size:26px; letter-spacing:-1px;">$48k</div>
+              <div style="font-family:var(--font-hanken); font-size:10px; letter-spacing:1px; text-transform:uppercase; color:#a79fce;">total</div>
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:9px; font-size:13.5px;">
+            <span style="display:flex; align-items:center; gap:9px;"><span style="width:11px; height:11px; border-radius:3px; background:#6701e6;"></span>Meta <strong style="margin-left:auto; font-family:var(--font-hanken);">42%</strong></span>
+            <span style="display:flex; align-items:center; gap:9px;"><span style="width:11px; height:11px; border-radius:3px; background:#2dd4bf;"></span>Google <strong style="margin-left:auto; font-family:var(--font-hanken);">28%</strong></span>
+            <span style="display:flex; align-items:center; gap:9px;"><span style="width:11px; height:11px; border-radius:3px; background:#ec4899;"></span>Instagram <strong style="margin-left:auto; font-family:var(--font-hanken);">16%</strong></span>
+            <span style="display:flex; align-items:center; gap:9px;"><span style="width:11px; height:11px; border-radius:3px; background:#fbbf24;"></span>Shopify <strong style="margin-left:auto; font-family:var(--font-hanken);">9%</strong></span>
+            <span style="display:flex; align-items:center; gap:9px;"><span style="width:11px; height:11px; border-radius:3px; background:#1a0340;"></span>Other <strong style="margin-left:auto; font-family:var(--font-hanken);">5%</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="blk">
+        <span class="lbl">Column chart</span>
+        <h3 class="ttl">Conversions by month</h3>
+        <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:12px; height:180px;">
+          <div style="display:flex; flex-direction:column; align-items:center; gap:8px; flex:1;"><div class="bar" style="position:relative; width:100%; max-width:42px; height:116px; background:var(--purple-300); border-radius:7px 7px 0 0;"><span class="bartip">312</span></div><span style="font-family:var(--font-hanken); font-size:11px; color:#a79fce;">Jan</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:8px; flex:1;"><div class="bar" style="position:relative; width:100%; max-width:42px; height:125px; background:var(--purple-300); border-radius:7px 7px 0 0;"><span class="bartip">336</span></div><span style="font-family:var(--font-hanken); font-size:11px; color:#a79fce;">Feb</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:8px; flex:1;"><div class="bar" style="position:relative; width:100%; max-width:42px; height:140px; background:#cdfb52; border-radius:7px 7px 0 0;"><span class="bartip">382</span></div><span style="font-family:var(--font-hanken); font-size:11px; color:#ede9fe; font-weight:600;">Mar</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:8px; flex:1;"><div class="bar" style="position:relative; width:100%; max-width:42px; height:131px; background:var(--purple-300); border-radius:7px 7px 0 0;"><span class="bartip">352</span></div><span style="font-family:var(--font-hanken); font-size:11px; color:#a79fce;">Apr</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:8px; flex:1;"><div class="bar" style="position:relative; width:100%; max-width:42px; height:148px; background:var(--purple-300); border-radius:7px 7px 0 0;"><span class="bartip">398</span></div><span style="font-family:var(--font-hanken); font-size:11px; color:#a79fce;">May</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:8px; flex:1;"><div class="bar" style="position:relative; width:100%; max-width:42px; height:159px; background:var(--purple-300); border-radius:7px 7px 0 0;"><span class="bartip">428</span></div><span style="font-family:var(--font-hanken); font-size:11px; color:#a79fce;">Jun</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== HORIZONTAL BREAKDOWN + 100% STACKED ===== -->
+    <section style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+      <div class="blk">
+        <span class="lbl">Breakdown</span>
+        <h3 class="ttl">Conversions by format</h3>
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <div><div style="display:flex; justify-content:space-between; margin-bottom:7px; font-size:14px;"><span style="font-weight:600;">Video</span><span style="font-family:var(--font-hanken);">38%</span></div><div style="height:10px; border-radius:999px; background:rgba(255,255,255,0.08);"><div style="height:10px; border-radius:999px; background:var(--porter-purple); width:38%;"></div></div></div>
+          <div><div style="display:flex; justify-content:space-between; margin-bottom:7px; font-size:14px;"><span style="font-weight:600;">Image</span><span style="font-family:var(--font-hanken);">31%</span></div><div style="height:10px; border-radius:999px; background:rgba(255,255,255,0.08);"><div style="height:10px; border-radius:999px; background:var(--porter-purple); width:31%;"></div></div></div>
+          <div><div style="display:flex; justify-content:space-between; margin-bottom:7px; font-size:14px;"><span style="font-weight:600;">Carousel</span><span style="font-family:var(--font-hanken);">19%</span></div><div style="height:10px; border-radius:999px; background:rgba(255,255,255,0.08);"><div style="height:10px; border-radius:999px; background:var(--porter-purple); width:19%;"></div></div></div>
+          <div><div style="display:flex; justify-content:space-between; margin-bottom:7px; font-size:14px;"><span style="font-weight:600;">Story</span><span style="font-family:var(--font-hanken);">12%</span></div><div style="height:10px; border-radius:999px; background:rgba(255,255,255,0.08);"><div style="height:10px; border-radius:999px; background:var(--porter-purple); width:12%;"></div></div></div>
+        </div>
+      </div>
+
+      <div class="blk">
+        <span class="lbl">100% stacked</span>
+        <h3 class="ttl">Channel mix, Q1</h3>
+        <div style="display:flex; flex-direction:column; gap:18px;">
+          <div><div style="font-family:var(--font-hanken); font-size:11px; color:#a79fce; margin-bottom:7px;">JAN</div><div style="display:flex; height:22px; border-radius:7px; overflow:hidden;"><div style="width:40%; background:#6701e6;"></div><div style="width:30%; background:#2dd4bf;"></div><div style="width:18%; background:#ec4899;"></div><div style="width:12%; background:#fbbf24;"></div></div></div>
+          <div><div style="font-family:var(--font-hanken); font-size:11px; color:#a79fce; margin-bottom:7px;">FEB</div><div style="display:flex; height:22px; border-radius:7px; overflow:hidden;"><div style="width:44%; background:#6701e6;"></div><div style="width:27%; background:#2dd4bf;"></div><div style="width:17%; background:#ec4899;"></div><div style="width:12%; background:#fbbf24;"></div></div></div>
+          <div><div style="font-family:var(--font-hanken); font-size:11px; color:#a79fce; margin-bottom:7px;">MAR</div><div style="display:flex; height:22px; border-radius:7px; overflow:hidden;"><div style="width:42%; background:#6701e6;"></div><div style="width:28%; background:#2dd4bf;"></div><div style="width:16%; background:#ec4899;"></div><div style="width:14%; background:#fbbf24;"></div></div></div>
+        </div>
+        <div style="display:flex; gap:14px; margin-top:18px; font-family:var(--font-hanken); font-size:11px; flex-wrap:wrap;">
+          <span style="display:flex; align-items:center; gap:6px;"><span style="width:10px; height:10px; border-radius:3px; background:#6701e6;"></span>Meta</span>
+          <span style="display:flex; align-items:center; gap:6px;"><span style="width:10px; height:10px; border-radius:3px; background:#2dd4bf;"></span>Google</span>
+          <span style="display:flex; align-items:center; gap:6px;"><span style="width:10px; height:10px; border-radius:3px; background:#ec4899;"></span>Instagram</span>
+          <span style="display:flex; align-items:center; gap:6px;"><span style="width:10px; height:10px; border-radius:3px; background:#fbbf24;"></span>Shopify</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== HEAT MAP ===== -->
+    <section class="blk">
+      <span class="lbl">Heat map</span>
+      <h3 class="ttl">Conversions by day &amp; time</h3>
+      <div style="display:grid; grid-template-columns:54px repeat(6,1fr); grid-auto-rows:36px; gap:6px; font-family:var(--font-hanken); font-size:11px; place-items:stretch;">
+        <span></span>
+        <span style="display:flex; align-items:center; justify-content:center; color:#a79fce;">12a</span>
+        <span style="display:flex; align-items:center; justify-content:center; color:#a79fce;">4a</span>
+        <span style="display:flex; align-items:center; justify-content:center; color:#a79fce;">8a</span>
+        <span style="display:flex; align-items:center; justify-content:center; color:#a79fce;">12p</span>
+        <span style="display:flex; align-items:center; justify-content:center; color:#a79fce;">4p</span>
+        <span style="display:flex; align-items:center; justify-content:center; color:#a79fce;">8p</span>
+
+        <span style="display:flex; align-items:center; color:#a79fce;">Mon</span>
+        <span style="background:#ede9fe; color:#6701e6; border-radius:6px; display:flex; align-items:center; justify-content:center;">12</span>
+        <span style="background:#f4f0fe; color:#9b8bd4; border-radius:6px; display:flex; align-items:center; justify-content:center;">8</span>
+        <span style="background:#c4b5fd; color:#3a0a80; border-radius:6px; display:flex; align-items:center; justify-content:center;">35</span>
+        <span style="background:#8b5cf6; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center;">68</span>
+        <span style="background:#6701e6; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center;">82</span>
+        <span style="background:#c4b5fd; color:#3a0a80; border-radius:6px; display:flex; align-items:center; justify-content:center;">54</span>
+
+        <span style="display:flex; align-items:center; color:#a79fce;">Tue</span>
+        <span style="background:#ede9fe; color:#6701e6; border-radius:6px; display:flex; align-items:center; justify-content:center;">15</span>
+        <span style="background:#f4f0fe; color:#9b8bd4; border-radius:6px; display:flex; align-items:center; justify-content:center;">9</span>
+        <span style="background:#c4b5fd; color:#3a0a80; border-radius:6px; display:flex; align-items:center; justify-content:center;">40</span>
+        <span style="background:#8b5cf6; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center;">72</span>
+        <span style="background:#6701e6; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center;">88</span>
+        <span style="background:#8b5cf6; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center;">60</span>
+
+        <span style="display:flex; align-items:center; color:#a79fce;">Wed</span>
+        <span style="background:#ede9fe; color:#6701e6; border-radius:6px; display:flex; align-items:center; justify-content:center;">14</span>
+        <span style="background:#ede9fe; color:#6701e6; border-radius:6px; display:flex; align-items:center; justify-content:center;">10</span>
+        <span style="background:#c4b5fd; color:#3a0a80; border-radius:6px; display:flex; align-items:center; justify-content:center;">38</span>
+        <span style="background:#8b5cf6; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center;">70</span>
+        <span style="background:#3a0a80; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center;">90</span>
+        <span style="background:#8b5cf6; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center;">66</span>
+
+        <span style="display:flex; align-items:center; color:#a79fce;">Thu</span>
+        <span style="background:#ede9fe; color:#6701e6; border-radius:6px; display:flex; align-items:center; justify-content:center;">16</span>
+        <span style="background:#ede9fe; color:#6701e6; border-radius:6px; display:flex; align-items:center; justify-content:center;">11</span>
+        <span style="background:#c4b5fd; color:#3a0a80; border-radius:6px; display:flex; align-items:center; justify-content:center;">42</span>
+        <span style="background:#6701e6; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center;">75</span>
+        <span style="background:#3a0a80; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center;">95</span>
+        <span style="background:#8b5cf6; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center;">70</span>
+
+        <span style="display:flex; align-items:center; color:#a79fce;">Fri</span>
+        <span style="background:#ede9fe; color:#6701e6; border-radius:6px; display:flex; align-items:center; justify-content:center;">18</span>
+        <span style="background:#ede9fe; color:#6701e6; border-radius:6px; display:flex; align-items:center; justify-content:center;">12</span>
+        <span style="background:#c4b5fd; color:#3a0a80; border-radius:6px; display:flex; align-items:center; justify-content:center;">45</span>
+        <span style="background:#6701e6; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center;">80</span>
+        <span style="background:#6701e6; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center;">85</span>
+        <span style="background:#8b5cf6; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center;">58</span>
+
+        <span style="display:flex; align-items:center; color:#a79fce;">Sat</span>
+        <span style="background:#ede9fe; color:#6701e6; border-radius:6px; display:flex; align-items:center; justify-content:center;">22</span>
+        <span style="background:#ede9fe; color:#6701e6; border-radius:6px; display:flex; align-items:center; justify-content:center;">14</span>
+        <span style="background:#c4b5fd; color:#3a0a80; border-radius:6px; display:flex; align-items:center; justify-content:center;">30</span>
+        <span style="background:#c4b5fd; color:#3a0a80; border-radius:6px; display:flex; align-items:center; justify-content:center;">48</span>
+        <span style="background:#c4b5fd; color:#3a0a80; border-radius:6px; display:flex; align-items:center; justify-content:center;">40</span>
+        <span style="background:#c4b5fd; color:#3a0a80; border-radius:6px; display:flex; align-items:center; justify-content:center;">35</span>
+
+        <span style="display:flex; align-items:center; color:#a79fce;">Sun</span>
+        <span style="background:#ede9fe; color:#6701e6; border-radius:6px; display:flex; align-items:center; justify-content:center;">20</span>
+        <span style="background:#ede9fe; color:#6701e6; border-radius:6px; display:flex; align-items:center; justify-content:center;">13</span>
+        <span style="background:#ede9fe; color:#6701e6; border-radius:6px; display:flex; align-items:center; justify-content:center;">28</span>
+        <span style="background:#c4b5fd; color:#3a0a80; border-radius:6px; display:flex; align-items:center; justify-content:center;">44</span>
+        <span style="background:#c4b5fd; color:#3a0a80; border-radius:6px; display:flex; align-items:center; justify-content:center;">38</span>
+        <span style="background:#ede9fe; color:#6701e6; border-radius:6px; display:flex; align-items:center; justify-content:center;">30</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px; margin-top:16px; font-family:var(--font-hanken); font-size:11px; color:#a79fce;">
+        Less
+        <span style="width:18px; height:12px; border-radius:3px; background:#ede9fe;"></span>
+        <span style="width:18px; height:12px; border-radius:3px; background:#c4b5fd;"></span>
+        <span style="width:18px; height:12px; border-radius:3px; background:#8b5cf6;"></span>
+        <span style="width:18px; height:12px; border-radius:3px; background:#6701e6;"></span>
+        <span style="width:18px; height:12px; border-radius:3px; background:#3a0a80;"></span>
+        More
+      </div>
+    </section>
+
+    <!-- ===== PIVOT TABLE ===== -->
+    <section class="blk">
+      <span class="lbl">Pivot table</span>
+      <h3 class="ttl">Spend by channel &times; week</h3>
+      <table style="width:100%; border-collapse:collapse; font-size:14px;">
+        <thead>
+          <tr style="font-family:var(--font-hanken); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#a79fce;">
+            <th style="text-align:left; padding:0 0 12px; font-weight:500;">Channel</th>
+            <th style="text-align:right; padding:0 0 12px 16px; font-weight:500;">W1</th>
+            <th style="text-align:right; padding:0 0 12px 16px; font-weight:500;">W2</th>
+            <th style="text-align:right; padding:0 0 12px 16px; font-weight:500;">W3</th>
+            <th style="text-align:right; padding:0 0 12px 16px; font-weight:500;">W4</th>
+            <th style="text-align:right; padding:0 0 12px 16px; font-weight:600; color:var(--porter-purple);">Total</th>
+            <th style="text-align:right; padding:0 0 12px 16px; font-weight:500;">&Delta; vs prev</th>
+          </tr>
+        </thead>
+        <tbody style="font-family:var(--font-hanken);">
+          <tr style="border-top:1px solid rgba(255,255,255,0.13);">
+            <td style="text-align:left; padding:13px 0; font-family:var(--font-bricolage); font-weight:600;"><span style="display:inline-flex; align-items:center; gap:9px;"><img src="../../../porter-design/assets/connectors/meta.svg" style="width:18px; height:18px;" />Meta</span></td>
+            <td style="text-align:right; padding:13px 0 13px 16px;">$4,820</td>
+            <td style="text-align:right; padding:13px 0 13px 16px;">$5,210</td>
+            <td style="text-align:right; padding:13px 0 13px 16px;">$4,990</td>
+            <td style="text-align:right; padding:13px 0 13px 16px;">$5,245</td>
+            <td style="text-align:right; padding:13px 0 13px 16px; font-weight:700; color:#ede9fe;">$20,265</td>
+            <td style="text-align:right; padding:13px 0 13px 16px;"><span style="font-family:var(--font-hanken); font-weight:700; font-size:12px; color:#2dd4bf; white-space:nowrap;">&#9650; +8.2%</span></td>
+          </tr>
+          <tr style="border-top:1px solid rgba(255,255,255,0.13);">
+            <td style="text-align:left; padding:13px 0; font-family:var(--font-bricolage); font-weight:600;"><span style="display:inline-flex; align-items:center; gap:9px;"><img src="../../../porter-design/assets/connectors/google_ads-icon.svg" style="width:18px; height:18px;" />Google Ads</span></td>
+            <td style="text-align:right; padding:13px 0 13px 16px;">$3,180</td>
+            <td style="text-align:right; padding:13px 0 13px 16px;">$3,420</td>
+            <td style="text-align:right; padding:13px 0 13px 16px;">$3,510</td>
+            <td style="text-align:right; padding:13px 0 13px 16px;">$3,400</td>
+            <td style="text-align:right; padding:13px 0 13px 16px; font-weight:700; color:#ede9fe;">$13,510</td>
+            <td style="text-align:right; padding:13px 0 13px 16px;"><span style="font-family:var(--font-hanken); font-weight:700; font-size:12px; color:#2dd4bf; white-space:nowrap;">&#9650; +4.1%</span></td>
+          </tr>
+          <tr style="border-top:1px solid rgba(255,255,255,0.13);">
+            <td style="text-align:left; padding:13px 0; font-family:var(--font-bricolage); font-weight:600;"><span style="display:inline-flex; align-items:center; gap:9px;"><img src="../../../porter-design/assets/connectors/instagram.svg" style="width:18px; height:18px;" />Instagram</span></td>
+            <td style="text-align:right; padding:13px 0 13px 16px;">$1,910</td>
+            <td style="text-align:right; padding:13px 0 13px 16px;">$1,980</td>
+            <td style="text-align:right; padding:13px 0 13px 16px;">$1,930</td>
+            <td style="text-align:right; padding:13px 0 13px 16px;">$1,900</td>
+            <td style="text-align:right; padding:13px 0 13px 16px; font-weight:700; color:#ede9fe;">$7,720</td>
+            <td style="text-align:right; padding:13px 0 13px 16px;"><span style="font-family:var(--font-hanken); font-weight:700; font-size:12px; color:var(--porter-pink); white-space:nowrap;">&#9660; 2.1%</span></td>
+          </tr>
+          <tr style="border-top:1px solid rgba(255,255,255,0.13);">
+            <td style="text-align:left; padding:13px 0; font-family:var(--font-bricolage); font-weight:600;"><span style="display:inline-flex; align-items:center; gap:9px;"><img src="../../../porter-design/assets/connectors/shopify.svg" style="width:18px; height:18px;" />Shopify</span></td>
+            <td style="text-align:right; padding:13px 0 13px 16px;">$1,050</td>
+            <td style="text-align:right; padding:13px 0 13px 16px;">$1,120</td>
+            <td style="text-align:right; padding:13px 0 13px 16px;">$1,090</td>
+            <td style="text-align:right; padding:13px 0 13px 16px;">$1,083</td>
+            <td style="text-align:right; padding:13px 0 13px 16px; font-weight:700; color:#ede9fe;">$4,343</td>
+            <td style="text-align:right; padding:13px 0 13px 16px;"><span style="font-family:var(--font-hanken); font-weight:700; font-size:12px; color:#2dd4bf; white-space:nowrap;">&#9650; +1.5%</span></td>
+          </tr>
+          <tr style="border-top:2px solid var(--porter-dark);">
+            <td style="text-align:left; padding:14px 0; font-family:var(--font-bricolage); font-weight:800;">Total</td>
+            <td style="text-align:right; padding:14px 0 14px 16px; font-weight:700;">$10,960</td>
+            <td style="text-align:right; padding:14px 0 14px 16px; font-weight:700;">$11,730</td>
+            <td style="text-align:right; padding:14px 0 14px 16px; font-weight:700;">$11,520</td>
+            <td style="text-align:right; padding:14px 0 14px 16px; font-weight:700;">$11,628</td>
+            <td style="text-align:right; padding:14px 0 14px 16px; font-weight:800; color:var(--porter-purple);">$45,838</td>
+            <td style="text-align:right; padding:14px 0 14px 16px;"><span style="font-family:var(--font-hanken); font-weight:700; font-size:12px; color:#2dd4bf; white-space:nowrap;">&#9650; +6.0%</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ===== FUNNEL + SPARKLINE KPIs ===== -->
+    <section style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+      <div class="blk">
+        <span class="lbl">Funnel</span>
+        <h3 class="ttl">Path to purchase</h3>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; align-items:center; gap:14px;"><div style="width:100%; height:42px; background:var(--porter-purple); border-radius:9px; display:flex; align-items:center; padding:0 16px; color:#fff; font-weight:700; font-size:14px;">Impressions</div><span style="font-family:var(--font-hanken); font-size:13px; white-space:nowrap; width:64px; text-align:right;">3.42M</span></div>
+          <div style="display:flex; align-items:center; gap:14px;"><div style="width:74%; height:42px; background:#7d2eea; border-radius:9px; display:flex; align-items:center; padding:0 16px; color:#fff; font-weight:700; font-size:14px;">Clicks</div><span style="font-family:var(--font-hanken); font-size:13px; white-space:nowrap; width:64px; text-align:right;">86.4k</span></div>
+          <div style="display:flex; align-items:center; gap:14px;"><div style="width:46%; height:42px; background:#9b5cf0; border-radius:9px; display:flex; align-items:center; padding:0 16px; color:#fff; font-weight:700; font-size:14px;">Add to cart</div><span style="font-family:var(--font-hanken); font-size:13px; white-space:nowrap; width:64px; text-align:right;">9.8k</span></div>
+          <div style="display:flex; align-items:center; gap:14px;"><div style="width:24%; height:42px; background:var(--porter-aqua); border-radius:9px; display:flex; align-items:center; padding:0 16px; color:var(--porter-dark); font-weight:700; font-size:14px;">Purchase</div><span style="font-family:var(--font-hanken); font-size:13px; white-space:nowrap; width:64px; text-align:right;">2.18k</span></div>
+        </div>
+      </div>
+
+      <div class="blk">
+        <span class="lbl">KPI + sparkline</span>
+        <h3 class="ttl">Trends at a glance</h3>
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:16px;">
+            <div><div style="font-family:var(--font-hanken); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#a79fce;">Revenue</div><div style="font-weight:900; font-size:24px; letter-spacing:-1px; white-space:nowrap;">$197.8k <span style="font-family:var(--font-hanken); font-size:12px; font-weight:600; color:#cdfb52;">+14%</span></div></div>
+            <svg viewBox="0 0 120 40" style="width:100px; height:40px; flex:none;"><polyline points="0,32 20,28 40,30 60,22 80,24 100,14 120,8" fill="none" stroke="#8b5cf6" stroke-width="2.5"/></svg>
+          </div>
+          <div style="border-top:1px solid rgba(255,255,255,0.13);"></div>
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:16px;">
+            <div><div style="font-family:var(--font-hanken); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#a79fce;">ROAS</div><div style="font-weight:900; font-size:24px; letter-spacing:-1px; white-space:nowrap;">4.1x <span style="font-family:var(--font-hanken); font-size:12px; font-weight:600; color:#cdfb52;">+0.6</span></div></div>
+            <svg viewBox="0 0 120 40" style="width:100px; height:40px; flex:none;"><polyline points="0,28 20,30 40,24 60,26 80,18 100,16 120,10" fill="none" stroke="#2dd4bf" stroke-width="2.5"/></svg>
+          </div>
+          <div style="border-top:1px solid rgba(255,255,255,0.13);"></div>
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:16px;">
+            <div><div style="font-family:var(--font-hanken); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#a79fce;">CPA</div><div style="font-weight:900; font-size:24px; letter-spacing:-1px; white-space:nowrap;">$22.10 <span style="font-family:var(--font-hanken); font-size:12px; font-weight:600; color:var(--pink-700);">+3%</span></div></div>
+            <svg viewBox="0 0 120 40" style="width:100px; height:40px; flex:none;"><polyline points="0,20 20,18 40,22 60,20 80,26 100,24 120,28" fill="none" stroke="#ec4899" stroke-width="2.5"/></svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== GEOGRAPHIC — TILE-GRID MAP ===== -->
+    <section class="blk">
+      <span class="lbl">Geographic</span>
+      <h3 class="ttl">Conversions by state</h3>
+      <div style="display:grid; grid-template-columns:repeat(11,1fr); gap:6px;">
+          <div style="grid-column:11; grid-row:1; background:#c4b5fd; color:#1a0340; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">ME</div>
+          <div style="grid-column:10; grid-row:2; background:#ede9fe; color:#6701e6; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">VT</div>
+          <div style="grid-column:11; grid-row:2; background:#c4b5fd; color:#1a0340; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">NH</div>
+          <div style="grid-column:1; grid-row:3; background:#6701e6; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">WA</div>
+          <div style="grid-column:2; grid-row:3; background:#c4b5fd; color:#1a0340; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">ID</div>
+          <div style="grid-column:3; grid-row:3; background:#ede9fe; color:#6701e6; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">MT</div>
+          <div style="grid-column:4; grid-row:3; background:#ede9fe; color:#6701e6; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">ND</div>
+          <div style="grid-column:5; grid-row:3; background:#ede9fe; color:#6701e6; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">SD</div>
+          <div style="grid-column:6; grid-row:3; background:#8b5cf6; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">MN</div>
+          <div style="grid-column:7; grid-row:3; background:#a78bfa; color:#1a0340; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">WI</div>
+          <div style="grid-column:8; grid-row:3; background:#8b5cf6; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">MI</div>
+          <div style="grid-column:9; grid-row:3; background:#3a0a80; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">NY</div>
+          <div style="grid-column:10; grid-row:3; background:#8b5cf6; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">MA</div>
+          <div style="grid-column:11; grid-row:3; background:#c4b5fd; color:#1a0340; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">RI</div>
+          <div style="grid-column:1; grid-row:4; background:#a78bfa; color:#1a0340; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">OR</div>
+          <div style="grid-column:2; grid-row:4; background:#a78bfa; color:#1a0340; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">NV</div>
+          <div style="grid-column:3; grid-row:4; background:#ede9fe; color:#6701e6; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">WY</div>
+          <div style="grid-column:4; grid-row:4; background:#8b5cf6; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">CO</div>
+          <div style="grid-column:5; grid-row:4; background:#c4b5fd; color:#1a0340; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">NE</div>
+          <div style="grid-column:6; grid-row:4; background:#c4b5fd; color:#1a0340; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">IA</div>
+          <div style="grid-column:7; grid-row:4; background:#6701e6; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">IL</div>
+          <div style="grid-column:8; grid-row:4; background:#a78bfa; color:#1a0340; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">IN</div>
+          <div style="grid-column:9; grid-row:4; background:#6701e6; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">OH</div>
+          <div style="grid-column:10; grid-row:4; background:#6701e6; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">PA</div>
+          <div style="grid-column:11; grid-row:4; background:#8b5cf6; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">NJ</div>
+          <div style="grid-column:1; grid-row:5; background:#3a0a80; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">CA</div>
+          <div style="grid-column:2; grid-row:5; background:#a78bfa; color:#1a0340; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">UT</div>
+          <div style="grid-column:3; grid-row:5; background:#c4b5fd; color:#1a0340; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">NM</div>
+          <div style="grid-column:4; grid-row:5; background:#c4b5fd; color:#1a0340; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">KS</div>
+          <div style="grid-column:5; grid-row:5; background:#a78bfa; color:#1a0340; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">MO</div>
+          <div style="grid-column:6; grid-row:5; background:#c4b5fd; color:#1a0340; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">KY</div>
+          <div style="grid-column:7; grid-row:5; background:#c4b5fd; color:#1a0340; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">WV</div>
+          <div style="grid-column:8; grid-row:5; background:#8b5cf6; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">VA</div>
+          <div style="grid-column:9; grid-row:5; background:#a78bfa; color:#1a0340; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">MD</div>
+          <div style="grid-column:10; grid-row:5; background:#c4b5fd; color:#1a0340; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">DE</div>
+          <div style="grid-column:11; grid-row:5; background:#a78bfa; color:#1a0340; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">CT</div>
+          <div style="grid-column:1; grid-row:6; background:#8b5cf6; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">AZ</div>
+          <div style="grid-column:3; grid-row:6; background:#c4b5fd; color:#1a0340; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">OK</div>
+          <div style="grid-column:4; grid-row:6; background:#c4b5fd; color:#1a0340; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">AR</div>
+          <div style="grid-column:5; grid-row:6; background:#a78bfa; color:#1a0340; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">TN</div>
+          <div style="grid-column:6; grid-row:6; background:#8b5cf6; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">NC</div>
+          <div style="grid-column:7; grid-row:6; background:#a78bfa; color:#1a0340; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">SC</div>
+          <div style="grid-column:8; grid-row:6; background:#c4b5fd; color:#1a0340; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">DC</div>
+          <div style="grid-column:3; grid-row:7; background:#3a0a80; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">TX</div>
+          <div style="grid-column:4; grid-row:7; background:#c4b5fd; color:#1a0340; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">LA</div>
+          <div style="grid-column:5; grid-row:7; background:#c4b5fd; color:#1a0340; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">MS</div>
+          <div style="grid-column:6; grid-row:7; background:#a78bfa; color:#1a0340; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">AL</div>
+          <div style="grid-column:7; grid-row:7; background:#8b5cf6; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">GA</div>
+          <div style="grid-column:1; grid-row:8; background:#ede9fe; color:#6701e6; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">AK</div>
+          <div style="grid-column:3; grid-row:8; background:#c4b5fd; color:#1a0340; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">HI</div>
+          <div style="grid-column:7; grid-row:8; background:#3a0a80; color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-hanken); font-weight:600; font-size:11px; height:34px;">FL</div>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px; margin-top:18px; font-family:var(--font-hanken); font-size:11px; color:#a79fce;">
+        Fewer
+        <span style="width:18px; height:12px; border-radius:3px; background:#ede9fe;"></span>
+        <span style="width:18px; height:12px; border-radius:3px; background:#c4b5fd;"></span>
+        <span style="width:18px; height:12px; border-radius:3px; background:#a78bfa;"></span>
+        <span style="width:18px; height:12px; border-radius:3px; background:#8b5cf6;"></span>
+        <span style="width:18px; height:12px; border-radius:3px; background:#6701e6;"></span>
+        <span style="width:18px; height:12px; border-radius:3px; background:#3a0a80;"></span>
+        More
+      </div>
+    </section>
+
+    <!-- ===== CONDITIONAL FORMATTING ===== -->
+    <section class="blk">
+      <span class="lbl">Conditional formatting</span>
+      <h3 class="ttl">Performance index by channel</h3>
+      <table style="width:100%; border-collapse:collapse;">
+        <thead>
+          <tr style="font-family:var(--font-hanken); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#a79fce; text-align:center;">
+            <th style="text-align:left; padding:0 0 12px; font-weight:500;">Channel</th><th style="padding:0 0 12px; font-weight:500;">Jan</th><th style="padding:0 0 12px; font-weight:500;">Feb</th><th style="padding:0 0 12px; font-weight:500;">Mar</th><th style="padding:0 0 12px; font-weight:500;">Apr</th><th style="padding:0 0 12px; font-weight:500;">May</th><th style="padding:0 0 12px; font-weight:500;">Jun</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="padding:5px 14px 5px 0; font-weight:600; font-size:14px; white-space:nowrap;"><span style="display:inline-flex; align-items:center; gap:9px;"><img src="../../../porter-design/assets/connectors/meta.svg" style="width:18px; height:18px;" />Meta</span></td><td style="padding:5px;"><div style="background:#bfe8a6; color:var(--porter-dark); border-radius:7px; padding:11px 0; text-align:center; font-family:var(--font-hanken); font-weight:600; font-size:13.5px;">82</div></td><td style="padding:5px;"><div style="background:#dcf3bd; color:var(--porter-dark); border-radius:7px; padding:11px 0; text-align:center; font-family:var(--font-hanken); font-weight:600; font-size:13.5px;">78</div></td><td style="padding:5px;"><div style="background:#bfe8a6; color:var(--porter-dark); border-radius:7px; padding:11px 0; text-align:center; font-family:var(--font-hanken); font-weight:600; font-size:13.5px;">88</div></td><td style="padding:5px;"><div style="background:#dcf3bd; color:var(--porter-dark); border-radius:7px; padding:11px 0; text-align:center; font-family:var(--font-hanken); font-weight:600; font-size:13.5px;">70</div></td><td style="padding:5px;"><div style="background:#bfe8a6; color:var(--porter-dark); border-radius:7px; padding:11px 0; text-align:center; font-family:var(--font-hanken); font-weight:600; font-size:13.5px;">84</div></td><td style="padding:5px;"><div style="background:#bfe8a6; color:var(--porter-dark); border-radius:7px; padding:11px 0; text-align:center; font-family:var(--font-hanken); font-weight:600; font-size:13.5px;">90</div></td></tr>
+          <tr><td style="padding:5px 14px 5px 0; font-weight:600; font-size:14px; white-space:nowrap;"><span style="display:inline-flex; align-items:center; gap:9px;"><img src="../../../porter-design/assets/connectors/google_ads-icon.svg" style="width:18px; height:18px;" />Google Ads</span></td><td style="padding:5px;"><div style="background:#dcf3bd; color:var(--porter-dark); border-radius:7px; padding:11px 0; text-align:center; font-family:var(--font-hanken); font-weight:600; font-size:13.5px;">68</div></td><td style="padding:5px;"><div style="background:#dcf3bd; color:var(--porter-dark); border-radius:7px; padding:11px 0; text-align:center; font-family:var(--font-hanken); font-weight:600; font-size:13.5px;">72</div></td><td style="padding:5px;"><div style="background:#fbeec2; color:var(--porter-dark); border-radius:7px; padding:11px 0; text-align:center; font-family:var(--font-hanken); font-weight:600; font-size:13.5px;">60</div></td><td style="padding:5px;"><div style="background:#dcf3bd; color:var(--porter-dark); border-radius:7px; padding:11px 0; text-align:center; font-family:var(--font-hanken); font-weight:600; font-size:13.5px;">75</div></td><td style="padding:5px;"><div style="background:#bfe8a6; color:var(--porter-dark); border-radius:7px; padding:11px 0; text-align:center; font-family:var(--font-hanken); font-weight:600; font-size:13.5px;">80</div></td><td style="padding:5px;"><div style="background:#dcf3bd; color:var(--porter-dark); border-radius:7px; padding:11px 0; text-align:center; font-family:var(--font-hanken); font-weight:600; font-size:13.5px;">66</div></td></tr>
+          <tr><td style="padding:5px 14px 5px 0; font-weight:600; font-size:14px; white-space:nowrap;"><span style="display:inline-flex; align-items:center; gap:9px;"><img src="../../../porter-design/assets/connectors/instagram.svg" style="width:18px; height:18px;" />Instagram</span></td><td style="padding:5px;"><div style="background:#f9dcbb; color:var(--porter-dark); border-radius:7px; padding:11px 0; text-align:center; font-family:var(--font-hanken); font-weight:600; font-size:13.5px;">45</div></td><td style="padding:5px;"><div style="background:#fbeec2; color:var(--porter-dark); border-radius:7px; padding:11px 0; text-align:center; font-family:var(--font-hanken); font-weight:600; font-size:13.5px;">52</div></td><td style="padding:5px;"><div style="background:#f9dcbb; color:var(--porter-dark); border-radius:7px; padding:11px 0; text-align:center; font-family:var(--font-hanken); font-weight:600; font-size:13.5px;">40</div></td><td style="padding:5px;"><div style="background:#fbeec2; color:var(--porter-dark); border-radius:7px; padding:11px 0; text-align:center; font-family:var(--font-hanken); font-weight:600; font-size:13.5px;">58</div></td><td style="padding:5px;"><div style="background:#f9dcbb; color:var(--porter-dark); border-radius:7px; padding:11px 0; text-align:center; font-family:var(--font-hanken); font-weight:600; font-size:13.5px;">38</div></td><td style="padding:5px;"><div style="background:#fbeec2; color:var(--porter-dark); border-radius:7px; padding:11px 0; text-align:center; font-family:var(--font-hanken); font-weight:600; font-size:13.5px;">50</div></td></tr>
+          <tr><td style="padding:5px 14px 5px 0; font-weight:600; font-size:14px; white-space:nowrap;"><span style="display:inline-flex; align-items:center; gap:9px;"><img src="../../../porter-design/assets/connectors/shopify.svg" style="width:18px; height:18px;" />Shopify</span></td><td style="padding:5px;"><div style="background:#f6c8c0; color:var(--porter-dark); border-radius:7px; padding:11px 0; text-align:center; font-family:var(--font-hanken); font-weight:600; font-size:13.5px;">30</div></td><td style="padding:5px;"><div style="background:#f6c8c0; color:var(--porter-dark); border-radius:7px; padding:11px 0; text-align:center; font-family:var(--font-hanken); font-weight:600; font-size:13.5px;">28</div></td><td style="padding:5px;"><div style="background:#f9dcbb; color:var(--porter-dark); border-radius:7px; padding:11px 0; text-align:center; font-family:var(--font-hanken); font-weight:600; font-size:13.5px;">35</div></td><td style="padding:5px;"><div style="background:#f6c8c0; color:var(--porter-dark); border-radius:7px; padding:11px 0; text-align:center; font-family:var(--font-hanken); font-weight:600; font-size:13.5px;">22</div></td><td style="padding:5px;"><div style="background:#f9dcbb; color:var(--porter-dark); border-radius:7px; padding:11px 0; text-align:center; font-family:var(--font-hanken); font-weight:600; font-size:13.5px;">40</div></td><td style="padding:5px;"><div style="background:#f6c8c0; color:var(--porter-dark); border-radius:7px; padding:11px 0; text-align:center; font-family:var(--font-hanken); font-weight:600; font-size:13.5px;">33</div></td></tr>
+          <tr><td style="padding:5px 14px 5px 0; font-weight:600; font-size:14px; white-space:nowrap;"><span style="display:inline-flex; align-items:center; gap:9px;"><img src="../../../porter-design/assets/connectors/gsc-color.svg" style="width:18px; height:18px;" />Search</span></td><td style="padding:5px;"><div style="background:#fbeec2; color:var(--porter-dark); border-radius:7px; padding:11px 0; text-align:center; font-family:var(--font-hanken); font-weight:600; font-size:13.5px;">60</div></td><td style="padding:5px;"><div style="background:#fbeec2; color:var(--porter-dark); border-radius:7px; padding:11px 0; text-align:center; font-family:var(--font-hanken); font-weight:600; font-size:13.5px;">64</div></td><td style="padding:5px;"><div style="background:#fbeec2; color:var(--porter-dark); border-radius:7px; padding:11px 0; text-align:center; font-family:var(--font-hanken); font-weight:600; font-size:13.5px;">55</div></td><td style="padding:5px;"><div style="background:#dcf3bd; color:var(--porter-dark); border-radius:7px; padding:11px 0; text-align:center; font-family:var(--font-hanken); font-weight:600; font-size:13.5px;">72</div></td><td style="padding:5px;"><div style="background:#fbeec2; color:var(--porter-dark); border-radius:7px; padding:11px 0; text-align:center; font-family:var(--font-hanken); font-weight:600; font-size:13.5px;">58</div></td><td style="padding:5px;"><div style="background:#fbeec2; color:var(--porter-dark); border-radius:7px; padding:11px 0; text-align:center; font-family:var(--font-hanken); font-weight:600; font-size:13.5px;">62</div></td></tr>
+        </tbody>
+      </table>
+      <div style="display:flex; align-items:center; gap:8px; margin-top:18px; font-family:var(--font-hanken); font-size:11px; color:#a79fce;">
+        Underperforming
+        <span style="width:18px; height:12px; border-radius:3px; background:#f6c8c0;"></span>
+        <span style="width:18px; height:12px; border-radius:3px; background:#f9dcbb;"></span>
+        <span style="width:18px; height:12px; border-radius:3px; background:#fbeec2;"></span>
+        <span style="width:18px; height:12px; border-radius:3px; background:#dcf3bd;"></span>
+        <span style="width:18px; height:12px; border-radius:3px; background:#bfe8a6;"></span>
+        Outperforming
+      </div>
+    </section>
+
+    <!-- ===== FLEXIBLE PIVOT ===== -->
+    <section class="blk">
+      <span class="lbl">Pivot table</span>
+      <h3 class="ttl">Flexible layouts — grouped rows &amp; nested cells</h3>
+      <table style="width:100%; border-collapse:collapse; font-size:14px;">
+        <thead>
+          <tr style="font-family:var(--font-hanken); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#a79fce; text-align:left;">
+            <th style="padding:0 14px 12px 0; font-weight:500;">Group</th>
+            <th style="padding:0 14px 12px 0; font-weight:500;">Campaign</th>
+            <th style="padding:0 14px 12px 0; font-weight:500;">Audiences</th>
+            <th style="padding:0 0 12px 0; font-weight:500; text-align:right;">Spend</th>
+            <th style="padding:0 0 12px 0; font-weight:500; text-align:right;">ROAS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-top:1px solid rgba(255,255,255,0.13);">
+            <td rowspan="3" style="vertical-align:top; padding:14px; background:var(--purple-100); border-radius:12px 12px 0 0; width:150px;"><div style="font-family:var(--font-bricolage); font-weight:700; font-size:16px; color:var(--porter-purple);">Paid social</div><div style="font-family:var(--font-hanken); font-size:12px; color:#4a4458; margin-top:4px;">3 campaigns &middot; $24,400</div></td>
+            <td style="padding:14px 14px 14px 18px; font-weight:600;">Spring Sale</td>
+            <td style="padding:14px 14px 14px 0;"><div style="display:flex; flex-direction:column; gap:5px; align-items:flex-start;"><span style="display:inline-block; font-family:var(--font-hanken); font-weight:600; font-size:11px; background:var(--purple-100); color:var(--porter-purple); padding:3px 9px; border-radius:999px; white-space:nowrap;">Lookalike 1%</span><span style="display:inline-block; font-family:var(--font-hanken); font-weight:600; font-size:11px; background:var(--purple-100); color:var(--porter-purple); padding:3px 9px; border-radius:999px; white-space:nowrap;">Interest: Fitness</span><span style="display:inline-block; font-family:var(--font-hanken); font-weight:600; font-size:11px; background:var(--purple-100); color:var(--porter-purple); padding:3px 9px; border-radius:999px; white-space:nowrap;">Retarget 30d</span></div></td>
+            <td style="padding:14px 0; text-align:right; font-family:var(--font-hanken);">$12,480</td>
+            <td style="padding:14px 0; text-align:right; font-family:var(--font-hanken); font-weight:600;">5.2x</td>
+          </tr>
+          <tr style="border-top:1px solid rgba(255,255,255,0.13);">
+            <td style="padding:14px 14px 14px 18px; font-weight:600;">Retargeting</td>
+            <td style="padding:14px 14px 14px 0;"><div style="display:flex; flex-direction:column; gap:5px; align-items:flex-start;"><span style="display:inline-block; font-family:var(--font-hanken); font-weight:600; font-size:11px; background:var(--purple-100); color:var(--porter-purple); padding:3px 9px; border-radius:999px; white-space:nowrap;">Cart abandoners</span><span style="display:inline-block; font-family:var(--font-hanken); font-weight:600; font-size:11px; background:var(--purple-100); color:var(--porter-purple); padding:3px 9px; border-radius:999px; white-space:nowrap;">Site visitors 14d</span></div></td>
+            <td style="padding:14px 0; text-align:right; font-family:var(--font-hanken);">$6,820</td>
+            <td style="padding:14px 0; text-align:right; font-family:var(--font-hanken); font-weight:600;">4.1x</td>
+          </tr>
+          <tr style="border-top:1px solid rgba(255,255,255,0.13);">
+            <td style="padding:14px 14px 14px 18px; font-weight:600;">Catalog Sales</td>
+            <td style="padding:14px 14px 14px 0;"><div style="display:flex; flex-direction:column; gap:5px; align-items:flex-start;"><span style="display:inline-block; font-family:var(--font-hanken); font-weight:600; font-size:11px; background:var(--purple-100); color:var(--porter-purple); padding:3px 9px; border-radius:999px; white-space:nowrap;">Broad</span><span style="display:inline-block; font-family:var(--font-hanken); font-weight:600; font-size:11px; background:var(--purple-100); color:var(--porter-purple); padding:3px 9px; border-radius:999px; white-space:nowrap;">DPA feed</span></div></td>
+            <td style="padding:14px 0; text-align:right; font-family:var(--font-hanken);">$5,100</td>
+            <td style="padding:14px 0; text-align:right; font-family:var(--font-hanken); font-weight:600;">3.4x</td>
+          </tr>
+          <tr style="border-top:1px solid rgba(255,255,255,0.13);">
+            <td rowspan="2" style="vertical-align:top; padding:14px; background:var(--aqua-100); border-radius:12px; width:150px;"><div style="font-family:var(--font-bricolage); font-weight:700; font-size:16px; color:var(--aqua-700);">Search</div><div style="font-family:var(--font-hanken); font-size:12px; color:#4a4458; margin-top:4px;">2 campaigns &middot; $12,440</div></td>
+            <td style="padding:14px 14px 14px 18px; font-weight:600;">Brand &mdash; Exact</td>
+            <td style="padding:14px 14px 14px 0;"><div style="display:flex; flex-direction:column; gap:5px; align-items:flex-start;"><span style="display:inline-block; font-family:var(--font-hanken); font-weight:600; font-size:11px; background:var(--purple-100); color:var(--porter-purple); padding:3px 9px; border-radius:999px; white-space:nowrap;">Branded terms</span></div></td>
+            <td style="padding:14px 0; text-align:right; font-family:var(--font-hanken);">$9,240</td>
+            <td style="padding:14px 0; text-align:right; font-family:var(--font-hanken); font-weight:600;">6.8x</td>
+          </tr>
+          <tr style="border-top:1px solid rgba(255,255,255,0.13);">
+            <td style="padding:14px 14px 14px 18px; font-weight:600;">Generic &mdash; Broad</td>
+            <td style="padding:14px 14px 14px 0;"><div style="display:flex; flex-direction:column; gap:5px; align-items:flex-start;"><span style="display:inline-block; font-family:var(--font-hanken); font-weight:600; font-size:11px; background:var(--purple-100); color:var(--porter-purple); padding:3px 9px; border-radius:999px; white-space:nowrap;">Category terms</span><span style="display:inline-block; font-family:var(--font-hanken); font-weight:600; font-size:11px; background:var(--purple-100); color:var(--porter-purple); padding:3px 9px; border-radius:999px; white-space:nowrap;">Competitor</span></div></td>
+            <td style="padding:14px 0; text-align:right; font-family:var(--font-hanken);">$3,200</td>
+            <td style="padding:14px 0; text-align:right; font-family:var(--font-hanken); font-weight:600;">2.9x</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ===== WATERFALL ===== -->
+    <section class="blk">
+      <span class="lbl">Waterfall</span>
+      <h3 class="ttl">Revenue bridge, Q1</h3>
+      <div style="display:flex; align-items:stretch; gap:8px;">
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:8px;">
+          <div style="position:relative; width:100%; height:200px;">
+            <div style="position:absolute; left:18%; right:18%; bottom:0.0%; height:71.4%; background:#8b5cf6; border-radius:4px;"></div>
+            <div style="position:absolute; left:0; right:0; bottom:calc(0.0% + 71.4% + 4px); text-align:center; font-family:var(--font-hanken); font-size:11px; font-weight:600; color:#fff;">$150k</div>
+          </div>
+          <span style="font-family:var(--font-hanken); font-size:11px; color:#a79fce; text-align:center;">Start</span>
+        </div>
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:8px;">
+          <div style="position:relative; width:100%; height:200px;">
+            <div style="position:absolute; left:18%; right:18%; bottom:71.4%; height:13.3%; background:#2dd4bf; border-radius:4px;"></div>
+            <div style="position:absolute; left:0; right:0; bottom:calc(71.4% + 13.3% + 4px); text-align:center; font-family:var(--font-hanken); font-size:11px; font-weight:600; color:#fff;">+$28k</div>
+          </div>
+          <span style="font-family:var(--font-hanken); font-size:11px; color:#a79fce; text-align:center;">Meta</span>
+        </div>
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:8px;">
+          <div style="position:relative; width:100%; height:200px;">
+            <div style="position:absolute; left:18%; right:18%; bottom:84.8%; height:8.6%; background:#2dd4bf; border-radius:4px;"></div>
+            <div style="position:absolute; left:0; right:0; bottom:calc(84.8% + 8.6% + 4px); text-align:center; font-family:var(--font-hanken); font-size:11px; font-weight:600; color:#fff;">+$18k</div>
+          </div>
+          <span style="font-family:var(--font-hanken); font-size:11px; color:#a79fce; text-align:center;">Google</span>
+        </div>
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:8px;">
+          <div style="position:relative; width:100%; height:200px;">
+            <div style="position:absolute; left:18%; right:18%; bottom:89.0%; height:4.3%; background:#ec4899; border-radius:4px;"></div>
+            <div style="position:absolute; left:0; right:0; bottom:calc(89.0% + 4.3% + 4px); text-align:center; font-family:var(--font-hanken); font-size:11px; font-weight:600; color:#fff;">−$9k</div>
+          </div>
+          <span style="font-family:var(--font-hanken); font-size:11px; color:#a79fce; text-align:center;">Refunds</span>
+        </div>
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:8px;">
+          <div style="position:relative; width:100%; height:200px;">
+            <div style="position:absolute; left:18%; right:18%; bottom:89.0%; height:3.8%; background:#2dd4bf; border-radius:4px;"></div>
+            <div style="position:absolute; left:0; right:0; bottom:calc(89.0% + 3.8% + 4px); text-align:center; font-family:var(--font-hanken); font-size:11px; font-weight:600; color:#fff;">+$8k</div>
+          </div>
+          <span style="font-family:var(--font-hanken); font-size:11px; color:#a79fce; text-align:center;">Shopify</span>
+        </div>
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:8px;">
+          <div style="position:relative; width:100%; height:200px;">
+            <div style="position:absolute; left:18%; right:18%; bottom:92.9%; height:2.4%; background:#2dd4bf; border-radius:4px;"></div>
+            <div style="position:absolute; left:0; right:0; bottom:calc(92.9% + 2.4% + 4px); text-align:center; font-family:var(--font-hanken); font-size:11px; font-weight:600; color:#fff;">+$5k</div>
+          </div>
+          <span style="font-family:var(--font-hanken); font-size:11px; color:#a79fce; text-align:center;">Search</span>
+        </div>
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:8px;">
+          <div style="position:relative; width:100%; height:200px;">
+            <div style="position:absolute; left:18%; right:18%; bottom:0.0%; height:95.2%; background:#8b5cf6; border-radius:4px;"></div>
+            <div style="position:absolute; left:0; right:0; bottom:calc(0.0% + 95.2% + 4px); text-align:center; font-family:var(--font-hanken); font-size:11px; font-weight:600; color:#fff;">$200k</div>
+          </div>
+          <span style="font-family:var(--font-hanken); font-size:11px; color:#a79fce; text-align:center;">Net</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== DOWNLOADS ===== -->
+    <section class="blk">
+      <span class="lbl">Downloads &amp; exports</span>
+      <h3 class="ttl">Take this report anywhere</h3>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div style="display:flex; align-items:center; gap:16px; padding:14px 16px; border:1px solid rgba(255,255,255,0.13); border-radius:14px;">
+          <span style="font-family:var(--font-hanken); font-weight:700; font-size:11px; letter-spacing:1px; color:#fff; background:var(--pink-700); padding:7px 9px; border-radius:7px;">PDF</span>
+          <div style="flex:1;"><div style="font-weight:700; font-size:15px;">March Results &mdash; Northwind Co.</div><div style="font-family:var(--font-hanken); font-size:12px; color:#a79fce;">2.4 MB &middot; 6 pages</div></div>
+          <x-import component-from-global-scope="PorterMetricsDesignSystem_101e0b.Button" variant="purple" size="sm" hint-size="120px,40px">Download</x-import>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; padding:14px 16px; border:1px solid rgba(255,255,255,0.13); border-radius:14px;">
+          <span style="font-family:var(--font-hanken); font-weight:700; font-size:11px; letter-spacing:1px; color:#fff; background:var(--aqua-700); padding:7px 9px; border-radius:7px;">CSV</span>
+          <div style="flex:1;"><div style="font-weight:700; font-size:15px;">Raw campaign data</div><div style="font-family:var(--font-hanken); font-size:12px; color:#a79fce;">182 KB &middot; 540 rows</div></div>
+          <x-import component-from-global-scope="PorterMetricsDesignSystem_101e0b.Button" variant="outline" size="sm" hint-size="120px,40px">Download</x-import>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; padding:14px 16px; border:1px solid rgba(255,255,255,0.13); border-radius:14px;">
+          <span style="width:34px; height:34px; border-radius:8px; background:#fff; box-shadow:inset 0 0 0 1px rgba(255,255,255,0.13); display:flex; align-items:center; justify-content:center;"><img src="../../../porter-design/assets/connectors/google_sheets.svg" style="width:20px; height:20px;" /></span>
+          <div style="flex:1;"><div style="font-weight:700; font-size:15px;">Export to Google Sheets</div><div style="font-family:var(--font-hanken); font-size:12px; color:#a79fce;">Live link &middot; auto-refresh</div></div>
+          <x-import component-from-global-scope="PorterMetricsDesignSystem_101e0b.Button" variant="outline" size="sm" hint-size="120px,40px">Connect</x-import>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+</x-dc>
+</body>
+</html>

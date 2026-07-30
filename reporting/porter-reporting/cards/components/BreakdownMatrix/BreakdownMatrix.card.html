@@ -1,0 +1,143 @@
+<!-- @dsCard group="Components" viewport="1200x760" name="Breakdown matrix" subtitle="Metrics × any breakdown — Segment by time / campaign / objective / product, with per-row heat + Total" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- ONE shared dependency, project-local relative path only (no machine paths, no sibling-repo paths) -->
+<link rel="stylesheet" href="../../styles.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400..700&display=swap" rel="stylesheet" />
+<style>
+  /* card-specific layout only — every color/font comes from the design tokens */
+  html, body { margin: 0; background: var(--surface-bg); color: var(--text-body); font-family: var(--font-hanken); }
+  .wrap { padding: 28px; max-width: 1180px; }
+  .eyebrow { font-family: var(--font-bricolage); font-weight: 700; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--eyebrow-color); margin: 0 0 4px; }
+  .bm-title { font-family: var(--font-bricolage); font-weight: 700; font-size: 22px; color: var(--text-title); margin: 0; }
+  .bm-meta { font-size: 12.5px; color: var(--text-muted); margin: 4px 0 0; }
+
+  /* the two control rows — Segment by (always) + View by (time only) */
+  .bm-ctlbar { display: flex; flex-wrap: wrap; gap: 22px; align-items: center; margin: 18px 0 10px; }
+  .bm-ctlgrp { display: flex; align-items: center; gap: 10px; }
+  .bm-ctllbl { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); }
+  .bm-pills { display: inline-flex; gap: 6px; }
+  .bm-note { font-size: 12px; color: var(--text-muted); margin: 0 0 14px; max-width: 780px; line-height: 1.5; }
+
+  /* the matrix (structure only — heat colours come from --cf-* tokens) */
+  .bm-wrap { overflow-x: auto; border: 1px solid var(--card-border); border-radius: 12px; background: var(--surface-card); }
+  .bm { border-collapse: collapse; width: 100%; font-family: var(--font-hanken); font-size: 12.5px; color: var(--text-body); }
+  .bm th, .bm td { padding: 7px 13px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--card-border); }
+  .bm thead th { background: var(--surface-card); color: var(--text-muted); font-weight: 600; }
+  .bm .bm-kpi { position: sticky; left: 0; text-align: left; background: var(--surface-card); color: var(--text-title); font-weight: 600; }
+  .bm .bm-total { font-weight: 700; color: var(--text-title); }
+  .bm .bm-grp .bm-kpi, .bm .bm-grp td { background: var(--surface-bg); color: var(--text-muted); font-weight: 700; font-size: 10.5px; letter-spacing: 0.04em; text-transform: uppercase; }
+</style>
+</head>
+<body data-theme="white">
+  <div class="wrap">
+    <p class="eyebrow">Breakdown matrix</p>
+    <h2 class="bm-title">Metrics by any breakdown</h2>
+    <p class="bm-meta">Acme Insurance &middot; sample data &middot; the same metrics, sliced by whatever you segment by</p>
+
+    <div class="bm-ctlbar">
+      <div class="bm-ctlgrp">
+        <span class="bm-ctllbl">Segment by</span>
+        <div class="bm-pills" id="seg">
+          <button class="pds-btn pds-btn--sm pds-btn--purple" data-seg="time">Time</button>
+          <button class="pds-btn pds-btn--sm pds-btn--outline" data-seg="campaign">Campaign</button>
+          <button class="pds-btn pds-btn--sm pds-btn--outline" data-seg="objective">Objective</button>
+          <button class="pds-btn pds-btn--sm pds-btn--outline" data-seg="product">Product</button>
+        </div>
+      </div>
+      <div class="bm-ctlgrp" id="granwrap">
+        <span class="bm-ctllbl">View by</span>
+        <div class="bm-pills" id="gran">
+          <button class="pds-btn pds-btn--sm pds-btn--outline" data-gran="day">Day</button>
+          <button class="pds-btn pds-btn--sm pds-btn--purple" data-gran="week">Week</button>
+          <button class="pds-btn pds-btn--sm pds-btn--outline" data-gran="month">Month</button>
+          <button class="pds-btn pds-btn--sm pds-btn--outline" data-gran="quarter">Quarter</button>
+        </div>
+      </div>
+    </div>
+
+    <p class="bm-note">Each row is shaded low&rarr;high across its own columns (heat = magnitude per metric, not good/bad). The <strong>Total</strong> column is untinted. Switch <strong>Segment by</strong> to break the same metrics down by campaign, objective, product, or any dimension; <strong>View by</strong> applies only to time.</p>
+
+    <!-- pre-rendered default (Segment by Time · Week) so the card shows a populated matrix even before any script runs; the inline script below re-slices it when you change the controls -->
+    <div id="bm-host"><div class="bm-wrap"><table class="bm"><thead><tr><th class="bm-kpi">KPI</th><th class="bm-total">Total</th><th>May 25 - May 31</th><th>May 18 - May 24</th><th>May 11 - May 17</th><th>May 4 - May 10</th></tr></thead><tbody><tr class="bm-grp"><td class="bm-kpi">Budget</td><td colspan="5"></td></tr><tr><td class="bm-kpi">Cost</td><td class="bm-total">$59,869.04</td><td style="background:var(--cf-5)">$17,514</td><td style="background:var(--cf-1)">$13,651.32</td><td style="background:var(--cf-1)">$13,689.8</td><td style="background:var(--cf-2)">$15,013.92</td></tr><tr class="bm-grp"><td class="bm-kpi">Visibility</td><td colspan="5"></td></tr><tr><td class="bm-kpi">Impressions</td><td class="bm-total">1,023,852</td><td style="background:var(--cf-4)">262,028</td><td style="background:var(--cf-2)">250,204</td><td style="background:var(--cf-1)">245,336</td><td style="background:var(--cf-5)">266,284</td></tr><tr><td class="bm-kpi">Search IS</td><td class="bm-total">42.1%</td><td style="background:var(--cf-5)">46.8%</td><td style="background:var(--cf-1)">36.5%</td><td style="background:var(--cf-2)">38.8%</td><td style="background:var(--cf-5)">45.7%</td></tr><tr><td class="bm-kpi">CPM</td><td class="bm-total">$58.47</td><td style="background:var(--cf-5)">$66.84</td><td style="background:var(--cf-1)">$54.56</td><td style="background:var(--cf-1)">$55.80</td><td style="background:var(--cf-1)">$56.38</td></tr><tr class="bm-grp"><td class="bm-kpi">Engagement</td><td colspan="5"></td></tr><tr><td class="bm-kpi">Clicks</td><td class="bm-total">40,396</td><td style="background:var(--cf-1)">9,136</td><td style="background:var(--cf-5)">11,072</td><td style="background:var(--cf-1)">9,040</td><td style="background:var(--cf-5)">11,148</td></tr><tr><td class="bm-kpi">CTR</td><td class="bm-total">3.95%</td><td style="background:var(--cf-1)">3.49%</td><td style="background:var(--cf-5)">4.43%</td><td style="background:var(--cf-2)">3.68%</td><td style="background:var(--cf-4)">4.19%</td></tr><tr><td class="bm-kpi">Avg CPC</td><td class="bm-total">$1.48</td><td style="background:var(--cf-5)">$1.92</td><td style="background:var(--cf-1)">$1.23</td><td style="background:var(--cf-3)">$1.51</td><td style="background:var(--cf-1)">$1.35</td></tr><tr class="bm-grp"><td class="bm-kpi">Conversion</td><td colspan="5"></td></tr><tr><td class="bm-kpi">Conversions</td><td class="bm-total">1,808</td><td style="background:var(--cf-5)">569</td><td style="background:var(--cf-1)">249</td><td style="background:var(--cf-3)">437</td><td style="background:var(--cf-5)">553</td></tr><tr><td class="bm-kpi">Conv. value</td><td class="bm-total">$212,205</td><td style="background:var(--cf-5)">$66,894</td><td style="background:var(--cf-1)">$29,212</td><td style="background:var(--cf-3)">$51,260</td><td style="background:var(--cf-5)">$64,839</td></tr><tr><td class="bm-kpi">ROAS</td><td class="bm-total">3.54x</td><td style="background:var(--cf-4)">3.82x</td><td style="background:var(--cf-1)">2.14x</td><td style="background:var(--cf-4)">3.74x</td><td style="background:var(--cf-5)">4.32x</td></tr><tr><td class="bm-kpi">Cost / conv.</td><td class="bm-total">$33.11</td><td style="background:var(--cf-1)">$30.78</td><td style="background:var(--cf-5)">$54.82</td><td style="background:var(--cf-1)">$31.33</td><td style="background:var(--cf-1)">$27.15</td></tr></tbody></table></div></div>
+  </div>
+
+  <script>
+  /* Self-contained breakdown-matrix: re-slices ONE synthetic series by the chosen
+     dimension. Mirrors components/charts/breakdown-matrix (kept inline so the card
+     renders with zero dependencies). Fictional Acme data only. */
+  (function () {
+    var B = { date:"date", cost:"cost", impressions:"impressions", clicks:"clicks", conversions:"conversions", convValue:"conv_value", impressionShare:"impression_share" };
+    function num(v){ return Number(v)||0; }
+    function grp(v,dp){ var f=Math.pow(10,dp); var s=(Math.round(num(v)*f)/f).toFixed(dp); var p=s.split("."); p[0]=p[0].replace(/\B(?=(\d{3})+(?!\d))/g,","); return p.join("."); }
+    function tz(s){ return s.indexOf(".")===-1?s:s.replace(/\.?0+$/,""); }
+    var fmt = {
+      money:function(v){ return num(v)<=0?"—":"$"+tz(grp(v,2)); },
+      money2:function(v){ return num(v)<=0?"—":"$"+grp(v,2); },
+      int:function(v){ return grp(Math.round(num(v)),0); },
+      dec:function(v){ return num(v)<=0?"—":tz(grp(v,2)); },
+      pct1:function(v){ return num(v)<=0?"—":(num(v)*100).toFixed(1)+"%"; },
+      pct2:function(v){ return num(v)<=0?"—":(num(v)*100).toFixed(2)+"%"; },
+      ratio:function(v){ return num(v)<=0?"—":num(v).toFixed(2)+"x"; }
+    };
+    function esc(s){ return String(s).replace(/[&<>"']/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+    var MONS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    function pd(s){ var t=String(s).replace(/-/g,""); return Date.UTC(+t.slice(0,4),+t.slice(4,6)-1,+t.slice(6,8)); }
+    function pstart(ms,g){ var d=new Date(ms),y=d.getUTCFullYear(),mo=d.getUTCMonth(); if(g==="day")return ms; if(g==="month")return Date.UTC(y,mo,1); if(g==="quarter")return Date.UTC(y,mo-(mo%3),1); var off=(d.getUTCDay()+6)%7; return ms-off*86400000; }
+    function plabel(ms,g){ var d=new Date(ms),y=d.getUTCFullYear(),mo=d.getUTCMonth(),day=d.getUTCDate(); if(g==="day")return MONS[mo]+" "+day; if(g==="month")return MONS[mo]+" "+y; if(g==="quarter")return "Q"+(Math.floor(mo/3)+1)+" "+y; var e=new Date(ms+6*86400000); return MONS[mo]+" "+day+" - "+MONS[e.getUTCMonth()]+" "+e.getUTCDate(); }
+    function blank(){ return {cost:0,impr:0,clk:0,conv:0,cval:0,isw:0}; }
+    function baseOf(r){ var s=num(r[B.impressionShare]); if(s>1)s=s/100; return {cost:num(r[B.cost]),impr:num(r[B.impressions]),clk:num(r[B.clicks]),conv:num(r[B.conversions]),cval:num(r[B.convValue]),share:s}; }
+    function add(o,b){ o.cost+=b.cost; o.impr+=b.impr; o.clk+=b.clk; o.conv+=b.conv; o.cval+=b.cval; o.isw+=b.share*b.impr; }
+    function derive(o){ return {cost:o.cost,impressions:o.impr,is:o.impr>0?o.isw/o.impr:0,cpm:o.impr>0?(o.cost/o.impr)*1000:0,clicks:o.clk,ctr:o.impr>0?o.clk/o.impr:0,cpc:o.clk>0?o.cost/o.clk:0,conversions:o.conv,convValue:o.cval,roas:o.cost>0?o.cval/o.cost:0,cpa:o.conv>0?o.cost/o.conv:0}; }
+    var METRICS=[["Budget","cost","Cost","money"],["Visibility","impressions","Impressions","int"],["Visibility","is","Search IS","pct1"],["Visibility","cpm","CPM","money2"],["Engagement","clicks","Clicks","int"],["Engagement","ctr","CTR","pct2"],["Engagement","cpc","Avg CPC","money2"],["Conversion","conversions","Conversions","dec"],["Conversion","convValue","Conv. value","money"],["Conversion","roas","ROAS","ratio"],["Conversion","cpa","Cost / conv.","money2"]];
+    function heat(v,mn,mx){ if(mx<=mn)return 5; var r=(v-mn)/(mx-mn); var s=1+Math.floor(r*5); return s<1?1:s>5?5:s; }
+    function build(series,bd){
+      var isTime=bd.type!=="category", gran=bd.granularity||"week";
+      var buckets={}, ord={}, total=blank();
+      for(var i=0;i<series.length;i++){ var row=series[i],key;
+        if(isTime){ var raw=row[B.date]; if(raw==null||raw==="")continue; var ms=pstart(pd(raw),gran); key=String(ms); ord[key]=ms; }
+        else { key=row[bd.field]; if(key==null||key==="")key="(not set)"; key=String(key); }
+        if(!buckets[key])buckets[key]=blank(); var b=baseOf(row); add(buckets[key],b); add(total,b);
+      }
+      var keys=Object.keys(buckets);
+      if(isTime) keys.sort(function(a,b){ return ord[b]-ord[a]; });
+      else keys.sort(function(a,b){ return (derive(buckets[b]).cost||0)-(derive(buckets[a]).cost||0); });
+      var cols=keys.map(function(k){ return {label:isTime?plabel(ord[k],gran):k, d:derive(buckets[k])}; });
+      var tot=derive(total), cc=cols.length+2;
+      var h='<div class="bm-wrap"><table class="bm"><thead><tr><th class="bm-kpi">KPI</th><th class="bm-total">Total</th>';
+      for(var c=0;c<cols.length;c++) h+="<th>"+esc(cols[c].label)+"</th>";
+      h+="</tr></thead><tbody>"; var pg;
+      METRICS.forEach(function(m){ var g=m[0],key=m[1],lbl=m[2],f=fmt[m[3]];
+        if(g&&g!==pg) h+='<tr class="bm-grp"><td class="bm-kpi">'+esc(g)+'</td><td colspan="'+(cc-1)+'"></td></tr>';
+        pg=g;
+        var vals=cols.map(function(col){ return col.d[key]; });
+        var mx=Math.max.apply(null,vals.concat([0])), mn=Math.min.apply(null,vals.concat([mx]));
+        h+='<tr><td class="bm-kpi">'+esc(lbl)+'</td><td class="bm-total">'+f(tot[key])+"</td>";
+        for(var j=0;j<cols.length;j++){ var v=vals[j]; var t=num(v)>0&&mx>0?' style="background:var(--cf-'+heat(v,mn,mx)+')"':""; h+="<td"+t+">"+f(v)+"</td>"; }
+        h+="</tr>";
+      });
+      return h+"</tbody></table></div>";
+    }
+    /* synthetic Acme day x campaign fixture (no real data) */
+    function pad(v){ return v<10?"0"+v:""+v; } function r2(v){ return Math.round(v*100)/100; } function r4(v){ return Math.round(v*1e4)/1e4; } function cl(v,a,b){ return v<a?a:v>b?b:v; }
+    var CAMP=[["Acme_Search_Term_Life","Search","Term Life","Lead Gen",1.0,1.0],["Acme_Search_Whole_Life","Search","Whole Life","Lead Gen",0.7,0.8],["Acme_PMax_Bundles","Performance Max","Bundles","Sales",0.9,1.2],["Acme_Brand_Defense","Search","Brand","Brand",0.4,1.6]];
+    var SERIES=[]; for(var ci=0;ci<CAMP.length;ci++){ var cp=CAMP[ci]; for(var i=0;i<28;i++){ var dip=(i>=14&&i<=20&&cp[2]!=="Brand")?0.55:1; var conv=Math.max(0,Math.round((20*cp[4]*cp[5]+5*Math.sin(i/3))*dip)); SERIES.push({date:"202605"+pad(4+i),campaign:cp[0],campaign_type:cp[1],objective:cp[3],product:cp[2],cost:r2(620*cp[4]+90*Math.sin(i/3)+5*i*cp[4]),impressions:Math.round(12000*cp[4]+1500*Math.sin(i/2+1)),clicks:Math.round(480*cp[4]+60*Math.sin(i/2.3)),conversions:conv,conv_value:Math.round(conv*(115+(i%6))),impression_share:r4(cl(0.40+0.08*Math.sin(i/3)+(cp[4]-0.7)*0.05,0.02,0.95))}); } }
+    /* wiring */
+    var host=document.getElementById("bm-host"), segWrap=document.getElementById("seg"), granWrap=document.getElementById("granwrap"), granPills=document.getElementById("gran");
+    var FIELD={ campaign:"campaign", objective:"objective", product:"product" };
+    var curSeg="time", curGran="week";
+    function bd(){ return curSeg==="time"?{type:"time",granularity:curGran}:{type:"category",field:FIELD[curSeg]}; }
+    function setActive(wrap,attr,val){ [].forEach.call(wrap.querySelectorAll("button"),function(b){ var on=b.getAttribute(attr)===val; b.className="pds-btn pds-btn--sm "+(on?"pds-btn--purple":"pds-btn--outline"); }); }
+    function render(){ granWrap.style.display=curSeg==="time"?"":"none"; host.innerHTML=build(SERIES,bd()); }
+    segWrap.addEventListener("click",function(e){ var b=e.target.closest("button"); if(!b)return; curSeg=b.getAttribute("data-seg"); setActive(segWrap,"data-seg",curSeg); render(); });
+    granPills.addEventListener("click",function(e){ var b=e.target.closest("button"); if(!b)return; curGran=b.getAttribute("data-gran"); setActive(granPills,"data-gran",curGran); render(); });
+    render();
+  })();
+  </script>
+</body>
+</html>

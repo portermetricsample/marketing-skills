@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Impression-share trend monitor — demo (fictional Acme Insurance)</title>
+<!--
+  Labeled FICTIONAL demo. Open in a browser.
+
+  The CSS below is a clearly-marked DEMO-ONLY fallback so the component is legible standalone —
+  it is NOT the component's styling. In production every class hook is styled by porter-design
+  tokens (see README → "Styling hooks"). The component (impression-share-trend-monitor.js) ships
+  ZERO CSS.
+-->
+<style>
+  /* ---- DEMO-ONLY fallback (stands in for porter-design tokens) ---- */
+  :root {
+    --got: #1d9e75; --rank: #6701e6; --budget: #ec4899;
+    --up: #0f6e56; --down: #be185d; --flat: #7a7a72;
+    --card-border: #e6e4ee; --surface: #fff; --bg: #faf9fc;
+    --title: #1c1c1a; --body: #2b2b28; --muted: #7a7a72;
+  }
+  body { margin: 0; padding: 28px; background: var(--bg); color: var(--body);
+    font-family: system-ui, sans-serif; }
+  h1 { font-size: 21px; margin: 0 0 2px; color: var(--title); }
+  .sub { color: var(--muted); font-size: 13px; margin: 0 0 20px; }
+
+  .pist-component { max-width: 760px; }
+  .pist-controls { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; margin-bottom: 14px; }
+  .pist-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pist-chip { font-size: 12px; padding: 6px 13px; border-radius: 999px; border: 1.5px solid var(--card-border);
+    background: var(--surface); color: var(--body); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+  .pist-chip--on { border-color: var(--title); background: var(--title); color: #fff; }
+  .pist-dot { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
+  .pist-dot--rank { background: var(--rank); } .pist-dot--budget { background: var(--budget); } .pist-dot--mixed { background: var(--muted); }
+  .pist-legend { display: flex; gap: 14px; font-size: 12px; color: var(--muted); margin-left: auto; flex-wrap: wrap; align-items: center; }
+  .pist-lg { display: flex; align-items: center; gap: 6px; } .pist-lg-label { opacity: .8; }
+  .pist-sw { width: 11px; height: 11px; border-radius: 2px; }
+  .pist-sw--got { background: var(--got); } .pist-sw--rank { background: var(--rank); } .pist-sw--budget { background: var(--budget); }
+
+  .pist-head, .pist-rowhead { display: grid; grid-template-columns: 20px 196px 160px 86px 1fr; gap: 14px; align-items: center; }
+  .pist-head { font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); padding: 0 0 6px; }
+  .pist-row { border-top: 1px solid var(--card-border); }
+  .pist-rowhead { width: 100%; text-align: left; background: none; border: 0; padding: 13px 0; cursor: pointer; font: inherit; color: inherit; }
+  .pist-chev { color: var(--muted); font-size: 11px; }
+  .pist-camp { font-weight: 600; color: var(--title); display: block; font-size: 14px; }
+  .pist-spend { color: var(--muted); font-size: 12px; }
+  .pist-spark { display: flex; flex-direction: column; }
+  .pist-spark-line { stroke: var(--rank); stroke-width: 2; } .pist-spark-dot { fill: var(--title); }
+  .pist-window { font-size: 11.5px; color: var(--muted); margin-top: 1px; }
+  .pist-change { font-size: 14px; font-weight: 600; }
+  .pist-change--up { color: var(--up); } .pist-change--down { color: var(--down); } .pist-change--flat { color: var(--flat); }
+  .pist-short { display: block; font-size: 10px; color: var(--muted); font-weight: 400; }
+  .pist-whybar { display: inline-flex; width: 100%; max-width: 150px; height: 11px; overflow: hidden; border-radius: 2px; }
+  .pist-seg--got { background: var(--got); } .pist-seg--rank { background: var(--rank); } .pist-seg--budget { background: var(--budget); }
+  .pist-limiter { display: block; font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+  .pist-limiter--rank { color: var(--rank); } .pist-limiter--budget { color: var(--budget); } .pist-limiter--mixed { color: var(--muted); }
+
+  .pist-detail { padding: 2px 0 18px 34px; }
+  .pist-detail-note { font-size: 12px; color: var(--muted); margin: 0 0 8px; }
+  .pist-wkgrid { display: flex; gap: 6px; align-items: flex-end; max-width: 560px; }
+  .pist-wkcol { flex: 1; text-align: center; }
+  .pist-wkbar { display: flex; flex-direction: column-reverse; height: 130px; border-radius: 3px; overflow: hidden; }
+  .pist-wkseg--got { background: var(--got); } .pist-wkseg--rank { background: var(--rank); } .pist-wkseg--budget { background: var(--budget); }
+  .pist-wklabel { font-size: 10px; color: var(--muted); margin-top: 4px; }
+
+  .pist-empty { color: var(--muted); font-size: 13px; }
+  .pist-skeleton .pist-skel-row, .pist-skel-controls { background: #ececf2; border-radius: 8px; }
+  .pist-skel-controls { height: 28px; margin-bottom: 14px; } .pist-skel-row { height: 44px; margin-top: 6px; }
+</style>
+</head>
+<body>
+  <h1>Impression Share — spend-ranked monitor (over time)</h1>
+  <p class="sub">Fictional <strong>Acme Insurance</strong> · demo-only styling · the component ships no CSS · click a campaign to expand its weekly breakdown</p>
+
+  <div id="host"></div>
+
+  <script src="./example.data.js"></script>
+  <script src="./impression-share-trend-monitor.js"></script>
+  <script>
+    var data = PorterReporting.impressionShareTrendMonitorExample;
+    PorterReporting.impressionShareTrendMonitor.mount("#host", { rows: data.rows, sort: "spend" });
+  </script>
+</body>
+</html>

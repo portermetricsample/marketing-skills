@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../_shared/support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Report Slides — New Type" description="Presentation / PowerPoint-style slide layouts for Porter — 16:9 reference deck: title, agenda, section divider, KPI overview, chart slide, comparison, big takeaway and closing. Bricolage + Hanken, on-brand." -->
+<helmet>
+<script src="./ds-base.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--porter-cream); }
+  .deck { max-width:1000px; margin:0 auto; display:flex; flex-direction:column; gap:34px; }
+  .slabel { font-family:var(--font-bricolage); font-weight:700; font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--jewel); margin-bottom:11px; }
+  .slide { position:relative; width:100%; aspect-ratio:16/9; border-radius:16px; overflow:hidden; box-shadow:inset 0 0 0 1px var(--neutral-200); background:#fff; }
+  .pad { position:absolute; inset:0; padding:52px 58px; display:flex; flex-direction:column; }
+  .eyb { font-family:var(--font-hanken); font-weight:600; font-size:14px; letter-spacing:.14em; text-transform:uppercase; color:var(--jewel); display:block; }
+  .stitle { font-family:var(--font-bricolage); font-weight:800; letter-spacing:-0.02em; line-height:1.02; margin:0; color:var(--ink); }
+  .body { font-family:var(--font-hanken); line-height:1.5; color:var(--ink-soft); }
+  @media print { body { background:#fff; } }
+</style>
+</helmet>
+
+<div style="padding:44px 22px 80px; font-family:var(--font-bricolage); color:var(--ink);">
+  <div class="deck">
+
+    <!-- 01 TITLE -->
+    <div>
+      <div class="slabel">01 · Slide de título</div>
+      <div class="slide" style="background:var(--porter-dark);">
+        <div class="pad" style="justify-content:space-between;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <img src="../../../porter-design/assets/brand/porter-mark.png" alt="Porter" style="width:30px; height:30px; object-fit:contain;" />
+            <span style="font-weight:900; font-size:21px; letter-spacing:-0.8px; color:#fff;">porter</span>
+          </div>
+          <div>
+            <span class="eyb" style="color:var(--porter-yellow); margin-bottom:18px;">Q1 Performance Review</span>
+            <h1 class="stitle" style="font-size:56px; color:#fff; max-width:18ch;">Marketing results &amp; <span style="color:var(--purple-500);">what comes next</span></h1>
+          </div>
+          <div style="display:flex; gap:46px; font-family:var(--font-hanken); font-size:13px;">
+            <div><div style="color:rgba(255,255,255,0.45); letter-spacing:.06em; margin-bottom:5px;">CLIENT</div><div style="color:#fff;">Northwind Co.</div></div>
+            <div><div style="color:rgba(255,255,255,0.45); letter-spacing:.06em; margin-bottom:5px;">PERIOD</div><div style="color:#fff;">Jan&ndash;Mar 2025</div></div>
+            <div><div style="color:rgba(255,255,255,0.45); letter-spacing:.06em; margin-bottom:5px;">PREPARED BY</div><div style="color:#fff;">Porter Metrics</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 AGENDA -->
+    <div>
+      <div class="slabel">02 · Agenda / contenidos</div>
+      <div class="slide">
+        <div class="pad">
+          <span class="eyb">Agenda</span>
+          <h2 class="stitle" style="font-size:40px; margin:10px 0 30px;">What we&rsquo;ll cover</h2>
+          <div style="display:flex; flex-direction:column; gap:0; border-top:1px solid var(--neutral-200);">
+            <div style="display:flex; align-items:center; gap:22px; padding:17px 0; border-bottom:1px solid var(--neutral-200);"><span style="font-family:var(--font-hanken); font-weight:700; font-size:14px; color:var(--jewel); width:32px;">01</span><span style="font-family:var(--font-bricolage); font-weight:700; font-size:21px;">The quarter in review</span></div>
+            <div style="display:flex; align-items:center; gap:22px; padding:17px 0; border-bottom:1px solid var(--neutral-200);"><span style="font-family:var(--font-hanken); font-weight:700; font-size:14px; color:var(--jewel); width:32px;">02</span><span style="font-family:var(--font-bricolage); font-weight:700; font-size:21px;">Channel performance</span></div>
+            <div style="display:flex; align-items:center; gap:22px; padding:17px 0; border-bottom:1px solid var(--neutral-200);"><span style="font-family:var(--font-hanken); font-weight:700; font-size:14px; color:var(--jewel); width:32px;">03</span><span style="font-family:var(--font-bricolage); font-weight:700; font-size:21px;">Creative &amp; messaging</span></div>
+            <div style="display:flex; align-items:center; gap:22px; padding:17px 0; border-bottom:1px solid var(--neutral-200);"><span style="font-family:var(--font-hanken); font-weight:700; font-size:14px; color:var(--jewel); width:32px;">04</span><span style="font-family:var(--font-bricolage); font-weight:700; font-size:21px;">Audience &amp; funnel</span></div>
+            <div style="display:flex; align-items:center; gap:22px; padding:17px 0; border-bottom:1px solid var(--neutral-200);"><span style="font-family:var(--font-hanken); font-weight:700; font-size:14px; color:var(--jewel); width:32px;">05</span><span style="font-family:var(--font-bricolage); font-weight:700; font-size:21px;">What comes next</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 03 SECTION DIVIDER -->
+    <div>
+      <div class="slabel">03 · Divisor de secci&oacute;n</div>
+      <div class="slide" style="background:var(--porter-purple);">
+        <div class="pad" style="justify-content:center;">
+          <span style="font-family:var(--font-hanken); font-weight:600; font-size:140px; line-height:0.8; color:rgba(255,255,255,0.22);">01</span>
+          <span class="eyb" style="color:rgba(255,255,255,0.8); margin:18px 0 10px;">Section</span>
+          <h2 class="stitle" style="font-size:58px; color:#fff;">The quarter in review</h2>
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 KPI OVERVIEW -->
+    <div>
+      <div class="slabel">04 · Slide de KPIs</div>
+      <div class="slide">
+        <div class="pad">
+          <span class="eyb">Performance</span>
+          <h2 class="stitle" style="font-size:38px; margin:10px 0 28px;">The quarter at a glance</h2>
+          <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:18px; flex:1;">
+            <div style="background:var(--porter-cream); border-radius:14px; padding:24px; display:flex; flex-direction:column; justify-content:center;">
+              <div style="font-family:var(--font-hanken); font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-mute);">Revenue</div>
+              <div style="font-weight:900; font-size:34px; letter-spacing:-1.5px; margin:8px 0 8px;">$197.8k</div>
+              <div style="font-family:var(--font-hanken); font-weight:700; font-size:13px; color:var(--aqua-700);">&#9650; 14.2%</div>
+            </div>
+            <div style="background:var(--porter-cream); border-radius:14px; padding:24px; display:flex; flex-direction:column; justify-content:center;">
+              <div style="font-family:var(--font-hanken); font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-mute);">ROAS</div>
+              <div style="font-weight:900; font-size:34px; letter-spacing:-1.5px; margin:8px 0 8px;">4.1x</div>
+              <div style="font-family:var(--font-hanken); font-weight:700; font-size:13px; color:var(--aqua-700);">&#9650; 17.4%</div>
+            </div>
+            <div style="background:var(--porter-cream); border-radius:14px; padding:24px; display:flex; flex-direction:column; justify-content:center;">
+              <div style="font-family:var(--font-hanken); font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-mute);">CPA</div>
+              <div style="font-weight:900; font-size:34px; letter-spacing:-1.5px; margin:8px 0 8px;">$22.10</div>
+              <div style="font-family:var(--font-hanken); font-weight:700; font-size:13px; color:var(--aqua-700);">&#9660; 8.1%</div>
+            </div>
+            <div style="background:var(--porter-purple); color:#fff; border-radius:14px; padding:24px; display:flex; flex-direction:column; justify-content:center;">
+              <div style="font-family:var(--font-hanken); font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:rgba(255,255,255,0.7);">Conversions</div>
+              <div style="font-weight:900; font-size:34px; letter-spacing:-1.5px; margin:8px 0 8px;">2,184</div>
+              <div style="font-family:var(--font-hanken); font-weight:700; font-size:13px; color:var(--accent);">&#9650; 9.6%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 05 CHART SLIDE -->
+    <div>
+      <div class="slabel">05 · Slide con gr&aacute;fica</div>
+      <div class="slide">
+        <div class="pad" style="flex-direction:row; gap:40px;">
+          <div style="flex:1.6; display:flex; flex-direction:column;">
+            <span class="eyb">Trend</span>
+            <h2 class="stitle" style="font-size:32px; margin:10px 0 20px;">Spend &amp; revenue, 12 weeks</h2>
+            <svg viewBox="0 0 560 240" preserveAspectRatio="none" style="width:100%; flex:1; display:block;">
+              <line x1="0" y1="80" x2="560" y2="80" stroke="#eef0f3" stroke-width="1"/>
+              <line x1="0" y1="160" x2="560" y2="160" stroke="#eef0f3" stroke-width="1"/>
+              <path d="M0,180 L51,168 L102,172 L153,148 L204,154 L255,124 L306,116 L357,128 L408,98 L459,86 L510,92 L560,64 L560,240 L0,240 Z" fill="#ede9fe"/>
+              <polyline points="0,180 51,168 102,172 153,148 204,154 255,124 306,116 357,128 408,98 459,86 510,92 560,64" fill="none" stroke="#6701e6" stroke-width="3.5" vector-effect="non-scaling-stroke"/>
+              <polyline points="0,206 51,202 102,196 153,198 204,190 255,182 306,184 357,176 408,172 459,176 510,166 560,162" fill="none" stroke="#2dd4bf" stroke-width="3" vector-effect="non-scaling-stroke"/>
+            </svg>
+          </div>
+          <div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:18px; border-left:1px solid var(--neutral-200); padding-left:36px;">
+            <div><div style="font-family:var(--font-hanken); font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-mute); margin-bottom:5px;">Takeaway</div><div style="font-family:var(--font-bricolage); font-weight:700; font-size:19px; line-height:1.25;">Revenue outpaced spend every week after W6.</div></div>
+            <div class="body" style="font-size:15px;">Flat budget, rising return — the gap widened as the February creative refresh compounded.</div>
+            <div style="display:flex; gap:18px; font-family:var(--font-hanken); font-size:12px;"><span style="display:flex; align-items:center; gap:6px;"><span style="width:14px; height:3px; border-radius:2px; background:var(--porter-purple);"></span>Revenue</span><span style="display:flex; align-items:center; gap:6px; color:var(--ink-mute);"><span style="width:14px; height:3px; border-radius:2px; background:var(--porter-aqua);"></span>Spend</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 06 COMPARISON -->
+    <div>
+      <div class="slabel">06 · Comparaci&oacute;n</div>
+      <div class="slide">
+        <div class="pad">
+          <span class="eyb">Period comparison</span>
+          <h2 class="stitle" style="font-size:38px; margin:10px 0 28px;">This quarter vs last</h2>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:22px; flex:1;">
+            <div style="background:var(--porter-cream); border-radius:14px; padding:30px; display:flex; flex-direction:column; gap:18px;">
+              <div style="font-family:var(--font-hanken); font-weight:700; font-size:13px; letter-spacing:.08em; text-transform:uppercase; color:var(--jewel);">This quarter</div>
+              <div style="display:flex; justify-content:space-between; align-items:baseline;"><span class="body" style="font-size:15px;">Revenue</span><span style="font-weight:800; font-size:26px;">$197.8k</span></div>
+              <div style="display:flex; justify-content:space-between; align-items:baseline;"><span class="body" style="font-size:15px;">ROAS</span><span style="font-weight:800; font-size:26px;">4.1x</span></div>
+              <div style="display:flex; justify-content:space-between; align-items:baseline;"><span class="body" style="font-size:15px;">Conversions</span><span style="font-weight:800; font-size:26px;">2,184</span></div>
+            </div>
+            <div style="border-radius:14px; padding:30px; display:flex; flex-direction:column; gap:18px; box-shadow:inset 0 0 0 1px var(--neutral-200);">
+              <div style="font-family:var(--font-hanken); font-weight:700; font-size:13px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-mute);">Previous quarter</div>
+              <div style="display:flex; justify-content:space-between; align-items:baseline;"><span class="body" style="font-size:15px;">Revenue</span><span style="font-weight:800; font-size:26px; color:var(--ink-mute);">$173.5k</span></div>
+              <div style="display:flex; justify-content:space-between; align-items:baseline;"><span class="body" style="font-size:15px;">ROAS</span><span style="font-weight:800; font-size:26px; color:var(--ink-mute);">3.5x</span></div>
+              <div style="display:flex; justify-content:space-between; align-items:baseline;"><span class="body" style="font-size:15px;">Conversions</span><span style="font-weight:800; font-size:26px; color:var(--ink-mute);">1,994</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 07 BIG TAKEAWAY -->
+    <div>
+      <div class="slabel">07 · Dato destacado</div>
+      <div class="slide" style="background:var(--porter-dark);">
+        <div class="pad" style="justify-content:center;">
+          <span class="eyb" style="color:var(--porter-yellow); margin-bottom:16px;">The headline</span>
+          <div style="font-weight:900; font-size:130px; line-height:0.86; letter-spacing:-5px; color:var(--accent);">+14%</div>
+          <p class="body" style="font-size:22px; color:rgba(255,255,255,0.78); max-width:34ch; margin:22px 0 0;">revenue growth on flat spend — the clearest signal that efficiency, not budget, moved the quarter.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 08 CLOSING -->
+    <div>
+      <div class="slabel">08 · Cierre</div>
+      <div class="slide" style="background:var(--porter-dark);">
+        <div class="pad" style="justify-content:space-between;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <img src="../../../porter-design/assets/brand/porter-mark.png" alt="Porter" style="width:30px; height:30px; object-fit:contain;" />
+            <span style="font-weight:900; font-size:21px; letter-spacing:-0.8px; color:#fff;">porter</span>
+          </div>
+          <h2 class="stitle" style="font-size:64px; color:#fff;">Thank you.</h2>
+          <div style="display:flex; justify-content:space-between; align-items:flex-end; font-family:var(--font-hanken); font-size:14px; color:rgba(255,255,255,0.7);">
+            <span>Questions? hello@portermetrics.com</span>
+            <span>portermetrics.com</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

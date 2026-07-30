@@ -1,0 +1,36 @@
+<!--
+  google-ads/impression-share-competitiveness — STATIC SCAFFOLD (structure only).
+
+  The markup the component animates: a sort control + an empty host. Two ways to
+  use it:
+
+    1. Self-contained (demo / simple page): you do NOT need this file —
+       call PorterReporting.impressionShare.mount("#target", { metrics })
+       and it generates this exact structure for you.
+
+    2. Live Porter report page: drop this markup into the page, then render the
+       analysis output (the keyword-ad-landing-metrics campaign_context, or
+       explicit campaign IS rows) into the host. The host carries
+       `data-porter-chart` for that wiring.
+
+  Class hooks only — NO <style> and NO logic here. All appearance is owned by
+  porter-design (see README → "Styling hooks"); all behaviour by the .js.
+-->
+<div class="pis-component">
+  <div class="pis-controls">
+    <label class="pis-filter">Sort by
+      <select class="pis-sort">
+        <option value="spend">Search spend (highest first)</option>
+        <option value="exposure">Lowest top IS first (most room to grow)</option>
+        <option value="budget">Most lost to budget</option>
+        <option value="rank">Most lost to rank</option>
+        <option value="alpha">Campaign (A–Z)</option>
+      </select>
+    </label>
+  </div>
+
+  <!-- The honesty note + summary + per-campaign IS table render here.
+       `data-porter-chart` is the live-report binding point (the chart key is
+       illustrative — match your report config). -->
+  <div class="pis-host" data-porter-chart="is_competitiveness"></div>
+</div>

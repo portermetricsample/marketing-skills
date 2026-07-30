@@ -1,0 +1,324 @@
+<!-- @dsCard group="Components" viewport="1200x1200" name="Alignment journey" subtitle="Per ad group: a 'N ads · M landing pages' badge, then Intent → Ad → Landing broken down per ad, with a three-state verdict, relevance links, Quality Score (gated) + the one fix" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- ONE shared dependency, project-local relative path only (no machine paths, no sibling-repo paths) -->
+<link rel="stylesheet" href="../../styles.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400..700&display=swap" rel="stylesheet" />
+<style>
+  /* card-specific LAYOUT only — every color/font comes from styles.css tokens */
+  html, body { margin: 0; background: var(--surface-bg); color: var(--text-body); font-family: var(--font-hanken); }
+  .wrap { padding: 28px; max-width: 1180px; }
+  .eyebrow { font-family: var(--font-bricolage); font-weight: 700; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--eyebrow-color); margin: 0 0 4px; }
+  .alj-title { font-family: var(--font-bricolage); font-weight: 700; font-size: 22px; color: var(--text-title); margin: 0; }
+  .alj-meta { font-size: 12.5px; color: var(--text-muted); margin: 4px 0 0; }
+
+  .alj-ctlbar { display: flex; align-items: center; gap: 10px; margin: 18px 0 14px; }
+  .alj-ctllbl { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); }
+  .alj-pills { display: inline-flex; gap: 6px; }
+
+  /* summary banner */
+  .alj-summary { background: var(--surface-sunken, var(--surface-bg)); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; }
+  .alj-sum-headline { font-size: 13.5px; color: var(--text-title); margin-bottom: 10px; line-height: 1.5; }
+  .alj-sum-stats { display: flex; flex-wrap: wrap; gap: 18px; font-size: 13px; }
+  .alj-sum-stat--aligned strong { color: var(--good); }
+  .alj-sum-stat--review strong { color: var(--callout-warn-tx); }
+  .alj-sum-stat--broken strong { color: var(--bad); }
+  .alj-sum-spend { font-size: 12.5px; color: var(--text-muted); margin-top: 8px; }
+
+  /* campaign group + campaign-grain Impression Share header (shown ONCE per campaign) */
+  .alj-campaign { margin-bottom: 20px; }
+  .alj-campaign-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+    padding: 9px 13px; margin-bottom: 12px; background: var(--surface-sunken, var(--surface-bg));
+    border: 1px solid var(--card-border); border-radius: 10px; }
+  .alj-campaign-label { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--text-muted); margin-right: 8px; }
+  .alj-campaign-name { font-family: var(--font-bricolage); font-size: 14px; color: var(--text-title); }
+  .alj-is { display: flex; flex-wrap: wrap; align-items: baseline; gap: 13px; font-size: 12px; color: var(--text-muted); }
+  .alj-is-label { font-size: 10px; text-transform: uppercase; letter-spacing: .04em; color: var(--text-muted); }
+  .alj-is-stat strong { color: var(--text-strong); font-weight: 700; }
+  .alj-is-stat--lost-rank strong, .alj-is-stat--lost-budget strong { color: var(--callout-warn-tx); }
+  .alj-is-lost { background: var(--surface-bg); border: 1px solid var(--card-border); border-radius: 8px;
+    padding: 1px 8px; font-size: 10.5px; color: var(--text-muted); }
+
+  /* card */
+  .alj-card { background: var(--surface-card); border: 1px solid var(--card-border); border-left-width: 4px; border-radius: 12px; padding: 16px; margin-bottom: 14px; }
+  .alj-card--aligned { border-left-color: var(--good); }
+  .alj-card--review  { border-left-color: var(--callout-warn-tx); }
+  .alj-card--broken  { border-left-color: var(--bad); }
+
+  .alj-card-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .alj-ag { font-size: 14px; color: var(--text-title); }
+  .alj-cmp { font-size: 12px; color: var(--text-muted); margin-left: 8px; }
+  .alj-perf { font-size: 12px; color: var(--text-muted); margin-right: 10px; }
+  .alj-verdict { padding: 3px 11px; border-radius: 12px; font-size: 12px; font-weight: 700; }
+  .alj-verdict--aligned { background: var(--callout-win-bg); color: var(--callout-win-tx); }
+  .alj-verdict--review  { background: var(--callout-warn-bg); color: var(--callout-warn-tx); }
+  .alj-verdict--broken  { background: var(--callout-risk-bg); color: var(--callout-risk-tx); }
+
+  /* relevance grade strip */
+  .alj-grades { font-size: 12px; background: var(--surface-bg); border-radius: 8px; padding: 6px 10px; margin-bottom: 10px; }
+  .alj-grades--none { color: var(--text-muted); }
+  .alj-grades-label { color: var(--text-muted); }
+  .alj-qs { font-weight: 700; color: var(--text-strong); }
+  .alj-grade { font-weight: 600; }
+  .alj-grade--above { color: var(--good); }
+  .alj-grade--avg   { color: var(--callout-warn-tx); }
+  .alj-grade--below { color: var(--bad); }
+
+  /* L1–L4 links */
+  .alj-links { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
+  .alj-link { border: 1px solid var(--card-border); border-radius: 8px; padding: 7px 9px; font-size: 11.5px; }
+  .alj-link-name { display: block; color: var(--text-muted); font-size: 10px; text-transform: uppercase; letter-spacing: .03em; margin-bottom: 2px; }
+  .alj-link-grade { font-weight: 700; }
+  .alj-link--pass .alj-link-grade { color: var(--good); }
+  .alj-link--partial .alj-link-grade { color: var(--callout-warn-tx); }
+  .alj-link--fail .alj-link-grade { color: var(--bad); }
+  .alj-link--unknown .alj-link-grade { color: var(--text-muted); }
+  .alj-link-reason { display: block; color: var(--text-muted); margin-top: 3px; line-height: 1.35; }
+
+  /* 3 columns */
+  .alj-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .alj-col { border: 1px solid var(--card-border); border-radius: 10px; padding: 10px 12px; }
+  .alj-col-label { font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--text-muted); margin-bottom: 7px; }
+  .alj-kw { margin-bottom: 7px; font-size: 12.5px; }
+  .alj-mt { font-size: 10px; color: var(--text-muted); }
+  .alj-term { padding-left: 14px; font-size: 11.5px; color: var(--text-muted); }
+  .alj-term--off { opacity: .65; font-style: italic; }
+  .alj-ad-headline { color: var(--accent, #1a73e8); font-size: 13px; line-height: 1.4; }
+  .alj-ad-sep { color: var(--text-muted); }
+  .alj-ad-desc { color: var(--text-body); font-size: 12px; margin-top: 5px; }
+  .alj-dest-url a { color: var(--accent, #1a73e8); text-decoration: none; font-size: 12px; }
+  .alj-mismatch, .alj-notscraped { color: var(--bad); font-size: 11px; }
+  .alj-h1 { font-size: 12.5px; margin-top: 5px; color: var(--text-strong); }
+  .alj-dest-summary { font-size: 12.5px; line-height: 1.5; margin-top: 4px; }
+  .alj-col-metric { margin-top: 8px; padding-top: 6px; border-top: 1px solid var(--card-border); font-size: 12px; font-weight: 600; color: var(--text-strong); }
+  .alj-sum-stat--spend strong { color: var(--text-strong); }
+
+  .alj-rec { margin-top: 10px; font-size: 12.5px; }
+  .alj-rec--broken { color: var(--bad); }
+  .alj-rec--review { color: var(--callout-warn-tx); }
+  .alj-rec--aligned { color: var(--good); }
+  .alj-rec-label { font-weight: 700; }
+  .alj-rec-why { color: var(--text-muted); }
+  .alj-break { background: var(--callout-risk-bg); color: var(--callout-risk-tx); border-radius: 8px; padding: 1px 7px; font-size: 10.5px; font-weight: 700; }
+
+  /* "N ads · M landing pages" badge + multi-ad → page sub-cards */
+  .alj-paircount { font-size: 10.5px; font-weight: 700; padding: 3px 9px; border-radius: 12px; margin-right: 10px; white-space: nowrap; }
+  .alj-paircount--whole { background: var(--callout-win-bg); color: var(--callout-win-tx); }
+  .alj-paircount--multi { background: var(--callout-warn-bg); color: var(--callout-warn-tx); }
+  .alj-grid--shared { grid-template-columns: 1fr; margin-bottom: 12px; }
+  .alj-pairings { display: flex; flex-direction: column; gap: 12px; }
+  .alj-pairing { border: 1px solid var(--card-border); border-left-width: 4px; border-radius: 10px; padding: 12px; }
+  .alj-pairing--aligned { border-left-color: var(--good); }
+  .alj-pairing--review  { border-left-color: var(--callout-warn-tx); }
+  .alj-pairing--broken  { border-left-color: var(--bad); }
+  .alj-pairing-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 9px; }
+  .alj-pairing-n { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-muted); font-weight: 700; }
+  .alj-grid--pairing { grid-template-columns: 1fr 1fr; }
+</style>
+</head>
+<body data-theme="white">
+  <div class="wrap">
+    <p class="eyebrow">Alignment journey</p>
+    <h2 class="alj-title">Search term → keyword → ad → landing, graded per ad group</h2>
+    <p class="alj-meta">Acme Insurance &middot; sample data &middot; the badge shows how many ads &amp; pages each group runs (1·1 = the whole story); verdict is a state (Aligned / Needs review / Broken), never an invented score</p>
+
+    <div class="alj-ctlbar">
+      <span class="alj-ctllbl">Show</span>
+      <div class="alj-pills" id="seg">
+        <button class="pds-btn pds-btn--sm pds-btn--purple" data-v="all">All</button>
+        <button class="pds-btn pds-btn--sm pds-btn--outline" data-v="broken">Broken</button>
+        <button class="pds-btn pds-btn--sm pds-btn--outline" data-v="review">Needs review</button>
+        <button class="pds-btn pds-btn--sm pds-btn--outline" data-v="aligned">Aligned</button>
+      </div>
+    </div>
+
+    <div id="alj-host"></div>
+  </div>
+
+  <script>
+  /* Self-contained alignment-journey card. Mirrors the structure of
+     components/google-ads/keyword-ad-landing-alignment (kept inline so the card
+     renders with zero dependencies). Fictional Acme Insurance data only. */
+  (function () {
+    function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+
+    var VLABEL = { aligned:"Aligned", review:"Needs review", broken:"Broken" };
+    var GRADE = { above:"Above", avg:"Avg", below:"Below" };
+
+    /* Pre-joined view models (alignment verdict + metrics grades already merged). */
+    var CARDS = [
+      /* MULTI case: this group runs TWO ads to TWO pages → badge "2 ads · 2 landing pages",
+         and the card splits into one sub-card per ad → its own page, each judged on its own. */
+      { ag:"Dental_Exact", cmp:"Acme_Health_SEM", verdict:"broken", spend:9230, ads:2, landings:2,
+        perf:"$9,230 · 40 conv · $230.75 / conv.",
+        grades:{ qs:"5.6", ad:"avg", ctr:"avg", lp:"below" },
+        intent:[ { kw:"dental insurance", mt:"Exact", badge:'<span class="alj-qs">QS 6.0</span> <span class="alj-grade alj-grade--avg">Ad Avg</span> <span class="alj-grade alj-grade--avg">CTR Avg</span> <span class="alj-grade alj-grade--below">LP Below</span>',
+                   terms:[["dental insurance plans",false],["best dental coverage",false]] },
+                 { kw:"dental coverage", mt:"Phrase", badge:'<span class="alj-qs">QS 5.0</span> <span class="alj-grade alj-grade--avg">Ad Avg</span> <span class="alj-grade alj-grade--above">CTR Above</span> <span class="alj-grade alj-grade--below">LP Below</span>',
+                   terms:[["dental coverage near me",false],["does insurance cover braces",true]] } ],
+        pairings:[
+          { verdict:"broken",
+            links:[ ["Keyword → ad","pass","Headlines lead with ‘Dental Insurance’."],
+                    ["Ad → landing","fail","Page H1 reads ‘Health Insurance Plans’ — never names dental."],
+                    ["Intent → landing","fail","A dental searcher finds no dental offer."] ],
+            msg:{ heads:["Affordable Dental Insurance","Plans From $19/mo","Get a Quote Today"], desc:"Compare dental plans and enrol online in minutes." },
+            dest:{ url:"acme.com/health-insurance", h1:"Health Insurance Plans", summary:"Hero ‘Health Insurance Plans’; lists health/medical coverage; no mention of dental.", mismatch:"Health", scraped:true },
+            rec:{ brk:"Wrong Page", what:"Repoint this ad to the dedicated dental page (the other ad already uses it).", why:"The page headline says ‘Health’, not ‘dental’ — the scent breaks on arrival." } },
+          { verdict:"aligned",
+            links:[ ["Keyword → ad","pass","Headlines lead with ‘Dental Insurance’."],
+                    ["Ad → landing","pass","Page H1 ‘Dental Insurance Plans’ mirrors the ad."],
+                    ["Intent → landing","pass","Dental quote form is above the fold."] ],
+            msg:{ heads:["Dental Insurance Plans","Coverage From $19/mo","Enrol in Minutes"], desc:"Cleanings, fillings and major work — compare dental plans online." },
+            dest:{ url:"acme.com/dental-insurance", h1:"Dental Insurance Plans", summary:"Hero ‘Dental Insurance Plans’ with a dental-specific quote form and plan tiers.", mismatch:null, scraped:true },
+            rec:{ brk:null, what:"Hold — this ad → dental page is coherent.", why:"All links pass; the page delivers the dental offer." } }
+        ] },
+
+      { ag:"Dental_Broad", cmp:"Acme_Health_SEM", verdict:"review", spend:6140,
+        perf:"$6,140 · 4 conv · $1,535.00 / conv. · thin volume", ctr:"3.3%", cvr:"1.3%",
+        grades:null,                                  /* QS came back summed (>10) → nulled; NO ‘QS 0’ */
+        links:[ ["Search term → keyword","partial","Broad pulls ‘braces cost’, ‘tooth pain’."],
+                ["Keyword → ad","partial","Ad sells insurance; some terms are clinical."],
+                ["Ad → landing","unknown","Landing scrape returned empty."],
+                ["Intent → landing","unknown","Page content unavailable."] ],
+        intent:[ { kw:"dental", mt:"Broad", badge:'<span class="alj-grade alj-grade--below">Ad Below</span> <span class="alj-grade alj-grade--below">CTR Below</span>',
+                   terms:[["dental insurance",false],["braces cost",true],["tooth pain remedies",true]] } ],
+        msg:{ heads:["Dental Insurance Plans","Enrol Online Today"], desc:"Coverage for cleanings, fillings and more." },
+        dest:{ url:"acme.com/health-insurance", h1:null, summary:"", mismatch:null, scraped:false },
+        rec:{ brk:null, what:"Add negatives for clinical terms and re-run once the page scrape succeeds.", why:"Broad is mixing care-intent with coverage-intent; the page could not be verified." } },
+
+      { ag:"Term_Life_Exact", cmp:"Acme_Life_SEM", verdict:"aligned", spend:8420,
+        perf:"$8,420 · 41 conv · $205.37 / conv.", ctr:"4.6%", cvr:"7.9%",
+        grades:{ qs:"9.0", ad:"above", ctr:"above", lp:"above" },
+        links:[ ["Search term → keyword","pass","‘term life insurance quote’ matches."],
+                ["Keyword → ad","pass","Headline reads ‘Term Life Insurance — Free Quote’."],
+                ["Ad → landing","pass","Page H1 ‘Term Life Insurance Quotes’ mirrors the ad."],
+                ["Intent → landing","pass","Quote form above the fold; need met."] ],
+        intent:[ { kw:"term life insurance", mt:"Exact", badge:'<span class="alj-qs">QS 9.0</span> <span class="alj-grade alj-grade--above">Ad Above</span> <span class="alj-grade alj-grade--above">CTR Above</span> <span class="alj-grade alj-grade--above">LP Above</span>',
+                   terms:[["term life insurance quote",false],["20 year term life",false]] } ],
+        msg:{ heads:["Term Life Insurance","Free Quote in 2 Minutes","Coverage From $15/mo"], desc:"Get a personalised term life quote and apply online." },
+        dest:{ url:"acme.com/life/term-life-quote", h1:"Term Life Insurance Quotes", summary:"Hero with an above-the-fold quote form; rates and FAQ below.", mismatch:null, scraped:true },
+        rec:{ brk:null, what:"Hold — the journey is coherent. Scale budget if CPA allows.", why:"All four links pass; the page delivers the quoted offer." } },
+
+      { ag:"Whole_Life_Phrase", cmp:"Acme_Life_SEM", verdict:"broken", spend:4980,
+        perf:"$4,980 · 7 conv · $711.43 / conv.", ctr:"3.3%", cvr:"3.3%",
+        grades:{ qs:"4.0", ad:"below", ctr:"avg", lp:"avg" },
+        links:[ ["Search term → keyword","pass","‘whole life insurance’ matches."],
+                ["Keyword → ad","fail","The ad pushes ‘Term Life’ — wrong product."],
+                ["Ad → landing","partial","Lands on the generic /life hub."],
+                ["Intent → landing","fail","No whole-life offer above the fold."] ],
+        intent:[ { kw:"whole life insurance", mt:"Phrase", badge:'<span class="alj-qs">QS 4.0</span> <span class="alj-grade alj-grade--below">Ad Below</span> <span class="alj-grade alj-grade--avg">CTR Avg</span> <span class="alj-grade alj-grade--avg">LP Avg</span>',
+                   terms:[["whole life insurance rates",false],["permanent life insurance",false]] } ],
+        msg:{ heads:["Life Insurance Made Easy","Term Life From $15/mo"], desc:"Apply online in minutes." },
+        dest:{ url:"acme.com/life", h1:"Life Insurance", summary:"General life-insurance hub; leads with term life.", mismatch:"Term", scraped:true },
+        rec:{ brk:"Ad Miss", what:"Write a whole-life ad (it currently sells term life) and point it at a whole-life page.", why:"The ad promises a different product than the searcher asked for." } }
+    ];
+
+    function gradesStrip(g){
+      if(!g) return '<div class="alj-grades alj-grades--none">No keyword grades for this ad group</div>';
+      var p=[];
+      if(g.qs) p.push('<span class="alj-qs">QS '+esc(g.qs)+'</span>');
+      if(g.ad) p.push('Ad relevance: <span class="alj-grade alj-grade--'+g.ad+'">'+GRADE[g.ad]+'</span>');
+      if(g.ctr) p.push('Expected CTR: <span class="alj-grade alj-grade--'+g.ctr+'">'+GRADE[g.ctr]+'</span>');
+      if(g.lp) p.push('Landing-page exp.: <span class="alj-grade alj-grade--'+g.lp+'">'+GRADE[g.lp]+'</span>');
+      return '<div class="alj-grades"><span class="alj-grades-label">Google relevance:</span> '+p.join(" · ")+'</div>';
+    }
+    function linksStrip(links){
+      return '<div class="alj-links">'+links.map(function(l){
+        return '<div class="alj-link alj-link--'+l[1]+'"><span class="alj-link-name">'+esc(l[0])+'</span>'+
+          '<span class="alj-link-grade">'+(l[1]==="unknown"?"—":l[1].charAt(0).toUpperCase()+l[1].slice(1))+'</span>'+
+          '<span class="alj-link-reason">'+esc(l[2])+'</span></div>';
+      }).join("")+'</div>';
+    }
+    function intentCol(intent){
+      return '<div class="alj-col"><div class="alj-col-label">1 · Intent (keyword → search terms)</div>'+
+        intent.map(function(kw){
+          var terms=kw.terms.map(function(t){ return '<div class="alj-term'+(t[1]?' alj-term--off':'')+'">↳ '+esc(t[0])+'</div>'; }).join("");
+          return '<div class="alj-kw"><div><strong>'+esc(kw.kw)+'</strong> <span class="alj-mt">'+esc(kw.mt)+'</span> '+(kw.badge||"")+'</div>'+terms+'</div>';
+        }).join("")+'</div>';
+    }
+    function messageCol(m, ctr){
+      var metric=ctr?'<div class="alj-col-metric">CTR '+esc(ctr)+'</div>':"";
+      return '<div class="alj-col"><div class="alj-col-label">2 · Message (ad)</div>'+
+        '<div class="alj-ad-headline">'+m.heads.map(esc).join(' <span class="alj-ad-sep">|</span> ')+'</div>'+
+        '<div class="alj-ad-desc">'+esc(m.desc)+'</div>'+metric+'</div>';
+    }
+    function destCol(d, cvr){
+      var miss=d.mismatch?' <span class="alj-mismatch">mismatch: '+esc(d.mismatch)+'</span>':"";
+      var ns=d.scraped?"":' <span class="alj-notscraped">page not scraped → review</span>';
+      var h1=d.h1?'<div class="alj-h1">H1: “'+esc(d.h1)+'”</div>':"";
+      var sm=d.summary?'<div class="alj-dest-summary">'+esc(d.summary)+'</div>':"";
+      var metric=cvr?'<div class="alj-col-metric">CVR '+esc(cvr)+'</div>':"";
+      return '<div class="alj-col"><div class="alj-col-label">3 · Destination (page)</div>'+
+        '<div class="alj-dest-url"><a href="#" onclick="return false">'+esc(d.url)+' ↗</a>'+miss+ns+'</div>'+h1+sm+metric+'</div>';
+    }
+    function pairBadge(ads, pages){
+      var a=ads+(ads===1?" ad":" ads"), p=pages+(pages===1?" landing page":" landing pages");
+      var whole=(ads===1 && pages===1);
+      return '<span class="alj-paircount alj-paircount--'+(whole?"whole":"multi")+'">'+a+' · '+p+'</span>';
+    }
+    function recLine(rec, verdict){
+      var brk=rec.brk?'<span class="alj-break">'+esc(rec.brk)+'</span> ':"";
+      return '<div class="alj-rec alj-rec--'+verdict+'">'+brk+'<span class="alj-rec-label">Fix:</span> '+esc(rec.what)+' <span class="alj-rec-why">'+esc(rec.why)+'</span></div>';
+    }
+    function pairingBlock(p, i, n){
+      return '<div class="alj-pairing alj-pairing--'+p.verdict+'">'+
+        '<div class="alj-pairing-head"><span class="alj-pairing-n">Ad '+(i+1)+' of '+n+'</span>'+
+          '<span class="alj-verdict alj-verdict--'+p.verdict+'">'+VLABEL[p.verdict]+'</span></div>'+
+        linksStrip(p.links)+
+        '<div class="alj-grid alj-grid--pairing">'+messageCol(p.msg)+destCol(p.dest)+'</div>'+
+        recLine(p.rec, p.verdict)+'</div>';
+    }
+    function cardHtml(c){
+      var ads=c.ads||1, landings=c.landings||1;
+      var head='<div class="alj-card-head"><div><strong class="alj-ag">'+esc(c.ag)+'</strong> <span class="alj-cmp">'+esc(c.cmp)+'</span></div>'+
+        '<div><span class="alj-perf">'+esc(c.perf)+'</span>'+pairBadge(ads,landings)+
+          '<span class="alj-verdict alj-verdict--'+c.verdict+'">'+VLABEL[c.verdict]+'</span></div></div>';
+      var body;
+      if (c.pairings && c.pairings.length){
+        /* multi case — shared intent once, then one sub-card per ad → its page */
+        body='<div class="alj-grid alj-grid--shared">'+intentCol(c.intent)+'</div>'+
+          '<div class="alj-pairings">'+c.pairings.map(function(p,i){ return pairingBlock(p,i,c.pairings.length); }).join("")+'</div>';
+      } else {
+        /* common case (1 ad · 1 page) — the original 3-column grid, unchanged */
+        body=linksStrip(c.links)+
+          '<div class="alj-grid">'+intentCol(c.intent)+messageCol(c.msg,c.ctr)+destCol(c.dest,c.cvr)+'</div>'+
+          recLine(c.rec, c.verdict);
+      }
+      return '<article class="alj-card alj-card--'+c.verdict+'">'+head+gradesStrip(c.grades)+body+'</article>';
+    }
+    function summary(list){
+      var by={aligned:0,review:0,broken:0}, total=0, attn=0;
+      CARDS.forEach(function(c){ by[c.verdict]++; total+=c.spend; if(c.verdict!=="aligned") attn+=c.spend; });
+      function money(n){ return "$"+n.toLocaleString("en-US"); }
+      return '<div class="alj-summary">'+
+        '<div class="alj-sum-headline">Of the search journeys analysed, dental and whole-life groups break on the landing page — the single biggest leak is dental keywords arriving on a generic Health page.</div>'+
+        '<div class="alj-sum-stats">'+
+          '<span class="alj-sum-stat"><strong>'+CARDS.length+'</strong> ad-group journeys</span>'+
+          '<span class="alj-sum-stat alj-sum-stat--spend"><strong>'+money(total)+'</strong> total spend</span>'+
+          '<span class="alj-sum-stat alj-sum-stat--aligned"><strong>'+by.aligned+'</strong> aligned</span>'+
+          '<span class="alj-sum-stat alj-sum-stat--review"><strong>'+by.review+'</strong> need review</span>'+
+          '<span class="alj-sum-stat alj-sum-stat--broken"><strong>'+by.broken+'</strong> broken</span>'+
+        '</div>'+
+        '<div class="alj-sum-spend"><strong>'+money(attn)+'</strong> in spend flows through journeys that need attention.</div>'+
+        '</div>';
+    }
+
+    var host=document.getElementById("alj-host"), seg=document.getElementById("seg");
+    var cur="all";
+    function render(){
+      var list=CARDS.filter(function(c){ return cur==="all"||c.verdict===cur; })
+        .slice().sort(function(a,b){ return b.spend-a.spend; });   // flat list, biggest ad spend first
+      host.innerHTML=summary(list)+list.map(cardHtml).join("");
+    }
+    function setActive(v){ [].forEach.call(seg.querySelectorAll("button"),function(b){ var on=b.getAttribute("data-v")===v; b.className="pds-btn pds-btn--sm "+(on?"pds-btn--purple":"pds-btn--outline"); }); }
+    seg.addEventListener("click",function(e){ var b=e.target.closest("button"); if(!b)return; cur=b.getAttribute("data-v"); setActive(cur); render(); });
+    render();
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!-- @dsCard group="Components" viewport="960x380" name="Financial overview cards" subtitle="Revenue → Spend → Return — headline + delta vs prev period + sparkline + two sub-metrics" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- ONE shared dependency, project-local relative path only (no machine paths, no sibling-repo paths) -->
+<link rel="stylesheet" href="../../styles.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400..700&display=swap" rel="stylesheet" />
+<style>
+  /* card-specific layout only — every color/font comes from the design tokens */
+  html, body { margin: 0; background: var(--surface-bg); color: var(--text-body); font-family: var(--font-hanken); }
+  .wrap { padding: 28px; max-width: 940px; }
+  .eyebrow { font-family: var(--font-bricolage); font-weight: 700; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--eyebrow-color); margin: 0 0 4px; }
+  .meta { font-size: 12.5px; color: var(--text-muted); margin: 0 0 20px; }
+  .fin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .fin-head { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+  .fin-sub { display: flex; gap: 28px; width: 100%; margin-top: 2px; }
+  .fin-sub div { display: flex; flex-direction: column; gap: 2px; }
+  .fin-sub .k { font-family: var(--font-hanken); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); }
+  .fin-sub .v { font-family: var(--font-bricolage); font-weight: 700; font-size: 16px; color: var(--text-title); }
+  .flow { text-align: center; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin: 16px 0 0; }
+</style>
+</head>
+<body data-theme="white">
+  <div class="wrap">
+    <p class="eyebrow">Financial overview</p>
+    <p class="meta">Acme Insurance &middot; May 2026 vs April 2026 &middot; sample data</p>
+
+    <div class="fin-grid">
+      <!-- ── REVENUE (money in) — ▲ is good -->
+      <div class="pds-stat-card">
+        <div class="pds-scorecard">
+          <div class="fin-head">
+            <span class="pds-scorecard__label">Revenue</span>
+            <span class="pds-chip pds-chip--pos">&#9650; 18.2%</span>
+          </div>
+          <span class="pds-scorecard__value">$312.4K</span>
+          <div class="pds-scorecard__spark" data-spark="248,256,261,274,289,301,312" data-spark-fallback="rising"></div>
+          <div class="fin-sub">
+            <div><span class="k">AOV</span><span class="v">$148</span></div>
+            <div><span class="k">Conversions</span><span class="v">2,110</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SPEND (money out) — ▲ is neutral -->
+      <div class="pds-stat-card">
+        <div class="pds-scorecard">
+          <div class="fin-head">
+            <span class="pds-scorecard__label">Spend</span>
+            <span class="pds-chip pds-chip--neutral">&#9650; 6.4%</span>
+          </div>
+          <span class="pds-scorecard__value">$86.7K</span>
+          <div class="pds-scorecard__spark" data-spark="79,81,80,83,84,85,86" data-spark-fallback="flat"></div>
+          <div class="fin-sub">
+            <div><span class="k">CPA</span><span class="v">$41.1</span></div>
+            <div><span class="k">CPM</span><span class="v">$12.30</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── RETURN (result) — ▲ is good; the bottom-line metric -->
+      <div class="pds-stat-card">
+        <div class="pds-scorecard">
+          <div class="fin-head">
+            <span class="pds-scorecard__label">Return</span>
+            <span class="pds-chip pds-chip--pos">&#9650; 11.1%</span>
+          </div>
+          <span class="pds-scorecard__value">3.6x</span>
+          <div class="pds-scorecard__spark" data-spark="3.0,3.1,3.2,3.3,3.4,3.5,3.6" data-spark-fallback="rising"></div>
+          <div class="fin-sub">
+            <div><span class="k">Profit</span><span class="v">$225.7K</span></div>
+            <div><span class="k">Margin</span><span class="v">72%</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="flow">Money in &nbsp;&rarr;&nbsp; Money out &nbsp;&rarr;&nbsp; Result</p>
+  </div>
+
+  <!-- chart lib, project-local — draws the smoothed sparklines, auto-inits -->
+  <script src="../../porter-charts.js"></script>
+</body>
+</html>

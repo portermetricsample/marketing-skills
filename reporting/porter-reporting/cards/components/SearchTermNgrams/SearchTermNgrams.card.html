@@ -1,0 +1,117 @@
+<!-- @dsCard group="Components" viewport="1000x640" name="Search-term n-gram mining" subtitle="Waste / winning n-grams from the search-terms report — bucket + blast-radius flag chips, cost heat, Action" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- ONE shared dependency, project-local relative path only -->
+<link rel="stylesheet" href="../../styles.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400..700&display=swap" rel="stylesheet" />
+<style>
+  /* card-specific LAYOUT only — every colour/font is a design TOKEN (var(--…)). No literal hex. */
+  html, body { margin: 0; background: var(--surface-bg); color: var(--text-body); font-family: var(--font-hanken); }
+  .wrap { padding: 28px; }
+  .eyebrow { font-family: var(--font-bricolage); font-weight: 700; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--eyebrow-color); margin: 0 0 4px; }
+  .meta { font-size: 12.5px; color: var(--text-muted); margin: 0 0 18px; }
+  /* the .sng-* hooks the component emits — previewed here with tokens for the design handoff */
+  .sng { width: 100%; border-collapse: collapse; background: var(--surface-card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; font-size: 13px; }
+  .sng thead th { text-align: right; padding: 9px 12px; background: var(--surface-sunken); border-bottom: 1px solid var(--border); font-family: var(--font-hanken); font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--text-muted); }
+  .sng thead th.sng-term { text-align: left; }
+  .sng td { padding: 9px 12px; border-bottom: 1px solid var(--border); text-align: right; white-space: nowrap; color: var(--text-body); font-variant-numeric: tabular-nums; }
+  .sng td.sng-term { text-align: left; }
+  .sng-gram { font-weight: 700; color: var(--text-title); }
+  .sng-nbadge { font-size: 11px; color: var(--text-muted); border: 1px solid var(--border); border-radius: 6px; padding: 1px 6px; }
+  .sng-bucket, .sng-flag, .sng-action { font-size: 11px; font-weight: 700; border-radius: 999px; padding: 2px 8px; display: inline-block; }
+  /* buckets reuse the shared pds chip accents */
+  .sng-bucket--winning { color: var(--good); }
+  .sng-bucket--waste { color: var(--bad); }
+  .sng-bucket--brand { color: var(--text-accent); }
+  .sng-bucket--competitor, .sng-bucket--neutral { color: var(--text-muted); }
+  .sng-bucket { background: var(--surface-sunken); }
+  /* blast-radius warning flag — one caution accent for design to formalize */
+  .sng-flag { background: var(--surface-paper); color: var(--text-strong); border: 1px solid var(--border); }
+  /* action verbs */
+  .sng-action--winning { color: var(--good); } .sng-action--waste { color: var(--bad); }
+  .sng-action--review { color: var(--text-strong); } .sng-action--brand { color: var(--text-accent); }
+  .sng-action--neutral { color: var(--text-muted); }
+  .sng-delta--good { color: var(--good); } .sng-delta--bad { color: var(--bad); }
+  .sng-delta { font-size: 11px; font-weight: 600; }
+  .legend { margin-top: 14px; font-size: 12px; color: var(--text-muted); }
+  .legend b { color: var(--text-body); }
+</style>
+</head>
+<body data-theme="white">
+  <div class="wrap">
+    <p class="eyebrow">Search terms · n-gram mining</p>
+    <p class="meta">Acme Insurance &middot; May 2026 vs April 2026 &middot; sample data &middot; lead-gen (CPA mode)</p>
+
+    <table class="sng">
+      <thead><tr>
+        <th class="sng-term">N-gram</th><th>n</th><th>Terms</th><th>Cost</th><th>Conv</th><th>CTR</th><th>CPA</th><th>Action</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="sng-term"><span class="sng-gram">insurance</span> <span class="sng-bucket sng-bucket--winning">winning</span></td>
+          <td><span class="sng-nbadge">1g</span></td><td>22</td>
+          <td style="background:var(--cf-5)">$1,188 <span class="sng-delta sng-delta--bad">▼9%</span></td>
+          <td>54 <span class="sng-delta sng-delta--good">▲13%</span></td><td>8.11%</td><td>$22</td>
+          <td><span class="sng-action sng-action--winning">Expand</span></td>
+        </tr>
+        <tr>
+          <td class="sng-term"><span class="sng-gram">term life insurance</span> <span class="sng-bucket sng-bucket--winning">winning</span></td>
+          <td><span class="sng-nbadge">3g</span></td><td>4</td>
+          <td style="background:var(--cf-3)">$386 <span class="sng-delta sng-delta--bad">▼9%</span></td>
+          <td>14 <span class="sng-delta sng-delta--good">▲27%</span></td><td>7.70%</td><td>$27.57</td>
+          <td><span class="sng-action sng-action--winning">Expand</span></td>
+        </tr>
+        <tr>
+          <td class="sng-term"><span class="sng-gram">online</span> <span class="sng-bucket sng-bucket--neutral">neutral</span></td>
+          <td><span class="sng-nbadge">1g</span></td><td>2</td>
+          <td style="background:var(--cf-3)">$168</td>
+          <td>4</td><td>7.81%</td><td>$42</td>
+          <td><span class="sng-action sng-action--neutral">—</span></td>
+        </tr>
+        <tr>
+          <td class="sng-term"><span class="sng-gram">cheapest life insurance</span> <span class="sng-bucket sng-bucket--waste">waste</span></td>
+          <td><span class="sng-nbadge">3g</span></td><td>3</td>
+          <td style="background:var(--cf-2)">$173</td>
+          <td>0</td><td>8.02%</td><td>—</td>
+          <td><span class="sng-action sng-action--waste">Negative</span></td>
+        </tr>
+        <tr>
+          <td class="sng-term"><span class="sng-gram">acme</span> <span class="sng-bucket sng-bucket--brand">brand</span></td>
+          <td><span class="sng-nbadge">1g</span></td><td>5</td>
+          <td style="background:var(--cf-2)">$104</td>
+          <td>36 <span class="sng-delta sng-delta--good">▲6%</span></td><td>9.20%</td><td>$2.89</td>
+          <td><span class="sng-action sng-action--brand">Defense</span></td>
+        </tr>
+        <tr>
+          <td class="sng-term"><span class="sng-gram">free</span> <span class="sng-bucket sng-bucket--waste">waste</span></td>
+          <td><span class="sng-nbadge">1g</span></td><td>2</td>
+          <td style="background:var(--cf-1)">$100</td>
+          <td>0</td><td>7.69%</td><td>—</td>
+          <td><span class="sng-action sng-action--waste">Negative</span></td>
+        </tr>
+        <tr>
+          <td class="sng-term"><span class="sng-gram">manulife</span> <span class="sng-bucket sng-bucket--waste">waste</span> <span class="sng-flag sng-flag--competitor">competitor</span></td>
+          <td><span class="sng-nbadge">1g</span></td><td>2</td>
+          <td style="background:var(--cf-1)">$61</td>
+          <td>0</td><td>7.40%</td><td>—</td>
+          <td><span class="sng-action sng-action--review">Review</span></td>
+        </tr>
+        <tr>
+          <td class="sng-term"><span class="sng-gram">whole life</span> <span class="sng-bucket sng-bucket--waste">waste</span> <span class="sng-flag sng-flag--rides-brand">rides-brand</span></td>
+          <td><span class="sng-nbadge">2g</span></td><td>2</td>
+          <td style="background:var(--cf-1)">$52</td>
+          <td>0</td><td>9.50%</td><td>—</td>
+          <td><span class="sng-action sng-action--review">Review</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="legend"><b>Read it:</b> one row per word/phrase across all search terms. <b>winning</b> → expand · <b>waste</b> → add a negative · <b>brand</b> → defense (never cut). A <b>flag</b> (competitor / rides-brand / broad) downgrades the Action to <b>Review</b> — confirm before negativing.</p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!-- @dsCard group="Components" viewport="1120x780" name="Search terms page" subtitle="Keyword cards (terms + tags) + criterion filter bar + dollar insights card — tags fire only when something's off" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- ONE shared dependency, project-local relative path only -->
+<link rel="stylesheet" href="../../styles.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400..700&display=swap" rel="stylesheet" />
+<style>
+  /* card-specific LAYOUT only — every colour/font is a design TOKEN (var(--…)). No literal hex. */
+  html, body { margin: 0; background: var(--surface-bg); color: var(--text-body); font-family: var(--font-hanken); }
+  .wrap { padding: 26px; }
+  .eyebrow { font-family: var(--font-bricolage); font-weight: 700; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--eyebrow-color, var(--text-accent)); margin: 0 0 4px; }
+  .meta { font-size: 12.5px; color: var(--text-muted); margin: 0 0 16px; }
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  .pill { border: 1px solid var(--border); background: var(--surface-card); color: var(--text-body); border-radius: 999px; padding: 6px 14px; font: 600 13px var(--font-hanken); }
+  .pill.active { background: var(--text-accent); color: #fff; border-color: var(--text-accent); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(520px, 1fr)); gap: 14px; align-items: start; }
+  .card { background: var(--surface-card); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; }
+  table { width: 100%; border-collapse: collapse; }
+  thead th { background: var(--surface-sunken); text-align: right; font: 600 11px var(--font-hanken); text-transform: uppercase; letter-spacing: .04em; color: var(--text-muted); padding: 10px 12px; border-bottom: 1px solid var(--border); }
+  thead th.t, thead th.tags { text-align: left; }
+  td { padding: 9px 12px; text-align: right; font-size: 13px; color: var(--text-body); border-bottom: 1px solid var(--border); }
+  td.t { text-align: left; } td.tags { text-align: left; }
+  .kw { font-family: var(--font-bricolage); font-weight: 700; font-size: 15px; color: var(--text-title); margin-right: 8px; }
+  .mt { font: 700 10px var(--font-hanken); text-transform: uppercase; border-radius: 999px; padding: 2px 7px; }
+  .mt-broad { background: var(--badge-yellow-bg, #fbf0cf); color: var(--badge-yellow-fg, #7a5a00); }
+  .mt-exact { background: var(--badge-aqua-bg, #ddf3f4); color: var(--badge-aqua-fg, #0f7d86); }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; background: var(--good); }
+  .term { color: var(--text-title); }
+  tfoot td { background: var(--surface-sunken); font-weight: 700; color: var(--text-title); }
+  .tag { font: 600 11px var(--font-hanken); border-radius: 999px; padding: 2px 8px; }
+  .tag-purple { background: var(--badge-purple-bg, #ece7fd); color: var(--badge-purple-fg, #4b32c4); }
+  .tag-pink { background: var(--badge-pink-bg, #fde6f0); color: var(--badge-pink-fg, #b5246a); }
+  .tag-green { background: #e6f3cd; color: #5e7c00; }
+  /* insights card */
+  .ins { margin-top: 14px; background: var(--surface-card); border: 1px solid var(--border); border-radius: 20px; padding: 20px 22px; }
+  .ins-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; }
+  .ins-title { font-family: var(--font-bricolage); font-weight: 800; font-size: 20px; color: var(--text-title); margin: 0; }
+  .ins-note { color: var(--text-muted); font-size: 12px; margin: 3px 0 0; }
+  .total { text-align: right; }
+  .total b { display: block; font-family: var(--font-bricolage); font-weight: 800; font-size: 32px; color: var(--text-accent); line-height: 1; }
+  .total span { display: block; font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--text-muted); margin-top: 2px; }
+  .irow { display: flex; align-items: center; gap: 14px; padding: 11px 0; border-top: 1px solid var(--border); }
+  .chip { flex: 0 0 104px; text-align: center; font: 700 11px var(--font-hanken); border-radius: 999px; padding: 4px 0; }
+  .imid { flex: 1; } .iaction { font-weight: 700; color: var(--text-title); font-size: 13.5px; } .irat { color: var(--text-muted); font-size: 12.5px; }
+  .imoney { text-align: right; } .idollars { font-family: var(--font-bricolage); font-weight: 800; font-size: 17px; color: var(--text-title); } .isub { font-size: 10.5px; text-transform: uppercase; color: var(--text-muted); }
+  .est { font: 600 9.5px var(--font-hanken); text-transform: uppercase; color: var(--text-muted); border: 1px solid var(--border); border-radius: 4px; padding: 0 4px; }
+</style>
+</head>
+<body data-theme="white">
+  <div class="wrap">
+    <p class="eyebrow">Search terms</p>
+    <p class="meta">Acme Insurance &middot; May 2026 &middot; sample data &middot; tags fire only when something is off</p>
+
+    <div class="filters">
+      <span class="pill active">All</span><span class="pill">Branded</span><span class="pill">Duplicate</span>
+      <span class="pill">Competitor</span><span class="pill">Relevance</span><span class="pill">Opportunity</span>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <table>
+          <thead><tr>
+            <th class="t"><span class="kw">life insurance</span><span class="mt mt-broad">Broad</span></th>
+            <th>Spend</th><th>Conv.</th><th>CPA</th><th class="tags">Tags</th>
+          </tr></thead>
+          <tbody>
+            <tr><td class="t"><span class="dot"></span><span class="term">life insurance online</span></td><td>$420</td><td>14</td><td>$30</td><td class="tags"></td></tr>
+            <tr><td class="t"><span class="dot"></span><span class="term">acme life insurance</span></td><td>$120</td><td>8</td><td>$15</td><td class="tags"><span class="tag tag-purple">Branded</span></td></tr>
+            <tr><td class="t"><span class="dot"></span><span class="term">life insurance jobs</span></td><td>$90</td><td>0</td><td>&mdash;</td><td class="tags"><span class="tag tag-pink">Irrelevant</span></td></tr>
+            <tr><td class="t"><span class="dot"></span><span class="term">how much is life insurance</span></td><td>$60</td><td>0</td><td>&mdash;</td><td class="tags"><span class="tag tag-green">Opportunity</span></td></tr>
+          </tbody>
+          <tfoot><tr><td class="t">Total</td><td>$820</td><td>23</td><td>$35.65</td><td></td></tr></tfoot>
+        </table>
+      </div>
+    </div>
+
+    <section class="ins">
+      <div class="ins-head">
+        <div><p class="eyebrow">Insights</p><h3 class="ins-title">Recommended actions</h3>
+          <p class="ins-note">Generated from the tables above — tagged terms become dollars.</p></div>
+        <div class="total"><b>$586</b><span>monthly potential</span><span style="text-transform:none;letter-spacing:0">$280 measured · $306 est.</span></div>
+      </div>
+      <div class="irow"><span class="chip tag-pink">Irrelevant</span><div class="imid"><span class="iaction">Add 2 terms as negatives</span><br><span class="irat">“life insurance jobs” ($90) and “cheap term life insurance” ($60) drew spend outside the keyword's intent.</span></div><div class="imoney"><span class="idollars">$150</span><br><span class="isub">recoverable</span></div></div>
+      <div class="irow"><span class="chip tag-green">Opportunity</span><div class="imid"><span class="iaction">New keywords · uncovered intents <span class="est">est.</span></span><br><span class="irat">Real demand no keyword owns — build the calculator/comparison they ask for.</span></div><div class="imoney"><span class="idollars">$180</span><br><span class="isub">untapped intents</span></div></div>
+    </section>
+  </div>
+</body>
+</html>

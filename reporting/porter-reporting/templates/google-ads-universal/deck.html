@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Google Ads Executive Deck — Acme Insurance (fictional demo)</title>
+<link rel="stylesheet" href="../../../porter-design/dist/porter-tokens.css">
+<script src="../../../porter-design/dist/porter-charts.js"></script>
+<style>
+  * { box-sizing:border-box; }
+  body { margin:0; background:#0f0726; color:var(--text-body); font-family:var(--font-hanken,'Hanken Grotesk',sans-serif); }
+  .deck { max-width:1060px; margin:0 auto; padding:40px 20px 80px; display:flex; flex-direction:column; gap:30px; }
+  .slide { position:relative; width:100%; aspect-ratio:16/9; border-radius:16px; overflow:hidden; box-shadow:inset 0 0 0 1px var(--card-border); background:#fff; }
+  .pad { position:absolute; inset:0; padding:48px 56px; display:flex; flex-direction:column; }
+  .sn { position:absolute; top:26px; right:32px; font-family:var(--font-hanken); font-size:12px; letter-spacing:.1em; color:var(--text-muted); z-index:2; }
+  .sn.on-dark { color:rgba(255,255,255,.5); }
+  .eyb { font-family:var(--font-hanken); font-weight:600; font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--eyebrow-color); display:block; }
+  .eyb.gold { color:var(--porter-yellow); }
+  .stitle { font-family:var(--font-bricolage); font-weight:800; letter-spacing:-0.02em; line-height:1.02; margin:0; color:var(--text-title); }
+  .body { font-family:var(--font-hanken); line-height:1.5; color:var(--text-body); }
+  .tile { background:var(--surface-sunken,#f6f3fe); border-radius:14px; padding:22px 24px; display:flex; flex-direction:column; justify-content:center; }
+  .tile .k { font-family:var(--font-hanken); font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-muted); }
+  .tile .v { font-family:var(--font-bricolage); font-weight:800; font-size:36px; letter-spacing:-1.5px; margin:8px 0 6px; color:var(--text-title); }
+  .tile .d { font-family:var(--font-hanken); font-weight:700; font-size:13px; }
+  .up { color:var(--delta-up); } .down-good { color:var(--good); } .neu { color:var(--text-muted); }
+  .logo { display:flex; align-items:center; gap:9px; }
+  .logo img { width:28px; height:28px; object-fit:contain; }
+  .logo span { font-family:var(--font-bricolage); font-weight:800; font-size:20px; letter-spacing:-.5px; color:#fff; }
+  .lead { display:flex; align-items:center; gap:18px; }
+  .lead .num { font-family:var(--font-bricolage); font-weight:800; font-size:18px; color:var(--eyebrow-color); width:30px; }
+  .lead .tx { font-family:var(--font-bricolage); font-weight:700; font-size:20px; color:var(--text-title); }
+  .div-line { border-top:1px solid var(--card-border); }
+  .cap { font-family:var(--font-hanken); font-size:12px; font-style:italic; color:var(--text-muted); }
+  table.s { width:100%; border-collapse:collapse; font-family:var(--font-hanken); }
+  table.s th { font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-muted); font-weight:500; text-align:right; padding:0 0 10px 14px; }
+  table.s th:first-child { text-align:left; padding-left:0; }
+  table.s td { font-size:15px; text-align:right; padding:9px 0 9px 14px; color:var(--text-body); border-top:1px solid var(--card-border); }
+  table.s td:first-child { text-align:left; padding-left:0; font-weight:600; color:var(--text-title); }
+  .pill2 { display:inline-flex; align-items:center; font-family:var(--font-hanken); font-weight:700; font-size:11px; letter-spacing:.05em; text-transform:uppercase; padding:4px 10px; border-radius:999px; }
+  .p-ok { background:var(--callout-win-bg); color:var(--callout-win-tx); }
+  .p-bad { background:var(--callout-risk-bg); color:var(--callout-risk-tx); }
+  .p-rev { background:var(--callout-warn-bg); color:var(--callout-warn-tx); }
+  .deckhint { font-family:var(--font-hanken); font-size:12px; color:rgba(255,255,255,.45); text-align:center; }
+</style>
+</head>
+<body data-theme="white">
+<div class="deck">
+  <div class="deckhint">Acme Insurance &middot; Google Ads &middot; Executive deck (16:9) &middot; FICTIONAL DEMO DATA &mdash; 15 slides</div>
+
+  <!-- 01 TITLE -->
+  <div class="slide" style="background:var(--porter-dark);">
+    <span class="sn on-dark">01 / 15</span>
+    <div class="pad" style="justify-content:space-between;">
+      <div class="logo"><img src="../../../porter-design/assets/brand/porter-mark.png" alt="Porter"><span>porter</span></div>
+      <div>
+        <span class="eyb gold" style="margin-bottom:16px;">Monthly Performance Review</span>
+        <h1 class="stitle" style="font-size:54px; color:#fff; max-width:20ch;">Google Ads &mdash; <span style="color:var(--purple-400,#a78bfa);">more leads, lower cost</span></h1>
+      </div>
+      <div style="display:flex; gap:44px; font-family:var(--font-hanken); font-size:13px;">
+        <div><div style="color:rgba(255,255,255,.45); letter-spacing:.06em; margin-bottom:5px;">CLIENT</div><div style="color:#fff;">Acme Insurance</div></div>
+        <div><div style="color:rgba(255,255,255,.45); letter-spacing:.06em; margin-bottom:5px;">PERIOD</div><div style="color:#fff;">May 2026 &middot; vs prev</div></div>
+        <div><div style="color:rgba(255,255,255,.45); letter-spacing:.06em; margin-bottom:5px;">SOURCE</div><div style="color:#fff;">Google Ads &middot; USD</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 AGENDA -->
+  <div class="slide">
+    <span class="sn">02 / 15</span>
+    <div class="pad">
+      <span class="eyb">Agenda</span>
+      <h2 class="stitle" style="font-size:38px; margin:10px 0 26px;">What we&rsquo;ll cover</h2>
+      <div class="div-line">
+        <div class="lead" style="padding:15px 0; border-bottom:1px solid var(--card-border);"><span class="num">01</span><span class="tx">The month in review</span></div>
+        <div class="lead" style="padding:15px 0; border-bottom:1px solid var(--card-border);"><span class="num">02</span><span class="tx">Where it&rsquo;s working &amp; leaking</span></div>
+        <div class="lead" style="padding:15px 0; border-bottom:1px solid var(--card-border);"><span class="num">03</span><span class="tx">Audience, geography &amp; search</span></div>
+        <div class="lead" style="padding:15px 0; border-bottom:1px solid var(--card-border);"><span class="num">04</span><span class="tx">Account health &amp; risks</span></div>
+        <div class="lead" style="padding:15px 0;"><span class="num">05</span><span class="tx">What comes next</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 DIVIDER 01 -->
+  <div class="slide" style="background:var(--porter-purple);">
+    <span class="sn on-dark">03 / 15</span>
+    <div class="pad" style="justify-content:center;">
+      <span style="font-family:var(--font-hanken); font-weight:600; font-size:130px; line-height:.8; color:rgba(255,255,255,.22);">01</span>
+      <span class="eyb" style="color:rgba(255,255,255,.85); margin:16px 0 10px;">Section</span>
+      <h2 class="stitle" style="font-size:54px; color:#fff;">The month in review</h2>
+    </div>
+  </div>
+
+  <!-- 04 KPI OVERVIEW -->
+  <div class="slide">
+    <span class="sn">04 / 15</span>
+    <div class="pad">
+      <span class="eyb">Performance</span>
+      <h2 class="stitle" style="font-size:34px; margin:10px 0 22px;">The month at a glance</h2>
+      <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:14px; flex:1;">
+        <div class="tile"><div class="k">Spend</div><div class="v">$120.0K</div><div class="d neu">&#9650; 10.0%</div></div>
+        <div class="tile"><div class="k">Conversions</div><div class="v">500</div><div class="d up">&#9650; 30.0%</div></div>
+        <div class="tile"><div class="k">CPA</div><div class="v">$240</div><div class="d down-good">&#9660; 15.0% &middot; good</div></div>
+        <div class="tile" style="background:var(--porter-purple);"><div class="k" style="color:rgba(255,255,255,.7);">ROAS &middot; Life</div><div class="v" style="color:#fff;">2.2x</div><div class="d" style="color:var(--accent);">&#9660; 12.0%</div></div>
+        <div class="tile"><div class="k">Conv. rate</div><div class="v">5.0%</div><div class="d up">&#9650; 18.0%</div></div>
+      </div>
+      <p class="cap" style="margin-top:16px;">Lead-gen account: CPA is the headline. Conversion value (ROAS) is tracked on Life campaigns only.</p>
+    </div>
+  </div>
+
+  <!-- 05 BIG TAKEAWAY -->
+  <div class="slide" style="background:var(--porter-dark);">
+    <span class="sn on-dark">05 / 15</span>
+    <div class="pad" style="justify-content:center;">
+      <span class="eyb gold" style="margin-bottom:14px;">The headline</span>
+      <div style="font-family:var(--font-bricolage); font-weight:800; font-size:120px; line-height:.86; letter-spacing:-5px; color:var(--accent);">+30%</div>
+      <p class="body" style="font-size:22px; color:rgba(255,255,255,.8); max-width:40ch; margin:22px 0 0;">more conversions, while cost per lead fell <strong style="color:#fff;">15%</strong> on 10% more spend. The account scaled <em>and</em> got more efficient &mdash; the strongest combination.</p>
+    </div>
+  </div>
+
+  <!-- 06 TREND -->
+  <div class="slide">
+    <span class="sn">06 / 15</span>
+    <div class="pad" style="flex-direction:row; gap:38px;">
+      <div style="flex:1.5; display:flex; flex-direction:column;">
+        <span class="eyb">Trend</span>
+        <h2 class="stitle" style="font-size:28px; margin:10px 0 16px;">Daily spend</h2>
+        <div data-series="3600,4100,4500,4200,4300,3800,3500,3600,2800,3000,4300,3600,3900,3800,3700,3400,2900,3900,3600,3800,4100,3200,2400,4300,4900,4500,4600,4400,4300,2900,4100" data-unit="$" data-series-labels="May 1,May 2,May 3,May 4,May 5,May 6,May 7,May 8,May 9,May 10,May 11,May 12,May 13,May 14,May 15,May 16,May 17,May 18,May 19,May 20,May 21,May 22,May 23,May 24,May 25,May 26,May 27,May 28,May 29,May 30,May 31" style="flex:1; min-height:0;"></div>
+      </div>
+      <div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:16px; border-left:1px solid var(--card-border); padding-left:34px;">
+        <div><div style="font-family:var(--font-hanken); font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-muted); margin-bottom:5px;">Takeaway</div><div style="font-family:var(--font-bricolage); font-weight:700; font-size:19px; line-height:1.25; color:var(--text-title);">Spend stayed steady (~$3.9K/day); conversions rose &mdash; that&rsquo;s where the efficiency came from.</div></div>
+        <div class="body" style="font-size:14.5px;">No single spike carried the month: output improved broadly while daily budget held flat.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 07 DIVIDER 02 -->
+  <div class="slide" style="background:var(--porter-purple);">
+    <span class="sn on-dark">07 / 15</span>
+    <div class="pad" style="justify-content:center;">
+      <span style="font-family:var(--font-hanken); font-weight:600; font-size:130px; line-height:.8; color:rgba(255,255,255,.22);">02</span>
+      <span class="eyb" style="color:rgba(255,255,255,.85); margin:16px 0 10px;">Section</span>
+      <h2 class="stitle" style="font-size:54px; color:#fff;">Working &amp; leaking</h2>
+    </div>
+  </div>
+
+  <!-- 08 CAMPAIGNS -->
+  <div class="slide">
+    <span class="sn">08 / 15</span>
+    <div class="pad">
+      <span class="eyb">Campaigns</span>
+      <h2 class="stitle" style="font-size:28px; margin:10px 0 16px;">Where the money works</h2>
+      <div style="display:flex; gap:34px; flex:1;">
+        <table class="s" style="flex:1.4;">
+          <thead><tr><th>Campaign</th><th>Spend</th><th>Conv.</th><th>CPA</th></tr></thead>
+          <tbody>
+            <tr><td>Life &mdash; Search</td><td>$58,000</td><td>210</td><td>$276</td></tr>
+            <tr><td>Life Broad MOFU</td><td>$16,000</td><td>70</td><td>$229</td></tr>
+            <tr><td>Dental &mdash; Search</td><td>$14,000</td><td>45</td><td>$311</td></tr>
+            <tr><td>Health &mdash; Search</td><td>$12,000</td><td>55</td><td>$218</td></tr>
+            <tr><td>Brand BOFU</td><td>$3,000</td><td>25</td><td>$120</td></tr>
+          </tbody>
+        </table>
+        <div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:14px; border-left:1px solid var(--card-border); padding-left:30px;">
+          <div style="font-family:var(--font-bricolage); font-weight:700; font-size:19px; line-height:1.3; color:var(--text-title);">Brand returns <span style="color:var(--good);">5.3x</span> on ~2% of spend.</div>
+          <p class="body" style="font-size:14px; margin:0;">Life takes 73% of budget at a $276 CPA. Health is the efficient non-brand line ($218); Dental is the laggard ($311).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 09 DEVICE -->
+  <div class="slide">
+    <span class="sn">09 / 15</span>
+    <div class="pad">
+      <span class="eyb">Audience</span>
+      <h2 class="stitle" style="font-size:28px; margin:10px 0 22px;">Desktop converts nearly 2&times; better</h2>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px; flex:1;">
+        <div class="tile" style="justify-content:flex-start;"><div class="k">Mobile &middot; 60% of spend</div><div class="v">$267</div><div class="body" style="font-size:14px;">CVR 4.2% &middot; ROAS 1.9x</div></div>
+        <div class="tile" style="justify-content:flex-start; background:var(--callout-win-bg);"><div class="k" style="color:var(--callout-win-tx);">Desktop &middot; 37% of spend</div><div class="v">$196</div><div class="body" style="font-size:14px;">CVR <strong>6.8%</strong> &middot; ROAS <strong>2.7x</strong></div></div>
+      </div>
+      <p class="cap" style="margin-top:16px;">Opportunity: a positive desktop bid adjustment is the cleanest efficiency lever this month.</p>
+    </div>
+  </div>
+
+  <!-- 10 GEOGRAPHY -->
+  <div class="slide">
+    <span class="sn">10 / 15</span>
+    <div class="pad">
+      <span class="eyb">Geography</span>
+      <h2 class="stitle" style="font-size:28px; margin:10px 0 16px;">California is the engine; two regions to act on</h2>
+      <table class="s" style="flex:1;">
+        <thead><tr><th>Region</th><th>Spend</th><th>CPA</th><th>ROAS</th><th>Read</th></tr></thead>
+        <tbody>
+          <tr><td>California</td><td>$40,000</td><td>$235</td><td>2.3x</td><td style="text-align:right;"><span class="pill2 p-rev">Core</span></td></tr>
+          <tr><td>Ohio</td><td>$5,000</td><td>$130</td><td>4.2x</td><td style="text-align:right;"><span class="pill2 p-ok">Scale</span></td></tr>
+          <tr><td>Nevada</td><td>$3,000</td><td>$410</td><td>1.3x</td><td style="text-align:right;"><span class="pill2 p-bad">High impr / low conv</span></td></tr>
+        </tbody>
+      </table>
+      <p class="cap" style="margin-top:14px;">Nevada burns impressions for almost no conversions &mdash; review targeting. Scale Ohio (4.2x).</p>
+    </div>
+  </div>
+
+  <!-- 11 SEARCH -->
+  <div class="slide">
+    <span class="sn">11 / 15</span>
+    <div class="pad">
+      <span class="eyb">Search &amp; keywords</span>
+      <h2 class="stitle" style="font-size:28px; margin:10px 0 16px;">Protect brand, cut the waste</h2>
+      <div style="display:flex; gap:34px; flex:1;">
+        <table class="s" style="flex:1.4;">
+          <thead><tr><th>Search term</th><th>Spend</th><th>Conv.</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td>acme life insurance (brand)</td><td>$1,200</td><td>40</td><td style="text-align:right;"><span class="pill2 p-ok">Protect</span></td></tr>
+            <tr><td>free insurance quote</td><td>$700</td><td>0</td><td style="text-align:right;"><span class="pill2 p-bad">Exclude</span></td></tr>
+            <tr><td>insurance near me (broad)</td><td>$550</td><td>0</td><td style="text-align:right;"><span class="pill2 p-bad">Exclude</span></td></tr>
+            <tr><td>dental insurance</td><td>$1,300</td><td>1</td><td style="text-align:right;"><span class="pill2 p-bad">Tighten</span></td></tr>
+          </tbody>
+        </table>
+        <div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:14px; border-left:1px solid var(--card-border); padding-left:30px;">
+          <div style="font-family:var(--font-bricolage); font-weight:700; font-size:19px; line-height:1.3; color:var(--text-title);">Brand search converts at a <span style="color:var(--good);">$30 CPA</span>.</div>
+          <p class="body" style="font-size:14px; margin:0;">~$1.3K/mo flows to zero-converting broad terms. Add negatives and tighten match types before scaling spend.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12 DIVIDER 03 -->
+  <div class="slide" style="background:var(--porter-purple);">
+    <span class="sn on-dark">12 / 15</span>
+    <div class="pad" style="justify-content:center;">
+      <span style="font-family:var(--font-hanken); font-weight:600; font-size:130px; line-height:.8; color:rgba(255,255,255,.22);">03</span>
+      <span class="eyb" style="color:rgba(255,255,255,.85); margin:16px 0 10px;">Section</span>
+      <h2 class="stitle" style="font-size:54px; color:#fff;">Health &amp; what&rsquo;s next</h2>
+    </div>
+  </div>
+
+  <!-- 13 AUDIT -->
+  <div class="slide">
+    <span class="sn">13 / 15</span>
+    <div class="pad">
+      <span class="eyb">Account health</span>
+      <h2 class="stitle" style="font-size:28px; margin:10px 0 20px;">Three things to tighten</h2>
+      <div style="display:flex; flex-direction:column; gap:14px; flex:1; justify-content:center;">
+        <div style="display:flex; gap:16px; align-items:flex-start;"><span class="pill2 p-rev" style="flex:none;">Spend</span><p class="body" style="margin:0; font-size:15px;"><strong>Re-weight budget.</strong> Budget-limited winners (Life Broad 3.63x, Health) lose 19&ndash;20% impression share while Brand (5.3x) stays tiny.</p></div>
+        <div style="display:flex; gap:16px; align-items:flex-start;"><span class="pill2 p-rev" style="flex:none;">Tracking</span><p class="body" style="margin:0; font-size:15px;"><strong>Fix conversion setup.</strong> Top value action mis-categorized as &ldquo;Default&rdquo;; Health &amp; Dental pass no value, blocking value-based bidding.</p></div>
+        <div style="display:flex; gap:16px; align-items:flex-start;"><span class="pill2 p-bad" style="flex:none;">Data gap</span><p class="body" style="margin:0; font-size:15px;"><strong>Quality Score unavailable</strong> this month &mdash; a connector data quirk (QS aggregates out of range), not an account problem.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 14 RECOMMENDATIONS -->
+  <div class="slide">
+    <span class="sn">14 / 15</span>
+    <div class="pad">
+      <span class="eyb">Next steps</span>
+      <h2 class="stitle" style="font-size:30px; margin:10px 0 18px;">What we&rsquo;ll do next</h2>
+      <div class="div-line" style="flex:1;">
+        <div class="lead" style="padding:12px 0; border-bottom:1px solid var(--card-border);"><span class="num">01</span><span class="tx" style="font-size:17px;">Add a positive desktop bid adjustment</span></div>
+        <div class="lead" style="padding:12px 0; border-bottom:1px solid var(--card-border);"><span class="num">02</span><span class="tx" style="font-size:17px;">Exclude zero-converting terms, tighten broad match</span></div>
+        <div class="lead" style="padding:12px 0; border-bottom:1px solid var(--card-border);"><span class="num">03</span><span class="tx" style="font-size:17px;">Fund budget-limited winners (Life Broad, Health)</span></div>
+        <div class="lead" style="padding:12px 0; border-bottom:1px solid var(--card-border);"><span class="num">04</span><span class="tx" style="font-size:17px;">Fix conversion categories &amp; extend value tracking</span></div>
+        <div class="lead" style="padding:12px 0;"><span class="num">05</span><span class="tx" style="font-size:17px;">Review Nevada targeting (audience / exclude)</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 15 CLOSING -->
+  <div class="slide" style="background:var(--porter-dark);">
+    <span class="sn on-dark">15 / 15</span>
+    <div class="pad" style="justify-content:space-between;">
+      <div class="logo"><img src="../../../porter-design/assets/brand/porter-mark.png" alt="Porter"><span>porter</span></div>
+      <h2 class="stitle" style="font-size:60px; color:#fff;">Thank you.</h2>
+      <div style="display:flex; justify-content:space-between; align-items:flex-end; font-family:var(--font-hanken); font-size:14px; color:rgba(255,255,255,.7);">
+        <span>Questions? hello@portermetrics.com</span>
+        <span>Acme Insurance &middot; Google Ads &middot; May 2026 &middot; USD</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script>
+  function rescan(){ if(window.PorterCharts) window.PorterCharts.init(); }
+  [0,150,500,1000].forEach(function(t){ setTimeout(rescan,t); });
+</script>
+</body>
+</html>

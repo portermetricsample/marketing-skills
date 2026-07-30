@@ -1,0 +1,660 @@
+<!-- @dsCard group="Components" viewport="1180x760" name="Account contribution — sankey" subtitle="Google Ads account as a contribution sankey — Flow by spend / conversions / conv. value, Depth to Keyword or Search term, hover lights the whole path" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- shared deps: project-local relative paths ONLY (no machine or sibling-repo paths) -->
+<link rel="stylesheet" href="../../styles.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400..700&display=swap" rel="stylesheet" />
+<style>
+  :root { --sk-other: var(--text-muted, #b8bdc9); --sk-ribbon-opacity: .42; }
+  html, body { margin: 0; background: var(--surface-bg); color: var(--text-body); font-family: var(--font-hanken); }
+  .wrap { padding: 28px 30px 40px; }
+  .appbar { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+  .appbar .word { font-weight: 700; color: var(--text-title); }
+  .appbar .acct { color: var(--text-muted); font-size: 13px; }
+  h1 { font-family: var(--font-bricolage), var(--font-hanken); font-size: 24px; margin: 6px 0 4px; color: var(--text-title); }
+  .sub { color: var(--text-muted); margin: 0 0 16px; font-size: 13.5px; max-width: 900px; }
+  .sk-controls.ac-controls { display: flex; gap: 26px; flex-wrap: wrap; align-items: center; margin: 4px 0 16px; }
+  .sk-seg { display: inline-flex; align-items: center; gap: 5px; }
+  .sk-seg-lab { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--text-muted); margin-right: 4px; }
+  .sk-seg-btn { font: inherit; font-size: 12px; font-weight: 600; color: var(--text-body); background: var(--surface-card); border: 1px solid var(--card-border); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+  .sk-seg-btn:hover { background: var(--surface-sunken, #f1f3f4); }
+  .sk-seg-btn.is-active { background: var(--surface-lavender, #e8f0fe); border-color: var(--accent-line, #c6dafc); color: var(--accent); }
+  .sk-host { position: relative; overflow-x: auto; }
+  .sk-svg { display: block; }
+  .sk-colhdr { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; fill: var(--text-muted); }
+  .sk-label { font-size: 11px; fill: var(--text-body); }
+  .sk-ribbon { fill-opacity: var(--sk-ribbon-opacity, .42); transition: fill-opacity .12s ease; }
+  .sk-ribbon.is-dim { fill-opacity: .06; }
+  .sk-ribbon.is-hot { fill-opacity: .74; }
+  .sk-node { transition: opacity .12s ease; }
+  .sk-node.is-dim { opacity: .2; }
+  .pds-tooltip { position: absolute; pointer-events: none; z-index: 5; background: var(--tip-bg); color: var(--tip-text); border: 1px solid var(--tip-border); border-radius: 9px; padding: 9px 11px; font-size: 12px; max-width: 280px; box-shadow: 0 8px 24px rgba(0,0,0,.22); }
+  .sk-tip-h { font-weight: 700; margin-bottom: 5px; }
+  .sk-tip-grid { display: grid; grid-template-columns: auto auto; gap: 2px 14px; }
+  .sk-tip-k { opacity: .72; }
+  .sk-tip-v { text-align: right; font-weight: 600; }
+  .sk-empty { padding: 24px; color: var(--text-muted); font-size: 13px; }
+</style>
+</head>
+<body data-theme="white">
+  <div class="wrap">
+    <div class="appbar"><span class="word">Google Ads</span> <span class="acct">· Acme Insurance · 123-456-7890</span></div>
+    <h1>Account contribution</h1>
+    <p class="sub">The account as a contribution sankey — ribbon width = the metric flowing through each split. <strong>Flow by</strong> switches Spend / Conversions / Conv. value; <strong>Depth</strong> extends to the real search queries. Hover any node to light its whole path; grey ribbons are the honest &ldquo;other / unreported&rdquo; buckets. Fictional demo &middot; synthetic numbers.</p>
+    <div id="host"></div>
+  </div>
+
+<script>
+/* contribution-sankey engine (connector-agnostic) — source: components/charts/contribution-sankey */
+(function (root, factory) {
+  var api = factory();
+  if (typeof module === "object" && module.exports) module.exports = api;
+  if (root) {
+    root.PorterReporting = root.PorterReporting || {};
+    root.PorterReporting.contributionSankey = api;
+  }
+})(typeof self !== "undefined" ? self : this, function () {
+  "use strict";
+
+  /* --------------------------------------------------------------- helpers -- */
+  function num(v) { return Number(v) || 0; }
+  function div(a, b) { return b ? a / b : 0; }
+  function f1(v) { return Math.round(num(v) * 10) / 10; }
+  function group(v, dp) {
+    var k = Math.pow(10, dp), s = (Math.round(num(v) * k) / k).toFixed(dp), p = s.split(".");
+    p[0] = p[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return p.join(".");
+  }
+  function trimZeros(s) { return s.indexOf(".") === -1 ? s : s.replace(/\.?0+$/, ""); }
+
+  // Built-in formats so the engine has ZERO deps. `format` on a metric/row picks one.
+  var FORMATS = {
+    money: function (v) { return "$" + trimZeros(group(v, 2)); },
+    int:   function (v) { return group(Math.round(num(v)), 0); },
+    dec:   function (v) { return trimZeros(group(num(v), 2)); },
+    pct:   function (v) { return (num(v) * 100).toFixed(1) + "%"; },
+    pct2:  function (v) { return (num(v) * 100).toFixed(2) + "%"; },
+    share: function (v) { var x = num(v); if (x <= 1) x *= 100; return x.toFixed(1) + "%"; },
+    ratio: function (v) { return num(v).toFixed(2) + "x"; },
+    raw:   function (v) { return String(v == null ? "" : v); }
+  };
+  function fmt(v, format) { return (FORMATS[format] || FORMATS.dec)(v); }
+
+  function xmlSafe(s) {
+    return String(s == null ? "" : s).replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, "");
+  }
+  function esc(s) {
+    return xmlSafe(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  // Categorical colour for a branch index. Design overrides via --cat-N / --sk-other;
+  // the fallback hexes only keep it legible with no tokens loaded (never the source of truth).
+  var FALLBACK = ["#6701e6", "#2dd4bf", "#fbbf24", "#ec4899", "#3b82f6", "#f97316", "#0ea5e9", "#a855f7"];
+  function colorVar(bi) {
+    if (bi < 0) return "var(--sk-other, #b8bdc9)";            // remainder / "other" branch
+    return "var(--cat-" + ((bi % 8) + 1) + ", " + FALLBACK[bi % 8] + ")";
+  }
+
+  function av(o, metric) { return o && o.values ? num(o.values[metric]) : 0; }
+
+  /* ----------------------------------------------- relations (for hover) ---- */
+  // Filter nodes/links to the active metric + depth, then index parent/children.
+  // Same filter the layout uses, so the hover graph matches what's drawn.
+  function relations(opts, metric, maxLevel) {
+    var cap = (maxLevel == null) ? Infinity : maxLevel;
+    var byId = {}, keep = {};
+    (opts.nodes || []).forEach(function (n) { byId[n.id] = n; });
+    (opts.nodes || []).forEach(function (n) {
+      if (n.level <= cap && (n.level === 0 || av(n, metric) > 0)) keep[n.id] = n;
+    });
+    var links = (opts.links || []).filter(function (l) {
+      return keep[l.source] && keep[l.target] && av(l, metric) > 0;
+    });
+    var children = {}, parentOf = {};
+    links.forEach(function (l) { (children[l.source] = children[l.source] || []).push(l.target); parentOf[l.target] = l.source; });
+    return { keep: keep, links: links, children: children, parentOf: parentOf };
+  }
+
+  // The set of node ids on the full trajectory THROUGH id (ancestors + descendants).
+  function trajectory(id, rel) {
+    var set = {}; set[id] = 1;
+    var p = rel.parentOf[id]; while (p != null) { set[p] = 1; p = rel.parentOf[p]; }
+    var stack = [id];
+    while (stack.length) { var cur = stack.pop(); (rel.children[cur] || []).forEach(function (c) { if (!set[c]) { set[c] = 1; stack.push(c); } }); }
+    return set;
+  }
+
+  /* --------------------------------------------------------------- layout -- */
+  function dimsOf(opts) {
+    var headerH = opts.headerH != null ? opts.headerH : 26;
+    return {
+      width: opts.width || 900, height: opts.height || 560,
+      padL: 10, padR: opts.padR != null ? opts.padR : 174,
+      headerH: headerH, padTop: headerH + 8, padBot: 10,
+      gap: opts.gap || 7, nodeW: opts.nodeW || 14, minNode: 1.4,
+      labelMin: 9, labelMax: opts.labelMax || 34
+    };
+  }
+
+  function layout(opts, dims) {
+    var metric = opts.metric;
+    var rel = relations(opts, metric, opts.maxLevel);
+    var keep = rel.keep, children = rel.children;
+    var ids = Object.keys(keep);
+    if (!ids.length) return null;
+
+    // branch index per node — assigned from the INPUT node order so a branch keeps
+    // the SAME colour across metric / depth switches. "__other__" → remainder (grey).
+    var branchIdx = {}, bcount = 0;
+    (opts.nodes || []).forEach(function (n) {
+      var b = n.branch;
+      if (b != null && b !== "__other__" && !(b in branchIdx)) branchIdx[b] = bcount++;
+    });
+    function bi(n) {
+      var b = n.branch;
+      if (b == null) return -2;                       // no branch → neutral
+      if (b === "__other__") return -1;               // remainder bucket
+      return (b in branchIdx) ? branchIdx[b] : -2;
+    }
+
+    var maxCol = 0; ids.forEach(function (id) { if (keep[id].level > maxCol) maxCol = keep[id].level; });
+
+    // order nodes per column via DFS (children contiguous under parent, value desc) → tidy, low-crossing.
+    var roots = ids.map(function (id) { return keep[id]; }).filter(function (n) { return n.level === 0; })
+      .sort(function (a, b) { return av(b, metric) - av(a, metric); });
+    var colNodes = [];
+    function pushCol(c, id) { (colNodes[c] = colNodes[c] || []).push(id); }
+    function dfs(n) {
+      pushCol(n.level, n.id);
+      (children[n.id] || []).slice().sort(function (a, b) { return av(keep[b], metric) - av(keep[a], metric); })
+        .forEach(function (cid) { dfs(keep[cid]); });
+    }
+    roots.forEach(dfs);
+
+    // uniform scale: the tallest column (value + gaps) fits the target height.
+    var colVal = colNodes.map(function (a) { return a.reduce(function (s, id) { return s + av(keep[id], metric); }, 0); });
+    var maxColVal = Math.max.apply(null, colVal.concat([1]));
+    var maxGap = Math.max.apply(null, colNodes.map(function (a) { return (a.length - 1) * dims.gap; }).concat([0]));
+    var scale = (dims.height - dims.padTop - dims.padBot - maxGap) / maxColVal;
+    if (!isFinite(scale) || scale <= 0) scale = 1;
+
+    // place: stack each column in DFS order, centre columns vertically.
+    var colH = colNodes.map(function (a) {
+      var h = (a.length - 1) * dims.gap;
+      a.forEach(function (id) { h += Math.max(dims.minNode, av(keep[id], metric) * scale); });
+      return h;
+    });
+    var contentH = Math.max.apply(null, colH.concat([0]));
+    var colStep = maxCol > 0 ? (dims.width - dims.padL - dims.padR - dims.nodeW) / maxCol : 0;
+
+    var pos = {};
+    colNodes.forEach(function (a, c) {
+      var y = dims.padTop + (contentH - colH[c]) / 2;
+      var x = dims.padL + c * colStep;
+      a.forEach(function (id) {
+        var n = keep[id], h = Math.max(dims.minNode, av(n, metric) * scale);
+        pos[id] = { x: x, y: y, w: dims.nodeW, h: h, col: c, bi: bi(n), label: n.label, full: n.full || n.label };
+        y += h + dims.gap;
+      });
+    });
+
+    // ribbons: partition each parent's right edge among its children, same (value-desc) order they were stacked.
+    var ribbons = [];
+    Object.keys(children).forEach(function (pid) {
+      if (!pos[pid]) return;
+      var p = pos[pid], sy = p.y;
+      children[pid].slice().filter(function (cid) { return pos[cid]; })
+        .sort(function (a, b) { return av(keep[b], metric) - av(keep[a], metric); })
+        .forEach(function (cid) {
+          var c = pos[cid], w = av(keep[cid], metric) * scale;
+          var sy0 = sy, sy1 = sy + w; sy += w;
+          var x1 = p.x + p.w, x2 = c.x, mx = (x1 + x2) / 2;
+          var d = "M" + f1(x1) + " " + f1(sy0) +
+                  " C" + f1(mx) + " " + f1(sy0) + " " + f1(mx) + " " + f1(c.y) + " " + f1(x2) + " " + f1(c.y) +
+                  " L" + f1(x2) + " " + f1(c.y + c.h) +
+                  " C" + f1(mx) + " " + f1(c.y + c.h) + " " + f1(mx) + " " + f1(sy1) + " " + f1(x1) + " " + f1(sy1) + " Z";
+          ribbons.push({ d: d, bi: c.bi, src: pid, tgt: cid });
+        });
+    });
+
+    return {
+      pos: pos, ribbons: ribbons, maxCol: maxCol, colStep: colStep,
+      height: contentH + dims.padTop + dims.padBot
+    };
+  }
+
+  /* --------------------------------------------------------------- build -- */
+  function controlsHtml(opts) {
+    var metrics = opts.metrics || [];
+    if (opts.metricToggle === false || metrics.length < 2) return "";
+    var btns = metrics.map(function (m) {
+      var on = m.key === opts.metric ? " is-active" : "";
+      return '<button class="sk-seg-btn' + on + '" data-metric="' + esc(m.key) + '">' + esc(m.label) + "</button>";
+    }).join("");
+    return '<div class="sk-controls"><div class="sk-seg"><span class="sk-seg-lab">Flow by</span>' + btns + "</div></div>";
+  }
+
+  function build(opts) {
+    opts = opts || {};
+    if (!opts.nodes || !opts.nodes.length) return '<div class="sk-empty">' + esc((opts && opts.emptyMessage) || "No data") + "</div>";
+    var dims = dimsOf(opts);
+    var L = layout(opts, dims);
+    if (!L) return '<div class="sk-empty">' + esc(opts.emptyMessage || "No data for this selection") + "</div>";
+
+    var cols = opts.columns || [];
+    var hdr = "";
+    for (var c = 0; c <= L.maxCol; c++) {
+      if (!cols[c]) continue;
+      var first = c === 0, cx = dims.padL + c * L.colStep;
+      hdr += '<text class="sk-colhdr" x="' + f1(first ? dims.padL : cx + dims.nodeW / 2) + '" y="' + (dims.headerH - 9) +
+             '" text-anchor="' + (first ? "start" : "middle") + '">' + esc(cols[c]) + "</text>";
+    }
+
+    var ribbons = L.ribbons.map(function (r) {
+      return '<path class="sk-ribbon" data-sk-src="' + esc(r.src) + '" data-sk-tgt="' + esc(r.tgt) +
+             '" d="' + r.d + '" fill="' + colorVar(r.bi) + '"/>';
+    }).join("");
+
+    var nodes = Object.keys(L.pos).map(function (id) {
+      var p = L.pos[id];
+      var rect = '<rect class="sk-node" data-sk-id="' + esc(id) + '" data-sk-level="' + p.col +
+                 '" x="' + f1(p.x) + '" y="' + f1(p.y) + '" width="' + p.w + '" height="' + f1(p.h) + '" rx="1.5" fill="' + colorVar(p.bi) + '"><title>' + esc(p.full) + "</title></rect>";
+      var label = "";
+      if (p.h >= dims.labelMin) {
+        var t = p.label || ""; if (t.length > dims.labelMax) t = t.slice(0, dims.labelMax - 1) + "…";
+        label = '<text class="sk-label" x="' + f1(p.x + p.w + 5) + '" y="' + f1(p.y + p.h / 2) +
+                '" dominant-baseline="middle">' + esc(t) + "</text>";
+      }
+      return rect + label;
+    }).join("");
+
+    var svg = '<svg class="sk-svg" width="' + dims.width + '" height="' + f1(L.height) +
+              '" viewBox="0 0 ' + dims.width + " " + f1(L.height) + '" xmlns="http://www.w3.org/2000/svg" role="img">' +
+              '<g class="sk-ribbons">' + ribbons + "</g><g class=\"sk-nodes\">" + nodes + "</g>" +
+              '<g class="sk-hdrs">' + hdr + "</g></svg>";
+
+    return '<div class="sk-component">' + controlsHtml(opts) +
+           '<div class="sk-host" data-porter-chart="contribution_sankey">' + svg + "</div>" +
+           '<div class="pds-tooltip sk-tip" role="tooltip" hidden></div></div>';
+  }
+
+  /* ----------------------------------------------------------- tooltip -- */
+  function tipRows(opts) {
+    if (opts.tooltipRows && opts.tooltipRows.length) return opts.tooltipRows;
+    return (opts.metrics || []).map(function (m) { return { label: m.label, key: m.key, format: m.format }; });
+  }
+  function tipHtml(node, opts) {
+    var rows = tipRows(opts), out = "";
+    for (var i = 0; i < rows.length; i++) {
+      var r = rows[i];
+      var v = (typeof r.derive === "function") ? r.derive(node.values || {}) : (node.values ? node.values[r.key] : null);
+      var s = (v == null || (r.skipZero && !num(v))) ? "—" : fmt(v, r.format);
+      out += '<span class="sk-tip-k">' + esc(r.label) + '</span><span class="sk-tip-v">' + s + "</span>";
+    }
+    return '<div class="sk-tip-h">' + esc(node.label || node.id) + "</div><div class=\"sk-tip-grid\">" + out + "</div>";
+  }
+
+  /* ---------------------------------------------------------------- mount -- */
+  function mount(target, opts) {
+    opts = opts || {};
+    if (typeof document === "undefined") return null;
+    var el = typeof target === "string" ? document.querySelector(target) : target;
+    if (!el) return null;
+    var metrics = opts.metrics || [];
+    var state = { metric: opts.metric || (metrics[0] && metrics[0].key), maxLevel: opts.maxLevel };
+    var byId = {}; (opts.nodes || []).forEach(function (n) { byId[n.id] = n; });
+    var rt, hostW;
+
+    function render() {
+      hostW = el.clientWidth || opts.width || 900;
+      var o = {}; for (var k in opts) o[k] = opts[k];
+      o.width = hostW; o.metric = state.metric; o.maxLevel = state.maxLevel;
+      el.innerHTML = build(o);
+      wire();
+    }
+
+    function wire() {
+      var btns = el.querySelectorAll(".sk-seg-btn[data-metric]");
+      for (var i = 0; i < btns.length; i++) {
+        btns[i].addEventListener("click", function (e) { state.metric = e.currentTarget.getAttribute("data-metric"); render(); });
+      }
+      var svg = el.querySelector(".sk-svg"), tip = el.querySelector(".sk-tip");
+      if (!svg) return;
+      var rel = relations(opts, state.metric, state.maxLevel);
+
+      function clearHi() {
+        var hot = svg.querySelectorAll(".is-hot,.is-dim");
+        for (var i = 0; i < hot.length; i++) hot[i].classList.remove("is-hot", "is-dim");
+        if (tip) tip.hidden = true;
+      }
+      function focusNode(id, ev) {
+        var set = trajectory(id, rel);
+        var ns = svg.querySelectorAll(".sk-node"), rs = svg.querySelectorAll(".sk-ribbon"), i;
+        for (i = 0; i < ns.length; i++) { var nid = ns[i].getAttribute("data-sk-id"); ns[i].classList.toggle("is-hot", !!set[nid]); ns[i].classList.toggle("is-dim", !set[nid]); }
+        for (i = 0; i < rs.length; i++) { var on = !!(set[rs[i].getAttribute("data-sk-src")] && set[rs[i].getAttribute("data-sk-tgt")]); rs[i].classList.toggle("is-hot", on); rs[i].classList.toggle("is-dim", !on); }
+        if (tip && byId[id]) { tip.innerHTML = tipHtml(byId[id], opts); tip.hidden = false; moveTip(ev); }
+      }
+      function moveTip(ev) {
+        if (!tip || tip.hidden) return;
+        var r = el.getBoundingClientRect();
+        var x = ev.clientX - r.left + 14, y = ev.clientY - r.top + 14;
+        if (x + tip.offsetWidth > el.clientWidth) x = ev.clientX - r.left - tip.offsetWidth - 14;
+        tip.style.left = Math.max(0, x) + "px"; tip.style.top = Math.max(0, y) + "px";
+      }
+      svg.addEventListener("mousemove", function (e) {
+        var t = e.target;
+        if (t && t.classList && t.classList.contains("sk-node")) { focusNode(t.getAttribute("data-sk-id"), e); }
+        else if (t && t.classList && t.classList.contains("sk-ribbon")) { focusNode(t.getAttribute("data-sk-tgt"), e); }
+        else { clearHi(); }
+      });
+      svg.addEventListener("mouseleave", clearHi);
+    }
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(render, 150); });
+    }
+    render();
+    return {
+      el: el, rerender: render,
+      setMetric: function (m) { state.metric = m; render(); },
+      setMaxLevel: function (n) { state.maxLevel = n; render(); },
+      getState: function () { return state; }
+    };
+  }
+
+  /* --------------------------------------------------------------- public -- */
+  return {
+    build: build, mount: mount, layout: layout, fmt: fmt, FORMATS: FORMATS,
+    _internal: { relations: relations, trajectory: trajectory, colorVar: colorVar }
+  };
+});
+</script>
+
+<script>
+/* google-ads use case: account-contribution */
+(function (root, factory) {
+  var engine = (typeof require === "function") ? require("../contribution-sankey") : null;
+  var api = factory(engine, root);
+  if (typeof module === "object" && module.exports) module.exports = api;
+  if (root) {
+    root.PorterReporting = root.PorterReporting || {};
+    root.PorterReporting.accountContribution = api;
+  }
+})(typeof self !== "undefined" ? self : this, function (engineFromRequire, root) {
+  "use strict";
+
+  function engine() { return engineFromRequire || (root && root.PorterReporting && root.PorterReporting.contributionSankey); }
+
+  /* ---- which Google Ads keys we read (override via opts.fields) ------------- */
+  var BASE = {
+    campaign:   "google_ads_campaign_name",
+    channel:    "google_ads_campaign_advertising_channel_type",
+    adGroup:    "google_ads_ad_group_name",
+    keyword:    "google_ads_keyword_info_text",
+    match:      "google_ads_keyword_info_match_type",
+    term:       "google_ads_search_term",
+    cost:       "google_ads_cost_micros",
+    conv:       "google_ads_conversions",
+    value:      "google_ads_conversions_value"
+  };
+  var SEP = "\u241F";
+
+  /* ---- helpers ------------------------------------------------------------- */
+  function num(v) { return Number(v) || 0; }
+  function m3() { return { cost: 0, conv: 0, value: 0 }; }
+  function addRow(acc, r, F) { acc.cost += num(r[F.cost]); acc.conv += num(r[F.conv]); acc.value += num(r[F.value]); return acc; }
+  function addM(a, b) { a.cost += b.cost; a.conv += b.conv; a.value += b.value; return a; }
+  function sub(a, b) { return { cost: Math.max(0, a.cost - b.cost), conv: Math.max(0, a.conv - b.conv), value: Math.max(0, a.value - b.value) }; }
+  function positive(m) { return m.cost > 0 || m.conv > 0 || m.value > 0; }
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+
+  var DEFAULT_METRICS = [
+    { key: "cost",  label: "Spend",       format: "money" },
+    { key: "conv",  label: "Conversions", format: "dec"   },
+    { key: "value", label: "Conv. value", format: "money" }
+  ];
+  var TOOLTIP_ROWS = [
+    { label: "Ad spend",    key: "cost",  format: "money" },
+    { label: "Conversions", key: "conv",  format: "dec"   },
+    { label: "Conv. value", key: "value", format: "money" },
+    { label: "CPA", derive: function (v) { return v.conv ? v.cost / v.conv : 0; }, format: "money", skipZero: true }
+  ];
+
+  /* ---- build the generic { columns, nodes, links } ------------------------- */
+  function buildData(opts) {
+    opts = opts || {};
+    var F = opts.fields || BASE;
+    var topTerms = opts.topTerms || 6;
+    var rootLabel = (opts.account && opts.account.name) || "Search campaigns";
+
+    var adGroupRows = opts.adGroups || [];
+    var keywordRows = opts.keywords || [];
+    var termRows = opts.searchTerms || [];
+
+    var nodes = [], links = [];
+    var acc = m3();
+
+    // ---- level 0/1/2 from ad-group totals (full spend) ----
+    var campM = {};         // campaign -> metrics
+    var agM = {};           // campaign|ag -> metrics
+    adGroupRows.forEach(function (r) {
+      var camp = r[F.campaign] || "(none)", ag = r[F.adGroup] || "(none)";
+      var agKey = camp + SEP + ag;
+      addRow(acc, r, F);
+      addRow(campM[camp] || (campM[camp] = m3()), r, F);
+      addRow(agM[agKey] || (agM[agKey] = m3()), r, F);
+    });
+
+    nodes.push({ id: "root", level: 0, label: rootLabel, values: acc });
+    Object.keys(campM).forEach(function (camp) {
+      nodes.push({ id: "c" + SEP + camp, level: 1, label: camp, branch: camp, values: campM[camp] });
+      links.push({ source: "root", target: "c" + SEP + camp, values: campM[camp] });
+    });
+    Object.keys(agM).forEach(function (agKey) {
+      var camp = agKey.split(SEP)[0], ag = agKey.split(SEP)[1];
+      nodes.push({ id: "a" + SEP + agKey, level: 2, label: ag, branch: camp, values: agM[agKey] });
+      links.push({ source: "c" + SEP + camp, target: "a" + SEP + agKey, values: agM[agKey] });
+    });
+
+    // ---- level 3: keywords (full keyword spend) + "other keywords" remainder ----
+    var kwM = {};           // campaign|ag|kw -> metrics
+    var kwMatch = {};       // campaign|ag|kw -> match type
+    var kwSumByAg = {};     // campaign|ag -> summed keyword metrics
+    keywordRows.forEach(function (r) {
+      var camp = r[F.campaign] || "(none)", ag = r[F.adGroup] || "(none)", kw = r[F.keyword] || "(none)";
+      var kwKey = camp + SEP + ag + SEP + kw, agKey = camp + SEP + ag;
+      addRow(kwM[kwKey] || (kwM[kwKey] = m3()), r, F);
+      kwMatch[kwKey] = r[F.match] || "";
+      addRow(kwSumByAg[agKey] || (kwSumByAg[agKey] = m3()), r, F);
+    });
+    Object.keys(kwM).forEach(function (kwKey) {
+      var parts = kwKey.split(SEP), camp = parts[0], ag = parts[1], kw = parts[2];
+      if (!agM[camp + SEP + ag]) return;                              // no parent ad group → skip
+      var lbl = kwMatch[kwKey] ? (kw + "  ·  " + String(kwMatch[kwKey]).toLowerCase()) : kw;
+      nodes.push({ id: "k" + SEP + kwKey, level: 3, label: lbl, full: kw, branch: camp, values: kwM[kwKey] });
+      links.push({ source: "a" + SEP + camp + SEP + ag, target: "k" + SEP + kwKey, values: kwM[kwKey] });
+    });
+    Object.keys(agM).forEach(function (agKey) {
+      var rem = sub(agM[agKey], kwSumByAg[agKey] || m3());
+      if (!positive(rem)) return;
+      var camp = agKey.split(SEP)[0];
+      nodes.push({ id: "ko" + SEP + agKey, level: 3, label: "other keywords", branch: "__other__", values: rem });
+      links.push({ source: "a" + SEP + agKey, target: "ko" + SEP + agKey, values: rem });
+    });
+
+    // ---- level 4: search terms (top-N per keyword) + "other / unreported" remainder ----
+    var byKw = {};          // keyword key -> [{label, m}]
+    var stSumByKw = {};     // keyword key -> summed shown+all term metrics
+    termRows.forEach(function (r) {
+      var camp = r[F.campaign] || "(none)", ag = r[F.adGroup] || "(none)", kw = r[F.keyword] || "(none)";
+      var kwKey = camp + SEP + ag + SEP + kw;
+      if (!kwM[kwKey]) return;                                        // term's keyword not in keyword table → skip
+      (byKw[kwKey] = byKw[kwKey] || []).push({ label: r[F.term] || "(empty)", m: addRow(m3(), r, F) });
+    });
+    Object.keys(byKw).forEach(function (kwKey) {
+      var parts = kwKey.split(SEP), camp = parts[0];
+      var arr = byKw[kwKey].sort(function (a, b) { return b.m.cost - a.m.cost; });
+      var shown = m3();
+      arr.slice(0, topTerms).forEach(function (t, i) {
+        addM(shown, t.m);
+        nodes.push({ id: "s" + SEP + kwKey + SEP + i, level: 4, label: t.label, branch: camp, values: t.m });
+        links.push({ source: "k" + SEP + kwKey, target: "s" + SEP + kwKey + SEP + i, values: t.m });
+      });
+      // remainder = keyword full total − shown reported terms (long tail + privacy-hidden)
+      var rem = sub(kwM[kwKey], shown);
+      if (positive(rem)) {
+        nodes.push({ id: "so" + SEP + kwKey, level: 4, label: "other / unreported searches", branch: "__other__", values: rem });
+        links.push({ source: "k" + SEP + kwKey, target: "so" + SEP + kwKey, values: rem });
+      }
+    });
+
+    return {
+      columns: ["Campaign type", "Campaign", "Ad group", "Keyword", "Search term"],
+      metrics: opts.metrics || DEFAULT_METRICS,
+      nodes: nodes, links: links
+    };
+  }
+
+  /* ---- mount: Flow-by + Depth controls + the sankey ------------------------ */
+  function scaffold(metrics) {
+    var mb = metrics.map(function (m, i) {
+      return '<button class="sk-seg-btn' + (i === 0 ? " is-active" : "") + '" data-metric="' + esc(m.key) + '">' + esc(m.label) + "</button>";
+    }).join("");
+    return '<div class="sk-component ac-component">' +
+      '<div class="sk-controls ac-controls">' +
+        '<div class="sk-seg"><span class="sk-seg-lab">Flow by</span>' + mb + "</div>" +
+        '<div class="sk-seg ac-depth"><span class="sk-seg-lab">Depth</span>' +
+          '<button class="sk-seg-btn is-active" data-depth="3">→ Keyword</button>' +
+          '<button class="sk-seg-btn" data-depth="4">→ Search term</button>' +
+        "</div>" +
+      "</div>" +
+      '<div class="ac-host sk-host" data-porter-chart="account_contribution"></div>' +
+    "</div>";
+  }
+
+  function mount(target, opts) {
+    opts = opts || {};
+    if (typeof document === "undefined") return null;
+    var el = typeof target === "string" ? document.querySelector(target) : target;
+    if (!el) return null;
+    var SK = engine();
+    if (!SK) { el.innerHTML = '<div class="sk-empty">contribution-sankey engine not loaded</div>'; return null; }
+
+    var data = buildData(opts);
+    if (!data.nodes.length) { el.innerHTML = '<div class="sk-empty">' + esc(opts.emptyMessage || "No data for this account") + "</div>"; return null; }
+
+    var metrics = data.metrics;
+    el.innerHTML = scaffold(metrics);
+    var host = el.querySelector(".ac-host");
+    var metricBtns = el.querySelectorAll(".sk-seg-btn[data-metric]");
+    var depthBtns = el.querySelectorAll(".sk-seg-btn[data-depth]");
+
+    var handle = SK.mount(host, {
+      columns: data.columns, metrics: metrics, nodes: data.nodes, links: data.links,
+      metric: opts.metric || metrics[0].key,
+      maxLevel: opts.depth === 5 ? 4 : 3,
+      metricToggle: false,                       // this use case owns the control bar
+      tooltipRows: TOOLTIP_ROWS,
+      height: opts.height || 560,
+      emptyMessage: opts.emptyMessage
+    });
+
+    function setActive(list, attr, val) {
+      for (var i = 0; i < list.length; i++) list[i].classList.toggle("is-active", list[i].getAttribute(attr) === String(val));
+    }
+    for (var i = 0; i < metricBtns.length; i++) metricBtns[i].addEventListener("click", function (e) {
+      var k = e.currentTarget.getAttribute("data-metric"); setActive(metricBtns, "data-metric", k); handle.setMetric(k);
+    });
+    for (var j = 0; j < depthBtns.length; j++) depthBtns[j].addEventListener("click", function (e) {
+      var d = e.currentTarget.getAttribute("data-depth"); setActive(depthBtns, "data-depth", d); handle.setMaxLevel(+d);
+    });
+    setActive(metricBtns, "data-metric", opts.metric || metrics[0].key);
+    setActive(depthBtns, "data-depth", opts.depth === 5 ? 4 : 3);
+
+    return { el: el, handle: handle, data: data, rerender: function () { handle.rerender(); } };
+  }
+
+  return { buildData: buildData, mount: mount, BASE: BASE, DEFAULT_METRICS: DEFAULT_METRICS };
+});
+</script>
+
+<script>
+/* fictional Acme data (synthetic) */
+(function (root, factory) {
+  var data = factory();
+  if (typeof module === "object" && module.exports) module.exports = data;
+  if (root) { root.PorterReportingExamples = root.PorterReportingExamples || {}; root.PorterReportingExamples.accountContribution = data; }
+})(typeof self !== "undefined" ? self : this, function () {
+  "use strict";
+
+  function ag(c, a, cost, conv, val) {
+    return { google_ads_campaign_name: c, google_ads_campaign_advertising_channel_type: "SEARCH",
+      google_ads_ad_group_name: a, google_ads_cost_micros: cost, google_ads_conversions: conv, google_ads_conversions_value: val };
+  }
+  function kw(c, a, k, m, cost, conv, val) {
+    return { google_ads_campaign_name: c, google_ads_ad_group_name: a, google_ads_keyword_info_text: k,
+      google_ads_keyword_info_match_type: m, google_ads_cost_micros: cost, google_ads_conversions: conv, google_ads_conversions_value: val };
+  }
+  function st(c, a, k, t, cost, conv, val) {
+    return { google_ads_campaign_name: c, google_ads_ad_group_name: a, google_ads_keyword_info_text: k,
+      google_ads_search_term: t, google_ads_cost_micros: cost, google_ads_conversions: conv, google_ads_conversions_value: val };
+  }
+
+  var BR = "Acme_Search_Brand", TL = "Acme_Search_TermLife", CO = "Acme_Search_Competitor";
+
+  return {
+    account: { id: "1234567890-1234567890", name: "Search campaigns" },
+
+    adGroups: [
+      ag(BR, "Brand Core",       450, 29, 5800),
+      ag(TL, "Term Quotes",      440, 15, 3000),
+      ag(TL, "Whole Life",       160,  5, 1000),
+      ag(CO, "Competitor Names", 250,  4,  600)
+    ],
+
+    keywords: [
+      kw(BR, "Brand Core",       "acme insurance",  "EXACT",  300, 20, 4000),
+      kw(BR, "Brand Core",       "acme life quote", "PHRASE", 150,  9, 1800),
+      kw(TL, "Term Quotes",      "term life quote", "BROAD",  220,  8, 1600),
+      kw(TL, "Term Quotes",      "buy term life",   "BROAD",  180,  6, 1200),
+      kw(TL, "Whole Life",       "whole life cost", "BROAD",  160,  5, 1000),
+      kw(CO, "Competitor Names", "competitor name", "BROAD",  200,  4,  600)
+      // Term Quotes keywords sum 400 < 440 → "other keywords" 40 / 1 / 200
+      // Competitor Names keyword sum 200 < 250 → "other keywords" 50 / 0 / 0
+    ],
+
+    searchTerms: [
+      st(BR, "Brand Core", "acme insurance",  "acme insurance",            250, 17, 3400),
+      st(BR, "Brand Core", "acme insurance",  "acme insurance reviews",     30,  2,  400),
+      st(BR, "Brand Core", "acme life quote", "acme life quote",           120,  7, 1500),
+      st(BR, "Brand Core", "acme life quote", "acme term quote",            20,  1,  200),
+      st(TL, "Term Quotes", "term life quote", "term life quote online",   150,  5, 1000),
+      st(TL, "Term Quotes", "term life quote", "cheap term life quote",     50,  2,  400),
+      st(TL, "Term Quotes", "buy term life",   "buy term life insurance",  130,  4,  900),
+      st(TL, "Whole Life",  "whole life cost", "whole life insurance cost",110,  4,  800),
+      st(CO, "Competitor Names", "competitor name", "competitorco",        120,  3,  400),
+      st(CO, "Competitor Names", "competitor name", "competitorco reviews", 40,  1,  200)
+      // each keyword's terms sum < its full spend → "other / unreported searches" absorbs the gap
+    ]
+  };
+});
+</script>
+
+<script>
+  (function () {
+    var D = (window.PorterReportingExamples && window.PorterReportingExamples.accountContribution) || {};
+    window.PorterReporting.accountContribution.mount("#host", {
+      account: D.account, adGroups: D.adGroups, keywords: D.keywords, searchTerms: D.searchTerms,
+      metric: "cost", depth: 4, height: 470
+    });
+  })();
+</script>
+</body>
+</html>

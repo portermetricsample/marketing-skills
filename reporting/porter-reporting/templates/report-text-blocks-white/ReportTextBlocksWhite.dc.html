@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../_shared/support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Report Text Blocks — Blanco (Light)" description="Same editorial text blocks set in the Bricolage Grotesque + Hanken Grotesk pairing — Bricolage for titles & headings, Hanken for body. Light document/slide layouts." -->
+<helmet>
+<script src="./ds-base.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #ffffff; }
+  .blk { background:#fff; border-radius:20px; padding:40px 44px; box-shadow:inset 0 0 0 1px var(--neutral-200); }
+  .lbl { font-family:var(--font-hanken); font-weight:500; font-size:12px; letter-spacing:1.5px; text-transform:uppercase; color:var(--porter-purple); display:block; }
+  .body { font-family:var(--font-hanken); font-size:17px; line-height:1.65; color:#3a3550; }
+  .body p { margin:0 0 16px; }
+  .body p:last-child { margin-bottom:0; }
+  .body strong, .ttx strong { font-weight:700; color:var(--porter-dark); }
+  .u { text-decoration:underline; text-decoration-color:var(--aqua-300); text-decoration-thickness:3px; text-underline-offset:3px; font-weight:600; color:var(--porter-dark); }
+  .hl { background:linear-gradient(transparent 56%, #e2fba6 56%); padding:0 2px; font-weight:600; color:var(--porter-dark); }
+  .chip { display:inline-flex; align-items:center; gap:3px; font-family:var(--font-hanken); font-weight:700; font-size:0.78em; letter-spacing:.01em; padding:2px 9px; border-radius:999px; line-height:1.5; vertical-align:1px; white-space:nowrap; }
+  .chip .ar { font-size:0.78em; }
+  .chip-pos { color:#5c8a00; background:#eef7d0; }
+  .chip-neg { color:var(--pink-700); background:var(--pink-100); }
+  .chip-neutral { color:var(--porter-purple); background:var(--purple-100); }
+  .chip-brand { color:#fff; background:var(--porter-purple); }
+  @media print { body { background:#fff; } }
+</style>
+</helmet>
+
+<div style="padding:40px 20px; font-family:var(--font-bricolage); color:var(--porter-dark);">
+  <div style="max-width:840px; margin:0 auto; display:flex; flex-direction:column; gap:20px;">
+
+    <section style="background:#1a0340; border-radius:30px; padding:40px 40px 34px; color:#FFF8EC; position:relative; overflow:hidden; font-family:'Hanken Grotesk',sans-serif;">
+  <div style="position:absolute; right:-70px; top:-70px; width:240px; height:240px; border-radius:50%; background:#8b5cf6; opacity:.5;"></div>
+  <div style="position:absolute; right:46px; bottom:-40px; width:120px; height:120px; border-radius:50%; background:#CDFB52; opacity:.92;"></div>
+  <div style="position:relative;">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <span style="display:inline-flex; width:26px; height:26px; border-radius:8px; background:#CDFB52; color:#1a0340; font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:16px; align-items:center; justify-content:center;">N</span>
+      <span style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; letter-spacing:.04em; font-size:15px;">Northlight</span>
+      <span style="opacity:.55; font-size:13px; margin-left:2px;">× Google Ads</span>
+    </div>
+    <div style="display:inline-block; margin-top:30px; background:#CDFB52; color:#1a0340; font-weight:700; font-size:12.5px; letter-spacing:.08em; text-transform:uppercase; padding:6px 12px; border-radius:999px; white-space:nowrap;">Monthly performance recap</div>
+    <h1 style="font-family:'Bricolage Grotesque',sans-serif; font-size:50px; line-height:1.02; font-weight:800; letter-spacing:-0.02em; margin:18px 0 0; max-width:9.4ch; color:#FFF8EC;">Your Google&nbsp;Ads, working harder.</h1>
+    <p style="margin:16px 0 0; font-size:16.5px; line-height:1.5; max-width:46ch; color:#cdc4ee;">A plain-English look at where your budget went in May — what moved, what we changed, and where we're taking it next.</p>
+    <div style="display:flex; flex-wrap:wrap; gap:34px; margin-top:30px; padding-top:22px; border-top:1px solid rgba(255,248,236,.22);">
+      <div><div style="font-size:11.5px; letter-spacing:.09em; text-transform:uppercase; color:#b9aee0;">Prepared for</div><div style="font-family:'Bricolage Grotesque',sans-serif; font-weight:600; font-size:17px; margin-top:4px; color:#FFF8EC;">Maria Delgado · Northsale&nbsp;Co.</div></div>
+      <div><div style="font-size:11.5px; letter-spacing:.09em; text-transform:uppercase; color:#b9aee0;">Reporting period</div><div style="font-family:'Bricolage Grotesque',sans-serif; font-weight:600; font-size:17px; margin-top:4px; color:#FFF8EC;">May 1 – 31, 2026</div></div>
+    </div>
+  </div>
+</section>
+
+    <!-- ===== TITLE SLIDE / COVER ===== -->
+    <header style="background:var(--porter-dark); color:#fff; padding:56px 56px 48px; border-radius:24px;">
+      <div style="display:flex; align-items:center; gap:9px; margin-bottom:48px;">
+        <img src="../../../porter-design/assets/brand/porter-mark.png" alt="Porter" style="width:28px; height:28px; object-fit:contain;" />
+        <span style="font-weight:900; font-size:19px; letter-spacing:-0.8px;">porter</span>
+      </div>
+      <span style="font-family:var(--font-hanken); font-weight:500; font-size:13px; letter-spacing:2px; text-transform:uppercase; color:var(--porter-yellow); display:block; margin-bottom:18px;">Q1 Performance Review</span>
+      <h1 style="font-weight:900; font-size:64px; line-height:0.95; letter-spacing:-2.5px; margin:0; max-width:14ch;">Marketing results &amp; <span style="color:var(--purple-500);">what comes next</span></h1>
+      <p style="font-family:var(--font-hanken); font-size:18px; line-height:1.55; color:rgba(255,255,255,0.66); max-width:52ch; margin:24px 0 0;">A read on the quarter — where spend went, what it returned, and the three bets we're making for Q2.</p>
+      <div style="display:flex; gap:40px; margin-top:44px; padding-top:24px; border-top:1px solid rgba(255,255,255,0.14); font-family:var(--font-hanken); font-size:12px;">
+        <div><div style="color:rgba(255,255,255,0.45); letter-spacing:1px; margin-bottom:5px;">CLIENT</div><div style="color:#fff; font-size:13px;">Northwind Co.</div></div>
+        <div><div style="color:rgba(255,255,255,0.45); letter-spacing:1px; margin-bottom:5px;">PERIOD</div><div style="color:#fff; font-size:13px;">Jan&ndash;Mar 2025</div></div>
+        <div><div style="color:rgba(255,255,255,0.45); letter-spacing:1px; margin-bottom:5px;">PREPARED BY</div><div style="color:#fff; font-size:13px;">Porter Metrics</div></div>
+      </div>
+    </header>
+
+    <!-- ===== SECTION DIVIDER ===== -->
+    <section style="background:var(--porter-purple); color:#fff; border-radius:20px; padding:44px 48px; display:flex; align-items:baseline; gap:28px;">
+      <span style="font-family:var(--font-hanken); font-size:15px; letter-spacing:1px; color:rgba(255,255,255,0.55); font-weight:500;">01</span>
+      <div>
+        <span style="font-family:var(--font-hanken); font-weight:500; font-size:12px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.7); display:block; margin-bottom:10px;">Section</span>
+        <h2 style="font-weight:800; font-size:44px; line-height:1; letter-spacing:-1.5px; margin:0;">The quarter in review</h2>
+      </div>
+    </section>
+
+    <!-- ===== SECTION DIVIDERS — COLOR SET ===== -->
+    <section style="background:var(--porter-yellow); color:var(--porter-dark); border-radius:20px; padding:44px 48px; display:flex; align-items:baseline; gap:28px;">
+      <span style="font-family:var(--font-hanken); font-size:15px; letter-spacing:1px; color:rgba(26,3,64,0.45); font-weight:500;">02</span>
+      <div>
+        <span style="font-family:var(--font-hanken); font-weight:500; font-size:12px; letter-spacing:2px; text-transform:uppercase; color:rgba(26,3,64,0.6); display:block; margin-bottom:10px;">Section</span>
+        <h2 style="font-weight:800; font-size:44px; line-height:1; letter-spacing:-1.5px; margin:0;">Channel performance</h2>
+      </div>
+    </section>
+    <section style="background:var(--porter-pink); color:#fff; border-radius:20px; padding:44px 48px; display:flex; align-items:baseline; gap:28px;">
+      <span style="font-family:var(--font-hanken); font-size:15px; letter-spacing:1px; color:rgba(255,255,255,0.55); font-weight:500;">03</span>
+      <div>
+        <span style="font-family:var(--font-hanken); font-weight:500; font-size:12px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.75); display:block; margin-bottom:10px;">Section</span>
+        <h2 style="font-weight:800; font-size:44px; line-height:1; letter-spacing:-1.5px; margin:0;">Creative &amp; messaging</h2>
+      </div>
+    </section>
+    <section style="background:var(--lime-400); color:var(--porter-dark); border-radius:20px; padding:44px 48px; display:flex; align-items:baseline; gap:28px;">
+      <span style="font-family:var(--font-hanken); font-size:15px; letter-spacing:1px; color:rgba(26,3,64,0.4); font-weight:500;">04</span>
+      <div>
+        <span style="font-family:var(--font-hanken); font-weight:500; font-size:12px; letter-spacing:2px; text-transform:uppercase; color:rgba(26,3,64,0.55); display:block; margin-bottom:10px;">Section</span>
+        <h2 style="font-weight:800; font-size:44px; line-height:1; letter-spacing:-1.5px; margin:0;">Audience &amp; funnel</h2>
+      </div>
+    </section>
+    <section style="background:var(--porter-aqua); color:var(--porter-dark); border-radius:20px; padding:44px 48px; display:flex; align-items:baseline; gap:28px;">
+      <span style="font-family:var(--font-hanken); font-size:15px; letter-spacing:1px; color:rgba(26,3,64,0.4); font-weight:500;">05</span>
+      <div>
+        <span style="font-family:var(--font-hanken); font-weight:500; font-size:12px; letter-spacing:2px; text-transform:uppercase; color:rgba(26,3,64,0.55); display:block; margin-bottom:10px;">Section</span>
+        <h2 style="font-weight:800; font-size:44px; line-height:1; letter-spacing:-1.5px; margin:0;">What comes next</h2>
+      </div>
+    </section>
+
+    <!-- ===== TITLE + STANDFIRST ===== -->
+    <section class="blk">
+      <span class="lbl" style="margin-bottom:14px;">Overview</span>
+      <h2 style="font-weight:800; font-size:36px; line-height:1.05; letter-spacing:-1.2px; margin:0 0 18px; max-width:20ch;">Spend held flat while revenue climbed 14%</h2>
+      <p style="font-family:var(--font-hanken); font-size:21px; line-height:1.5; color:#4a4560; font-weight:500; margin:0; max-width:60ch;">The efficiency story of Q1: we kept budget steady across channels and let creative testing do the heavy lifting. ROAS rose from 3.5x to 4.1x.</p>
+    </section>
+
+    <!-- ===== BODY COPY (single + two-column) ===== -->
+    <section class="blk">
+      <h3 style="font-weight:700; font-size:22px; letter-spacing:-0.4px; margin:0 0 16px;">What drove the change</h3>
+      <div class="body">
+        <p>Three shifts compounded over the quarter. First, we consolidated spend into the two channels with the strongest incremental return and paused four underperforming campaigns by week three.</p>
+        <p>Second, the creative refresh launched in February outperformed the prior library on every format, with video carrying the largest lift. Third, a tighter audience strategy lowered CPA without sacrificing volume.</p>
+      </div>
+      <div style="height:1px; background:var(--neutral-200); margin:28px 0;"></div>
+      <div class="body" style="columns:2; column-gap:40px;">
+        <p>For longer narrative passages, the same body style flows naturally into two columns — useful for printed reports and dense appendix pages where vertical space is at a premium.</p>
+        <p>Column flow keeps measure comfortable for reading while fitting more copy per page. Headings, lists and callouts break out of the column grid to anchor the reader.</p>
+      </div>
+    </section>
+
+    <!-- ===== KEY TAKEAWAYS ===== -->
+    <section class="blk">
+      <span class="lbl" style="margin-bottom:8px;">Key takeaways</span>
+      <h3 style="font-weight:800; font-size:28px; letter-spacing:-0.8px; margin:0 0 28px;">Three things to remember</h3>
+      <div style="display:flex; flex-direction:column; gap:24px;">
+        <div style="display:flex; gap:20px; align-items:flex-start;">
+          <span style="flex:none; width:40px; height:40px; border-radius:12px; background:var(--purple-100); color:var(--porter-purple); font-family:var(--font-hanken); font-weight:600; font-size:16px; display:flex; align-items:center; justify-content:center;">1</span>
+          <div><div style="font-weight:700; font-size:18px; margin-bottom:4px;">Efficiency beat volume</div><div class="body" style="font-size:16px;">Same spend, more return — the quarter's headline is margin, not reach.</div></div>
+        </div>
+        <div style="display:flex; gap:20px; align-items:flex-start;">
+          <span style="flex:none; width:40px; height:40px; border-radius:12px; background:var(--purple-100); color:var(--porter-purple); font-family:var(--font-hanken); font-weight:600; font-size:16px; display:flex; align-items:center; justify-content:center;">2</span>
+          <div><div style="font-weight:700; font-size:18px; margin-bottom:4px;">Creative is the lever</div><div class="body" style="font-size:16px;">The February refresh drove most of the ROAS gain. Keep the testing cadence.</div></div>
+        </div>
+        <div style="display:flex; gap:20px; align-items:flex-start;">
+          <span style="flex:none; width:40px; height:40px; border-radius:12px; background:var(--purple-100); color:var(--porter-purple); font-family:var(--font-hanken); font-weight:600; font-size:16px; display:flex; align-items:center; justify-content:center;">3</span>
+          <div><div style="font-weight:700; font-size:18px; margin-bottom:4px;">Two channels carry the load</div><div class="body" style="font-size:16px;">Meta and Google account for 70% of conversions. Diversify in Q2.</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PULL QUOTE ===== -->
+    <section style="background:#f6f7f9; border-radius:20px; padding:52px 56px; box-shadow:inset 0 0 0 1px var(--neutral-200);">
+      <div style="font-family:var(--font-bricolage); font-weight:900; font-size:64px; line-height:0.6; color:var(--porter-purple); height:34px;">&ldquo;</div>
+      <p style="font-weight:700; font-size:30px; line-height:1.25; letter-spacing:-0.8px; margin:0 0 24px; max-width:24ch;">The cheapest growth we found all quarter came from better creative, not more budget.</p>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div style="width:38px; height:38px; border-radius:50%; background:var(--porter-purple);"></div>
+        <div style="font-family:var(--font-hanken); font-size:13px;"><div style="font-weight:600;">Alex Rivera</div><div style="color:var(--porter-muted);">Head of Growth</div></div>
+      </div>
+    </section>
+
+    <!-- ===== QUOTES — COLOR SET ===== -->
+    <section style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+      <div style="background:#fff; border-radius:20px; padding:32px 34px; box-shadow:inset 0 0 0 1px var(--neutral-200);">
+        <div style="font-family:var(--font-bricolage); font-weight:900; font-size:46px; line-height:0.5; color:var(--porter-aqua); height:26px;">&ldquo;</div>
+        <p style="font-weight:700; font-size:20px; line-height:1.3; letter-spacing:-0.5px; margin:0 0 16px;">Celeste reads cool and calm &mdash; good for measured, analytical pull quotes.</p>
+        <div style="font-family:var(--font-hanken); font-size:12px; color:var(--porter-muted);">Jordan Lee &middot; Analyst</div>
+      </div>
+      <div style="background:#fff; border-radius:20px; padding:32px 34px; box-shadow:inset 0 0 0 1px var(--neutral-200);">
+        <div style="font-family:var(--font-bricolage); font-weight:900; font-size:46px; line-height:0.5; color:var(--lime-600); height:26px;">&ldquo;</div>
+        <p style="font-weight:700; font-size:20px; line-height:1.3; letter-spacing:-0.5px; margin:0 0 16px;">Lime signals a win &mdash; pair it with positive, momentum-building lines.</p>
+        <div style="font-family:var(--font-hanken); font-size:12px; color:var(--porter-muted);">Sam Cruz &middot; Growth</div>
+      </div>
+      <div style="background:#fff; border-radius:20px; padding:32px 34px; box-shadow:inset 0 0 0 1px var(--neutral-200);">
+        <div style="font-family:var(--font-bricolage); font-weight:900; font-size:46px; line-height:0.5; color:var(--porter-yellow); height:26px;">&ldquo;</div>
+        <p style="font-weight:700; font-size:20px; line-height:1.3; letter-spacing:-0.5px; margin:0 0 16px;">Yellow draws the eye &mdash; reserve it for the single line that matters most.</p>
+        <div style="font-family:var(--font-hanken); font-size:12px; color:var(--porter-muted);">Robin Patel &middot; Strategy</div>
+      </div>
+      <div style="background:#fff; border-radius:20px; padding:32px 34px; box-shadow:inset 0 0 0 1px var(--neutral-200);">
+        <div style="font-family:var(--font-bricolage); font-weight:900; font-size:46px; line-height:0.5; color:var(--porter-pink); height:26px;">&ldquo;</div>
+        <p style="font-weight:700; font-size:20px; line-height:1.3; letter-spacing:-0.5px; margin:0 0 16px;">Cherry adds energy &mdash; great for bold, opinionated client-facing quotes.</p>
+        <div style="font-family:var(--font-hanken); font-size:12px; color:var(--porter-muted);">Casey Kim &middot; Creative</div>
+      </div>
+    </section>
+
+    <!-- ===== CALLOUT + BIG STAT ===== -->
+    <section style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+      <div style="background:var(--purple-100); border-radius:20px; padding:32px;">
+        <span style="font-family:var(--font-hanken); font-weight:600; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--porter-purple); display:block; margin-bottom:14px;">Insight</span>
+        <p style="font-family:var(--font-hanken); font-size:18px; line-height:1.5; font-weight:600; color:var(--porter-dark); margin:0;">Pausing the four weakest campaigns freed 18% of budget — which we redeployed into the winning video set mid-quarter.</p>
+      </div>
+      <div style="background:var(--porter-dark); color:#fff; border-radius:20px; padding:32px; display:flex; flex-direction:column; justify-content:center;">
+        <div style="font-weight:900; font-size:68px; line-height:0.9; letter-spacing:-3px;">+14%</div>
+        <p style="font-family:var(--font-hanken); font-size:16px; line-height:1.5; color:rgba(255,255,255,0.7); margin:12px 0 0; max-width:30ch;">revenue growth on flat spend — the clearest signal that efficiency, not budget, moved the quarter.</p>
+      </div>
+    </section>
+
+    <!-- ===== CALLOUTS — COLOR SET ===== -->
+    <section style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+      <div style="background:var(--aqua-100); border-radius:20px; padding:32px;">
+        <span style="font-family:var(--font-hanken); font-weight:600; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--aqua-700); display:block; margin-bottom:14px;">Note</span>
+        <p style="font-family:var(--font-hanken); font-size:18px; line-height:1.5; font-weight:600; color:var(--porter-dark); margin:0;">Celeste tint &mdash; calm, neutral callouts for context and methodology notes.</p>
+      </div>
+      <div style="background:var(--lime-100); border-radius:20px; padding:32px;">
+        <span style="font-family:var(--font-hanken); font-weight:600; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--lime-700); display:block; margin-bottom:14px;">Win</span>
+        <p style="font-family:var(--font-hanken); font-size:18px; line-height:1.5; font-weight:600; color:var(--porter-dark); margin:0;">Lime tint &mdash; flag a positive result or a milestone the team should celebrate.</p>
+      </div>
+      <div style="background:var(--yellow-100); border-radius:20px; padding:32px;">
+        <span style="font-family:var(--font-hanken); font-weight:600; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:#92400e; display:block; margin-bottom:14px;">Watch out</span>
+        <p style="font-family:var(--font-hanken); font-size:18px; line-height:1.5; font-weight:600; color:var(--porter-dark); margin:0;">Yellow tint &mdash; a caution or assumption the reader should keep in mind.</p>
+      </div>
+      <div style="background:var(--pink-100); border-radius:20px; padding:32px;">
+        <span style="font-family:var(--font-hanken); font-weight:600; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--pink-700); display:block; margin-bottom:14px;">Risk</span>
+        <p style="font-family:var(--font-hanken); font-size:18px; line-height:1.5; font-weight:600; color:var(--porter-dark); margin:0;">Cherry tint &mdash; highlight a risk, a drop, or something that needs action now.</p>
+      </div>
+    </section>
+
+    <!-- ===== EXECUTIVE SUMMARY ===== -->
+    <section class="blk">
+      <span class="lbl" style="margin-bottom:10px;">Executive summary</span>
+      <h3 style="font-weight:800; font-size:26px; letter-spacing:-0.6px; margin:0 0 16px;">TL;DR</h3>
+      <p class="body" style="font-size:18px; margin-bottom:22px;">Q1 was a margin quarter. Flat spend, a creative refresh, and tighter targeting lifted revenue 14% and ROAS to 4.1x. The risk going into Q2 is concentration — two channels carry most of the volume.</p>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div style="display:flex; gap:12px; align-items:baseline;"><span style="flex:none; width:7px; height:7px; border-radius:50%; background:var(--porter-aqua); transform:translateY(-2px);"></span><span style="font-family:var(--font-hanken); font-size:16px; color:#3a3550;"><strong style="color:var(--porter-dark);">Revenue</strong> up 14% to $197.8k on flat budget.</span></div>
+        <div style="display:flex; gap:12px; align-items:baseline;"><span style="flex:none; width:7px; height:7px; border-radius:50%; background:var(--porter-aqua); transform:translateY(-2px);"></span><span style="font-family:var(--font-hanken); font-size:16px; color:#3a3550;"><strong style="color:var(--porter-dark);">ROAS</strong> improved from 3.5x to 4.1x.</span></div>
+        <div style="display:flex; gap:12px; align-items:baseline;"><span style="flex:none; width:7px; height:7px; border-radius:50%; background:var(--porter-aqua); transform:translateY(-2px);"></span><span style="font-family:var(--font-hanken); font-size:16px; color:#3a3550;"><strong style="color:var(--porter-dark);">Next:</strong> diversify beyond Meta + Google in Q2.</span></div>
+      </div>
+    </section>
+
+    <!-- ===== INLINE EMPHASIS & METRIC CHIPS ===== -->
+    <section class="blk">
+      <span class="lbl" style="margin-bottom:14px;">Inline emphasis</span>
+      <h3 style="font-family:var(--font-bricolage); font-weight:800; font-size:26px; letter-spacing:-0.6px; margin:0 0 18px;">Highlighting metrics inside text</h3>
+      <p class="body" style="font-size:19px; line-height:1.8; margin-bottom:30px;">Revenue reached <strong>$197.8k</strong> this quarter &mdash; a <span class="chip chip-pos"><span class="ar">&#9650;</span>14%</span> lift on <span class="hl">flat spend</span>. The clearest driver was <span class="u">creative testing</span>, while CPA fell to <strong>$22.10</strong> <span class="chip chip-neg"><span class="ar">&#9660;</span>8%</span>. Two channels &mdash; <span class="u">Meta</span> and <span class="u">Google</span> &mdash; still carry <strong>70%</strong> of all conversions, a concentration worth <span class="hl">watching in Q2</span>.</p>
+
+      <div style="height:1px; background:var(--neutral-200); margin:0 0 26px;"></div>
+
+      <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:18px 40px; font-family:var(--font-hanken); font-size:15px; color:#3a3550;">
+        <div style="display:flex; align-items:center; gap:14px;"><span style="font-family:var(--font-hanken); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--porter-muted); width:84px; flex:none;">Bold</span><span>Profit grew <strong>32%</strong></span></div>
+        <div style="display:flex; align-items:center; gap:14px;"><span style="font-family:var(--font-hanken); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--porter-muted); width:84px; flex:none;">Underline</span><span>Best <span class="u">performing</span> ad</span></div>
+        <div style="display:flex; align-items:center; gap:14px;"><span style="font-family:var(--font-hanken); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--porter-muted); width:84px; flex:none;">Highlight</span><span>The <span class="hl">key insight</span> here</span></div>
+        <div style="display:flex; align-items:center; gap:14px;"><span style="font-family:var(--font-hanken); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--porter-muted); width:84px; flex:none;">Chips</span><span style="display:inline-flex; gap:6px; flex-wrap:wrap;"><span class="chip chip-pos"><span class="ar">&#9650;</span>14%</span><span class="chip chip-neg"><span class="ar">&#9660;</span>8%</span><span class="chip chip-neutral">4.1x ROAS</span><span class="chip chip-brand">New</span></span></div>
+      </div>
+    </section>
+
+    <!-- ===== CAPTION / SOURCE ===== -->
+    <section class="blk" style="padding:28px 44px;">
+      <p style="font-family:var(--font-hanken); font-size:12px; line-height:1.6; color:var(--porter-muted); margin:0;">Figure 1 &mdash; All figures reflect attributed conversions within a 7-day click window. <span style="color:var(--porter-dark);">Source:</span> Porter Metrics, blended across Meta Ads, Google Ads &amp; Shopify. Last refreshed Apr 2, 2025.</p>
+    </section>
+
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

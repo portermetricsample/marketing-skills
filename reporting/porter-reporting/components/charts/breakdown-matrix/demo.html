@@ -1,0 +1,78 @@
+<!doctype html>
+<meta charset="utf-8" />
+<title>Breakdown matrix — fictional demo (Acme Insurance)</title>
+
+<!-- DEMO-ONLY fallback tokens: mirror porter-design so the page still renders if
+     that sibling repo isn't checked out next to this one. The real <link> below
+     comes LATER in the cascade and OVERRIDES these — they are not the source of truth. -->
+<style>
+  :root {
+    --font-hanken: "Hanken Grotesk", system-ui, sans-serif;
+    --font-bricolage: "Bricolage Grotesque", var(--font-hanken);
+    --surface-bg: #f4f5f7; --surface-card: #ffffff; --card-border: #e6e8eb;
+    --text-title: #14161a; --text-body: #3c4046; --text-muted: #82888f;
+    --cf-1: #f7c7d5; --cf-2: #fbdcc4; --cf-3: #fcecbf; --cf-4: #dcefb6; --cf-5: #bbe6b0;
+  }
+</style>
+<link rel="stylesheet" href="../../../../porter-design/dist/porter-tokens.css" />
+<link rel="stylesheet" href="breakdown-matrix.css" />
+
+<style>
+  body { margin: 0; background: var(--surface-bg); }
+  .page { max-width: 1080px; margin: 0 auto; padding: 40px 24px 64px;
+          font-family: var(--font-hanken); color: var(--text-body); }
+  .demo-banner { font-size: 12px; color: var(--text-muted); background: var(--surface-card);
+                 border: 1px dashed var(--card-border); border-radius: 10px;
+                 padding: 8px 12px; margin-bottom: 18px; }
+  h1 { font-family: var(--font-bricolage); color: var(--text-title); font-size: 26px; margin: 0 0 4px; }
+  .sub { color: var(--text-muted); margin: 0 0 22px; font-size: 14px; }
+  h2 { font-family: var(--font-bricolage); color: var(--text-title); font-size: 17px; margin: 38px 0 4px; }
+  .h2note { color: var(--text-muted); font-size: 13px; margin: 0 0 14px; }
+</style>
+
+<div data-theme="white" class="page">
+  <div class="demo-banner">
+    Fictional demo · account <strong>Acme Insurance</strong> · synthetic numbers (not real
+    performance). One component, one data series — the dropdowns re-slice it live.
+  </div>
+
+  <h1>Breakdown matrix</h1>
+  <p class="sub">Metrics down the side; the columns are whatever you segment by. Use <strong>Segment by</strong> to change the dimension; <strong>View by</strong> appears only when you're segmenting by time.</p>
+
+  <div id="host-main"></div>
+
+  <h2>Custom metric set (proof metrics aren't fixed either)</h2>
+  <p class="h2note">Same component, broken down by campaign, but the rows are caller-provided here — Cost · Clicks · CTR · Conversions · ROAS.</p>
+  <div id="host-lean"></div>
+</div>
+
+<script src="example.data.js"></script>
+<script src="breakdown-matrix.js"></script>
+<script>
+  var bm = window.PorterReporting.breakdownMatrix;
+  var data = window.PorterReporting.exampleData;
+
+  // ONE interactive matrix: a "Segment by" dropdown (+ "View by" for time)
+  bm.mount("#host-main", {
+    series: data.series,
+    breakdowns: [
+      { id: "time",      label: "Time",      type: "time",     granularity: "week" },
+      { id: "campaign",  label: "Campaign",  type: "category", field: "campaign" },
+      { id: "objective", label: "Objective", type: "category", field: "objective" },
+      { id: "product",   label: "Product",   type: "category", field: "product" }
+    ]
+  });
+
+  // a second matrix with a caller-provided metric set (no SUMAS groups)
+  bm.mount("#host-lean", {
+    series: data.series,
+    breakdown: { type: "category", field: "campaign" },
+    metrics: [
+      { key: "cost",        label: "Cost",        format: "money" },
+      { key: "clicks",      label: "Clicks",      format: "int"   },
+      { key: "ctr",         label: "CTR",         format: "pct2"  },
+      { key: "conversions", label: "Conversions", format: "dec"   },
+      { key: "roas",        label: "ROAS",        format: "ratio" }
+    ]
+  });
+</script>

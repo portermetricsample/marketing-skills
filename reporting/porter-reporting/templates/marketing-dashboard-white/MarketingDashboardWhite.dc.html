@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../_shared/support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Marketing Dashboard — Blanco" description="On-brand marketing analytics dashboard — KPI tiles, spend trend, channel breakdown, and a campaign table built on the Porter brand kit." -->
+<helmet>
+<script src="./ds-base.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+</style>
+</helmet>
+
+<div style="display:flex; min-height:100vh; font-family:var(--font-bricolage); background:#ffffff; color:var(--porter-black);">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside style="width:252px; flex:none; background:var(--porter-dark); color:#fff; display:flex; flex-direction:column; padding:24px 18px;">
+    <div style="display:flex; align-items:center; gap:9px; padding:6px 8px 26px;">
+      <img src="../../../porter-design/assets/brand/porter-mark.png" alt="Porter" style="width:30px; height:30px; object-fit:contain;" />
+      <span style="font-weight:900; font-size:21px; letter-spacing:-1px; color:#fff;">porter</span>
+    </div>
+
+    <nav style="display:flex; flex-direction:column; gap:3px;">
+      <a href="#" style="display:flex; align-items:center; gap:11px; padding:11px 14px; border-radius:10px; text-decoration:none; font-weight:700; font-size:14.5px; color:#fff; background:var(--porter-purple);"><span style="width:6px; height:6px; border-radius:2px; background:#fff;"></span>Overview</a>
+      <a href="#" style="display:flex; align-items:center; gap:11px; padding:11px 14px; border-radius:10px; text-decoration:none; font-weight:600; font-size:14.5px; color:rgba(255,255,255,0.66);"><span style="width:6px; height:6px; border-radius:2px; background:rgba(255,255,255,0.3);"></span>Campaigns</a>
+      <a href="#" style="display:flex; align-items:center; gap:11px; padding:11px 14px; border-radius:10px; text-decoration:none; font-weight:600; font-size:14.5px; color:rgba(255,255,255,0.66);"><span style="width:6px; height:6px; border-radius:2px; background:rgba(255,255,255,0.3);"></span>Channels</a>
+      <a href="#" style="display:flex; align-items:center; gap:11px; padding:11px 14px; border-radius:10px; text-decoration:none; font-weight:600; font-size:14.5px; color:rgba(255,255,255,0.66);"><span style="width:6px; height:6px; border-radius:2px; background:rgba(255,255,255,0.3);"></span>Audiences</a>
+      <a href="#" style="display:flex; align-items:center; gap:11px; padding:11px 14px; border-radius:10px; text-decoration:none; font-weight:600; font-size:14.5px; color:rgba(255,255,255,0.66);"><span style="width:6px; height:6px; border-radius:2px; background:rgba(255,255,255,0.3);"></span>Reports</a>
+      <a href="#" style="display:flex; align-items:center; gap:11px; padding:11px 14px; border-radius:10px; text-decoration:none; font-weight:600; font-size:14.5px; color:rgba(255,255,255,0.66);"><span style="width:6px; height:6px; border-radius:2px; background:rgba(255,255,255,0.3);"></span>Integrations</a>
+    </nav>
+
+    <div style="margin-top:auto; padding-top:24px;">
+      <div style="font-family:var(--font-hanken); font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,0.45); margin-bottom:12px; padding:0 6px;">Connected · 6</div>
+      <div style="display:flex; flex-wrap:wrap; gap:8px; padding:0 6px;">
+        <span style="width:34px; height:34px; border-radius:9px; background:#fff; display:flex; align-items:center; justify-content:center;"><img src="../../../porter-design/assets/connectors/meta.svg" style="width:20px; height:20px;" /></span>
+        <span style="width:34px; height:34px; border-radius:9px; background:#fff; display:flex; align-items:center; justify-content:center;"><img src="../../../porter-design/assets/connectors/google_ads-icon.svg" style="width:20px; height:20px;" /></span>
+        <span style="width:34px; height:34px; border-radius:9px; background:#fff; display:flex; align-items:center; justify-content:center;"><img src="../../../porter-design/assets/connectors/instagram.svg" style="width:20px; height:20px;" /></span>
+        <span style="width:34px; height:34px; border-radius:9px; background:#fff; display:flex; align-items:center; justify-content:center;"><img src="../../../porter-design/assets/connectors/ga4-color.svg" style="width:20px; height:20px;" /></span>
+        <span style="width:34px; height:34px; border-radius:9px; background:#fff; display:flex; align-items:center; justify-content:center;"><img src="../../../porter-design/assets/connectors/shopify.svg" style="width:20px; height:20px;" /></span>
+        <span style="width:34px; height:34px; border-radius:9px; background:#fff; display:flex; align-items:center; justify-content:center;"><img src="../../../porter-design/assets/connectors/gsc-color.svg" style="width:20px; height:20px;" /></span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main style="flex:1; min-width:0; display:flex; flex-direction:column;">
+
+    <!-- top bar -->
+    <header style="display:flex; align-items:center; justify-content:space-between; padding:20px 36px; background:var(--porter-white); border-bottom:1px solid var(--neutral-200);">
+      <div style="display:flex; align-items:center; gap:14px;">
+        <div style="font-family:var(--font-hanken); font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--porter-purple);">Client</div>
+        <div style="display:flex; align-items:center; gap:8px; font-weight:700; font-size:16px;">Northwind&nbsp;Co. <span style="color:var(--porter-muted); font-weight:500;">&#9662;</span></div>
+      </div>
+      <div style="display:flex; align-items:center; gap:14px;">
+        <div style="font-family:var(--font-hanken); font-size:13px; color:var(--porter-dark); border:1px solid var(--neutral-200); border-radius:999px; padding:9px 16px;">Mar 1 &ndash; Mar 31, 2026</div>
+        <x-import component-from-global-scope="PorterMetricsDesignSystem_101e0b.Button" variant="purple" size="sm" hint-size="120px,40px">Export report</x-import>
+      </div>
+    </header>
+
+    <!-- content -->
+    <div style="padding:30px 36px; display:flex; flex-direction:column; gap:22px;">
+
+      <div>
+        <span style="font-family:var(--font-hanken); font-weight:500; font-size:13px; letter-spacing:2px; text-transform:uppercase; color:var(--porter-purple); display:block; margin-bottom:8px;">Performance overview</span>
+        <x-import component-from-global-scope="PorterMetricsDesignSystem_101e0b.Heading" level="h2" hint-size="400px,52px">Every channel, <strong>one view</strong></x-import>
+      </div>
+
+      <!-- KPI tiles -->
+      <div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:16px;">
+        <div style="background:#fff; border-radius:18px; padding:22px; box-shadow:inset 0 0 0 1px var(--neutral-200);">
+          <div style="font-family:var(--font-hanken); font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--porter-muted);">Ad spend</div>
+          <div style="font-weight:900; font-size:34px; letter-spacing:-1.5px; margin:10px 0 6px;">$48,250</div>
+          <div style="font-family:var(--font-hanken); font-size:12px; font-weight:600; color:var(--aqua-700);">&#9650; 12.4%</div>
+        </div>
+        <div style="background:#fff; border-radius:18px; padding:22px; box-shadow:inset 0 0 0 1px var(--neutral-200);">
+          <div style="font-family:var(--font-hanken); font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--porter-muted);">Impressions</div>
+          <div style="font-weight:900; font-size:34px; letter-spacing:-1.5px; margin:10px 0 6px;">3.42M</div>
+          <div style="font-family:var(--font-hanken); font-size:12px; font-weight:600; color:var(--aqua-700);">&#9650; 8.1%</div>
+        </div>
+        <div style="background:#fff; border-radius:18px; padding:22px; box-shadow:inset 0 0 0 1px var(--neutral-200);">
+          <div style="font-family:var(--font-hanken); font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--porter-muted);">Clicks</div>
+          <div style="font-weight:900; font-size:34px; letter-spacing:-1.5px; margin:10px 0 6px;">86,400</div>
+          <div style="font-family:var(--font-hanken); font-size:12px; font-weight:600; color:var(--aqua-700);">&#9650; 5.6%</div>
+        </div>
+        <div style="background:#fff; border-radius:18px; padding:22px; box-shadow:inset 0 0 0 1px var(--neutral-200);">
+          <div style="font-family:var(--font-hanken); font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--porter-muted);">Conversions</div>
+          <div style="font-weight:900; font-size:34px; letter-spacing:-1.5px; margin:10px 0 6px;">2,184</div>
+          <div style="font-family:var(--font-hanken); font-size:12px; font-weight:600; color:var(--pink-700);">&#9660; 2.3%</div>
+        </div>
+        <div style="background:var(--porter-purple); color:#fff; border-radius:18px; padding:22px;">
+          <div style="font-family:var(--font-hanken); font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,0.7);">ROAS</div>
+          <div style="font-weight:900; font-size:34px; letter-spacing:-1.5px; margin:10px 0 6px;">4.1x</div>
+          <div style="font-family:var(--font-hanken); font-size:12px; font-weight:600; color:var(--aqua-400);">&#9650; 0.6</div>
+        </div>
+      </div>
+
+      <!-- charts row -->
+      <div style="display:grid; grid-template-columns:1.7fr 1fr; gap:16px;">
+
+        <!-- spend over time -->
+        <div style="background:#fff; border-radius:20px; padding:26px 28px; box-shadow:inset 0 0 0 1px var(--neutral-200);">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:18px;">
+            <div>
+              <div style="font-family:var(--font-hanken); font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--porter-muted);">Ad spend</div>
+              <div style="font-weight:800; font-size:22px; letter-spacing:-0.5px; margin-top:4px;">Spend over time</div>
+            </div>
+            <div style="display:flex; gap:16px; align-items:center; font-family:var(--font-hanken); font-size:12px;">
+              <span style="display:flex; align-items:center; gap:6px;"><span style="width:14px; height:3px; border-radius:2px; background:var(--porter-purple);"></span>This period</span>
+              <span style="display:flex; align-items:center; gap:6px; color:var(--porter-muted);"><span style="width:14px; height:3px; border-radius:2px; background:var(--porter-pink);"></span>Previous</span>
+            </div>
+          </div>
+          <svg viewBox="0 0 760 240" preserveAspectRatio="none" style="width:100%; height:230px; display:block;">
+            <line x1="0" y1="60" x2="760" y2="60" stroke="#eef0f3" stroke-width="1"/>
+            <line x1="0" y1="120" x2="760" y2="120" stroke="#eef0f3" stroke-width="1"/>
+            <line x1="0" y1="180" x2="760" y2="180" stroke="#eef0f3" stroke-width="1"/>
+            <path d="M0,180 L63,160 L126,168 L190,140 L253,150 L316,120 L380,110 L443,128 L506,96 L570,84 L633,92 L696,64 L760,52 L760,240 L0,240 Z" fill="#ede9fe"/>
+            <polyline points="0,190 63,182 126,176 190,170 253,178 316,158 380,150 443,162 506,140 570,150 633,138 696,128 760,120" fill="none" stroke="#ec4899" stroke-width="2.5" stroke-dasharray="5 5"/>
+            <polyline points="0,180 63,160 126,168 190,140 253,150 316,120 380,110 443,128 506,96 570,84 633,92 696,64 760,52" fill="none" stroke="#6701e6" stroke-width="3.5"/>
+          </svg>
+          <div style="display:flex; justify-content:space-between; font-family:var(--font-hanken); font-size:11px; color:var(--porter-muted); margin-top:10px;">
+            <span>Mar 1</span><span>Mar 8</span><span>Mar 15</span><span>Mar 22</span><span>Mar 31</span>
+          </div>
+        </div>
+
+        <!-- spend by channel -->
+        <div style="background:#fff; border-radius:20px; padding:26px 28px; box-shadow:inset 0 0 0 1px var(--neutral-200);">
+          <div style="font-family:var(--font-hanken); font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--porter-muted);">Distribution</div>
+          <div style="font-weight:800; font-size:22px; letter-spacing:-0.5px; margin:4px 0 22px;">Spend by channel</div>
+
+          <div style="display:flex; flex-direction:column; gap:18px;">
+            <div>
+              <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:7px;">
+                <span style="display:flex; align-items:center; gap:8px; font-weight:600; font-size:14px;"><img src="../../../porter-design/assets/connectors/meta.svg" style="width:18px; height:18px;" />Meta</span>
+                <span style="font-family:var(--font-hanken); font-size:13px; color:var(--porter-dark);">$20,265</span>
+              </div>
+              <div style="height:8px; border-radius:999px; background:var(--purple-100);"><div style="height:8px; border-radius:999px; background:var(--porter-purple); width:42%;"></div></div>
+            </div>
+            <div>
+              <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:7px;">
+                <span style="display:flex; align-items:center; gap:8px; font-weight:600; font-size:14px;"><img src="../../../porter-design/assets/connectors/google_ads-icon.svg" style="width:18px; height:18px;" />Google Ads</span>
+                <span style="font-family:var(--font-hanken); font-size:13px; color:var(--porter-dark);">$13,510</span>
+              </div>
+              <div style="height:8px; border-radius:999px; background:var(--purple-100);"><div style="height:8px; border-radius:999px; background:var(--porter-purple); width:28%;"></div></div>
+            </div>
+            <div>
+              <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:7px;">
+                <span style="display:flex; align-items:center; gap:8px; font-weight:600; font-size:14px;"><img src="../../../porter-design/assets/connectors/instagram.svg" style="width:18px; height:18px;" />Instagram</span>
+                <span style="font-family:var(--font-hanken); font-size:13px; color:var(--porter-dark);">$7,720</span>
+              </div>
+              <div style="height:8px; border-radius:999px; background:var(--purple-100);"><div style="height:8px; border-radius:999px; background:var(--porter-purple); width:16%;"></div></div>
+            </div>
+            <div>
+              <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:7px;">
+                <span style="display:flex; align-items:center; gap:8px; font-weight:600; font-size:14px;"><img src="../../../porter-design/assets/connectors/shopify.svg" style="width:18px; height:18px;" />Shopify</span>
+                <span style="font-family:var(--font-hanken); font-size:13px; color:var(--porter-dark);">$4,343</span>
+              </div>
+              <div style="height:8px; border-radius:999px; background:var(--purple-100);"><div style="height:8px; border-radius:999px; background:var(--porter-purple); width:9%;"></div></div>
+            </div>
+            <div>
+              <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:7px;">
+                <span style="display:flex; align-items:center; gap:8px; font-weight:600; font-size:14px;"><img src="../../../porter-design/assets/connectors/gsc-color.svg" style="width:18px; height:18px;" />Search</span>
+                <span style="font-family:var(--font-hanken); font-size:13px; color:var(--porter-dark);">$2,412</span>
+              </div>
+              <div style="height:8px; border-radius:999px; background:var(--purple-100);"><div style="height:8px; border-radius:999px; background:var(--porter-purple); width:5%;"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- campaigns table -->
+      <div style="background:#fff; border-radius:20px; padding:26px 28px; box-shadow:inset 0 0 0 1px var(--neutral-200);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+          <div style="font-weight:800; font-size:22px; letter-spacing:-0.5px;">Top campaigns</div>
+          <a href="#" style="font-family:var(--font-hanken); font-size:12px; letter-spacing:1px; text-transform:uppercase; color:var(--porter-purple); text-decoration:none; font-weight:600;">View all &rarr;</a>
+        </div>
+        <table style="width:100%; border-collapse:collapse; font-size:14px;">
+          <thead>
+            <tr style="font-family:var(--font-hanken); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--porter-muted); text-align:right;">
+              <th style="text-align:left; padding:0 0 12px 20px; font-weight:500;">Campaign</th>
+              <th style="text-align:left; padding:0 0 12px 20px; font-weight:500;">Source</th>
+              <th style="padding:0 0 12px 20px; font-weight:500;">Spend</th>
+              <th style="padding:0 0 12px 20px; font-weight:500;">Clicks</th>
+              <th style="padding:0 0 12px 20px; font-weight:500;">CTR</th>
+              <th style="padding:0 0 12px 20px; font-weight:500;">Conv.</th>
+              <th style="padding:0 0 12px 20px; font-weight:500;">ROAS</th>
+              <th style="text-align:right; padding:0 0 12px 20px; font-weight:500;">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-top:1px solid var(--neutral-200); text-align:right;">
+              <td style="text-align:left; padding:14px 0; font-weight:600;">Spring Sale &mdash; Prospecting</td>
+              <td style="text-align:left; padding:14px 0;"><span style="display:flex; align-items:center; gap:8px;"><img src="../../../porter-design/assets/connectors/meta.svg" style="width:18px; height:18px;" />Meta</span></td>
+              <td style="padding:14px 0 14px 20px; font-family:var(--font-hanken);">$12,480</td>
+              <td style="padding:14px 0 14px 20px; font-family:var(--font-hanken);">24,100</td>
+              <td style="padding:14px 0 14px 20px; font-family:var(--font-hanken);">3.2%</td>
+              <td style="padding:14px 0 14px 20px; font-family:var(--font-hanken);">612</td>
+              <td style="padding:14px 0 14px 20px; font-family:var(--font-hanken); font-weight:600;">5.2x</td>
+              <td style="text-align:right; padding:14px 0;"><span style="font-family:var(--font-hanken); font-weight:600; font-size:11px; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; border-radius:999px; background:var(--aqua-100); color:var(--aqua-700);">Active</span></td>
+            </tr>
+            <tr style="border-top:1px solid var(--neutral-200); text-align:right;">
+              <td style="text-align:left; padding:14px 0; font-weight:600;">Brand Search &mdash; Exact</td>
+              <td style="text-align:left; padding:14px 0;"><span style="display:flex; align-items:center; gap:8px;"><img src="../../../porter-design/assets/connectors/google_ads-icon.svg" style="width:18px; height:18px;" />Google Ads</span></td>
+              <td style="padding:14px 0 14px 20px; font-family:var(--font-hanken);">$9,240</td>
+              <td style="padding:14px 0 14px 20px; font-family:var(--font-hanken);">18,600</td>
+              <td style="padding:14px 0 14px 20px; font-family:var(--font-hanken);">6.1%</td>
+              <td style="padding:14px 0 14px 20px; font-family:var(--font-hanken);">540</td>
+              <td style="padding:14px 0 14px 20px; font-family:var(--font-hanken); font-weight:600;">6.8x</td>
+              <td style="text-align:right; padding:14px 0;"><span style="font-family:var(--font-hanken); font-weight:600; font-size:11px; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; border-radius:999px; background:var(--aqua-100); color:var(--aqua-700);">Active</span></td>
+            </tr>
+            <tr style="border-top:1px solid var(--neutral-200); text-align:right;">
+              <td style="text-align:left; padding:14px 0; font-weight:600;">Retargeting &mdash; Dynamic</td>
+              <td style="text-align:left; padding:14px 0;"><span style="display:flex; align-items:center; gap:8px;"><img src="../../../porter-design/assets/connectors/instagram.svg" style="width:18px; height:18px;" />Instagram</span></td>
+              <td style="padding:14px 0 14px 20px; font-family:var(--font-hanken);">$6,820</td>
+              <td style="padding:14px 0 14px 20px; font-family:var(--font-hanken);">14,200</td>
+              <td style="padding:14px 0 14px 20px; font-family:var(--font-hanken);">2.8%</td>
+              <td style="padding:14px 0 14px 20px; font-family:var(--font-hanken);">388</td>
+              <td style="padding:14px 0 14px 20px; font-family:var(--font-hanken); font-weight:600;">4.1x</td>
+              <td style="text-align:right; padding:14px 0;"><span style="font-family:var(--font-hanken); font-weight:600; font-size:11px; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; border-radius:999px; background:var(--aqua-100); color:var(--aqua-700);">Active</span></td>
+            </tr>
+            <tr style="border-top:1px solid var(--neutral-200); text-align:right;">
+              <td style="text-align:left; padding:14px 0; font-weight:600;">Catalog Sales &mdash; Auto</td>
+              <td style="text-align:left; padding:14px 0;"><span style="display:flex; align-items:center; gap:8px;"><img src="../../../porter-design/assets/connectors/shopify.svg" style="width:18px; height:18px;" />Shopify</span></td>
+              <td style="padding:14px 0 14px 20px; font-family:var(--font-hanken);">$5,100</td>
+              <td style="padding:14px 0 14px 20px; font-family:var(--font-hanken);">9,800</td>
+              <td style="padding:14px 0 14px 20px; font-family:var(--font-hanken);">2.1%</td>
+              <td style="padding:14px 0 14px 20px; font-family:var(--font-hanken);">296</td>
+              <td style="padding:14px 0 14px 20px; font-family:var(--font-hanken); font-weight:600;">3.4x</td>
+              <td style="text-align:right; padding:14px 0;"><span style="font-family:var(--font-hanken); font-weight:600; font-size:11px; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; border-radius:999px; background:var(--yellow-100); color:#92400e;">Paused</span></td>
+            </tr>
+            <tr style="border-top:1px solid var(--neutral-200); text-align:right;">
+              <td style="text-align:left; padding:14px 0; font-weight:600;">Blog Promotion &mdash; Reach</td>
+              <td style="text-align:left; padding:14px 0;"><span style="display:flex; align-items:center; gap:8px;"><img src="../../../porter-design/assets/connectors/wordpress-color.svg" style="width:18px; height:18px;" />WordPress</span></td>
+              <td style="padding:14px 0 14px 20px; font-family:var(--font-hanken);">$3,210</td>
+              <td style="padding:14px 0 14px 20px; font-family:var(--font-hanken);">7,400</td>
+              <td style="padding:14px 0 14px 20px; font-family:var(--font-hanken);">1.9%</td>
+              <td style="padding:14px 0 14px 20px; font-family:var(--font-hanken);">158</td>
+              <td style="padding:14px 0 14px 20px; font-family:var(--font-hanken); font-weight:600;">2.2x</td>
+              <td style="text-align:right; padding:14px 0;"><span style="font-family:var(--font-hanken); font-weight:600; font-size:11px; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; border-radius:999px; background:var(--purple-100); color:var(--porter-purple);">Review</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+</x-dc>
+</body>
+</html>

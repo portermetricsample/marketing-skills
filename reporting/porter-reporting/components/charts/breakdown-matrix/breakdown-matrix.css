@@ -1,0 +1,104 @@
+/*
+ * charts/breakdown-matrix — structural CSS (Reporting owns layout/behaviour).
+ * Every colour, font and ramp value is a porter-design TOKEN (var(--…)).
+ * No literal hex / font name here — appearance is Design's.
+ * Render inside a Design theme scope, e.g. <div data-theme="white"> … </div>.
+ */
+
+.bm-wrap {
+  overflow-x: auto;                 /* columns exceed width → horizontal scroll   */
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  background: var(--surface-card);
+}
+
+.bm {
+  border-collapse: collapse;
+  width: 100%;
+  font-family: var(--font-hanken);
+  font-size: 13px;
+  color: var(--text-body);
+}
+
+.bm th,
+.bm td {
+  padding: 8px 14px;
+  text-align: right;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--card-border);
+}
+
+/* header row — sticky on vertical scroll */
+.bm thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--surface-card);
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* first column = the KPI/metric label, pinned on horizontal scroll */
+.bm .bm-kpi {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  text-align: left;
+  background: var(--surface-card);
+  color: var(--text-title);
+  font-weight: 600;
+}
+.bm thead .bm-kpi { z-index: 2; }   /* top-left wins both sticky axes */
+
+/* the leading Total column (never tinted — per-row heat is the comparison) */
+.bm .bm-total {
+  font-weight: 700;
+  color: var(--text-title);
+}
+
+/* group header row (e.g. Budget / Visibility / Engagement / Conversion) */
+.bm .bm-grp .bm-kpi,
+.bm .bm-grp td {
+  background: var(--surface-bg);
+  color: var(--text-muted);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* the component's control bar — "Segment by" + (for time only) "View by" */
+.bm-component { font-family: var(--font-hanken); }
+.bm-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+.bm-ctl {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.bm-controls select {
+  font: inherit;
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--card-border);
+  background: var(--surface-card);
+  color: var(--text-title);
+}
+
+/* empty / no-data state */
+.bm-empty {
+  font-family: var(--font-hanken);
+  color: var(--text-muted);
+  padding: 24px;
+  text-align: center;
+  border: 1px dashed var(--card-border);
+  border-radius: 14px;
+  background: var(--surface-card);
+}

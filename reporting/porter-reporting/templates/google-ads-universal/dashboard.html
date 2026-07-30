@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Google Ads Universal Dashboard — Acme Insurance (fictional demo)</title>
+<!-- Standalone HTML consumption (porter-design AGENTS.md §1b): link the flattened
+     tokens + the chart lib from the sibling porter-design repo. No copied assets. -->
+<link rel="stylesheet" href="../../../porter-design/dist/porter-tokens.css">
+<script src="../../../porter-design/dist/porter-charts.js"></script>
+<style>
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--surface-bg); color:var(--text-body); font-family:var(--font-hanken,'Hanken Grotesk',sans-serif); }
+  a { text-decoration:none; }
+  .shell { display:flex; min-height:100vh; }
+  .side { width:248px; flex:none; background:var(--porter-dark); color:#fff; display:flex; flex-direction:column; padding:22px 16px; position:sticky; top:0; height:100vh; }
+  .brand { display:flex; align-items:center; gap:9px; padding:6px 8px 22px; }
+  .brand img { width:28px; height:28px; object-fit:contain; }
+  .brand span { font-family:var(--font-bricolage); font-weight:800; font-size:20px; letter-spacing:-.5px; color:#fff; }
+  .nav { display:flex; flex-direction:column; gap:2px; }
+  .nav a { display:flex; align-items:center; gap:10px; padding:10px 13px; border-radius:10px; font-family:var(--font-hanken); font-weight:600; font-size:14px; color:rgba(255,255,255,.62); cursor:pointer; }
+  .nav a .dot { width:6px; height:6px; border-radius:2px; background:rgba(255,255,255,.3); }
+  .nav a.on { background:var(--porter-purple); color:#fff; font-weight:700; }
+  .nav a.on .dot { background:#fff; }
+  .side .src { margin-top:auto; padding-top:20px; }
+  .side .src .h { font-family:var(--font-hanken); font-size:10.5px; letter-spacing:1.4px; text-transform:uppercase; color:rgba(255,255,255,.42); margin:0 6px 10px; }
+  .side .src .row { display:flex; align-items:center; gap:9px; padding:0 6px; }
+  .side .src .ic { width:32px; height:32px; border-radius:9px; background:#fff; display:flex; align-items:center; justify-content:center; }
+  .side .src .ic img { width:19px; height:19px; }
+  .side .src .nm { font-family:var(--font-hanken); font-size:12.5px; color:rgba(255,255,255,.8); }
+  .main { flex:1; min-width:0; display:flex; flex-direction:column; }
+  .top { display:flex; align-items:center; justify-content:space-between; padding:18px 34px; background:var(--surface-card); border-bottom:1px solid var(--card-border); position:sticky; top:0; z-index:5; }
+  .top .acct { display:flex; align-items:center; gap:11px; }
+  .top .acct .eye { font-family:var(--font-hanken); font-size:10.5px; letter-spacing:1.5px; text-transform:uppercase; color:var(--eyebrow-color); }
+  .top .acct .nm { font-family:var(--font-bricolage); font-weight:700; font-size:16px; color:var(--text-title); }
+  .top .ctrl { display:flex; align-items:center; gap:10px; }
+  .pill { font-family:var(--font-hanken); font-size:12.5px; color:var(--text-body); border:1px solid var(--card-border); border-radius:999px; padding:8px 15px; }
+  .demo { font-family:var(--font-hanken); font-weight:700; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--callout-warn-tx); background:var(--callout-warn-bg); border-radius:999px; padding:6px 12px; }
+  .btn { font-family:var(--font-hanken); font-weight:700; font-size:12.5px; color:#fff; background:var(--porter-purple); border:none; border-radius:10px; padding:9px 16px; cursor:pointer; }
+  .wrap { padding:26px 34px 70px; display:flex; flex-direction:column; gap:20px; }
+  .page { display:none; flex-direction:column; gap:20px; }
+  .page.on { display:flex; }
+  .blk { background:var(--surface-card); border-radius:20px; padding:24px 26px; box-shadow:inset 0 0 0 1px var(--card-border); }
+  .lbl { font-family:var(--font-bricolage); font-weight:700; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--eyebrow-color); display:block; margin-bottom:6px; }
+  .ttl { font-family:var(--font-bricolage); font-weight:800; font-size:20px; letter-spacing:-.01em; margin:0 0 16px; color:var(--text-title); }
+  .ttl.sm { font-size:17px; margin-bottom:12px; }
+  .sub { font-family:var(--font-hanken); font-size:13px; color:var(--text-muted); margin:-10px 0 16px; }
+  .body { font-family:var(--font-hanken); font-size:14.5px; line-height:1.6; color:var(--text-body); }
+  .body strong { color:var(--text-title); font-weight:700; }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  .grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .pagehead h1 { font-family:var(--font-bricolage); font-weight:800; font-size:30px; line-height:1.05; letter-spacing:-.02em; margin:6px 0 0; color:var(--text-title); }
+  .kpis { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:14px; }
+  @media (max-width:1180px){ .kpis { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+  .th { font-family:var(--font-hanken); font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-muted); font-weight:500; }
+  table { width:100%; border-collapse:collapse; font-family:var(--font-hanken); }
+  thead th { font-family:var(--font-hanken); font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-muted); font-weight:500; text-align:right; padding:0 0 12px 16px; }
+  thead th:first-child { text-align:left; padding-left:0; }
+  tbody td { font-size:14px; text-align:right; padding:11px 0 11px 16px; color:var(--text-body); border-top:1px solid var(--card-border); }
+  tbody td:first-child { text-align:left; padding-left:0; font-weight:600; color:var(--text-title); }
+  tbody tr.tot td { border-top:2px solid var(--total-accent); font-weight:800; color:var(--text-title); padding-top:13px; }
+  .cf { display:inline-block; padding:3px 10px; border-radius:6px; font-weight:700; color:#1a0340; }
+  .verdict { display:inline-flex; align-items:center; gap:6px; font-family:var(--font-hanken); font-weight:700; font-size:11px; letter-spacing:.06em; text-transform:uppercase; padding:5px 11px; border-radius:999px; }
+  .v-ok { background:var(--callout-win-bg); color:var(--callout-win-tx); }
+  .v-rev { background:var(--callout-warn-bg); color:var(--callout-warn-tx); }
+  .v-bad { background:var(--callout-risk-bg); color:var(--callout-risk-tx); }
+  .v-na { background:var(--grid-line); color:var(--text-muted); }
+  .callout { border-radius:16px; padding:20px 22px; }
+  .callout .k { font-family:var(--font-bricolage); font-weight:700; font-size:11px; letter-spacing:.14em; text-transform:uppercase; display:block; margin-bottom:8px; }
+  .callout p { font-family:var(--font-bricolage); font-weight:700; font-size:18px; line-height:1.32; margin:0; color:var(--text-title); }
+  .c-info { background:var(--callout-info-bg); } .c-info .k { color:var(--callout-info-tx); }
+  .c-win { background:var(--callout-win-bg); } .c-win .k { color:var(--callout-win-tx); }
+  .footer { font-family:var(--font-hanken); font-size:12px; color:var(--text-muted); display:flex; justify-content:space-between; padding:4px 6px; }
+  .sw { width:11px; height:11px; border-radius:3px; }
+  .note { font-family:var(--font-hanken); font-size:12px; font-style:italic; color:var(--text-muted); margin-top:10px; }
+  .rec { display:flex; gap:16px; padding:16px 0; border-top:1px solid var(--card-border); }
+  .rec .n { flex:none; font-family:var(--font-bricolage); font-weight:800; font-size:19px; color:var(--total-accent); width:28px; }
+  .rec .t { font-family:var(--font-bricolage); font-weight:700; font-size:15px; color:var(--text-title); margin-bottom:3px; }
+</style>
+</head>
+<body data-theme="white">
+<div class="shell">
+
+  <aside class="side">
+    <div class="brand"><img src="../../../porter-design/assets/brand/porter-mark.png" alt="Porter"><span>porter</span></div>
+    <nav class="nav" id="nav">
+      <a class="on" data-p="overview"><span class="dot"></span>Overview</a>
+      <a data-p="funnel"><span class="dot"></span>Funnel</a>
+      <a data-p="campaigns"><span class="dot"></span>Campaigns</a>
+      <a data-p="keywords"><span class="dot"></span>Keywords &amp; terms</a>
+      <a data-p="audience"><span class="dot"></span>Audience &amp; geo</a>
+      <a data-p="conversions"><span class="dot"></span>Conversions</a>
+      <a data-p="audit"><span class="dot"></span>Account audit</a>
+      <a data-p="actions"><span class="dot"></span>Next steps</a>
+    </nav>
+    <div class="src">
+      <div class="h">Data source</div>
+      <div class="row"><span class="ic"><img src="../../../porter-design/assets/connectors/google_ads-icon.svg" alt="Google Ads"></span><span class="nm">Google Ads</span></div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="top">
+      <div class="acct">
+        <span class="ic" style="width:34px;height:34px;border-radius:9px;background:var(--surface-sunken,#f4f0fe);display:flex;align-items:center;justify-content:center;"><img src="../../../porter-design/assets/connectors/google_ads-icon.svg" style="width:20px;height:20px;" alt=""></span>
+        <div><div class="eye">Client account</div><div class="nm">Acme Insurance &middot; Google Ads</div></div>
+      </div>
+      <div class="ctrl">
+        <span class="demo">Fictional demo data</span>
+        <span class="pill">May 1 &ndash; May 31 &middot; vs prev</span>
+        <span class="pill">Currency: USD</span>
+        <button class="btn">Export</button>
+      </div>
+    </header>
+
+    <div class="wrap">
+
+      <!-- OVERVIEW -->
+      <section class="page on" id="overview">
+        <div class="pagehead"><span class="lbl">Monthly performance review</span><h1>More leads, cheaper &mdash; tracked value softened.</h1>
+          <p class="body" style="max-width:780px;margin-top:10px;">This month spent <strong>$120.0K</strong> and produced <strong>500 conversions</strong> at a <strong>$240 CPA</strong> &mdash; conversions <span class="pds-chip pds-chip--pos">&#9650;30%</span> while cost per lead fell <span class="pds-chip pds-chip--pos" style="color:var(--good);background:color-mix(in srgb,var(--good) 15%,transparent);">&#9660;15% &middot; good</span>. Tracked conversion value dipped, so value-based ROAS slipped <span class="pds-chip pds-chip--neg">&#9660;12%</span>. Value is tracked on Life campaigns only, so <span class="pds-u">CPA is the honest headline</span> for this account.</p>
+        </div>
+
+        <div class="kpis">
+          <div class="pds-stat-card pds-scorecard"><span class="pds-scorecard__label">Spend</span><span class="pds-scorecard__value">$120.0K</span><div class="pds-scorecard__spark" data-spark="29000,26000,27000,28000,10000"></div><span class="pds-chip pds-chip--neutral">&#9650; 10.0%</span></div>
+          <div class="pds-stat-card pds-scorecard"><span class="pds-scorecard__label">Conversions</span><span class="pds-scorecard__value">500</span><div class="pds-scorecard__spark" data-spark="115,110,112,120,43"></div><span class="pds-chip pds-chip--pos">&#9650; 30.0%</span></div>
+          <div class="pds-stat-card pds-scorecard"><span class="pds-scorecard__label">Cost / conv. (CPA)</span><span class="pds-scorecard__value">$240</span><div class="pds-scorecard__spark" data-spark="252,236,241,233,300"></div><span class="pds-chip pds-chip--pos" style="color:var(--good);background:color-mix(in srgb,var(--good) 15%,transparent);">&#9660; 15.0% &middot; good</span></div>
+          <div class="pds-stat-card pds-scorecard"><span class="pds-scorecard__label">ROAS (Life only)</span><span class="pds-scorecard__value">2.2x</span><div class="pds-scorecard__spark" data-spark="1.9,2.4,2.1,2.3,1.8"></div><span class="pds-chip pds-chip--neg">&#9660; 12.0% &middot; bad</span></div>
+          <div class="pds-stat-card pds-scorecard"><span class="pds-scorecard__label">Conv. rate</span><span class="pds-scorecard__value">5.0%</span><div class="pds-scorecard__spark" data-spark="4.8,5.2,5.1,4.6,4.7"></div><span class="pds-chip pds-chip--pos">&#9650; 18.0%</span></div>
+        </div>
+
+        <div class="grid2">
+          <div class="blk"><span class="lbl">Time series</span><h3 class="ttl sm">Daily spend</h3>
+            <div data-series="3600,4100,4500,4200,4300,3800,3500,3600,2800,3000,4300,3600,3900,3800,3700,3400,2900,3900,3600,3800,4100,3200,2400,4300,4900,4500,4600,4400,4300,2900,4100" data-unit="$" data-series-labels="May 1,May 2,May 3,May 4,May 5,May 6,May 7,May 8,May 9,May 10,May 11,May 12,May 13,May 14,May 15,May 16,May 17,May 18,May 19,May 20,May 21,May 22,May 23,May 24,May 25,May 26,May 27,May 28,May 29,May 30,May 31" style="height:210px;"></div>
+          </div>
+          <div class="blk"><span class="lbl">Time series</span><h3 class="ttl sm">Daily conversions</h3>
+            <div data-series="14,16,22,18,21,20,12,17,18,17,19,15,11,13,15,14,12,11,19,21,18,16,12,15,24,17,19,20,18,8,15" data-series-labels="May 1,May 2,May 3,May 4,May 5,May 6,May 7,May 8,May 9,May 10,May 11,May 12,May 13,May 14,May 15,May 16,May 17,May 18,May 19,May 20,May 21,May 22,May 23,May 24,May 25,May 26,May 27,May 28,May 29,May 30,May 31" style="height:210px;"></div>
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div class="blk"><span class="lbl">Distribution</span><h3 class="ttl sm">Spend by product line</h3>
+            <div style="display:flex;align-items:center;gap:30px;flex-wrap:wrap;">
+              <div class="pds-donut" style="--donut-size:160px;background:conic-gradient(var(--cat-1) 0 73%,var(--cat-2) 73% 95%,var(--cat-3) 95% 97.5%,var(--cat-4) 97.5% 100%);"></div>
+              <div style="display:flex;flex-direction:column;gap:10px;font-family:var(--font-hanken);font-size:13.5px;color:var(--text-body);">
+                <span style="display:flex;align-items:center;gap:8px;"><span class="sw" style="background:var(--cat-1);"></span>Life &middot; <strong style="color:var(--text-title);">73%</strong></span>
+                <span style="display:flex;align-items:center;gap:8px;"><span class="sw" style="background:var(--cat-2);"></span>Health &amp; Dental &middot; <strong style="color:var(--text-title);">22%</strong></span>
+                <span style="display:flex;align-items:center;gap:8px;"><span class="sw" style="background:var(--cat-3);"></span>Auto &middot; <strong style="color:var(--text-title);">2.5%</strong></span>
+                <span style="display:flex;align-items:center;gap:8px;"><span class="sw" style="background:var(--cat-4);"></span>Brand &middot; <strong style="color:var(--text-title);">2.5%</strong></span>
+              </div>
+            </div>
+            <p class="note">Life takes ~3 of every 4 dollars. Brand is a sliver of spend but returns the highest ROAS (see Campaigns).</p>
+          </div>
+          <div class="blk"><span class="lbl">Snapshot</span><h3 class="ttl sm">Top campaigns by spend</h3>
+            <table>
+              <thead><tr><th>Campaign</th><th>Spend</th><th>Conv.</th><th>CPA</th></tr></thead>
+              <tbody>
+                <tr><td>Life &mdash; Search (TL)</td><td>$58,000</td><td>210</td><td>$276</td></tr>
+                <tr><td>Life Broad MOFU (ROAS)</td><td>$16,000</td><td>70</td><td>$229</td></tr>
+                <tr><td>Dental &mdash; Search (HD)</td><td>$14,000</td><td>45</td><td>$311</td></tr>
+                <tr><td>Health &mdash; Search (HD)</td><td>$12,000</td><td>55</td><td>$218</td></tr>
+                <tr><td>Brand BOFU (BR)</td><td>$3,000</td><td>25</td><td>$120</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- FUNNEL -->
+      <section class="page" id="funnel">
+        <div class="pagehead"><span class="lbl">SUMAS funnel &middot; outcome-first</span><h1>Where the funnel leaks</h1>
+          <p class="body" style="max-width:780px;margin-top:10px;">Read from the bottom up: declare the <strong>conversion</strong> outcome first, then walk back through engagement and visibility to explain it. Each level shows volume, efficiency (cost) and effectiveness (rate) vs the previous month.</p>
+        </div>
+        <div class="grid3">
+          <div class="blk"><span class="lbl" style="color:var(--cat-1);">Conversion</span><h3 class="ttl" style="font-size:30px;">500</h3>
+            <span class="pds-chip pds-chip--pos">&#9650; 30.0%</span>
+            <div style="margin-top:16px;display:flex;flex-direction:column;gap:8px;font-family:var(--font-hanken);font-size:13.5px;color:var(--text-body);">
+              <div style="display:flex;justify-content:space-between;"><span>CPA</span><strong style="color:var(--text-title);">$240 <span class="pds-chip pds-chip--pos" style="color:var(--good);background:color-mix(in srgb,var(--good) 15%,transparent);">&#9660;15%</span></strong></div>
+              <div style="display:flex;justify-content:space-between;"><span>Conv. rate</span><strong style="color:var(--text-title);">5.0% <span class="pds-chip pds-chip--pos">&#9650;18%</span></strong></div>
+              <div style="display:flex;justify-content:space-between;"><span>Value (Life)</span><strong style="color:var(--text-title);">$264.0K <span class="pds-chip pds-chip--neg">&#9660;3%</span></strong></div>
+              <div style="display:flex;justify-content:space-between;"><span>ROAS (Life)</span><strong style="color:var(--text-title);">2.2x <span class="pds-chip pds-chip--neg">&#9660;12%</span></strong></div>
+            </div>
+          </div>
+          <div class="blk"><span class="lbl" style="color:var(--cat-2);">Engagement</span><h3 class="ttl" style="font-size:30px;">10,000</h3>
+            <span class="pds-chip pds-chip--pos">&#9650; 8.0% clicks</span>
+            <div style="margin-top:16px;display:flex;flex-direction:column;gap:8px;font-family:var(--font-hanken);font-size:13.5px;color:var(--text-body);">
+              <div style="display:flex;justify-content:space-between;"><span>CPC</span><strong style="color:var(--text-title);">$12.00 <span class="pds-chip pds-chip--neutral">&#9650;2%</span></strong></div>
+              <div style="display:flex;justify-content:space-between;"><span>CTR</span><strong style="color:var(--text-title);">2.5% <span class="pds-chip pds-chip--pos">&#9650;40%</span></strong></div>
+            </div>
+            <p class="note">CTR rose as cheap prospecting impressions pulled back &mdash; the click base got more qualified.</p>
+          </div>
+          <div class="blk"><span class="lbl" style="color:var(--cat-3);">Visibility</span><h3 class="ttl" style="font-size:30px;">400K</h3>
+            <span class="pds-chip pds-chip--neg">&#9660; 35.0% impr.</span>
+            <div style="margin-top:16px;display:flex;flex-direction:column;gap:8px;font-family:var(--font-hanken);font-size:13.5px;color:var(--text-body);">
+              <div style="display:flex;justify-content:space-between;"><span>CPM</span><strong style="color:var(--text-title);">$300.0</strong></div>
+              <div style="display:flex;justify-content:space-between;"><span>Search IS (Life)</span><strong style="color:var(--text-title);">35%</strong></div>
+              <div style="display:flex;justify-content:space-between;"><span>Search IS (Brand)</span><strong style="color:var(--text-title);">85%</strong></div>
+            </div>
+          </div>
+        </div>
+        <div class="grid2">
+          <div class="blk"><span class="lbl">Funnel</span><h3 class="ttl sm">Path to conversion</h3>
+            <div class="pds-funnel">
+              <div class="pds-funnel__stage"><div class="pds-funnel__head"><span class="pds-funnel__name">Impressions</span><span class="pds-funnel__value">400,000</span></div><div class="pds-funnel__track"><div class="pds-funnel__fill" style="width:100%;"></div></div></div>
+              <div class="pds-funnel__rate">&#8595; 2.5% click-through</div>
+              <div class="pds-funnel__stage"><div class="pds-funnel__head"><span class="pds-funnel__name">Clicks</span><span class="pds-funnel__value">10,000</span></div><div class="pds-funnel__track"><div class="pds-funnel__fill" style="width:40%;background:var(--cat-2);"></div></div></div>
+              <div class="pds-funnel__rate">&#8595; 5.0% conversion</div>
+              <div class="pds-funnel__stage"><div class="pds-funnel__head"><span class="pds-funnel__name">Conversions</span><span class="pds-funnel__value">500</span></div><div class="pds-funnel__track"><div class="pds-funnel__fill" style="width:14%;background:var(--cat-3);"></div></div></div>
+            </div>
+          </div>
+          <div class="callout c-info" style="display:flex;flex-direction:column;justify-content:center;">
+            <span class="k">Leak read</span>
+            <p>Visibility fell 35% &mdash; but that was a deliberate <span class="pds-u">prospecting pullback</span>, not a Search problem. Engagement and conversion both improved. The funnel got <strong>more efficient, not bigger</strong>. The real visibility lever is Search impression share: Life loses <strong>18% to rank</strong> (fixable with Quality Score / bids), not budget.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CAMPAIGNS -->
+      <section class="page" id="campaigns">
+        <div class="pagehead"><span class="lbl">Campaigns</span><h1>Performance by campaign</h1></div>
+        <div class="blk">
+          <p class="sub">CPA and ROAS shaded best&rarr;worst. Health &amp; Dental and Auto track <em>leads only</em> (no value) &mdash; their ROAS reads ~0 by design; judge them on CPA.</p>
+          <table>
+            <thead><tr><th>Campaign</th><th>Type</th><th>Spend</th><th>Conv.</th><th>CPA</th><th>Value</th><th>ROAS</th></tr></thead>
+            <tbody>
+              <tr><td>Life &mdash; Search (TL)</td><td>Search</td><td>$58,000</td><td>210</td><td><span class="cf" style="background:var(--cf-3);">$276</span></td><td>$150,000</td><td><span class="cf" style="background:var(--cf-3);">2.59x</span></td></tr>
+              <tr><td>Life Broad MOFU (ROAS)</td><td>Search</td><td>$16,000</td><td>70</td><td><span class="cf" style="background:var(--cf-4);">$229</span></td><td>$58,000</td><td><span class="cf" style="background:var(--cf-4);">3.63x</span></td></tr>
+              <tr><td>Dental &mdash; Search (HD)</td><td>Search</td><td>$14,000</td><td>45</td><td><span class="cf" style="background:var(--cf-1);">$311</span></td><td>&mdash;</td><td><span class="v-na verdict">leads only</span></td></tr>
+              <tr><td>Health &mdash; Search (HD)</td><td>Search</td><td>$12,000</td><td>55</td><td><span class="cf" style="background:var(--cf-4);">$218</span></td><td>&mdash;</td><td><span class="v-na verdict">leads only</span></td></tr>
+              <tr><td>Life Search ROAS Test</td><td>Search</td><td>$9,000</td><td>35</td><td><span class="cf" style="background:var(--cf-3);">$257</span></td><td>$40,000</td><td><span class="cf" style="background:var(--cf-5);">4.44x</span></td></tr>
+              <tr><td>Auto Search Test (HA)</td><td>Search</td><td>$4,000</td><td>38</td><td><span class="cf" style="background:var(--cf-5);">$105</span></td><td>&mdash;</td><td><span class="v-na verdict">leads only</span></td></tr>
+              <tr><td>Brand BOFU (BR)</td><td>Search</td><td>$3,000</td><td>25</td><td><span class="cf" style="background:var(--cf-5);">$120</span></td><td>$16,000</td><td><span class="cf" style="background:var(--cf-5);">5.33x</span></td></tr>
+              <tr><td>Demand Gen Video</td><td>Demand Gen</td><td>$4,000</td><td>22</td><td><span class="cf" style="background:var(--cf-4);">$182</span></td><td>&mdash;</td><td><span class="v-na verdict">prospecting</span></td></tr>
+              <tr class="tot"><td>Total</td><td></td><td>$120,000</td><td>500</td><td>$240</td><td>$264,000</td><td>2.20x</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="blk"><span class="lbl">Visibility diagnostic</span><h3 class="ttl sm">Search impression share &mdash; budget vs rank</h3>
+          <p class="sub">Lose impressions to <strong>budget</strong> &rarr; raise budget. Lose to <strong>rank</strong> &rarr; fix Quality Score / bids; more budget won't help.</p>
+          <table>
+            <thead><tr><th>Campaign</th><th>Impr. share</th><th>Lost &mdash; budget</th><th>Lost &mdash; rank</th><th>Diagnosis</th></tr></thead>
+            <tbody>
+              <tr><td>Life &mdash; Search (TL)</td><td>35%</td><td>6%</td><td>18%</td><td style="text-align:right;"><span class="verdict v-rev">Rank-limited</span></td></tr>
+              <tr><td>Life Broad MOFU</td><td>22%</td><td>20%</td><td>7%</td><td style="text-align:right;"><span class="verdict v-rev">Budget-limited</span></td></tr>
+              <tr><td>Dental &mdash; Search (HD)</td><td>28%</td><td>2%</td><td>24%</td><td style="text-align:right;"><span class="verdict v-rev">Rank-limited</span></td></tr>
+              <tr><td>Health &mdash; Search (HD)</td><td>24%</td><td>19%</td><td>8%</td><td style="text-align:right;"><span class="verdict v-rev">Budget-limited</span></td></tr>
+              <tr><td>Brand BOFU (BR)</td><td>85%</td><td>0%</td><td>6%</td><td style="text-align:right;"><span class="verdict v-ok">Strong</span></td></tr>
+            </tbody>
+          </table>
+          <p class="note">If your connector returns impression share on a 0&ndash;1 scale and lost-IS on 0&ndash;100, normalize before charting (a known Google Ads quirk).</p>
+        </div>
+      </section>
+
+      <!-- KEYWORDS -->
+      <section class="page" id="keywords">
+        <div class="pagehead"><span class="lbl">Keywords &amp; search terms</span><h1>What people typed &mdash; and what to do</h1></div>
+        <div class="blk"><span class="lbl">Search terms</span><h3 class="ttl sm">Top search terms by spend</h3>
+          <table>
+            <thead><tr><th>Search term</th><th>Match</th><th>Spend</th><th>Conv.</th><th>CPA</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr><td>acme life insurance</td><td style="text-align:right;"><span class="pds-chip pds-chip--neutral">Exact</span></td><td>$1,200</td><td>40</td><td>$30</td><td style="text-align:right;"><span class="verdict v-ok">Brand &middot; protect</span></td></tr>
+              <tr><td>term life insurance</td><td style="text-align:right;"><span class="pds-chip pds-chip--neutral">Phrase</span></td><td>$9,000</td><td>32</td><td>$281</td><td style="text-align:right;"><span class="verdict v-ok">Keep</span></td></tr>
+              <tr><td>life insurance</td><td style="text-align:right;"><span class="pds-chip pds-chip--neutral">Phrase</span></td><td>$8,500</td><td>30</td><td>$283</td><td style="text-align:right;"><span class="verdict v-ok">Keep</span></td></tr>
+              <tr><td>best life insurance</td><td style="text-align:right;"><span class="pds-chip pds-chip--neutral">Exact</span></td><td>$4,000</td><td>9</td><td>$444</td><td style="text-align:right;"><span class="verdict v-rev">Review</span></td></tr>
+              <tr><td>dental insurance</td><td style="text-align:right;"><span class="pds-chip pds-chip--neutral">Exact</span></td><td>$1,300</td><td>1</td><td>$1,300</td><td style="text-align:right;"><span class="verdict v-bad">Tighten</span></td></tr>
+              <tr><td>free insurance quote</td><td style="text-align:right;"><span class="pds-chip pds-chip--neutral">Exact</span></td><td>$700</td><td>0</td><td>&mdash;</td><td style="text-align:right;"><span class="verdict v-bad">Exclude</span></td></tr>
+              <tr><td>insurance near me</td><td style="text-align:right;"><span class="pds-chip pds-chip--neutral">Broad</span></td><td>$550</td><td>0</td><td>&mdash;</td><td style="text-align:right;"><span class="verdict v-bad">Exclude</span></td></tr>
+              <tr><td>cheap car insurance</td><td style="text-align:right;"><span class="pds-chip pds-chip--neutral">Exact</span></td><td>$420</td><td>5</td><td>$84</td><td style="text-align:right;"><span class="verdict v-rev">Monitor</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="grid2">
+          <div class="blk"><span class="lbl">Keywords</span><h3 class="ttl sm">Top keywords by spend</h3>
+            <table>
+              <thead><tr><th>Keyword</th><th>Match</th><th>Spend</th><th>CPA</th><th>QS</th></tr></thead>
+              <tbody>
+                <tr><td>term life insurance</td><td style="text-align:right;"><span class="pds-chip pds-chip--neutral">Exact</span></td><td>$9,000</td><td>$281</td><td style="text-align:right;"><span class="verdict v-na">pending</span></td></tr>
+                <tr><td>best life insurance</td><td style="text-align:right;"><span class="pds-chip pds-chip--neutral">Phrase</span></td><td>$4,000</td><td>$444</td><td style="text-align:right;"><span class="verdict v-na">pending</span></td></tr>
+                <tr><td>life insurance online</td><td style="text-align:right;"><span class="pds-chip pds-chip--neutral">Phrase</span></td><td>$3,500</td><td>$300</td><td style="text-align:right;"><span class="verdict v-na">pending</span></td></tr>
+                <tr><td>cheap life insurance</td><td style="text-align:right;"><span class="pds-chip pds-chip--neutral">Broad</span></td><td>$3,200</td><td>$260</td><td style="text-align:right;"><span class="verdict v-na">n/a</span></td></tr>
+                <tr><td>acme life insurance</td><td style="text-align:right;"><span class="pds-chip pds-chip--neutral">Exact</span></td><td>$1,200</td><td>$30</td><td style="text-align:right;"><span class="verdict v-na">pending</span></td></tr>
+              </tbody>
+            </table>
+            <p class="note">Quality Score column intentionally left "pending": Google Ads QS aggregates unreliably over multi-day windows (returns out-of-range values). Show the latest snapshot once available.</p>
+          </div>
+          <div class="blk"><span class="lbl">Match type</span><h3 class="ttl sm">Spend by match type</h3>
+            <div class="pds-breakdown">
+              <div class="pds-breakdown__row"><span>Exact</span><div class="pds-breakdown__track"><div class="pds-breakdown__fill" style="width:55%;"></div></div><span>~55%</span></div>
+              <div class="pds-breakdown__row"><span>Phrase</span><div class="pds-breakdown__track"><div class="pds-breakdown__fill" style="width:30%;background:var(--cat-2);"></div></div><span>~30%</span></div>
+              <div class="pds-breakdown__row"><span>Broad</span><div class="pds-breakdown__track"><div class="pds-breakdown__fill" style="width:15%;background:var(--cat-3);"></div></div><span>~15%</span></div>
+            </div>
+            <p class="note">Broad match drives the most wasted spend (the 0-conversion terms above are nearly all broad/loose). Tighten before scaling.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- AUDIENCE & GEO -->
+      <section class="page" id="audience">
+        <div class="pagehead"><span class="lbl">Audience &amp; geography</span><h1>Who converts, and where</h1></div>
+        <div class="grid3">
+          <div class="pds-stat-card"><div class="th">Mobile</div><div style="font-family:var(--font-bricolage);font-weight:800;font-size:24px;color:var(--text-title);margin-top:6px;">$267 <span style="font-size:13px;color:var(--text-muted);">CPA</span></div><div class="body" style="font-size:13px;margin-top:6px;">60% of spend &middot; CVR 4.2% &middot; ROAS 1.9x</div></div>
+          <div class="pds-stat-card"><div class="th">Desktop</div><div style="font-family:var(--font-bricolage);font-weight:800;font-size:24px;color:var(--text-title);margin-top:6px;">$196 <span style="font-size:13px;color:var(--text-muted);">CPA</span></div><div class="body" style="font-size:13px;margin-top:6px;">37% of spend &middot; CVR <strong>6.8%</strong> &middot; ROAS <strong>2.7x</strong></div></div>
+          <div class="pds-stat-card"><div class="th">Connected TV</div><div style="font-family:var(--font-bricolage);font-weight:800;font-size:24px;color:var(--text-title);margin-top:6px;">&mdash;</div><div class="body" style="font-size:13px;margin-top:6px;">Demand Gen reach &middot; ~5 conv &middot; $4K spend</div></div>
+        </div>
+        <div class="callout c-win"><span class="k">Device opportunity</span><p>Desktop converts at <strong>6.8%</strong> vs mobile's 4.2% and returns <strong>2.7x</strong> vs 1.9x &mdash; at a $196 CPA vs $267. It's only 37% of spend. A positive desktop bid adjustment is the cleanest efficiency lever this month.</p></div>
+        <div class="grid2">
+          <div class="blk"><span class="lbl">Geography</span><h3 class="ttl sm">Spend by region</h3>
+            <div class="pds-breakdown">
+              <div class="pds-breakdown__row"><span>California</span><div class="pds-breakdown__track"><div class="pds-breakdown__fill" style="width:100%;"></div></div><span>$40.0K</span></div>
+              <div class="pds-breakdown__row"><span>Texas</span><div class="pds-breakdown__track"><div class="pds-breakdown__fill" style="width:55%;background:var(--cat-2);"></div></div><span>$22.0K</span></div>
+              <div class="pds-breakdown__row"><span>New York</span><div class="pds-breakdown__track"><div class="pds-breakdown__fill" style="width:45%;background:var(--cat-2);"></div></div><span>$18.0K</span></div>
+              <div class="pds-breakdown__row"><span>Florida</span><div class="pds-breakdown__track"><div class="pds-breakdown__fill" style="width:20%;background:var(--cat-3);"></div></div><span>$8.0K</span></div>
+              <div class="pds-breakdown__row"><span>Ohio</span><div class="pds-breakdown__track"><div class="pds-breakdown__fill" style="width:12%;background:var(--cat-3);"></div></div><span>$5.0K</span></div>
+              <div class="pds-breakdown__row"><span>Nevada</span><div class="pds-breakdown__track"><div class="pds-breakdown__fill" style="width:7%;background:var(--cat-4);"></div></div><span>$3.0K</span></div>
+            </div>
+            <p class="note">Region breakdown bars work for any geography (the design system ships a US-tile map only; bars stay geo-agnostic).</p>
+          </div>
+          <div class="blk"><span class="lbl">Efficiency by region</span><h3 class="ttl sm">Best &amp; worst regions</h3>
+            <table>
+              <thead><tr><th>Region</th><th>Spend</th><th>CPA</th><th>ROAS</th><th></th></tr></thead>
+              <tbody>
+                <tr><td>Ohio</td><td>$5,000</td><td>$130</td><td>4.2x</td><td style="text-align:right;"><span class="verdict v-ok">Scale</span></td></tr>
+                <tr><td>Florida</td><td>$8,000</td><td>$190</td><td>2.9x</td><td style="text-align:right;"><span class="verdict v-ok">Efficient</span></td></tr>
+                <tr><td>California</td><td>$40,000</td><td>$235</td><td>2.3x</td><td style="text-align:right;"><span class="verdict v-rev">Core</span></td></tr>
+                <tr><td>New York</td><td>$18,000</td><td>$300</td><td>1.7x</td><td style="text-align:right;"><span class="verdict v-rev">Watch</span></td></tr>
+                <tr><td>Nevada</td><td>$3,000</td><td>$410</td><td>1.3x</td><td style="text-align:right;"><span class="verdict v-bad">High impr / low conv</span></td></tr>
+              </tbody>
+            </table>
+            <p class="note">Nevada burns impressions for few conversions &mdash; review targeting / creative before spending more.</p>
+          </div>
+        </div>
+        <div class="blk"><span class="lbl">Timing</span><h3 class="ttl sm">Conversions by day of week</h3>
+          <div class="pds-bars" style="--chart-h:170px;">
+            <div class="pds-bar" style="height:92%;"></div>
+            <div class="pds-bar" style="height:88%;"></div>
+            <div class="pds-bar" style="height:89%;"></div>
+            <div class="pds-bar" style="height:80%;"></div>
+            <div class="pds-bar" style="height:94%;"></div>
+            <div class="pds-bar" style="height:65%;"></div>
+            <div class="pds-bar" style="height:100%;"></div>
+          </div>
+          <div style="display:flex;gap:28px;width:max-content;margin-top:10px;">
+            <span class="th" style="width:48px;text-align:center;">Mon</span><span class="th" style="width:48px;text-align:center;">Tue</span><span class="th" style="width:48px;text-align:center;">Wed</span><span class="th" style="width:48px;text-align:center;">Thu</span><span class="th" style="width:48px;text-align:center;">Fri</span><span class="th" style="width:48px;text-align:center;">Sat</span><span class="th" style="width:48px;text-align:center;">Sun</span>
+          </div>
+          <p class="note">Sunday is the strongest conversion day; Saturday the weakest. Weekends hold up &mdash; no need to throttle.</p>
+        </div>
+      </section>
+
+      <!-- CONVERSIONS -->
+      <section class="page" id="conversions">
+        <div class="pagehead"><span class="lbl">Conversions</span><h1>What counts as a conversion</h1>
+          <p class="body" style="max-width:780px;margin-top:10px;">We report Google's <strong>primary</strong> actions (the "Conversions" column). Value is tracked on <span class="pds-u">Life and a little Auto only</span> &mdash; Health &amp; Dental fire as leads with $0 value, which is why account ROAS understates the full picture.</p>
+        </div>
+        <div class="blk"><span class="lbl">Down-funnel ladder</span><h3 class="ttl sm">Primary conversion actions</h3>
+          <table>
+            <thead><tr><th>Action</th><th>Category</th><th>Primary conv.</th><th>All conv.</th><th>Value</th></tr></thead>
+            <tbody>
+              <tr><td>Life App Start</td><td style="text-align:right;"><span class="pds-chip pds-chip--neutral">Default</span></td><td>280</td><td>600</td><td>$186,000</td></tr>
+              <tr><td>Health Application</td><td style="text-align:right;"><span class="pds-chip pds-chip--neutral">Lead form</span></td><td>85</td><td>150</td><td>&mdash;</td></tr>
+              <tr><td>Life Payment Received</td><td style="text-align:right;"><span class="pds-chip pds-chip--neutral">Default</span></td><td>45</td><td>90</td><td>$62,000</td></tr>
+              <tr><td>Auto Quote</td><td style="text-align:right;"><span class="pds-chip pds-chip--neutral">Request quote</span></td><td>30</td><td>48</td><td>$40</td></tr>
+              <tr><td>Health Payment Received</td><td style="text-align:right;"><span class="pds-chip pds-chip--neutral">Default</span></td><td>12</td><td>30</td><td>$16,000</td></tr>
+              <tr><td>Life Policy Approved</td><td style="text-align:right;"><span class="pds-chip pds-chip--brand">Purchase</span></td><td>8</td><td>40</td><td>&mdash;</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout c-info"><span class="k">Tracking note</span><p>The biggest value driver, <strong>Life App Start</strong>, is categorized <span class="pds-u">"Default"</span>, not "Purchase" / "Submit lead form". Inconsistent categories make value-based bidding less trustworthy &mdash; clean them up (see audit).</p></div>
+      </section>
+
+      <!-- AUDIT -->
+      <section class="page" id="audit">
+        <div class="pagehead"><span class="lbl">Account audit &middot; 8 checks</span><h1>Health check &amp; what to fix</h1>
+          <p class="body" style="max-width:780px;margin-top:10px;">A read against the porter-analysis Google Ads audit cluster. Each check carries a verdict; the dollar-ranked fixes roll up into Next steps.</p>
+        </div>
+        <div class="grid2">
+          <div class="blk"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><span class="lbl" style="margin:0;">Conversion tracking</span><span class="verdict v-rev">Review</span></div><p class="body" style="font-size:13.5px;">Top value action ("Life App Start") is mis-categorized as <em>Default</em>. Value tracked on Life/Auto only. Down-funnel actions present (good).</p></div>
+          <div class="blk"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><span class="lbl" style="margin:0;">Bid strategy alignment</span><span class="verdict v-rev">Review</span></div><p class="body" style="font-size:13.5px;">Parallel Life "ROAS test" campaigns. Confirm target ROAS matches the real ~2.6&ndash;4.4x and consolidate the tests once a winner emerges.</p></div>
+          <div class="blk"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><span class="lbl" style="margin:0;">Value-based bidding</span><span class="verdict v-rev">Review</span></div><p class="body" style="font-size:13.5px;">Life is eligible for tROAS (value + volume). Health &amp; Dental can't use value bidding until they pass a conversion value &mdash; today they're CPA-only.</p></div>
+          <div class="blk"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><span class="lbl" style="margin:0;">Spend allocation</span><span class="verdict v-rev">Review</span></div><p class="body" style="font-size:13.5px;">Life = 73% of spend. Budget-limited campaigns (Life Broad, Health) lose 19&ndash;20% impression share to budget while Brand (5.3x ROAS) is tiny. Re-weight.</p></div>
+          <div class="blk"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><span class="lbl" style="margin:0;">Campaign settings / geo</span><span class="verdict v-rev">Review</span></div><p class="body" style="font-size:13.5px;">Nevada spends on many impressions for few conversions &mdash; check location/audience targeting. Otherwise geo targeting looks intentional.</p></div>
+          <div class="blk"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><span class="lbl" style="margin:0;">Search-term hygiene</span><span class="verdict v-rev">Review</span></div><p class="body" style="font-size:13.5px;">$1.3K+ on zero-converting terms ("free insurance quote", "insurance near me" broad). Add negatives; tighten broad match.</p></div>
+          <div class="blk"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><span class="lbl" style="margin:0;">Quality Score</span><span class="verdict v-bad">Blocked</span></div><p class="body" style="font-size:13.5px;">Can't assess reliably &mdash; QS aggregates out of range over multi-day windows (1&ndash;10 expected). Use the latest snapshot once the connector normalizes it.</p></div>
+          <div class="blk"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><span class="lbl" style="margin:0;">Ad assets / landing CRO</span><span class="verdict v-na">Not run</span></div><p class="body" style="font-size:13.5px;">Asset-extension presence and landing-page CRO need the asset + scrape pulls (not in this pass). Included in the template; populate next iteration.</p></div>
+        </div>
+      </section>
+
+      <!-- NEXT STEPS -->
+      <section class="page" id="actions">
+        <div class="pagehead"><span class="lbl">Next steps</span><h1>What to do next</h1></div>
+        <div class="blk">
+          <div class="rec"><span class="n">01</span><div><div class="t">Add a positive desktop bid adjustment</div><p class="body" style="font-size:14px;margin:0;">Desktop converts at 6.8% (vs 4.2% mobile) and 2.7x ROAS at a $196 CPA, but is only 37% of spend. Cleanest efficiency win this month.</p></div></div>
+          <div class="rec"><span class="n">02</span><div><div class="t">Cut wasted search terms, tighten broad match</div><p class="body" style="font-size:14px;margin:0;">Exclude "free insurance quote" and "insurance near me" (broad); tighten "dental insurance" exact. Recovers ~$1.3K+/mo.</p></div></div>
+          <div class="rec"><span class="n">03</span><div><div class="t">Fund the budget-limited winners</div><p class="body" style="font-size:14px;margin:0;">Life Broad MOFU (3.63x) and Health lose 19&ndash;20% IS to budget. Shift spend from rank-limited Life TL (fix QS there instead) and from low-value Demand Gen.</p></div></div>
+          <div class="rec"><span class="n">04</span><div><div class="t">Fix conversion-action categories &amp; extend value tracking</div><p class="body" style="font-size:14px;margin:0;">Re-categorize "Life App Start" off Default; pass a value to Health &amp; Dental leads so the whole account can use value-based bidding.</p></div></div>
+          <div class="rec"><span class="n">05</span><div><div class="t">Review Nevada targeting</div><p class="body" style="font-size:14px;margin:0;">High impressions, few conversions, $410 CPA. Tighten audience/location or pause until it earns its spend.</p></div></div>
+        </div>
+        <div class="footer"><span>Acme Insurance &middot; Google Ads &middot; fictional demo data &middot; prepared with Porter</span><span>May 2026 &middot; vs prev &middot; USD &middot; CPA computed (native cost/conv unreliable)</span></div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  var nav = document.getElementById('nav');
+  nav.addEventListener('click', function(e){
+    var a = e.target.closest('a'); if(!a) return;
+    var p = a.getAttribute('data-p');
+    nav.querySelectorAll('a').forEach(function(x){ x.classList.toggle('on', x===a); });
+    document.querySelectorAll('.page').forEach(function(s){ s.classList.toggle('on', s.id===p); });
+    window.scrollTo(0,0);
+    if(window.PorterCharts) window.PorterCharts.init();
+  });
+  function rescan(){ if(window.PorterCharts) window.PorterCharts.init(); }
+  [0,120,400,900].forEach(function(t){ setTimeout(rescan,t); });
+</script>
+</body>
+</html>

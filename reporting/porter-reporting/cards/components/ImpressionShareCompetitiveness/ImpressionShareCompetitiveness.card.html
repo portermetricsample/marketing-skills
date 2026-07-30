@@ -1,0 +1,164 @@
+<!-- @dsCard group="Components" viewport="1180x760" name="Impression share — auction competitiveness" subtitle="Per campaign: Top IS · Abs. top · lost-to-rank / lost-to-budget split · coverage bar · the budget-vs-rank limiter. Your own account — the honest substitute for Auction Insights (no competitor data on the connector)." -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- ONE shared dependency, project-local relative path only (no machine paths, no sibling-repo paths) -->
+<link rel="stylesheet" href="../../styles.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400..700&display=swap" rel="stylesheet" />
+<style>
+  /* card-specific LAYOUT only — every color/font comes from styles.css tokens */
+  html, body { margin: 0; background: var(--surface-bg); color: var(--text-body); font-family: var(--font-hanken); }
+  .wrap { padding: 28px; max-width: 1120px; }
+  .eyebrow { font-family: var(--font-bricolage); font-weight: 700; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--eyebrow-color); margin: 0 0 4px; }
+  .pis-title { font-family: var(--font-bricolage); font-weight: 700; font-size: 22px; color: var(--text-title); margin: 0; }
+  .pis-meta { font-size: 12.5px; color: var(--text-muted); margin: 4px 0 0; }
+
+  .pis-note { font-size: 12px; color: var(--text-muted); background: var(--surface-sunken, var(--surface-bg));
+    border: 1px solid var(--card-border); border-left: 3px solid var(--callout-warn-tx);
+    border-radius: 8px; padding: 9px 12px; margin: 16px 0 14px; line-height: 1.5; }
+  .pis-note strong { color: var(--text-strong); }
+
+  .pis-ctlbar { display: flex; align-items: center; gap: 10px; margin: 0 0 14px; }
+  .pis-ctllbl { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); }
+  .pis-pills { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+
+  .pis-summary { background: var(--surface-sunken, var(--surface-bg)); border: 1px solid var(--card-border);
+    border-radius: 12px; padding: 13px 16px; margin-bottom: 14px; }
+  .pis-sum-stats { display: flex; flex-wrap: wrap; gap: 18px; font-size: 13px; }
+  .pis-sum-stat strong { color: var(--text-strong); }
+  .pis-sum-stat--rank strong { color: var(--callout-warn-tx); }
+  .pis-sum-stat--budget strong { color: var(--callout-risk-tx); }
+
+  .pis-table { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--surface-card);
+    border: 1px solid var(--card-border); border-radius: 12px; overflow: hidden; }
+  .pis-head th { text-align: left; font-size: 10.5px; text-transform: uppercase; letter-spacing: .04em;
+    color: var(--text-muted); font-weight: 600; padding: 10px 12px; border-bottom: 1px solid var(--card-border); }
+  .pis-row td { padding: 11px 12px; border-bottom: 1px solid var(--card-border); vertical-align: middle; }
+  .pis-row:last-child td { border-bottom: 0; }
+  .pis-camp { font-family: var(--font-bricolage); font-weight: 700; color: var(--text-title); }
+  .pis-is--top { font-weight: 700; color: var(--text-strong); }
+  .pis-is--abs { color: var(--text-muted); }
+  .pis-lost--rank { color: var(--callout-warn-tx); }
+  .pis-lost--budget { color: var(--callout-risk-tx); }
+
+  .pis-coverage { width: 170px; }
+  .pis-bar { display: flex; width: 100%; height: 12px; border-radius: 6px; overflow: hidden; background: var(--surface-bg); }
+  .pis-bar-seg--top { background: var(--good); }
+  .pis-bar-seg--lost-rank { background: var(--callout-warn-tx); }
+  .pis-bar-seg--lost-budget { background: var(--callout-risk-tx); }
+
+  .pis-limiter { font-size: 11.5px; font-weight: 700; white-space: nowrap; }
+  .pis-limiter--strong { color: var(--good); }
+  .pis-limiter--rank { color: var(--callout-warn-tx); }
+  .pis-limiter--budget { color: var(--callout-risk-tx); }
+  .pis-limiter--both { color: var(--bad); }
+</style>
+</head>
+<body data-theme="white">
+  <div class="wrap">
+    <p class="eyebrow">Impression share</p>
+    <h2 class="pis-title">Search auction competitiveness, per campaign</h2>
+    <p class="pis-meta">Acme Insurance &middot; sample data &middot; campaign-grain Search Impression Share</p>
+
+    <p class="pis-note">Your account’s own Search auction competitiveness. This is <strong>not</strong>
+      competitor Auction Insights — the Porter google-ads connector exposes no competitor-domain
+      dimension, so rival domains, overlap rate and outranking share cannot be shown.</p>
+
+    <div class="pis-ctlbar">
+      <span class="pis-ctllbl">Sort</span>
+      <div class="pis-pills" id="seg">
+        <button class="pds-btn pds-btn--sm pds-btn--purple" data-s="spend">Spend</button>
+        <button class="pds-btn pds-btn--sm pds-btn--outline" data-s="exposure">Lowest top IS</button>
+        <button class="pds-btn pds-btn--sm pds-btn--outline" data-s="budget">Most lost to budget</button>
+        <button class="pds-btn pds-btn--sm pds-btn--outline" data-s="rank">Most lost to rank</button>
+      </div>
+    </div>
+
+    <div id="pis-host"></div>
+  </div>
+
+  <script>
+  /* Self-contained impression-share card. Mirrors the structure of
+     components/google-ads/impression-share-competitiveness (kept inline so the
+     card renders with zero dependencies). Fictional Acme Insurance data only.
+     Top + Lost·rank + Lost·budget = 100% of the top-eligible auctions. */
+  (function () {
+    function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+    function money(n){ return "$"+n.toLocaleString("en-US"); }
+    function pct(v){ return (v*100).toFixed(1)+"%"; }
+
+    /* one row per campaign — campaign-grain IS. Fictional. */
+    var ROWS = [
+      { camp:"Acme_Health_SEM", spend:15370, top:0.58, abs:0.29, rankLost:0.22, budgetLost:0.20 },
+      { camp:"Acme_Life_SEM",   spend:13400, top:0.71, abs:0.42, rankLost:0.18, budgetLost:0.11 },
+      { camp:"Acme_Auto_SEM",   spend:11200, top:0.40, abs:0.18, rankLost:0.12, budgetLost:0.48 },
+      { camp:"Acme_Brand",      spend:2030,  top:0.93, abs:0.78, rankLost:0.05, budgetLost:0.02 }
+    ];
+    var LIM = { strong:"Strong top coverage", budget:"Budget-limited", rank:"Rank-limited", both:"Rank + budget limited" };
+    function limiter(r){
+      if(r.top>=0.80) return "strong";
+      var hiR=r.rankLost>=0.20, hiB=r.budgetLost>=0.20;
+      if(hiR&&hiB) return "both";
+      if(r.budgetLost>r.rankLost) return "budget";
+      return "rank";
+    }
+    function bar(r){
+      var sum=r.top+r.rankLost+r.budgetLost; if(sum<=0) return '<div class="pis-bar"></div>';
+      function w(x){ return (x/sum*100).toFixed(2)+"%"; }
+      return '<div class="pis-bar">'+
+        '<span class="pis-bar-seg pis-bar-seg--top" style="width:'+w(r.top)+'" title="Top IS '+pct(r.top)+'"></span>'+
+        '<span class="pis-bar-seg pis-bar-seg--lost-rank" style="width:'+w(r.rankLost)+'" title="Lost to rank '+pct(r.rankLost)+'"></span>'+
+        '<span class="pis-bar-seg pis-bar-seg--lost-budget" style="width:'+w(r.budgetLost)+'" title="Lost to budget '+pct(r.budgetLost)+'"></span>'+
+        '</div>';
+    }
+    function rowHtml(r){
+      var m=limiter(r);
+      return '<tr class="pis-row pis-row--'+m+'">'+
+        '<td class="pis-camp">'+esc(r.camp)+'</td>'+
+        '<td class="pis-spend">'+money(r.spend)+'</td>'+
+        '<td class="pis-is pis-is--top">'+pct(r.top)+'</td>'+
+        '<td class="pis-is pis-is--abs">'+pct(r.abs)+'</td>'+
+        '<td class="pis-lost pis-lost--rank">'+pct(r.rankLost)+'</td>'+
+        '<td class="pis-lost pis-lost--budget">'+pct(r.budgetLost)+'</td>'+
+        '<td class="pis-coverage">'+bar(r)+'</td>'+
+        '<td class="pis-limiter pis-limiter--'+m+'">'+LIM[m]+'</td></tr>';
+    }
+    function summary(){
+      var total=0,wTop=0,rankSpend=0,budgetSpend=0;
+      ROWS.forEach(function(r){ total+=r.spend; wTop+=r.top*r.spend; var m=limiter(r);
+        if(m==="budget"||m==="both") budgetSpend+=r.spend; if(m==="rank"||m==="both") rankSpend+=r.spend; });
+      return '<div class="pis-summary"><div class="pis-sum-stats">'+
+        '<span class="pis-sum-stat"><strong>'+ROWS.length+'</strong> campaigns</span>'+
+        '<span class="pis-sum-stat pis-sum-stat--spend"><strong>'+money(total)+'</strong> Search spend</span>'+
+        '<span class="pis-sum-stat pis-sum-stat--weighted-is"><strong>'+pct(wTop/total)+'</strong> top IS (spend-weighted)</span>'+
+        '<span class="pis-sum-stat pis-sum-stat--rank"><strong>'+money(rankSpend)+'</strong> behind rank-limited</span>'+
+        '<span class="pis-sum-stat pis-sum-stat--budget"><strong>'+money(budgetSpend)+'</strong> behind budget-limited</span>'+
+        '</div></div>';
+    }
+    function table(list){
+      return '<table class="pis-table"><thead><tr class="pis-head">'+
+        '<th>Campaign</th><th>Spend</th><th>Top IS</th><th>Abs. top</th><th>Lost · rank</th><th>Lost · budget</th><th>Top-auction coverage</th><th>Limited by</th>'+
+        '</tr></thead><tbody>'+list.map(rowHtml).join("")+'</tbody></table>';
+    }
+
+    var host=document.getElementById("pis-host"), seg=document.getElementById("seg"), cur="spend";
+    function sortRows(){
+      return ROWS.slice().sort(function(a,b){
+        if(cur==="exposure") return a.top-b.top;
+        if(cur==="budget") return b.budgetLost-a.budgetLost;
+        if(cur==="rank") return b.rankLost-a.rankLost;
+        return b.spend-a.spend;
+      });
+    }
+    function render(){ host.innerHTML=summary()+table(sortRows()); }
+    function setActive(s){ [].forEach.call(seg.querySelectorAll("button"),function(b){ var on=b.getAttribute("data-s")===s; b.className="pds-btn pds-btn--sm "+(on?"pds-btn--purple":"pds-btn--outline"); }); }
+    seg.addEventListener("click",function(e){ var b=e.target.closest("button"); if(!b)return; cur=b.getAttribute("data-s"); setActive(cur); render(); });
+    render();
+  })();
+  </script>
+</body>
+</html>
