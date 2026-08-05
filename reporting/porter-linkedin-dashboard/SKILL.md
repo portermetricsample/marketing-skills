@@ -1,5 +1,5 @@
 ---
-name: porter-linkedin-pages-dashboard
+name: porter-linkedin-dashboard
 description: >-
   Build a polished, hosted LinkedIn Company Page analytics dashboard for any LinkedIn
   Page using the PorterMetrics MCP — a 4-page report (Overview, Posts, Audience,

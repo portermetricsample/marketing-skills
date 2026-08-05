@@ -1,4 +1,4 @@
-# porter-linkedin-pages-dashboard — install
+# porter-linkedin-dashboard — install
 
 A 4-page LinkedIn Company Page dashboard (Overview · Posts · Audience · Discovery)
 published as a hosted Porter report. See [`SKILL.md`](SKILL.md) for what it builds and how
@@ -21,7 +21,7 @@ Copy this folder into your skills directory, then restart Claude Code:
 ```bash
 git clone --depth 1 https://github.com/portermetricsample/marketing-skills /tmp/ms \
   && mkdir -p ~/.claude/skills \
-  && cp -r /tmp/ms/reporting/porter-linkedin-pages-dashboard ~/.claude/skills/ \
+  && cp -r /tmp/ms/reporting/porter-linkedin-dashboard ~/.claude/skills/ \
   && rm -rf /tmp/ms
 ```
 
@@ -29,7 +29,7 @@ git clone --depth 1 https://github.com/portermetricsample/marketing-skills /tmp/
 
 Chat has no filesystem to copy into, so use the packaged artifact instead:
 
-1. Download `porter-linkedin-pages-dashboard.skill` (use the **Download raw file**
+1. Download `porter-linkedin-dashboard.skill` (use the **Download raw file**
    button — it's a zip, not text).
 2. Attach it to a Claude.ai conversation.
 3. The file card shows a **Save skill** button — click it to install the skill into your
@@ -45,4 +45,4 @@ No command needed most of the time — just ask:
 > "build me a dashboard for my LinkedIn page"
 
 or hand it a Porter LinkedIn report URL and say "replicate this for my page". To invoke it
-explicitly: `/porter-linkedin-pages-dashboard`
+explicitly: `/porter-linkedin-dashboard`
