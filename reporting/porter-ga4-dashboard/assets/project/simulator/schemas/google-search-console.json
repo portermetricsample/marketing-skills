@@ -1,0 +1,31 @@
+{
+ "connector": "google-search-console",
+ "fields": [
+  "google_search_console_date",
+  "google_search_console_query",
+  "google_search_console_page",
+  "google_search_console_country",
+  "google_search_console_device",
+  "google_search_console_search_appearance",
+  "google_search_console_clicks",
+  "google_search_console_impressions",
+  "google_search_console_ctr",
+  "google_search_console_position",
+  "google_search_console_day_of_week",
+  "google_search_console_year_month",
+  "google_search_console_year_quarter",
+  "google_search_console_quarter",
+  "google_search_console_week",
+  "google_search_console_year",
+  "google_search_console_year_week",
+  "google_search_console_month",
+  "google_search_console_search_type_web",
+  "google_search_console_search_type_image",
+  "google_search_console_search_type_video",
+  "google_search_console_search_type_news",
+  "google_search_console_search_type_discover",
+  "google_search_console_search_type_googlenews",
+  "google_search_console_aggregation_type_bypage",
+  "google_search_console_aggregation_type_byproperty"
+ ]
+}

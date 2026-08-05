@@ -1,0 +1,25 @@
+{
+  "connector": "google-ads",
+  "note": "Snapshot for local unknown_field validation. Regenerate with `node simulator/refresh-schemas.mjs`.",
+  "fields": [
+    "date",
+    "account_name",
+    "campaign",
+    "campaign_name",
+    "ad_group",
+    "ad_group_name",
+    "country",
+    "device",
+    "network",
+    "cost",
+    "impressions",
+    "clicks",
+    "ctr",
+    "average_cpc",
+    "conversions",
+    "conversions_value",
+    "cost_per_conversion",
+    "search_impression_share",
+    "roas"
+  ]
+}
