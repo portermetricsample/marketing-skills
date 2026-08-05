@@ -1,5 +1,5 @@
 ---
-name: porter-search-console-dashboard
+name: porter-gsc-dashboard
 description: >-
   Reproduce a polished, hosted Google Search Console SEO dashboard with ALL DATA
   MASKED (synthetic, fictional "Acme Analytics" property) using the PorterMetrics
