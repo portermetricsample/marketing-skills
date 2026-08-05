@@ -1,0 +1,29 @@
+{
+  "name": "porter-report-template",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Porter hosted-report base template (Next.js static export served inside the Porter wrapper).",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "dev:next": "next dev",
+    "simulator": "node simulator/server.mjs",
+    "build": "next build",
+    "audit": "node scripts/audit.mjs",
+    "verify:relative": "node scripts/verify-relative-paths.mjs",
+    "package": "node scripts/package-template.mjs"
+  },
+  "dependencies": {
+    "next": "14.2.15",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "three": "0.169.0"
+  },
+  "devDependencies": {
+    "@types/node": "22.7.5",
+    "@types/react": "18.3.11",
+    "@types/react-dom": "18.3.1",
+    "@types/three": "0.169.0",
+    "playwright": "1.48.2",
+    "typescript": "5.6.3"
+  }
+}
