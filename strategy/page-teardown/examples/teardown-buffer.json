@@ -1,0 +1,135 @@
+{
+  "meta": {
+    "url": "https://buffer.com/",
+    "analyzed_from": "Porter MCP scraping (web_scraping.firecrawl_scrape)",
+    "scope": "copy only — nav, images, demos and layout are out of scope"
+  },
+  "declaration": {
+    "page_type": "homepage",
+    "awareness_path": ["solution-aware", "product-aware", "most-aware"],
+    "sequence": ["promise-first (journey-led)", "feature-led", "risk-reversal"]
+  },
+  "strategic_levers": {
+    "positioning": {
+      "category": "social media workspace",
+      "competes_against": ["single-function schedulers", "manual posting"],
+      "note": "claims a spectrum — 'workspace' (hero) → 'management for everyone' (title) → 'all-you-need toolkit for small businesses' (metadata). Load-bearing claim: 'connected to every platform and tool you use'."
+    },
+    "messaging": [
+      { "claim": "completeness / breadth", "evidence": ["the most complete set of publishing integrations, ever", "connected to every platform and tool you use", "…and so much more!"] },
+      { "claim": "universality", "evidence": ["Social media management for everyone", "Whoever you are, we've got you covered"] },
+      { "claim": "effort-free speed", "evidence": ["Reply to comments in a flash", "10x speed", "without draining your time"] },
+      { "claim": "growth / aspiration", "evidence": ["Grow from zero to one to one million", "Grow your social presence with confidence"] },
+      { "claim": "human + transparency", "evidence": ["no bots, just real people who care", "We are an open company"] },
+      { "claim": "AI kept optional, not the headline", "evidence": ["There's also an AI Assistant if you need it"] }
+    ],
+    "audience": {
+      "declared": ["creators", "small businesses", "agencies"],
+      "real": "genuinely segmented — three full blocks, each with its own message and its own testimonial community (not decorative tabs)",
+      "per_segment": [
+        { "segment": "creators", "axis": "reach / scale", "message": "Grow from zero to one to one million" },
+        { "segment": "small businesses", "axis": "time / efficiency", "message": "Level up your social presence without draining your time" },
+        { "segment": "agencies", "axis": "trust / scaling clients", "message": "The most trusted tool for freelancers and agencies" }
+      ]
+    },
+    "awareness_path": {
+      "serves": ["solution-aware", "product-aware", "most-aware"],
+      "starts_at": "solution-aware",
+      "skips": ["unaware", "problem-aware"],
+      "note": "opens on the outcome with zero problem-education — the biggest strategic choice on the page"
+    },
+    "goal": "free email signup (product-led, no sales motion)"
+  },
+  "structure": {
+    "outline": [
+      { "section": "hero", "component": "Hero", "elements": ["integrations strip (Canva, Claude, ChatGPT, Cursor, Drive, Dropbox, OneDrive, Unsplash, Zapier)", "H1: 'Your social media workspace'", "SUB: 'Connected to every platform and tool you use.'", "FORM: email", "BUTTON: 'Get started for free'", "MICROCOPY: consent"], "repeat": 1 },
+      { "section": "social-proof bar", "component": "Social proof", "elements": ["STAT: '239,262 creators, brands, and agencies using Buffer'", "brand logos (Metallica, Wired, Semrush, Crocs, ElevenLabs, Pizza Hut, Vice, Clash of Clans)"], "repeat": 1 },
+      { "section": "core features", "component": "Features", "elements": ["BADGE: category", "H3: benefit-as-headline", "screenshot", "BODY", "BUTTON: Learn more"], "repeat": 4 },
+      { "section": "…and so much more!", "component": "Features", "elements": ["H3: feature (Collaborate / Mobile app / Start page / AI assistant)", "BODY", "BUTTON"], "repeat": 4 },
+      { "section": "connect your accounts", "component": "Reference", "elements": ["[Objections: Fit] — Buffer × {platform}"], "repeat": 11 },
+      { "section": "whoever you are", "component": "Audience", "elements": ["TABS: 3 segments", "per segment: H3 promise + benefit bullets + testimonial community (×3 people)"], "repeat": 3 },
+      { "section": "customer support", "component": "Community", "elements": ["H2: 'Human support, worldwide'", "BODY: [Objections: Risk] 'no bots, just real people'", "BUTTON ×2"], "repeat": 1 },
+      { "section": "resources", "component": "Community / Offer", "elements": ["H2: 'Fuel your social media success'", "[Offer] ×5"], "repeat": 1 },
+      { "section": "about us", "component": "Differentiation", "elements": ["H2: 'We are an open company'", "BODY: [Differentiator] transparency", "BUTTON: Open dashboard", "STAT: MAU 239,262 · customers 79,229 · team 73 · ARR $25.9M"], "repeat": 1 },
+      { "section": "close", "component": "Close", "elements": ["H2: 'Grow your social presence with confidence'", "BUTTON: [CTA]", "MICROCOPY: 'No credit card needed. Free forever.'"], "repeat": 1 }
+    ],
+    "sequence": {
+      "blend": "weighted to promise-first",
+      "stages": [
+        { "stage": "hero", "pattern": "journey-led (promise-first)", "note": "states the after-state; pains deliberately left out" },
+        { "stage": "middle", "pattern": "feature-led (spec-driven)", "note": "core features + integration Reference" },
+        { "stage": "close", "pattern": "risk-reversal (trust-first)", "note": "social proof + human support + 'no card'" }
+      ]
+    },
+    "sections_used": ["Hero", "Social proof", "Features", "Reference", "Audience", "Community", "Differentiation", "Close"],
+    "sections_omitted": ["Problem", "Comparison", "Pricing", "FAQs"],
+    "objection_map": {
+      "answered": [
+        { "objection": "fit", "where": "integrations Reference" },
+        { "objection": "risk", "where": "human support 'no bots' + close 'no credit card, free forever'" },
+        { "objection": "effort", "where": "resources library + AI assistant 'if you need it'" },
+        { "objection": "source/trust", "where": "open financials" }
+      ],
+      "left_live": ["price", "switching", "need"]
+    },
+    "proof_ladder": [
+      { "rung": 1, "type": "aggregate counter + brand logos", "example": "239,262 users; Metallica, Wired, Crocs", "credibility": "anonymous scale + borrowed authority" },
+      { "rung": 2, "type": "named peers per segment", "example": "creator / SMB / agency communities with real handles + follower counts", "credibility": "concrete, relatable" },
+      { "rung": 3, "type": "institutional", "example": "open financials — ARR $25.9M, 73 teammates", "credibility": "authority via transparency" }
+    ],
+    "copy_component_structure": {
+      "descends_ladder": true,
+      "ladder_observed": "BADGE → H3 → BODY → BUTTON",
+      "bold_path_present": false,
+      "skim_test": "fails on copy — the story is carried by headlines + product screenshots, not a bold path",
+      "pattern_consistency": "high — all core blocks share one shape"
+    }
+  },
+  "copy": {
+    "concept": "Everything you need to run social, in one connected place — whoever you are.",
+    "angle": { "dominant": "before/after (transformation)", "secondary": ["archetypes", "listicle"], "note": "aspirational, not pain-relief" },
+    "hook": { "text": "Your social media workspace", "type": "possessive identity/outcome", "note": "names the result, not a pain" },
+    "headline_pattern": "benefit-as-headline; the category label is offloaded to a BADGE so the H3 is free for the claim",
+    "cta_strategy": {
+      "primary": "Get started for free",
+      "primary_repetitions": 2,
+      "secondary": "Learn more",
+      "friction_removed": ["no credit card", "free forever"],
+      "trigger": "commitment (a tiny first yes)"
+    }
+  },
+  "style": {
+    "voice": "warm, plain, human, first-person-plural; confident not aggressive; no jargon; B2C-leaning for a B2B tool",
+    "rhetorical_figures": [
+      { "figure": "gradatio", "example": "zero → one → one million" },
+      { "figure": "tricolon", "example": "creators, brands, and agencies" },
+      { "figure": "correctio", "example": "Answers, not just analytics", "note": "the overused 'not just X' pattern" },
+      { "figure": "hyperbole", "example": "the most complete set… ever; 10x speed" },
+      { "figure": "personification", "example": "Buffer will help you…" }
+    ],
+    "triggers": ["social proof (dominant)", "authority (via transparency)", "reciprocity (free tools)", "commitment (free, no card)", "liking/unity (for everyone)", "concreteness (named creators)"]
+  },
+  "metrics": {
+    "sections": 10,
+    "body_words_approx": 700,
+    "cta_count_primary": 2,
+    "proof_points_approx": 12,
+    "density": "very low — visual/product-shot driven, copy is connective tissue",
+    "above_the_fold": ["integrations strip", "H1", "one-line subhead", "email field", "CTA", "live user counter"],
+    "language": "en-US"
+  },
+  "value_read": [
+    { "layer": "clarity", "question": "Do I get it?", "verdict": "strong", "leak": "'Your social media workspace / connected to every platform' — instant" },
+    { "layer": "relevance", "question": "Is it for me?", "verdict": "strong", "leak": "three real segmented blocks; weak only for the unaware" },
+    { "layer": "value", "question": "Do I want it now?", "verdict": "partial", "leak": "sells convenience ('one place'), not a quantified outcome; no 'save X hours'" },
+    { "layer": "differentiation", "question": "Why this over alternatives?", "verdict": "weak", "leak": "biggest gap — no comparison, no 'unlike Hootsuite'; the one differentiator (transparency) sits low and is about the company" },
+    { "layer": "completeness", "question": "Does it answer all my questions?", "verdict": "partial", "leak": "Fit/Risk/Effort answered; Price and Switching left open, no FAQ" },
+    { "layer": "conversion", "question": "Do I know what to do next?", "verdict": "strong", "leak": "one repeated action, friction removed, email above the fold" }
+  ],
+  "reading": "Buffer is Clear + Relevant + Converting at an excellent level, and its audience segmentation is unusually sharp — three blocks, each tuned to the axis that segment cares about (reach / time / trust), each with its own proof. But it is Weak on Differentiation and thin on proof of Value, with partial Completeness (no Price, no Switching). It's a conversion machine for someone who already decided they want a scheduler — its defense is zero-price, transparency, and human support, not a product-superiority argument.",
+  "gaps": {
+    "sections_omitted": ["Problem", "Comparison", "Pricing", "FAQs"],
+    "objections_left_live": ["price", "switching", "need"],
+    "value_layers_failed": ["differentiation (weak)", "value-proof (partial)", "completeness (partial)"]
+  }
+}

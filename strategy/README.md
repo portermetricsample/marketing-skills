@@ -1,6 +1,6 @@
 # Strategy Skills
 
-Three skills that structure marketing thinking from strategy to copy. Each covers one layer of the marketing hierarchy and feeds the next — so every asset traces back to explicit strategic decisions instead of improvisation. Company- and industry-agnostic.
+Four skills that structure marketing thinking from strategy to copy — three that **build** (strategy → messaging → page) and one that **takes an existing page apart** and scores it. Each traces back to explicit strategic decisions instead of improvisation. Company- and industry-agnostic.
 
 ## The hierarchy
 
@@ -25,6 +25,9 @@ Turns positioning into words: a strategic narrative (Andy Raskin's five moves �
 ### 3. `landing-page-copy`
 Structures and writes landing pages: match structure to the traffic's awareness stage (Schwartz: unaware → most aware), select the section layout accordingly (narrative long-form / canonical SaaS / short direct), fill every section from the messaging, then hold the copy to a quality bar (required components, adjective test, brevity rules, pre-publish checklist). Includes a critique mode that traces each section back to messaging and flags orphan claims.
 
+### 4. `page-teardown`
+The analysis counterpart to the three above: reverse-engineer any **live external page** — a competitor's homepage, a reference landing page — into its positioning, messaging, narrative, exact sections, and a **value read** that scores whether it works (clarity · relevance · value · differentiation · completeness · conversion). Fetches the page through the **Porter Metrics MCP** scraper, classifies it against a fixed 4-level cascade, and outputs a single clean JSON object you render however you like. Run it on the best pages in a category before writing your own. *(This one needs the Porter MCP — for the scrape.)*
+
 ## Worked example
 
 [`example-acme.md`](example-acme.md) carries one fictional company through all three layers — STP → messaging → landing page — so each framework has a concrete case to point at. Replace Acme with your own.
@@ -36,10 +39,11 @@ Structures and writes landing pages: match structure to the traffic's awareness 
 "What should we say about it?"   → positioning-messaging
 "Write the landing page"         → landing-page-copy
 "Review this page"               → landing-page-copy (+ upward diagnosis)
+"Tear down a competitor's page"  → page-teardown
 ```
 
 Skills also work standalone: each checks for the inputs it needs and asks for (or reconstructs) what's missing.
 
 ## Frameworks credited
 
-STP (Kotler) · MASDA segmentation criteria · Jobs-to-be-Done · Obviously Awesome (April Dunford) · Strategic Narrative (Andy Raskin) · Positioning→Messaging→Copy hierarchy (Peep Laja) · Awareness stages (Eugene Schwartz) · StoryBrand (Donald Miller) · PAS and classic copywriting formulas
+STP (Kotler) · MASDA segmentation criteria · Jobs-to-be-Done · Obviously Awesome (April Dunford) · Strategic Narrative (Andy Raskin) · Positioning→Messaging→Copy hierarchy (Peep Laja) · Awareness stages (Eugene Schwartz) · StoryBrand (Donald Miller) · PAS and classic copywriting formulas · Influence triggers (Robert Cialdini) · classical rhetoric · creative-teardown method
