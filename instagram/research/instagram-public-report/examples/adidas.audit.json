@@ -1,0 +1,760 @@
+{
+ "brand": "adidas",
+ "handle": "adidas",
+ "generated": "Aug 6, 2026",
+ "profile": {
+  "followers": 29635828,
+  "follows": 1060,
+  "media_count": 1637,
+  "bio": "Where there's a pitch, there's a legend. #YouGotThis",
+  "website": "https://linktr.ee/adidas",
+  "avatar_url": "https://scontent-ord5-2.xx.fbcdn.net/v/t51.82787-15/688232457_18615637840045765_6068337426703417804_n.jpg?_nc_cat=1&ccb=1-7&_nc_sid=7d201b&_nc_ohc=dJvJvoBeUMcQ7kNvwGdSwZo&_nc_oc=AdrQx78rndh4JKEJLJeBGlZ_XegowbCStKOtW_r3AaPxrc69Z5bVM1Osgte15KVIvl0&_nc_zt=23&_nc_ht=scontent-ord5-2.xx&edm=AL-3X8kEAAAA&_nc_gid=YGpA-ru08iT8Qckji7dyMA&oh=00_AQG87arNCQ0NajXdJJmcLdaswDs7WctVJRwX-76ildFZkw&oe=6A7A4AF1"
+ },
+ "windows": {
+  "freq_n": 100,
+  "eng_n": 50,
+  "visuals_n": 12,
+  "creator_posts_n": 25,
+  "post_window": "Sep 2025 \u2013 Jul 2026"
+ },
+ "posts": [
+  {
+   "ts": "2026-07-27T09:28:38",
+   "type": "Carousel",
+   "likes": 14698,
+   "comments": 98
+  },
+  {
+   "ts": "2026-07-26T16:00:04",
+   "type": "Carousel",
+   "likes": 28160,
+   "comments": 136
+  },
+  {
+   "ts": "2026-07-26T14:24:36",
+   "type": "Carousel",
+   "likes": 175739,
+   "comments": 1194
+  },
+  {
+   "ts": "2026-07-25T15:11:03",
+   "type": "Carousel",
+   "likes": 222665,
+   "comments": 1711
+  },
+  {
+   "ts": "2026-07-24T16:00:02",
+   "type": "Carousel",
+   "likes": 135766,
+   "comments": 548
+  },
+  {
+   "ts": "2026-07-24T14:53:29",
+   "type": "Carousel",
+   "likes": 70190,
+   "comments": 718
+  },
+  {
+   "ts": "2026-07-19T19:55:07",
+   "type": "Image",
+   "likes": 152810,
+   "comments": 546
+  },
+  {
+   "ts": "2026-07-19T12:46:03",
+   "type": "Reel",
+   "likes": 14245,
+   "comments": 162
+  },
+  {
+   "ts": "2026-07-19T03:33:05",
+   "type": "Reel",
+   "likes": 200627,
+   "comments": 1166
+  },
+  {
+   "ts": "2026-07-18T23:15:55",
+   "type": "Carousel",
+   "likes": 508652,
+   "comments": 3165
+  },
+  {
+   "ts": "2026-07-14T23:26:31",
+   "type": "Reel",
+   "likes": 416289,
+   "comments": 2592
+  },
+  {
+   "ts": "2026-07-14T22:36:47",
+   "type": "Carousel",
+   "likes": 83168,
+   "comments": 124
+  },
+  {
+   "ts": "2026-07-11T22:51:01",
+   "type": "Carousel",
+   "likes": 180603,
+   "comments": 710
+  },
+  {
+   "ts": "2026-07-10T23:34:12",
+   "type": "Carousel",
+   "likes": 395633,
+   "comments": 746
+  },
+  {
+   "ts": "2026-07-07T19:48:28",
+   "type": "Reel",
+   "likes": 100111,
+   "comments": 568
+  },
+  {
+   "ts": "2026-07-02T14:00:40",
+   "type": "Reel",
+   "likes": 18052,
+   "comments": 197
+  },
+  {
+   "ts": "2026-07-01T12:00:39",
+   "type": "Reel",
+   "likes": 11917,
+   "comments": 137
+  },
+  {
+   "ts": "2026-06-29T15:04:59",
+   "type": "Reel",
+   "likes": 24843,
+   "comments": 159
+  },
+  {
+   "ts": "2026-06-29T13:49:53",
+   "type": "Reel",
+   "likes": 23120,
+   "comments": 145
+  },
+  {
+   "ts": "2026-06-28T16:28:07",
+   "type": "Reel",
+   "likes": 77980,
+   "comments": 226
+  },
+  {
+   "ts": "2026-06-27T04:06:29",
+   "type": "Carousel",
+   "likes": 41200,
+   "comments": 218
+  },
+  {
+   "ts": "2026-06-20T13:22:57",
+   "type": "Carousel",
+   "likes": 54041,
+   "comments": 445
+  },
+  {
+   "ts": "2026-06-19T21:46:53",
+   "type": "Carousel",
+   "likes": 22691,
+   "comments": 81
+  },
+  {
+   "ts": "2026-06-18T20:22:17",
+   "type": "Carousel",
+   "likes": 22588,
+   "comments": 265
+  },
+  {
+   "ts": "2026-06-17T16:53:51",
+   "type": "Carousel",
+   "likes": 56460,
+   "comments": 211
+  },
+  {
+   "ts": "2026-06-17T09:00:02",
+   "type": "Carousel",
+   "likes": 25467,
+   "comments": 331
+  },
+  {
+   "ts": "2026-06-12T23:52:32",
+   "type": "Carousel",
+   "likes": 68037,
+   "comments": 125
+  },
+  {
+   "ts": "2026-06-07T18:05:09",
+   "type": "Carousel",
+   "likes": 262139,
+   "comments": 1229
+  },
+  {
+   "ts": "2026-05-22T14:00:25",
+   "type": "Carousel",
+   "likes": 81533,
+   "comments": 382
+  },
+  {
+   "ts": "2026-05-18T08:17:09",
+   "type": "Carousel",
+   "likes": 305416,
+   "comments": 931
+  },
+  {
+   "ts": "2026-05-15T14:01:01",
+   "type": "Carousel",
+   "likes": 411770,
+   "comments": 542
+  },
+  {
+   "ts": "2026-05-15T08:29:30",
+   "type": "Carousel",
+   "likes": 451152,
+   "comments": 1066
+  },
+  {
+   "ts": "2026-05-14T14:08:39",
+   "type": "Carousel",
+   "likes": 105809,
+   "comments": 524
+  },
+  {
+   "ts": "2026-05-13T11:01:32",
+   "type": "Carousel",
+   "likes": 318030,
+   "comments": 487
+  },
+  {
+   "ts": "2026-05-10T14:59:33",
+   "type": "Carousel",
+   "likes": 52902,
+   "comments": 227
+  },
+  {
+   "ts": "2026-05-08T17:59:14",
+   "type": "Reel",
+   "likes": 614965,
+   "comments": 1845
+  },
+  {
+   "ts": "2026-05-08T15:59:12",
+   "type": "Reel",
+   "likes": 248776,
+   "comments": 1096
+  },
+  {
+   "ts": "2026-05-08T13:58:43",
+   "type": "Reel",
+   "likes": 4306354,
+   "comments": 15980
+  },
+  {
+   "ts": "2026-05-08T11:00:59",
+   "type": "Reel",
+   "likes": 2177088,
+   "comments": 4017
+  },
+  {
+   "ts": "2026-05-07T07:59:03",
+   "type": "Reel",
+   "likes": 2921604,
+   "comments": 31748
+  },
+  {
+   "ts": "2026-05-05T18:13:20",
+   "type": "Reel",
+   "likes": 176794,
+   "comments": 1396
+  },
+  {
+   "ts": "2026-04-30T13:01:02",
+   "type": "Carousel",
+   "likes": 27131,
+   "comments": 181
+  },
+  {
+   "ts": "2026-04-29T13:00:19",
+   "type": "Reel",
+   "likes": 34206,
+   "comments": 216
+  },
+  {
+   "ts": "2026-04-28T13:01:51",
+   "type": "Reel",
+   "likes": 33932,
+   "comments": 262
+  },
+  {
+   "ts": "2026-04-27T08:00:31",
+   "type": "Image",
+   "likes": 186995,
+   "comments": 965
+  },
+  {
+   "ts": "2026-04-24T12:05:47",
+   "type": "Carousel",
+   "likes": 33544,
+   "comments": 180
+  },
+  {
+   "ts": "2026-04-13T10:52:20",
+   "type": "Carousel",
+   "likes": 34878,
+   "comments": 308
+  },
+  {
+   "ts": "2026-04-09T11:01:39",
+   "type": "Reel",
+   "likes": 9390,
+   "comments": 192
+  },
+  {
+   "ts": "2026-03-23T16:38:50",
+   "type": "Carousel",
+   "likes": 62822,
+   "comments": 478
+  },
+  {
+   "ts": "2026-03-15T19:33:19",
+   "type": "Carousel",
+   "likes": 2710,
+   "comments": 36
+  },
+  {
+   "ts": "2026-03-13T14:47:42",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2026-03-04T12:24:42",
+   "type": "Reel"
+  },
+  {
+   "ts": "2026-02-25T11:07:39",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2026-02-25T09:00:37",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2026-02-22T20:28:37",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2026-02-21T22:01:05",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2026-02-19T13:21:40",
+   "type": "Reel"
+  },
+  {
+   "ts": "2026-02-18T14:57:45",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2026-02-18T13:27:16",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2026-02-18T11:55:03",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2026-02-15T18:53:25",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2026-02-15T14:03:20",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2026-02-13T20:59:06",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2026-02-12T13:15:10",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2026-02-07T12:54:42",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2026-02-05T16:04:11",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2026-02-02T16:05:09",
+   "type": "Image"
+  },
+  {
+   "ts": "2026-02-01T16:00:00",
+   "type": "Reel"
+  },
+  {
+   "ts": "2026-01-20T04:17:10",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2026-01-13T20:46:14",
+   "type": "Image"
+  },
+  {
+   "ts": "2026-01-08T14:13:03",
+   "type": "Reel"
+  },
+  {
+   "ts": "2025-12-28T18:48:16",
+   "type": "Image"
+  },
+  {
+   "ts": "2025-12-21T17:18:41",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2025-12-21T16:23:46",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2025-12-16T22:03:37",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2025-12-14T01:29:55",
+   "type": "Reel"
+  },
+  {
+   "ts": "2025-12-14T01:00:28",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2025-12-12T11:40:05",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2025-10-24T14:44:20",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2025-09-25T18:00:00",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2025-09-24T16:00:00",
+   "type": "Reel"
+  },
+  {
+   "ts": "2025-09-21T15:51:13",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2025-09-21T10:34:36",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2025-09-21T09:58:26",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2025-09-20T15:25:42",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2025-09-20T14:20:02",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2025-09-20T13:17:47",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2025-09-20T08:00:08",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2025-09-19T14:50:53",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2025-09-19T13:56:32",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2025-09-17T13:59:36",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2025-09-16T14:19:27",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2025-09-14T06:53:00",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2025-09-12T15:00:00",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2025-09-12T07:00:00",
+   "type": "Reel"
+  },
+  {
+   "ts": "2025-09-11T07:59:19",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2025-09-10T15:00:00",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2025-09-10T10:50:20",
+   "type": "Carousel"
+  },
+  {
+   "ts": "2025-09-10T07:59:58",
+   "type": "Image"
+  },
+  {
+   "ts": "2025-09-09T15:00:37",
+   "type": "Image"
+  }
+ ],
+ "recent": [
+  {
+   "code": "DbSpMiUAJEh",
+   "type": "Carousel",
+   "is_video": false,
+   "caption": "World Champion controlled stability, Dropset 4 \u2014 @spraguerrrr. Every lift fully controlled, every jump powerful. #YouGotThis",
+   "likes": 14702,
+   "comments": 98,
+   "date": "Jul 27",
+   "slides": 8,
+   "creators": [
+    "spraguerrrr"
+   ],
+   "img_url": "https://scontent-ord5-2.cdninstagram.com/v/t51.82787-15/759321186_18640957690045765_8812534566577350057_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=110&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiQ0FST1VTRUxfSVRFTS5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=L8vJAqNKH30Q7kNvwHO_lDB&_nc_oc=Adq-3J8MEuVPA8YHQ-Ms-R3Q4skdxkC_3ZMJFxPV-fr7o6kI0lpX5UyzTiCGYl3VThw&_nc_zt=23&_nc_ht=scontent-ord5-2.cdninstagram.com&edm=AL-3X8kEAAAA&_nc_gid=CgcbxRCm5tsjPQRjsEkPXQ&oh=00_AQFZzLXUEyD5M0nIteXmTljcPfjPx1bxWRYaVBJ-r7YYHA&oe=6A7A545C"
+  },
+  {
+   "code": "DbQxPUtAECS",
+   "type": "Carousel",
+   "is_video": false,
+   "caption": "Gym day never looked so good \u2014 @harpermurrayy",
+   "likes": 28164,
+   "comments": 136,
+   "date": "Jul 26",
+   "slides": 10,
+   "creators": [
+    "harpermurrayy"
+   ],
+   "img_url": "https://scontent-ord5-2.cdninstagram.com/v/t51.82787-15/754248013_18639986197045765_8275879286874491123_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=110&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiQ0FST1VTRUxfSVRFTS5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=SsrQj5EI9pIQ7kNvwH9XGi3&_nc_oc=Adr_x6EPBf6wdDJ1xPIc7wBR-FhLDAT732hIDQllilwpkt5JI9LCuOW6g0NIrdR5o1Q&_nc_zt=23&_nc_ht=scontent-ord5-2.cdninstagram.com&edm=AL-3X8kEAAAA&_nc_gid=CgcbxRCm5tsjPQRjsEkPXQ&oh=00_AQHgXnnZWfVKiaUA8CJp2Wd5eFETNKvApNzuVEXu3H2f1Q&oe=6A7A5B02"
+  },
+  {
+   "code": "DbQmRYEADtL",
+   "type": "Carousel",
+   "is_video": false,
+   "caption": "The Greatest in Volleyball. VNL Champions: The Sultans of the Net. \ud83c\udfc6\ud83c\udfc6 #YouGotThis",
+   "likes": 175744,
+   "comments": 1194,
+   "date": "Jul 26",
+   "slides": 6,
+   "creators": [],
+   "img_url": "https://scontent-ord5-1.cdninstagram.com/v/t51.82787-15/758350240_18640704574045765_3134798447197339078_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=104&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiQ0FST1VTRUxfSVRFTS5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=8eY1ktPCYccQ7kNvwGZt2cR&_nc_oc=AdpgaC9GcxGtM6jcGtspZ2HtZE2jRzjCD-gzUwOnzn5oSm-oE-KjLmBRhYQm1gBPZsQ&_nc_zt=23&_nc_ht=scontent-ord5-1.cdninstagram.com&edm=AL-3X8kEAAAA&_nc_gid=CgcbxRCm5tsjPQRjsEkPXQ&oh=00_AQHk7CJ7VpE6TsOZQSl_tsi6e_UyWYkzds1SrSp7nCYi_A&oe=6A7A3613"
+  },
+  {
+   "code": "DbOGyrijMUQ",
+   "type": "Carousel",
+   "is_video": false,
+   "caption": "strong never goes out of style \u2014 @emiliamernes",
+   "likes": 222676,
+   "comments": 1712,
+   "date": "Jul 25",
+   "slides": 10,
+   "creators": [
+    "emiliamernes"
+   ],
+   "img_url": "https://scontent-ord5-1.cdninstagram.com/v/t51.82787-15/756612979_18640372417045765_8323604349370451969_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=107&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiQ0FST1VTRUxfSVRFTS5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=mzbJKEsh7LIQ7kNvwEnKhS-&_nc_oc=AdpPhH1M8wm2zo2u0lIox5BH8_GvKPZZlLmUOU5CSJ4UISdIOblm0tmWsWyx_BaQzoA&_nc_zt=23&_nc_ht=scontent-ord5-1.cdninstagram.com&edm=AL-3X8kEAAAA&_nc_gid=CgcbxRCm5tsjPQRjsEkPXQ&oh=00_AQEMCLhfFSTHXm8u_1x4HxYns7uZiq-RDJbvnX7mwrBh1A&oe=6A7A4101"
+  },
+  {
+   "code": "DbLnseBgO2j",
+   "type": "Carousel",
+   "is_video": false,
+   "caption": "WORK IT \u2014 @tatemcrae",
+   "likes": 135800,
+   "comments": 548,
+   "date": "Jul 24",
+   "slides": 11,
+   "creators": [
+    "tatemcrae"
+   ],
+   "img_url": "https://scontent-ord5-1.cdninstagram.com/v/t51.82787-15/756048592_18639984796045765_3299490525951029989_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=104&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiQ0FST1VTRUxfSVRFTS5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=FxfmA39CS14Q7kNvwFd6wKG&_nc_oc=AdoKmgtMszqSB-YbpVY76ttdZ60XqhyuOmQtAUgNVmi8AfpEYsRTr-sSp_MdfxnV9kM&_nc_zt=23&_nc_ht=scontent-ord5-1.cdninstagram.com&edm=AL-3X8kEAAAA&_nc_gid=CgcbxRCm5tsjPQRjsEkPXQ&oh=00_AQGicCraqBxs4qDz3J-3yX-gF4JM1yfcwVdK8ejVUP166Q&oe=6A7A3E90"
+  },
+  {
+   "code": "DbLf_IMjDeE",
+   "type": "Carousel",
+   "is_video": false,
+   "caption": "Where performance meets style. Welcome to Originals Sport.",
+   "likes": 70200,
+   "comments": 718,
+   "date": "Jul 24",
+   "slides": 8,
+   "creators": [],
+   "img_url": "https://scontent-ord5-2.cdninstagram.com/v/t51.82787-15/756048592_18640053418045765_2912657993102279141_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=102&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiQ0FST1VTRUxfSVRFTS5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=syO7WzjSzr4Q7kNvwGubpbT&_nc_oc=AdoCa4shWbCxpfUXnAwWC7wOdTFIzF6W2h6leCbUlP9lDpsadCYWJLr6zMI_unLF878&_nc_zt=23&_nc_ht=scontent-ord5-2.cdninstagram.com&edm=AL-3X8kEAAAA&_nc_gid=CgcbxRCm5tsjPQRjsEkPXQ&oh=00_AQE71ZV5zKi7TC5YndSjb5mg8WoGdmm8nHb7Q68hyB1VFw&oe=6A7A4E7D"
+  },
+  {
+   "code": "Da_KdSSAwl5",
+   "type": "Image",
+   "is_video": false,
+   "caption": "For the last time, Timoth\u00e9e Chalamet brings out the Trionda Final ball for the FIFA World Cup Final \u2014 Spain vs Argentina. #YouGotThis",
+   "likes": 152811,
+   "comments": 546,
+   "date": "Jul 19",
+   "slides": 0,
+   "creators": [],
+   "img_url": "https://scontent-ord5-1.cdninstagram.com/v/t51.82787-15/751805044_18638611264045765_1695127275913740007_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=106&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=rCanUg9NElYQ7kNvwEfW5Tn&_nc_oc=AdqstgPcsLQZXR168xkbxnICpr1Ul9Zov1NOjdjjNtk7ksXaefIO-uxiFif-VN3C_n8&_nc_zt=23&_nc_ht=scontent-ord5-1.cdninstagram.com&edm=AL-3X8kEAAAA&_nc_gid=CgcbxRCm5tsjPQRjsEkPXQ&oh=00_AQGCIJKtgZqyhqYA8PfyAZrh5mjrlTNbUt15IZ5lGqjWDQ&oe=6A7A6532"
+  },
+  {
+   "code": "Da-ZJUeAdGs",
+   "type": "Reel",
+   "is_video": true,
+   "caption": "Take your seat. The legend is about to begin \ud83c\udf7f #YouGotThis",
+   "likes": 14245,
+   "comments": 162,
+   "date": "Jul 19",
+   "slides": 0,
+   "creators": [],
+   "img_url": "https://scontent-ord5-1.cdninstagram.com/v/t51.82787-15/751151684_18638481298045765_2605195497738144440_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=108&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiQ0xJUFMuYmVzdF9pbWFnZV91cmxnZW4uQzMifQ%3D%3D&_nc_ohc=PUsSZr2pWQkQ7kNvwGDsNIF&_nc_oc=AdrxUO2xIsHLnoQVPdS_stnNZmtBT9UdAQyvxJOrqiyEmYXc7IRQH8Pc37hJ6FrKefY&_nc_zt=23&_nc_ht=scontent-ord5-1.cdninstagram.com&edm=AL-3X8kEAAAA&_nc_gid=CgcbxRCm5tsjPQRjsEkPXQ&_nc_tpa=Q5bMBQEQDT9Xc1L19sY_e5qspxLe7wsfA8dnP0fjDL1YGIu55SBwWaWxZjpiEUmXy8Ixth8EXzPEFXZ8&oh=00_AQEPsTUejTp2kOtgmG4yMBcu4sTglH6X0ZBGi6LAx0sZ8w&oe=6A7A5EAA"
+  },
+  {
+   "code": "Da9aCkOs_pw",
+   "type": "Reel",
+   "is_video": true,
+   "caption": "NYC where dreams are made. #YouGotThis",
+   "likes": 200627,
+   "comments": 1166,
+   "date": "Jul 19",
+   "slides": 0,
+   "creators": [],
+   "img_url": "https://scontent-ord5-2.cdninstagram.com/v/t51.82787-15/752242471_18638373844045765_7583067881093634848_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=102&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiQ0xJUFMuYmVzdF9pbWFnZV91cmxnZW4uQzMifQ%3D%3D&_nc_ohc=LRQpawUyJ3YQ7kNvwHF9Cmx&_nc_oc=Adqg16_41gai-Uf-fBtKeYDa0y8iiifLE3KpR-fCyxD4hh-9xcFHSeoTvn-Xwe1hUSI&_nc_zt=23&_nc_ht=scontent-ord5-2.cdninstagram.com&edm=AL-3X8kEAAAA&_nc_gid=CgcbxRCm5tsjPQRjsEkPXQ&_nc_tpa=Q5bMBQG4EDtTUWxct85KXY-TSuuUHcNO8Ax1hZDe67M97jXxrw1zVgcVUTfPEn86vH34jvtSWXpYLDyM&oh=00_AQHhRaWhfuow7yXniVU7EAfHhU8wgakGDlcseByrWfMNZA&oe=6A7A3453"
+  },
+  {
+   "code": "Da88tyKDKxW",
+   "type": "Carousel",
+   "is_video": false,
+   "caption": "Delivering the match ball in style \u2014 @jadepicon and @tobjizzle bring out the Trionda Final Ball for France vs England, World Cup Bronze final.",
+   "likes": 508653,
+   "comments": 3165,
+   "date": "Jul 18",
+   "slides": 3,
+   "creators": [
+    "jadepicon",
+    "tobjizzle"
+   ],
+   "img_url": "https://scontent-ord5-1.cdninstagram.com/v/t51.82787-15/751751985_18638315041045765_1727542644049419889_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=101&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiQ0FST1VTRUxfSVRFTS5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=1k5SeNmSFXsQ7kNvwELRQ4C&_nc_oc=AdqfQWk6h0tkv-Dvnp3QXDOstlCcnfFXqrCuFX54tHGYqpmsTb_QlMzY-aUTxPIlmk0&_nc_zt=23&_nc_ht=scontent-ord5-1.cdninstagram.com&edm=AL-3X8kEAAAA&_nc_gid=CgcbxRCm5tsjPQRjsEkPXQ&oh=00_AQGTBkG8KuorgwOZCvQ0ysYSXtjxt5fzw1jw7ts3hVZ8ZA&oe=6A7A4FBA"
+  },
+  {
+   "code": "Dayqq-gACbQ",
+   "type": "Reel",
+   "is_video": true,
+   "caption": "todo por esta camiseta. \ud83c\udde6\ud83c\uddf7 everything for this jersey. \ud83c\udde6\ud83c\uddf7 #YouGotThis",
+   "likes": 416290,
+   "comments": 2592,
+   "date": "Jul 14",
+   "slides": 0,
+   "creators": [],
+   "img_url": "https://scontent-ord5-1.cdninstagram.com/v/t51.82787-15/747736731_18637046392045765_6641434515446417626_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=109&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiQ0xJUFMuYmVzdF9pbWFnZV91cmxnZW4uQzMifQ%3D%3D&_nc_ohc=gpMsFsDI-S8Q7kNvwFxhY7F&_nc_oc=AdpAZug-01vBPu1IY8JECt7p6kMEAyHgaRciBnabv9Oy0A6KO7y8eluMuYWOWGMmCj0&_nc_zt=23&_nc_ht=scontent-ord5-1.cdninstagram.com&edm=AL-3X8kEAAAA&_nc_gid=CgcbxRCm5tsjPQRjsEkPXQ&_nc_tpa=Q5bMBQGcQGrMlPuAG4GZJYPllXu_3hbpQ_PE5aQz7FZ9z10PNT6s1Bi40DLvf550VOFoqTxEVlGTVz1T&oh=00_AQEPGRV14DyNSA-TSkD1a-oukNW3r0fIZAQPT74WpChmug&oe=6A7A4CF6"
+  },
+  {
+   "code": "DaylDpzgGTT",
+   "type": "Carousel",
+   "is_video": false,
+   "caption": "Olympic Champion \ud83e\udd1d FIFA World Cup. The fastest man in the world steps onto the pitch with the new Trionda Final ball \u2014 France vs Spain Semi-Final. #YouGotThis",
+   "likes": 83168,
+   "comments": 124,
+   "date": "Jul 14",
+   "slides": 3,
+   "creators": [],
+   "img_url": "https://scontent-ord5-1.cdninstagram.com/v/t51.82787-15/746630067_18637038517045765_2533680370105826834_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=109&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiQ0FST1VTRUxfSVRFTS5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=8Vwc8i-DYGUQ7kNvwHlSdGg&_nc_oc=Ado_KiuPtnDM96D4wt5eppTDqj5quXi9ycRnb6sSyJmcYxeh7fIOrn7OfdpGBNxriOY&_nc_zt=23&_nc_ht=scontent-ord5-1.cdninstagram.com&edm=AL-3X8kEAAAA&_nc_gid=CgcbxRCm5tsjPQRjsEkPXQ&oh=00_AQGsRYFbZ_KcLRLIJY1E1lNc7iVds2yso6M7HM6EqSUs3g&oe=6A7A63A6"
+  }
+ ],
+ "creators": [
+  {
+   "handle": "tatemcrae",
+   "type": "Creator \u00b7 musician",
+   "posts": 2,
+   "likes": 531533
+  },
+  {
+   "handle": "jadepicon",
+   "type": "Creator",
+   "posts": 1,
+   "likes": 508662
+  },
+  {
+   "handle": "tobjizzle",
+   "type": "Creator",
+   "posts": 1,
+   "likes": 508662
+  },
+  {
+   "handle": "emiliamernes",
+   "type": "Creator \u00b7 musician",
+   "posts": 1,
+   "likes": 222764
+  },
+  {
+   "handle": "harpermurrayy",
+   "type": "Athlete \u00b7 volleyball",
+   "posts": 1,
+   "likes": 28192
+  },
+  {
+   "handle": "marcelo",
+   "type": "Athlete \u00b7 football",
+   "posts": 1,
+   "likes": 24847
+  },
+  {
+   "handle": "enzoalvesv",
+   "type": "Creator",
+   "posts": 1,
+   "likes": 24847
+  },
+  {
+   "handle": "tim_wenisch",
+   "type": "Athlete",
+   "posts": 1,
+   "likes": 22692
+  },
+  {
+   "handle": "alyssamcelheny",
+   "type": "Athlete \u00b7 HYROX",
+   "posts": 1,
+   "likes": 22588
+  },
+  {
+   "handle": "vol_sports",
+   "type": "Team account",
+   "posts": 1,
+   "likes": 18052
+  },
+  {
+   "handle": "spraguerrrr",
+   "type": "Athlete",
+   "posts": 1,
+   "likes": 14717
+  },
+  {
+   "handle": "GoPSUSports",
+   "type": "Team account",
+   "posts": 1,
+   "likes": 11917
+  }
+ ],
+ "collab": {
+  "tagged_posts": 11,
+  "total_posts": 25,
+  "unique_handles": 12,
+  "hashtag": "#YouGotThis",
+  "hashtag_pct": 50
+ }
+}
