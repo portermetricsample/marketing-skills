@@ -10,7 +10,7 @@ No API keys. No client data. Only reusable recipes.
 
 | Folder | What's inside |
 |--------|--------------|
-| [`research/`](research/) | **Competitor & search intelligence** — the layer that feeds decisions and content. [`channels/`](research/channels/) holds full competitor teardowns per platform (Meta Ads, TikTok Ads, Instagram public, LinkedIn posts) via scraping → self-contained Porter report; [`seo/`](research/seo/) holds 14 organic-search skills — content gaps, keyword value, AI visibility, traffic drop detection, featured snippets, and more |
+| [`research/`](research/) | **Competitor & search intelligence** — the layer that feeds decisions and content. [`channels/`](research/channels/) holds full competitor teardowns per surface (Meta Ads, TikTok Ads, Instagram public, LinkedIn posts, and a competitor's whole website via `website-changes-monitor`) → self-contained Porter report; [`seo/`](research/seo/) holds 14 organic-search skills — content gaps, keyword value, AI visibility, traffic drop detection, featured snippets, and more |
 | [`google-ads/`](google-ads/) | Analysis frameworks — financial overview, funnel metrics, search terms, account audit, keyword↔ad↔landing alignment, impression share, brand incrementality, negatives, change history, and more |
 | [`meta-ads/`](meta-ads/) | Paid social execution — campaign setup and optimization, account safety, creative performance scoring (Unicorn/Winning/Losing), and a full multi-page Meta Ads dashboard |
 | [`creative/`](creative/) | Hook writing and ad diagnostics |
