@@ -16,7 +16,7 @@ Turns LinkedIn post URLs into a stable `posts.json` — the clean data contract 
 ## Run it
 
 ```bash
-cd /Users/juan/marketing-skills/linkedin/research/linkedin-post-scraper/scripts
+cd /Users/juan/marketing-skills/research/channels/linkedin-post-scraper/scripts
 python3 li_scrape.py --out <OUTDIR> "URL1" "URL2" ...
 # or a file with one URL per line:
 python3 li_scrape.py --out <OUTDIR> --urls urls.txt

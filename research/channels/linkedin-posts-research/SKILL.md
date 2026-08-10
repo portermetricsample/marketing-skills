@@ -25,7 +25,7 @@ Pick a run dir, e.g. `data/<slug>-<date>/`. All three steps write there.
 ### 1 — Scrape
 
 ```bash
-cd /Users/juan/marketing-skills/linkedin/research/linkedin-post-scraper/scripts
+cd /Users/juan/marketing-skills/research/channels/linkedin-post-scraper/scripts
 python3 li_scrape.py --out <RUNDIR> "URL1" "URL2" ...
 ```
 
@@ -73,7 +73,7 @@ Rules that carry over from the `posts` framework:
 ### 3 — Render the Porter report
 
 ```bash
-cd /Users/juan/marketing-skills/linkedin/research/linkedin-posts-research/scripts
+cd /Users/juan/marketing-skills/research/channels/linkedin-posts-research/scripts
 python3 li_report.py --data <RUNDIR> --title "<Title>" --out <RUNDIR>/report.html
 ```
 

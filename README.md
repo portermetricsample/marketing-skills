@@ -1,18 +1,18 @@
 # marketing-skills
 
-Account-agnostic marketing skills and frameworks built on the [Porter Metrics MCP](https://portermetrics.com). Each folder is a self-contained channel — drop any of them into a Claude Code session and run it against your own accounts.
+Account-agnostic marketing skills and frameworks built on the [Porter Metrics MCP](https://portermetrics.com). Each folder is a self-contained area — drop any of them into a Claude Code session and run it against your own accounts.
 
 No API keys. No client data. Only reusable recipes.
 
 > **This is the canonical public distribution of Porter Metrics skills.** The former `porter-metrics-google-ads` repo has been archived; all its skills are included here and kept up to date.
 
-## Channels
+## Areas
 
 | Folder | What's inside |
 |--------|--------------|
+| [`research/`](research/) | **Competitor & search intelligence** — the layer that feeds decisions and content. [`channels/`](research/channels/) holds full competitor teardowns per platform (Meta Ads, TikTok Ads, Instagram public, LinkedIn posts) via scraping → self-contained Porter report; [`seo/`](research/seo/) holds 14 organic-search skills — content gaps, keyword value, AI visibility, traffic drop detection, featured snippets, and more |
 | [`google-ads/`](google-ads/) | Analysis frameworks — financial overview, funnel metrics, search terms, account audit, keyword↔ad↔landing alignment, impression share, brand incrementality, negatives, change history, and more |
-| [`meta-ads/`](meta-ads/) | Paid social — campaign research, creative performance scoring (Unicorn/Winning/Losing), and a full multi-page Meta Ads dashboard |
-| [`seo/`](seo/) | 12 organic search skills — content gaps, keyword value, AI visibility, traffic drop detection, featured snippets, and more |
+| [`meta-ads/`](meta-ads/) | Paid social execution — campaign setup and optimization, account safety, creative performance scoring (Unicorn/Winning/Losing), and a full multi-page Meta Ads dashboard |
 | [`creative/`](creative/) | Hook writing and ad diagnostics |
 | [`analytics/`](analytics/) | Cross-channel performance decay — labels pages and ads by their real trend at scale |
 | [`strategy/`](strategy/) | Strategy → copy stack: STP (segmentation, targeting, positioning), positioning → narrative → messaging, landing-page structure + copy, and `page-teardown` (reverse-engineer any competitor page into positioning/messaging/sections + a value read). The build frameworks need no MCP; `page-teardown` uses the Porter MCP scraper to fetch the page |
