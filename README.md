@@ -13,10 +13,11 @@ No API keys. No client data. Only reusable recipes.
 | [`research/`](research/) | **Competitor & search intelligence** — the layer that feeds decisions and content. [`channels/`](research/channels/) holds full competitor teardowns per surface (Meta Ads, TikTok Ads, Instagram public, LinkedIn posts, and a competitor's whole website via `website-changes-monitor`) → self-contained Porter report; [`seo/`](research/seo/) holds 14 organic-search skills — content gaps, keyword value, AI visibility, traffic drop detection, featured snippets, and more |
 | [`google-ads/`](google-ads/) | Analysis frameworks — financial overview, funnel metrics, search terms, account audit, keyword↔ad↔landing alignment, impression share, brand incrementality, negatives, change history, and more |
 | [`meta-ads/`](meta-ads/) | Paid social execution — campaign setup and optimization, account safety, creative performance scoring (Unicorn/Winning/Losing), and a full multi-page Meta Ads dashboard |
-| [`creative/`](creative/) | Hook writing and ad diagnostics |
+| [`creative/`](creative/) | Creative production and diagnostics — hook writing, ad diagnostics, LinkedIn infographic visuals (`porter-ai-systems`), and branded Remotion animations (`porter-remotion-animation`) |
+| [`core/`](core/) | Product/onboarding — `porter-setup`, the wizard to install and connect the Porter Metrics MCP in any AI assistant |
 | [`analytics/`](analytics/) | Cross-channel performance decay — labels pages and ads by their real trend at scale |
 | [`strategy/`](strategy/) | Strategy → copy stack: STP (segmentation, targeting, positioning), positioning → narrative → messaging, landing-page structure + copy, and `page-teardown` (reverse-engineer any competitor page into positioning/messaging/sections + a value read). The build frameworks need no MCP; `page-teardown` uses the Porter MCP scraper to fetch the page |
-| [`reporting/`](reporting/) | Cross-channel deliverable builders — `dashboard-builder` creates a complete hosted Porter dashboard end-to-end: SUMAS planning → brand-approved design kit (Porter or white-label) → live published report URL. `porter-instagram-dashboard` ships a ready-made 4-page Instagram Insights dashboard that can also be cloned onto any account in a single MCP call |
+| [`reporting/`](reporting/) | Cross-channel deliverable builders + the SUMAS analysis framework (`sumas`) that underpins them — `dashboard-builder` creates a complete hosted Porter dashboard end-to-end: SUMAS planning → brand-approved design kit (Porter or white-label) → live published report URL. `porter-instagram-dashboard` ships a ready-made 4-page Instagram Insights dashboard that can also be cloned onto any account in a single MCP call |
 
 ## Reference
 

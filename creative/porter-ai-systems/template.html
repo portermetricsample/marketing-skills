@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Porter AI Marketing Systems — 10 Claude use cases for Meta Ads</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#fdf8f0; --deep:#1a0340; --purple:#6701e6;
+    --lav:#ede9fe; --lav2:#c4b5fd; --pink:#EC4899; --aqua:#2DD4BF; --claude:#D97757;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{background:#d9d2c7;}
+  .canvas{width:1080px;height:1350px;background:var(--cream);position:relative;
+    font-family:'Inter',sans-serif;color:var(--deep);overflow:hidden;padding:56px 56px 0 56px;}
+  .canvas::before{content:"";position:absolute;inset:0;
+    background-image:linear-gradient(rgba(26,3,64,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(26,3,64,.035) 1px,transparent 1px);
+    background-size:54px 54px;pointer-events:none;}
+
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--purple);display:flex;align-items:center;gap:10px;position:relative;z-index:2;}
+  .eyebrow .dot{width:9px;height:9px;border-radius:50%;background:var(--pink);}
+  .eyebrow .sys{color:var(--deep);opacity:.55;}
+  h1{font-size:62px;line-height:.98;font-weight:900;letter-spacing:-.02em;margin-top:16px;position:relative;z-index:2;}
+  h1 .hl{position:relative;white-space:nowrap;}
+  h1 .hl svg{position:absolute;left:-8px;top:-6px;width:calc(100% + 16px);height:calc(100% + 14px);overflow:visible;z-index:-1;}
+  .thesis{margin-top:18px;font-size:20px;line-height:1.35;font-weight:500;color:#3a2a5e;max-width:780px;position:relative;z-index:2;}
+  .thesis b{color:var(--deep);font-weight:800;} .thesis .mark{color:var(--purple);font-weight:800;}
+
+  /* SPINE */
+  .spine{margin-top:24px;display:flex;align-items:stretch;position:relative;z-index:2;}
+  .node{flex:1;border:2px solid var(--deep);border-radius:14px;padding:11px 13px;display:flex;align-items:center;gap:11px;background:#fff;}
+  .node.src{background:var(--lav);} .node.mcp{background:var(--purple);border-color:var(--purple);} .node.claude{background:var(--deep);border-color:var(--deep);}
+  .node .chip{flex:0 0 auto;width:42px;height:42px;border-radius:11px;background:#fff;border:1px solid rgba(26,3,64,.12);
+    display:flex;align-items:center;justify-content:center;box-shadow:0 1px 2px rgba(26,3,64,.08);}
+  .node .chip img{width:27px;height:27px;object-fit:contain;display:block;}
+  .node .chip svg{width:27px;height:27px;display:block;}
+  .node .ntxt{display:flex;flex-direction:column;line-height:1.08;}
+  .node .nlbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;opacity:.6;}
+  .node .nname{font-size:17px;font-weight:800;letter-spacing:-.01em;}
+  .node.mcp .nlbl,.node.mcp .nname,.node.claude .nlbl,.node.claude .nname{color:#fff;}
+  .node.mcp .nlbl{opacity:.72;} .node.claude .nlbl{opacity:.6;}
+  .conn{flex:0 0 44px;display:flex;align-items:center;justify-content:center;}
+  .conn svg{width:44px;height:24px;}
+
+  /* GRID */
+  .grid{margin-top:26px;display:grid;grid-template-columns:1fr 1fr;gap:16px;position:relative;z-index:2;}
+  .card{border:2px solid var(--deep);border-radius:16px;background:#fff;padding:16px 17px;display:flex;gap:15px;align-items:center;position:relative;min-height:150px;}
+  .card .num{position:absolute;top:13px;right:15px;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:13px;color:var(--deep);opacity:.3;}
+  .ill{flex:0 0 66px;width:66px;height:66px;border-radius:13px;background:var(--lav);border:1.5px solid var(--deep);display:flex;align-items:center;justify-content:center;}
+  .ill svg{width:42px;height:42px;display:block;}
+  .ctxt{padding-right:10px;}
+  .ctitle{font-size:18px;font-weight:800;letter-spacing:-.01em;line-height:1.08;}
+  .cdesc{margin-top:6px;font-size:13px;line-height:1.32;color:#4a3a6e;font-weight:500;}
+  .cdesc .k{color:var(--purple);font-weight:700;}
+  .chip2{display:inline-block;margin-top:9px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.04em;
+    color:var(--deep);background:var(--lav);border:1px solid var(--lav2);border-radius:6px;padding:3px 7px;}
+  .chip2 .dn{color:var(--pink);font-weight:700;} .chip2 .up{color:var(--purple);font-weight:700;}
+
+  .ic{fill:none;stroke:var(--deep);stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
+  .icp{fill:none;stroke:var(--purple);stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
+  .pk{fill:none;stroke:var(--pink);stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round;}
+  .fk{fill:var(--pink);} .fp{fill:var(--purple);}
+
+  .footer{position:absolute;left:56px;right:56px;bottom:26px;display:flex;align-items:center;justify-content:space-between;z-index:2;}
+  .setup{display:flex;align-items:center;gap:9px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:var(--deep);background:var(--lav);border:1.5px solid var(--deep);border-radius:999px;padding:7px 14px;}
+  .setup b{font-weight:700;} .setup .plus{color:var(--purple);font-weight:700;}
+  .brand{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--deep);opacity:.7;}
+  .brand img{width:22px;height:22px;border-radius:6px;}
+  .brand span{color:var(--pink);}
+</style>
+</head>
+<body>
+<div class="canvas">
+
+  <div class="eyebrow"><span class="dot"></span>PORTER METRICS <span class="sys">/ AI MARKETING SYSTEMS</span></div>
+
+  <h1>10 Claude use cases for<br>
+    <span class="hl">Meta&nbsp;Ads
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path d="M3,82 C25,93 78,93 97,80 C99,72 96,40 90,22 C60,11 28,12 6,24 C2,42 1,66 3,82 Z" fill="none" stroke="#EC4899" stroke-width="3.2" stroke-linecap="round"/>
+      </svg>
+    </span>
+  </h1>
+
+  <p class="thesis">Claude gets useful when it can <b>see your ad data</b>, not just your prompt.
+    <span class="mark">Connect the data → run the system.</span></p>
+
+  <!-- SPINE: real logos on white chips -->
+  <div class="spine">
+    <div class="node src">
+      <span class="chip"><img src="assets/logos/meta.svg" alt="Meta"></span>
+      <span class="ntxt"><span class="nlbl">Source</span><span class="nname">Meta Ads data</span></span>
+    </div>
+    <div class="conn"><svg viewBox="0 0 44 24"><path class="icp" stroke-width="2.2" d="M2 12 H36"/><path class="icp" stroke-width="2.2" d="M30 6 L38 12 L30 18"/></svg></div>
+    <div class="node mcp">
+      <span class="chip"><img src="assets/logos/porter-mark-192.png" alt="Porter"></span>
+      <span class="ntxt"><span class="nlbl">Connector</span><span class="nname">Porter MCP</span></span>
+    </div>
+    <div class="conn"><svg viewBox="0 0 44 24"><path class="icp" stroke-width="2.2" d="M2 12 H36"/><path class="icp" stroke-width="2.2" d="M30 6 L38 12 L30 18"/></svg></div>
+    <div class="node claude">
+      <span class="chip"><svg viewBox="0 0 24 24"><path fill="#D97757" d="m4.714 15.956l4.718-2.648l.079-.23l-.08-.128h-.23l-.79-.048l-2.695-.073l-2.337-.097l-2.265-.122l-.57-.121l-.535-.704l.055-.353l.48-.321l.685.06l1.518.104l2.277.157l1.651.098l2.447.255h.389l.054-.158l-.133-.097l-.103-.098l-2.356-1.596l-2.55-1.688l-1.336-.972l-.722-.491L2 6.223l-.158-1.008l.656-.722l.88.06l.224.061l.893.686l1.906 1.476l2.49 1.833l.364.304l.146-.104l.018-.072l-.164-.274l-1.354-2.446l-1.445-2.49l-.644-1.032l-.17-.619a3 3 0 0 1-.103-.729L6.287.133L6.7 0l.995.134l.42.364l.619 1.415L9.735 4.14l1.555 3.03l.455.898l.243.832l.09.255h.159V9.01l.127-1.706l.237-2.095l.23-2.695l.08-.76l.376-.91l.747-.492l.583.28l.48.685l-.067.444l-.286 1.851l-.558 2.903l-.365 1.942h.213l.243-.242l.983-1.306l1.652-2.064l.728-.82l.85-.904l.547-.431h1.032l.759 1.129l-.34 1.166l-1.063 1.347l-.88 1.142l-1.263 1.7l-.79 1.36l.074.11l.188-.02l2.853-.606l1.542-.28l1.84-.315l.832.388l.09.395l-.327.807l-1.967.486l-2.307.462l-3.436.813l-.043.03l.049.061l1.548.146l.662.036h1.62l3.018.225l.79.522l.473.638l-.08.485l-1.213.62l-1.64-.389l-3.825-.91l-1.31-.329h-.183v.11l1.093 1.068l2.003 1.81l2.508 2.33l.127.578l-.321.455l-.34-.049l-2.204-1.657l-.85-.747l-1.925-1.62h-.127v.17l.443.649l2.343 3.521l.122 1.08l-.17.353l-.607.213l-.668-.122l-1.372-1.924l-1.415-2.168l-1.141-1.943l-.14.08l-.674 7.254l-.316.37l-.728.28l-.607-.461l-.322-.747l.322-1.476l.388-1.924l.316-1.53l.285-1.9l.17-.632l-.012-.042l-.14.018l-1.432 1.967l-2.18 2.945l-1.724 1.845l-.413.164l-.716-.37l.066-.662l.401-.589l2.386-3.036l1.439-1.882l.929-1.086l-.006-.158h-.055L4.138 18.56l-1.13.146l-.485-.456l.06-.746l.231-.243l1.907-1.312Z"/></svg></span>
+      <span class="ntxt"><span class="nlbl">Reasoning</span><span class="nname">Claude</span></span>
+    </div>
+  </div>
+
+  <!-- GRID -->
+  <div class="grid">
+
+    <!-- 01 fatigue (pink) -->
+    <div class="card"><span class="num">01</span>
+      <span class="ill"><svg viewBox="0 0 24 24">
+        <g class="ic"><rect x="3" y="3" width="18" height="18" rx="2.5"/><circle cx="8" cy="8" r="1.8"/></g>
+        <path class="pk" d="M4 13.5 L8 15.5 L12 14 L17.5 18.5"/>
+        <path class="pk" d="M17.5 18.5 L14 18.2 M17.5 18.5 L17.2 15"/>
+      </svg></span>
+      <span class="ctxt"><span class="ctitle">Creative fatigue detector</span>
+        <span class="cdesc">Spend stays high but <span class="k">CTR, hook rate, ROAS</span> start sliding.</span>
+        <span class="chip2">ROAS <span class="dn">&#9660;</span>&nbsp; SPEND &#8594;</span>
+      </span>
+    </div>
+
+    <!-- 02 angle (deep) -->
+    <div class="card"><span class="num">02</span>
+      <span class="ill"><svg viewBox="0 0 24 24">
+        <g class="ic"><circle cx="10.5" cy="10.5" r="7.5"/><path d="M16 16 L21 21"/><path d="M7 10.5 L9.6 13.2 L14.2 8"/></g>
+      </svg></span>
+      <span class="ctxt"><span class="ctitle">Winning angle miner</span>
+        <span class="cdesc">Extract the <span class="k">promise, pain, proof</span> behind top ads.</span>
+      </span>
+    </div>
+
+    <!-- 03 budget (pink) -->
+    <div class="card"><span class="num">03</span>
+      <span class="ill"><svg viewBox="0 0 24 24">
+        <g class="ic"><rect x="3" y="13" width="4.6" height="7.5" rx="1"/><rect x="16.4" y="6" width="4.6" height="14.5" rx="1"/></g>
+        <path class="pk" d="M9 11.5 C12.5 8 14.4 8 16.4 9.6"/>
+        <path class="pk" d="M16.4 9.6 L13.7 9.1 M16.4 9.6 L15.5 12.1"/>
+      </svg></span>
+      <span class="ctxt"><span class="ctitle">Budget shift copilot</span>
+        <span class="cdesc">Move spend by <span class="k">CPA, ROAS, volume &amp; trend</span>.</span>
+        <span class="chip2">CPA <span class="dn">&#9660;</span>&nbsp; ROAS <span class="up">&#9650;</span></span>
+      </span>
+    </div>
+
+    <!-- 04 overlap (pink) -->
+    <div class="card"><span class="num">04</span>
+      <span class="ill"><svg viewBox="0 0 24 24">
+        <circle class="ic" cx="9" cy="11" r="6.5"/><circle class="icp" cx="15" cy="11" r="6.5"/>
+        <circle class="fk" cx="12" cy="11" r="1.9"/>
+      </svg></span>
+      <span class="ctxt"><span class="ctitle">Audience overlap map</span>
+        <span class="cdesc">Find campaigns <span class="k">fighting for the same buyers</span>.</span>
+      </span>
+    </div>
+
+    <!-- 05 ugc (deep) -->
+    <div class="card"><span class="num">05</span>
+      <span class="ill"><svg viewBox="0 0 24 24">
+        <path class="ic" d="m12.296 3.464l3.02 3.956M20.2 6L3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3zM3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm3.18-5.724l3.1 3.899"/>
+      </svg></span>
+      <span class="ctxt"><span class="ctitle">UGC brief generator</span>
+        <span class="cdesc">Turn data into <span class="k">scripts, scenes &amp; hooks</span>.</span>
+      </span>
+    </div>
+
+    <!-- 06 comment (pink) -->
+    <div class="card"><span class="num">06</span>
+      <span class="ill"><svg viewBox="0 0 24 24">
+        <path class="ic" d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"/>
+        <path class="pk" d="M12 7 v4 M12 14.6 h.01"/>
+      </svg></span>
+      <span class="ctxt"><span class="ctitle">Comment objection extractor</span>
+        <span class="cdesc">Mine replies for <span class="k">doubts &amp; new angles</span>.</span>
+      </span>
+    </div>
+
+    <!-- 07 mismatch (deep) -->
+    <div class="card"><span class="num">07</span>
+      <span class="ill"><svg viewBox="0 0 24 24">
+        <path class="ic" d="m18.84 12.25l1.72-1.71h-.02a5.004 5.004 0 0 0-.12-7.07a5.006 5.006 0 0 0-6.95 0l-1.72 1.71m-6.58 6.57l-1.71 1.71a5.004 5.004 0 0 0 .12 7.07a5.006 5.006 0 0 0 6.95 0l1.71-1.71"/>
+        <path class="pk" d="M8 2.5v2.5M2.5 8h2.5m11 11v2.5m2.5-5h2.5"/>
+      </svg></span>
+      <span class="ctxt"><span class="ctitle">Landing mismatch audit</span>
+        <span class="cdesc">Flag where the <span class="k">ad-to-page story breaks</span>.</span>
+        <span class="chip2">AD &#8800; PAGE</span>
+      </span>
+    </div>
+
+    <!-- 08 spy (deep) -->
+    <div class="card"><span class="num">08</span>
+      <span class="ill"><svg viewBox="0 0 24 24">
+        <path class="ic" d="M10 10h4m5-3V4a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v3m5 14a2 2 0 0 0 2-2v-3.851c0-1.39-2-2.962-2-4.829V8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v11a2 2 0 0 0 2 2zm2-5H2m2 5a2 2 0 0 1-2-2v-3.851c0-1.39 2-2.962 2-4.829V8a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v11a2 2 0 0 1-2 2zM9 7V4a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v3"/>
+      </svg></span>
+      <span class="ctxt"><span class="ctitle">Ad library spy</span>
+        <span class="cdesc">Summarize <span class="k">competitor patterns</span> at a glance.</span>
+      </span>
+    </div>
+
+    <!-- 09 anomaly (pink) -->
+    <div class="card"><span class="num">09</span>
+      <span class="ill"><svg viewBox="0 0 24 24">
+        <path class="ic" d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/>
+        <circle class="fk" cx="9" cy="4.4" r="1.6"/>
+      </svg></span>
+      <span class="ctxt"><span class="ctitle">Anomaly alerts</span>
+        <span class="cdesc">Explain <span class="k">spikes, drops &amp; learning resets</span>.</span>
+        <span class="chip2"><span class="dn">&#9888;</span> SPIKE DETECTED</span>
+      </span>
+    </div>
+
+    <!-- 10 report (deep) -->
+    <div class="card"><span class="num">10</span>
+      <span class="ill"><svg viewBox="0 0 24 24">
+        <g class="ic"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4m-4 5h4"/></g>
+        <circle class="fk" cx="8.2" cy="11" r="1.1"/><circle class="fk" cx="8.2" cy="16" r="1.1"/>
+      </svg></span>
+      <span class="ctxt"><span class="ctitle">Monday report writer</span>
+        <span class="cdesc">What changed, <span class="k">why it matters, what's next</span>.</span>
+      </span>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <div class="setup"><b>Setup:</b> Porter MCP <span class="plus">+</span> Claude <span class="plus">+</span> Meta Ads</div>
+    <div class="brand"><img src="assets/logos/porter-mark-192.png" alt="Porter">Follow <b>Porter Metrics</b> <span>&middot;</span> portermetrics.com</div>
+  </div>
+
+</div>
+<script>if(location.search.indexOf('x2')>-1){document.documentElement.style.zoom='2';}</script>
+</body>
+</html>
