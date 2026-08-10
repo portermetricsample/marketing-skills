@@ -24,12 +24,9 @@ Pick a run dir, e.g. `data/<slug>-<date>/`. All three steps write there.
 
 ### 1 — Scrape
 
-```bash
-cd /Users/juan/marketing-skills/research/channels/linkedin-post-scraper/scripts
-python3 li_scrape.py --out <RUNDIR> "URL1" "URL2" ...
-```
+Use the **`linkedin-post-scraper`** skill — it runs on the Porter Metrics MCP (`web_scraping.run_web_scraper` with actor `apimaestro/linkedin-post-detail`, no keys) and returns the `posts.json` contract. Save it to `<RUNDIR>/posts.json`.
 
-Read `<RUNDIR>/posts.json`. Any post with `ok:false` is a blocked carousel/document/restricted post — mention it to the user; it still appears in the report as a "not readable" card. Analyze only the `ok:true` posts.
+Any post with `ok:false` is a blocked carousel/document/restricted post — mention it to the user; it still appears in the report as a "not readable" card. Analyze only the `ok:true` posts.
 
 ### 2 — Analyze with the cascade (you write `analysis.json`)
 
