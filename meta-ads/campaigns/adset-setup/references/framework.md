@@ -20,7 +20,7 @@ a Pixel + event. If those don't exist on the account yet, that is a blocker to s
 
 ## 2. Budget placement — the CBO rule
 - **Campaign is CBO** → the budget lives on the campaign. **Do NOT put a budget on the ad set.**
-- **Campaign is NOT CBO** → set the ad-set budget (⚠️ **MINOR units** — ×offset yourself; the connector does NOT convert, verified 2026-07-16; use `../_budget/budget.md`) AND an explicit
+- **Campaign is NOT CBO** → set the ad-set budget (⚠️ **MINOR units** — ×offset yourself; the connector does NOT convert, verified 2026-07-16; use `../../_budget/budget.md`) AND an explicit
   `bid_strategy` (`LOWEST_COST_WITHOUT_CAP` unless the user has a CPA/ROAS target).
 Read the campaign's CBO flag before deciding — never assume.
 

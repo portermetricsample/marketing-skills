@@ -53,7 +53,7 @@ en lenguaje claro (no este JSON crudo).
 ## Reglas
 - **Todo `status: PAUSED`.** El resumen SIEMPRE dice que no gasta hasta que el usuario active.
 - `budget.amount_major` = lo que dijo el usuario (moneda real); la conversión a la unidad de cada acción
-  la hace el ejecutor vía [`../_budget/budget.md`](../_budget/budget.md) — no metas centavos aquí.
+  la hace el ejecutor vía [`../../_budget/budget.md`](../../_budget/budget.md) — no metas centavos aquí.
 - `validations` lista lo que se verificó (para que el usuario vea que está bien armado).
 - `warnings` lista lo que quedó pendiente/limitado (p. ej. "intereses no disponibles hoy", "video en proceso").
 - Tras crear, adjunta los ids reales (campaign/adset/ad) + el link de Ads Manager.

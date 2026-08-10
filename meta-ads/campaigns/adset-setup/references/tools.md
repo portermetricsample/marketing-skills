@@ -45,7 +45,7 @@ injected from the signed blob).
 - **Campaign bid_strategy propagates:** if the campaign is `LOWEST_COST_WITH_BID_CAP`/`COST_CAP`,
   `adset_create` fails with `subcode 1815857 "Bid amount required"`. Fix the campaign's strategy
   (`campaign_update` → `LOWEST_COST_WITHOUT_CAP`) or pass a `bid_value`. (Feedback gap 32.)
-- **Budget unit is MINOR here too** (centavos) — verified 2026-07-16 by read-back: sent `12345` → stored `12345`. The schema's "MAJOR unit / connector converts / do NOT ×100" is **WRONG**. Same as campaign: **×offset yourself**. Use [`../_budget/budget.md`](../_budget/budget.md). (Gap 35 corrected.)
+- **Budget unit is MINOR here too** (centavos) — verified 2026-07-16 by read-back: sent `12345` → stored `12345`. The schema's "MAJOR unit / connector converts / do NOT ×100" is **WRONG**. Same as campaign: **×offset yourself**. Use [`../../_budget/budget.md`](../../_budget/budget.md). (Gap 35 corrected.)
 - **CBO campaign → no ad-set budget.** Putting a budget on the ad set of a CBO campaign is wrong;
   the budget lives on the campaign.
 - **Meta throttle:** rapid automated writes (or an account without a payment method) can return

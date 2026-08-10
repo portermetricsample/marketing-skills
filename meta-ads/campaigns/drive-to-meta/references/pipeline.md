@@ -64,6 +64,9 @@ changes Drive sharing**):
    `https://drive.usercontent.google.com/download?id=<FILE_ID>&export=download&confirm=t`
    (the `&confirm=t` skips the virus-scan interstitial that large files otherwise return).
 3. Pass it verbatim as `params.url`. ⚠️ Do NOT edit any query param of a signed URL → `403 failed to download`.
+4. **After** the `video_id` is confirmed `ready`, remind the user they can set the Drive file **back to
+   private** — Meta has its own copy, so the public link is no longer needed (avoids a world-readable leftover).
+
 Validated: the `url` path works end-to-end (a 1 MB public MP4 → `video_id 1060923979708093`). A private
 Drive link was NOT tested (requires the user to share); the mechanism (Porter fetch → Meta) is proven.
 
@@ -94,22 +97,39 @@ execute_action("facebook_ads.adset_create", account_id=<blob>, params={
 ```
 - **Budget minor units + minimum** (validated): a COP account rejected `500` with
   *"daily budget 500 COP is below the account minimum (3319 COP in minor units); raise it"* — read the
-  minimum from that error and resend. Convert the user's real money via [`../../_budget/budget.md`](../../_budget/budget.md).
-- `(objective, optimization_goal, billing_event, destination_type)` must be a valid **triple** or Meta
-  returns subcode 1772103 — see the connector's "valid triples" knowledge entry.
+  minimum from that error and resend. ⚠️ The number is in the **account's** currency (Porter = COP), not
+  the user's — reconcile before converting. Budget math via [`../../_budget/budget.md`](../../_budget/budget.md).
+- **Advantage Audience flag:** the validated run (TRAFFIC, plain `targeting_countries:["US"]`, no
+  interests) did **NOT** need it. But some objectives/targeting require it — Meta then returns
+  **subcode 1870227 "Advantage Audience Flag Required"**. Fix: resend with `targeting_advantage_audience:0`
+  (manual audience) or `1` (Advantage+; `1` forces `age_max`=65, else subcode 1870189).
+- **Valid `(objective → optimization_goal, billing_event, destination_type)` combos** (a bad combo =
+  subcode 1772103). Minimal validated map:
+
+  | objective | optimization_goal | billing_event | destination_type |
+  |-----------|-------------------|---------------|------------------|
+  | OUTCOME_TRAFFIC | LINK_CLICKS / LANDING_PAGE_VIEWS | IMPRESSIONS | WEBSITE |
+  | OUTCOME_AWARENESS | REACH / IMPRESSIONS | IMPRESSIONS | — |
+  | OUTCOME_ENGAGEMENT | POST_ENGAGEMENT / THRUPLAY | IMPRESSIONS | — |
+  | OUTCOME_LEADS | LEAD_GENERATION | IMPRESSIONS | ON_AD (+ `promoted_object_page_id`) |
+  | OUTCOME_SALES | OFFSITE_CONVERSIONS | IMPRESSIONS | WEBSITE (+ `promoted_object_pixel_id`) |
+
 - **≥1 geo is mandatory.** DCA/multi-format ad later ⇒ set `is_dynamic_creative:true` HERE.
-- LEADS/AWARENESS/ENGAGEMENT need `promoted_object_page_id`; SALES needs `promoted_object_pixel_id`.
 
 ## 4) Ad (PAUSED)
 ```
 execute_action("facebook_ads.ad_create", account_id=<blob>, params={
   "name":"…", "adset_id":<id>, "page_id":<page>, "status":"PAUSED",
   "image_hash":<hash>            # OR "video_id":<id> (ready) OR carousel/DCA (see ad-setup)
-  "message":"…","headline":"…","description":"…","link":"…","cta_type":"LEARN_MORE","url_tags":"utm_…"})
+  "message":"…","headline":"…","link":"…","cta_type":"LEARN_MORE","url_tags":"utm_…"
+  ,"description":"…"})           # ← IMAGE/LINK/carousel ONLY — DROP for video (see below)
   → {id:<ad_id>}
 ```
 - `image_hash` / `picture` / `video_id` are **mutually exclusive** — one creative route per ad.
-- LEADS requires `lead_gen_form_id`. UTMs go in `url_tags` (no leading `?`), NOT inside `link`.
+- **`description` is NOT supported on VIDEO ads** — including it → subcode 1443050 *"description not
+  supported in video_data"*. Omit it when the creative is a `video_id` (fine for image/link/carousel).
+- LEADS requires `lead_gen_form_id` (create it first via the `leadform` skill). UTMs go in `url_tags`
+  (no leading `?`), NOT inside `link`.
 
 ## 5) Verify (+ teardown for tests)
 ```
@@ -129,7 +149,9 @@ execute_action("facebook_ads.campaign_delete", account_id=<blob>, params={"campa
 | `Object with ID '<blob>' does not exist` | put the signed blob in the presigned POST body | body `account_id` = native `act_…` |
 | `409 presigned_token_already_used` | reused a single-use token | new `prepare_upload`, re-POST |
 | `daily budget N below account minimum (M …)` | budget < account min / wrong units | send ≥ M minor units |
-| `subcode 1772103` | invalid objective/opt-goal/billing/destination triple | consult the valid-triples matrix |
+| `subcode 1772103` | invalid objective/opt-goal/billing/destination triple | use the combos table in §3 |
+| `subcode 1870227` "Advantage Audience Flag Required" | ad set needs the audience flag for this config | resend `targeting_advantage_audience:0` (or `1` with `age_max`=65) |
+| `subcode 1443050` "description not supported in video_data" | `description` sent on a video ad | drop `description` for video creatives |
 | `subcode 1885998` | DCA ad on a non-DCA ad set | `is_dynamic_creative:true` at adset create |
 | `subcode 2859015` | Meta write throttle | back off, retry later — never retry-storm |
 | `403 failed to download` (url path) | edited a signed URL / not public | pass URL verbatim; ensure link-shared + `confirm=t` |

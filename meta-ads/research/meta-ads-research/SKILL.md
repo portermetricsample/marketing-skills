@@ -1,165 +1,164 @@
 ---
 name: meta-ads-research
-description: Análisis completo de competidor en Meta Ads a partir del solo nombre. Extrae ads activos de la Biblioteca de Anuncios de Meta para un brand (videos E imágenes), deduplica por SHA256, transcribe audio, extrae frames, hace OCR + análisis visual, y arma un REPORTE VISUAL Porter (HTML autocontenido). Activar con /meta-ads-research o cuando el usuario pida "scrape ads de meta de X", "research creativo de Y", "trae los ads activos de Z", "auditar competidor en Meta", "analiza al competidor X" o similar. Output: JSON canónico + brand_brief.md + reporte HTML estilo Porter. Usa Apify + Deepgram + Anthropic vision + PaddleOCR + ffmpeg.
+description: Full competitor teardown on Meta Ads from just a brand name. Pulls a brand's active ads from the Meta Ad Library (videos AND images), dedupes by SHA256, transcribes audio (Deepgram), extracts frames (ffmpeg), reads on-screen text (OCR), and builds a self-contained Porter visual report. Trigger on "scrape X's Meta ads", "creative research on Y", "audit Z on Meta", "analyze competitor X", or a Meta Ad Library URL. Output: canonical JSON + Porter HTML report.
 ---
 
 # Meta Ads Research
 
-Pipeline de extracción limpia y deduplicada de creativos activos en la Biblioteca de Anuncios de Meta. Output: JSON consumible directo + companion en markdown.
+Clean, deduplicated extraction of a brand's active Meta Ad Library creatives → structured JSON → a Porter visual report. The job is to hand the analyst every structured variable and let them judge — we extract and classify, we don't opine.
 
-## Cuándo activar
+## When to trigger
 
-- "scrape ads de Meta de {brand}"
-- "research creativo de {brand}"
-- "trae los ads activos de {brand}"
-- "qué ads tiene corriendo {brand}"
-- "auditar {brand} en Meta"
-- "comparar {brand A} vs {brand B}"
+- "scrape {brand}'s Meta ads" / "what ads is {brand} running"
+- "creative research on {brand}" / "audit {brand} on Meta"
+- "analyze competitor {brand}" / "compare {brand A} vs {brand B}"
+- a pasted Meta Ad Library URL (the `page_id` is in `view_all_page_id=`)
 
-## Credenciales
+## Credentials
+
+Real tokens live in a gitignored `.env` in the pipeline scripts folder — never committed. Load it before running:
 
 ```bash
-export APIFY_TOKEN=apify_api_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-export DEEPGRAM_TOKEN=your_deepgram_token_here
-# ANTHROPIC_API_KEY ← pendiente para vision pass
+cd /Users/juan/repos/mobile/workspace/use-cases/meta-ads-pipeline/scripts
+set -a; source ./.env; set +a
 ```
 
-## Scope
-
-Procesa **videos E imágenes** por igual. Estado actual:
-- ✅ Videos con voz: transcripción (Deepgram) + frames (ffmpeg)
-- ❌ Imágenes: OCR + vision **pendiente (ver gap 1 abajo)**
-- ❌ Videos silentes (motion graphics, animaciones sin voz): solo dedup, sin valor analítico hasta que vision pass esté implementado (ver gap 1)
-- ❌ OCR + vision sobre frames de video **pendiente (ver gap 1 abajo)**
+`.env` defines `APIFY_TOKEN` and `DEEPGRAM_TOKEN`. If it's missing (clean checkout), create it from Porter's tokens before running.
 
 ## Pipeline
 
-Ubicación: `/Users/juan/repos/mobile/workspace/use-cases/meta-ads-pipeline/scripts/`
+Scripts: `/Users/juan/repos/mobile/workspace/use-cases/meta-ads-pipeline/scripts/`
 
 ```bash
-# 1. Identificar page_id (skip si ya lo tienes de la URL del Ad Library)
-python3 01_identify_page.py "<brand_name|website|facebook_url>"
-
-# 2. Scrape
-python3 02_scrape_ads.py --page-id <ID> --max-items 500
-
-# 3. Dedup (SHA256 sobre bytes de media)
-python3 03_dedup_creatives.py --page-id <ID>
-
-# 4. Enrich (default: enrich-all, customer paga por completeness)
-python3 04_enrich_creatives.py --page-id <ID> --top-n 999
-
-# 5. Build canonical output — --formats all es OBLIGATORIO
-#    (default es 'summary' → AUDIT.json sin hooks/creatives/media → reporte vacío)
-python3 run_audit.py --page-id <ID> --auto-confirm --formats all
-python3 generate_brief.py --page-id <ID>   # run_audit NO genera el brief; correrlo aparte
-
-# 6. Reporte visual Porter (HTML autocontenido) — ver sección abajo
-#    --brand SIEMPRE (con --page-id directo, page_name viene null → header "—")
-python3 generate_report.py --page-id <ID> --brand "<Name>" --narrative data/<ID>/narrative.json
+# run_audit orchestrates identify → scrape → dedup → enrich → audit in ONE call.
+# Do NOT run 02/03/04 separately as well — run_audit re-runs them, which double-scrapes and burns Apify quota.
+python3 run_audit.py --page-id <ID> --auto-confirm --formats all --top-n 40 --max-items 500
+python3 parse_utm.py         --page-id <ID>   # → utm_intel.json  (campaign intel from link_url)
+python3 funnel_classifier.py --page-id <ID>   # → funnel_intel.json (inferred Meta ODAX objective)
+python3 ocr_creatives.py     --page-id <ID>   # → ocr_intel.json  (on-screen text, Apple Vision)
+python3 generate_report.py   --page-id <ID> --brand "<Name>" --narrative data/<ID>/narrative.json
 ```
 
-### Gotchas verificados (test PolicyMe, 2026-07-16)
+- `--top-n` caps enrichment (Deepgram) spend; omit for full coverage. `--max-items` caps the scrape.
+- On a fresh/clean run, delete any prior `data/<ID>/` outputs first — re-scraping over old files leaves mixed-vintage state.
+- Output: `data/<page_id>/AUDIT.json` (canonical) + the `*_intel.json` layers + `dist/<slug>/index.html`. End-to-end 1–5 min by size.
 
-- **`--formats all` obligatorio** en run_audit. Sin él, el AUDIT.json solo trae `summary` y el reporte queda sin creativos ni ángulos.
-- **`--brand "<Name>"` obligatorio** en generate_report cuando entrás por `--page-id` (el pipeline no resuelve `page_name` → sale null). Usar el nombre que dio el usuario.
-- **run_audit NO corre generate_brief.** Son pasos separados. El brief es la fuente para escribir `narrative.json`.
-- **Ángulos:** el clasificador (`generate_brief.py` → `ANGLE_RULES`) es rule-based bilingüe EN+ES. Si una marca nueva cae mucho en `uncategorized`, expandir `ANGLE_RULES` con sus patrones (es la fuente compartida por AUDIT.json y brief). DCO sin copy real → etiqueta `DCO — sin copy`, no uncategorized.
-- **Costo real PolicyMe:** 80 ads → 45 únicos → 31 videos enriquecidos ≈ $3.38. Regla: avisar si un run va a pasar $5.
+### Verified gotchas
 
-Output: `data/<page_id>/AUDIT.json` (envelope FireCrawl-shaped, schema v2.0) + `data/<page_id>/brand_brief.md` (companion agente-friendly, incluye billing block) + `dist/<slug>/index.html` (reporte visual Porter). Schema completo en `docs/SCHEMA.md`. Tiempo end-to-end: 1-5 min según tamaño.
+- `--formats all` is mandatory on run_audit. Without it AUDIT.json is `summary`-only → the report renders empty.
+- `--brand "<Name>"` is mandatory on generate_report when entering by `--page-id` (page_name resolves null → header shows "—").
+- run_audit does NOT run generate_brief; they're separate steps.
+- Angle classifier (`generate_brief.py → ANGLE_RULES`) is rule-based EN+ES. If a new brand lands mostly in `uncategorized`, extend `ANGLE_RULES` with its patterns. Real DCO with no copy → tag `DCO — no copy`, not uncategorized.
+- Warn the user before any run projected to cost > $5 backend.
 
-## Reporte visual Porter (paso final)
+## The report
 
-`generate_report.py` convierte `AUDIT.json` en un `index.html` autocontenido (imágenes en base64, se abre sin internet) con el sistema de diseño Porter. Es la entrega presentable para el cliente. **El reporte se renderiza en INGLÉS por default** (labels, secciones y narrativa).
+`generate_report.py` turns AUDIT.json + the intel layers into a self-contained `index.html` (base64 images, opens offline) in the Porter design system. English by default.
 
-**Dos capas:**
-- **Datos (automático):** KPIs, ángulos de hook, elegibilidad por plataforma, grid de top-24 creativos con thumbnail + modal (hook + transcript), landings (host + path, para que se vean páginas distintas), transparencia. Sale del `AUDIT.json` sin intervención.
-- **Narrativa cualitativa (Claude la escribe):** subtítulo, patrones transversales, deep-dive por creativo (script + capa visual + estrategia) y hallazgos accionables. Van en `narrative.json` opcional. SIN él, el reporte sale completo, solo omite esas secciones.
+Two layers:
+- **Data (automatic, from JSON):** counts, media/format, inferred objective, campaign intel, launch timeline, longevity×variants segmentation, hook angles, platform eligibility, creative grid, landings.
+- **Narrative (the AI writes):** subtitle, cross-library patterns, per-creative deep-dives, actionable findings — via `narrative.json`.
 
-**Flujo obligatorio para el deep-dive (así queda consistente y NO inventado):**
-1. LEER `data/<ID>/brand_brief.md` y los transcripts en `AUDIT.json → scripts[]`.
-2. Para cada creativo del deep-dive, **ABRIR sus 3 frames** con la tool Read (imágenes): `data/<ID>/thumbs/<fingerprint>_hook.jpg`, `_mid.jpg`, `_end.jpg`. Describir actores, setting y qué muestra cada frame a partir de lo que se VE — nunca inventar.
-3. Escribir `data/<ID>/narrative.json` con esta forma (inglés):
+**A complete analysis ALWAYS includes the narrative deep-dives.** The data-only report (no `narrative.json`) is a partial — never the deliverable. Only stop at data-only when the user explicitly asks for a quick data pull. If you ran the pipeline but didn't write the narrative, the analysis is not done.
+
+**Definition of done — every step, in order, none skipped:**
+1. scrape → dedup → enrich → run_audit (`--formats all`)
+2. parse_utm · funnel_classifier · ocr_creatives (all three intel layers)
+3. **narrative.json** — 6–8 per-creative deep-dives (stratified), 3–6 patterns, 3–5 findings, subtitle
+4. generate_report `--brand --narrative` → confirm the deep-dives rendered
+5. deliver + state the sample size
+
+Conventions:
+- **Section titles are the question they answer**, in plain language — "What kind of ads do they run?", not "Media & format". Technical terms (ODAX, funnel_stage) go in the body, never the title.
+- **Compact density** — 2-col grids, proportion bars, stat tiles. The audit must not need infinite scroll.
+- **Colors** — full Porter palette by default; `--accent "#hex"` tints only the accent to the competitor's color.
+- **Why HTML, not a report.portermetrics.com dashboard** — those run on Porter connectors (the client's own account). This data is the public Ad Library via Apify, not a connector.
+
+## Analysis contract
+
+Meta hides all performance (CTR, spend, impressions, ROAS) for a competitor. Every "what works" read is **inference from public signals** — never a measured fact. The whole contract follows from that.
+
+**Extract and classify — never judge, never invent.**
+- We hand the analyst the structured variables (angle, hook, concept, insight, format, objective, timing…) and let *them* decide what's good. We do not ship quality verdicts ("why it works", "winning ad").
+- Descriptive attributes are **classified against a bank** (angles, hooks, triggers…), citing the entry or flagging the gap. A variable with no bank to draw from is a gap to note, not something to invent (this is why `copy_levers`/`why_it_works` are out).
+
+**Fact/judgment boundary — one source of numbers.**
+- Numbers and facts always come from `AUDIT.json` (counts, `days_active`, `variants_total`, dates, platforms, CTA, `link_url`). The report **injects** them; the AI never types a figure. The per-brand header is templated and identical for every brand: `N active · M unique · K enriched (X%)`.
+- The AI writes only descriptive attributes in `narrative.json` — no digits, no URLs. (This kills the "149 vs 337" bug: the 149 was a hand-typed count in prose.)
+
+**Every proxy variable carries 4 things** (`days_active`, `variants_total`, …):
+1. A hypothesis label, not a verdict — "Candidate winner, worth investigating", never "Winner".
+2. An inline disclaimer next to the signal — longevity/variants proxy the advertiser's investment, not proven performance.
+3. The raw number visible (`147d · 13 var · still active`) so the reader can overrule the read.
+4. Observation separated from inference — correlation ≠ causation, stated. The reader concludes.
+
+**Vocabulary — describe observable behavior, not measured performance.**
+- Use for a competitor: Evergreen · Always-on vs Burst/Pulsing · Testing · Scaling · Iteration vs Concept · Time-in-market · Spend-proxy (ad density) · Survivorship bias · Hero/Hub/Hygiene.
+- Never for a competitor: Unicorn / Winning / Steady / Fatiguing / Losing — those are the `creative_performance` (Motion) bands and need metrics we only have for our OWN account.
+- Decompose a creative on the `content-stack` axis: Concept → Angle → Format → Hook.
+
+**Segmentation 2×2** (longevity × variants, median split): Evergreen/Always-on (long, few) · Scaled & heavily-iterated (long, many) · New concept testing at volume (recent, many) · Early testers (recent, few). Alt cuts: by product line, declared format, theme (UTM), `funnel_stage`.
+
+**Launch timeline** by `first_seen_date`. With `active_only=true` it is survivorship-biased (recent months inflated, old months show only survivors). For real cadence/kill-rate, scrape `active_status=all`.
+
+**UTM intel** (`parse_utm.py`). From `link_url`, deterministic, zero AI cost: `declared_format`, `campaign_theme`, `launch_month`, `objective`, `product_area`, `landing_host`. Product/theme codes are brand-specific → keep the raw token + optional `--product-map`. Always report coverage (e.g. 69/71); empty if the brand doesn't tag.
+
+**Objective classifier** (`funnel_classifier.py`) — taxonomy = the 6 Meta ODAX objectives (Awareness · Traffic · Engagement · Leads · App promotion · Sales). Meta hides the real objective, so it's inferred in layers: `utm_objective` (advertiser-declared, highest) > `cta_type` > `landing_host`. Output per creative: `inferred_objective` + `confidence` + `driving_signal` + all raw `signals` + `conflict`. **Transparency rule: the report shows every raw signal, then the inference — never the verdict alone.** A signal conflict is itself an insight (e.g. Sales objective under a soft `WATCH_MORE` CTA = "conversion goal, soft creative"). Message-level intent overlay = Schwartz's 5 awareness stages (Unaware→Most-aware). Do not confuse with `ad-diagnostic`'s creative funnel (capture→keep→click→convert), a different axis.
+
+## Media classification (the branch key)
+
+`run_audit.py` derives two canonical per-creative fields that route everything downstream:
+- `media_kind` ∈ `static_image | voiced_video | silent_video` — keyed off transcript presence, not `is_enriched`.
+- `audio` ∈ `speech | music_only | none | n/a` — the `music_only`/`none` split comes from `04_enrich`'s ffprobe audio-stream check.
+
+Branch by it: `voiced_video` → Deepgram transcript; `silent_video` / `static_image` → OCR/visual (never spend Deepgram on them). Creative selection for enrichment is **stratified** across the 2×2 (proven bets + fresh experiments + product coverage), not a single top-variants ranking — `days_active` alone buries new experiments.
+
+## Writing the narrative (deep-dive)
+
+1. Read `data/<ID>/brand_brief.md`, the transcripts in `AUDIT.json → scripts[]`, and `data/<ID>/ocr_intel.json`. Route by `media_kind`: **voiced_video** → transcript (HOOK/BODY/CTA script); **silent_video / image** → no audio, use the OCR `on_screen_text` as the message, with `delivery: {"voice":"No"}`. OCR carries typography misreads ("tanjeta"→"tarjeta") — correct them by context, never copy literally.
+2. For each deep-dive creative, open its 3 frames with Read (`thumbs/<fp>_{hook,mid,end}.jpg`) and describe actors, setting, and what each frame shows — only from what is visible, never invented.
+3. Write `data/<ID>/narrative.json`:
 
 ```json
 {
-  "subtitle": "One line thesis of the brand's Meta strategy (HTML inline ok).",
-  "patterns": [
-    {"title": "3-6 word pattern", "body": "1-2 sentences on what repeats across every ad."}
-  ],
-  "deep_dives": [
-    {
-      "fingerprint": "<full fingerprint from AUDIT>",
-      "title": "Concept name",
-      "format": "e.g. UGC selfie + product screen",
-      "hook_type": "e.g. Bold numeric price claim",
-      "angle": "e.g. price anchor",
-      "funnel_stage": "TOF | MOF | BOF (+ short label)",
-      "persona": "who it targets",
-      "actors": "who APPEARS in the video (grounded on the frames)",
-      "copy_levers": ["lever1", "lever2"],
-      "delivery": {"voice": "Yes", "music": "optional"},
-      "script_stages": [
-        {"stage": "HOOK", "time": "0-3s", "text": "…"},
-        {"stage": "BODY", "time": "3-15s", "text": "…"},
-        {"stage": "CTA",  "time": "15-19s", "text": "…"}
-      ],
-      "frame_notes": {"hook": "what's on screen", "mid": "…", "end": "…"},
-      "why_it_works": "1-2 sentences"
-    }
-  ],
-  "findings": [
-    {"title": "Actionable finding", "body": "Implication for a competitor of this brand."}
-  ]
+  "subtitle": "One-line QUALITATIVE thesis. No numbers — the report injects those from AUDIT.json.",
+  "patterns": [{"title": "3-6 word pattern", "body": "1-2 sentences on what repeats across ads."}],
+  "deep_dives": [{
+    "fingerprint": "<full fingerprint from AUDIT>",
+    "title": "short creative name",
+    "concept": "the big creative vehicle (sketch, mockumentary, day-in-the-life, before/after)",
+    "insight": "the human truth / tension the copy leverages",
+    "format": "e.g. UGC selfie + product screen",
+    "hook_type": "e.g. question that names the objection",
+    "angle": "e.g. price anchor",
+    "funnel_stage": "TOF | MOF | BOF (+ short label)",
+    "persona": "who it targets",
+    "actors": "who appears, grounded on the frames",
+    "delivery": {"voice": "Yes", "music": "optional"},
+    "script_stages": [{"stage": "HOOK", "time": "0-3s", "text": "…"}],
+    "on_screen_text": "silent/image ONLY: the OCR message, misreads corrected. Renders a '📝 On-screen text (OCR)' panel instead of Audio. Omit for voiced_video.",
+    "frame_notes": {"hook": "what's on screen", "mid": "…", "end": "…"}
+  }],
+  "findings": [{"title": "Actionable finding", "body": "Implication for a competitor of this brand."}]
 }
 ```
 
-- **`duration` y `pace` (w/s) se calculan solos** en el generador desde `scripts[]` — NO los escribas.
-- Default: **6-8 deep_dives** (los de más `variants_total` con transcript). El grid + modal cubren el resto. Para brands con muchos creativos NO hagas los 30+ a mano: top 6-8 y listo.
-- 3-6 patterns, 3-5 findings.
-- Reglas de honestidad: SOLO afirmar lo que brief/AUDIT/frames respaldan. Meta NO expone performance (CTR/spend/impresiones) → nunca inventarlas (ver Limitations).
+- `duration` and `pace` (w/s) are computed by the generator from `scripts[]` — don't write them.
+- Default 6–8 deep-dives (stratified, not just top-variants). 3–6 patterns, 3–5 findings.
+- Only assert what brief/AUDIT/frames/OCR support.
 
-**Colores:** default toda la paleta Porter (violeta/aqua/rosa). Para teñir el acento con el color del competidor: `--accent "#hex"`. El resto se mantiene Porter.
+## Rules
 
-**Por qué HTML y no dashboard de report.portermetrics.com:** esos dashboards se alimentan de conectores Porter (cuenta del cliente vía API). Estos datos vienen de la Biblioteca pública de Meta vía Apify — no son un conector, así que no pueden ser un dashboard nativo. El HTML Porter autocontenido es la vía correcta.
+- **State the sample size.** Always report `enriched N of M unique`; never imply exhaustive coverage.
+- **Don't auto-pick an ambiguous page_id.** If 01 returns multiple candidates, ask the user.
+- **Don't invent missing data.** No transcript and no OCR → the analysis is null, not deduced.
+- **Report caps.** If `--max-items` filled, the brand has more → note it in `limitations[]`.
+- **One audience, one message per creative** in the read; don't blend.
+- **Suggest slicing for big brands** (>50 unique) to keep the brief small.
 
-## Reglas de comportamiento (obligatorias)
+## Roadmap & references
 
-1. **Sample size explícito.** Reportar siempre `enriched N de M unique`. NUNCA implicar análisis exhaustivo cuando es muestra.
-2. **No autoseleccionar page_id ambiguo.** Si script 01 devuelve múltiples candidatos → pedir al usuario que confirme.
-3. **No inventar datos faltantes.** Si un creativo no tiene transcript ni OCR, su análisis es null. No deducir.
-4. **Reportar caps alcanzados.** Si `--max-items` se llenó, el brand tiene más → dejarlo en `limitations[]`.
-5. **Avisar costos >$5 backend.** Si el run lo va a superar, avisar al usuario antes de proceder.
-6. **Brands con creativos sin audio = facturación parcial.** Mientras el gap 1 no esté arreglado, imágenes y videos silentes (motion graphics) NO se facturan. Ejemplo: brand con 102 videos pero 71 silentes solo factura los 31 con voz. Dejarlo explícito al customer.
-7. **Brands grandes (>50 unique creatives) → sugerir slicing.** El brief crece linealmente con creatives. Para brands así, sugerir al customer usar `formats=['summary','hooks','landings']` por default para mantener output <3K tokens. Bold ejemplo: 149 unique → 239 líneas / 7K tokens en brief completo.
-
-## Gaps críticos pendientes
-
-Evidencia, fix y acceptance tests detallados en `docs/HANDOFF.md` (Phase 1).
-
-1. **Image + silent-video enrichment** → imágenes y videos sin voz (motion graphics) reciben $0 de valor. Fix: PaddleOCR + Claude Opus 4.8 vision sobre imágenes Y frames de video silente.
-2. **Angle classifier sin cobertura completa** → brands EN/PT caen en `"uncategorized"`, y narrativas POV en español también (Bold: 20/31 hooks en español uncategorized). Fix: expandir `ANGLE_RULES` con (a) patterns EN + PT, (b) nueva categoría `ask your data`, (c) categorías ES narrativas: `narrative POV` ("yo soy", "mi negocio"), `social struggle` ("es difícil", "me quedé sin"), `transactional surprise` ("recibiste X pesos").
-3. **Country hint null para B2B sin utm geo** → fallback cascade: `transcript_language` → body language detection → landing path + nuevo field `country_hint_method`.
-4. **Sequential downloads en script 03 Y script 04** → ambos descargan media one-at-a-time. Bancolombia: dedup tomaba 7+ horas. **Script 03 ya tiene parallel prefetch (10 workers) — ahora corre en 5 min.** Script 04 todavía secuencial — necesita el mismo fix. Sin esto, brands en CDN edges lentos siguen siendo bottleneck en enrichment. Fix igual al de script 03: ThreadPoolExecutor con 10 workers, timeout 15s por download, cachear fallos para no re-intentar.
-
-## Limitations estructurales (comunicar al customer)
-
-Estas son límites del dataset público de Meta, no del pipeline. Cuando el customer pregunte por ellas, surfacear honestamente:
-
-- No performance metrics (CTR, clicks, engagement, spend) para ads comerciales
-- `platforms` = eligibility, NO delivery share (no se puede responder "IG vs FB share")
-- Country/age/interest targeting no expuesto
-- Killed tests filtrados por `active_only=true` (excluidos del audit por default)
-
-## Fuera de scope
-
-Análisis temporal, monitoring/diff over time, narrativa de análisis, presentaciones, ads de otras redes (TikTok/LinkedIn/YouTube) → **no son parte de este skill**. Ver roadmap en `docs/HANDOFF.md` o usar skills separados.
-
-## Referencias
-
-- Pipeline + scripts: `/Users/juan/repos/mobile/workspace/use-cases/meta-ads-pipeline/`
-- **HANDOFF al dev team:** `docs/HANDOFF.md` (arquitectura, costos, pricing, roadmap, acceptance tests, brands de QA)
-- Schema canónico: `docs/SCHEMA.md`
-- Historia de decisiones: `docs/ITERATION_LOG.md`
-- PRD del producto: `/Users/juan/repos/mobile/workspace/use-cases/competitor-monitoring-meta-ads.md`
+Open gaps, dev-team handoff, pricing and acceptance tests live in the docs — not inlined here:
+- Pipeline: `/Users/juan/repos/mobile/workspace/use-cases/meta-ads-pipeline/`
+- `docs/HANDOFF.md` (architecture, costs, roadmap, QA brands) · `docs/SCHEMA.md` · `docs/ITERATION_LOG.md`
+- Building a banked text/video/audio analysis framework (see `porter-marketing` → `content/skills/content-framework`) is the next major step.

@@ -27,13 +27,17 @@ The full ordered call sequence, params, and every validated gotcha live in
 **[`references/pipeline.md`](references/pipeline.md)** — read it before running.
 
 ## What makes it CONSISTENT (the differentiator)
-- **Transport decision is automatic, not guessed** (the #1 source of failures):
-  - Drive file **≤ 10 MB** → pull bytes with the Google-Drive MCP (`download_file_content`) →
-    **transport B**: `prepare_upload` + `scripts/drive_to_meta_upload.py` (base64 POSTed **in code**,
-    never streamed through the model).
+- **Transport decision is automatic, not guessed** (the #1 source of failures). It keys off the
+  **standalone Google-Drive MCP**, whose `download_file_content` hard-caps at **10 MB** — so 10 MB is
+  the cutoff *in this setup*. (If instead you reach Drive through Porter's `storage.download_file`
+  connector, its bytes ceiling is ~30 MiB — raise the cutoff accordingly; see asset-upload.)
+  - Drive file **≤ 10 MB** → pull bytes (`download_file_content`) → **transport B**:
+    `prepare_upload` + `scripts/drive_to_meta_upload.py` (base64 POSTed **in code**, never streamed
+    through the model).
   - Drive file **> 10 MB** (all real videos) → the Drive MCP **cannot download it** →
     **transport A**: the file must be **link-shared** and passed as a public `url` to
-    `facebook_ads.video_upload`. (Claude does NOT change Drive sharing — the user does; see pipeline.md.)
+    `facebook_ads.video_upload`. (Claude does NOT change Drive sharing — the user does, and can
+    re-privatize once Meta has its copy; see pipeline.md.)
 - **Currency-aware budget:** read the account currency, convert the user's real money to minor units,
   enforce the account minimum — the user always thinks in "$X/day", never in cents.
 - **Video is async:** after `video_upload`, poll `object_read(video_id, fields="status")` until
@@ -44,27 +48,33 @@ The full ordered call sequence, params, and every validated gotcha live in
 |-------|-----------|-------|
 | Ad account (name or id) | all | Resolved via `list_accounts` → signed blob. |
 | Drive file (id or name) | asset | An **image** (JPG/PNG — WebP is rejected) or **video** (MP4/MOV). |
-| Objective | campaign | `OUTCOME_TRAFFIC` / `LEADS` / `SALES` / `AWARENESS` / `ENGAGEMENT` / `APP_PROMOTION`. |
-| Facebook Page | ad | Auto-discoverable: `object_read(act_…, fields="promote_pages{id,name}")`. Confirm with the user. |
-| Budget (real money/day) | ad set | Converted to minor units; ≥ account minimum. |
+| Objective | campaign | **All carry the `OUTCOME_` prefix** (frozen at create): `OUTCOME_TRAFFIC` / `OUTCOME_LEADS` / `OUTCOME_SALES` / `OUTCOME_AWARENESS` / `OUTCOME_ENGAGEMENT` / `OUTCOME_APP_PROMOTION`. |
+| Facebook Page | ad | Auto-discoverable: `object_read(account_id=<signed blob>, object_id="act_…", fields="promote_pages{id,name}")`. Confirm with the user. |
+| Budget (money/day, **in the ACCOUNT'S currency**) | ad set | The Porter account is **COP**, not USD — read the account currency first and take the user's number in THAT currency. Convert to minor units (×offset), enforce the account minimum. Never treat "$5" as 5 account-currency units. |
 | Geo (≥1 country) | ad set | Meta rejects targeting with no geo. |
-| Copy: message / headline / link / CTA | ad | LEADS also needs a `lead_gen_form_id`. |
+| Copy: message / headline / link / CTA | ad | **LEADS** also needs a `lead_gen_form_id` → get it first via the sibling **[`../leadform/`](../leadform/)** skill (`leadform_create` / `leadform_list`); the orchestrator does not create the form. **Video ads:** omit `description` (Meta rejects it on video). |
 
 ## Operate (happy path, image)
 > "Sube `business-retail.jpg` de mi Drive a la cuenta Porter y ármame un anuncio de tráfico a
-> portermetrics.com, $5/día, US, en pausa."
-1. `list_accounts(query="Porter")` → signed blob. `object_read(act_…, "promote_pages{id,name}")` → Page.
-2. Drive file ≤10 MB → `download_file_content` → `prepare_upload(image_upload)` →
-   `python3 scripts/drive_to_meta_upload.py --kind image --from-drive-json --src <dl.json>
-   --account act_… --upload-url <fresh> --filename business-retail.jpg --mime image/jpeg` → `image_hash`.
+> portermetrics.com, COP 20.000/día, US, en pausa." (Budget is in the account currency — Porter is COP.)
+1. `list_accounts(query="Porter")` → signed blob (+ read the account **currency**).
+   `object_read(account_id=<blob>, object_id="act_…", fields="promote_pages{id,name}")` → Page.
+2. **Get the file's size + mime first** (`get_file_metadata`). WebP → stop (convert). ≤10 MB →
+   `download_file_content` → `prepare_upload(image_upload)` → `python3
+   scripts/drive_to_meta_upload.py --kind image --from-drive-json --src <dl.json> --account act_…
+   --upload-url <fresh> --filename business-retail.jpg --mime image/jpeg` → `image_hash`.
 3. `campaign_create(objective=OUTCOME_TRAFFIC, special_ad_categories=[], status=PAUSED)`.
 4. `adset_create(optimization_goal=LINK_CLICKS, billing_event=IMPRESSIONS, destination_type=WEBSITE,
-   targeting_countries=["US"], daily_budget_amount=<minor≥min>, status=PAUSED)`.
+   targeting_countries=["US"], daily_budget_amount=<minor≥account min>, status=PAUSED)`.
+   ↳ if Meta returns **subcode 1870227 "Advantage Audience Flag Required"** (some objectives/targeting),
+   resend with `targeting_advantage_audience: 0` (manual) or `1` (Advantage+, needs `age_max`=65).
 5. `ad_create(page_id, image_hash, message, headline, link, cta_type=LEARN_MORE, status=PAUSED)`.
+   (For a **video** ad use `video_id` instead of `image_hash`, and **omit `description`**.)
 6. `object_read(ad_id, "creative{image_hash},status")` → confirm hash matches + PAUSED. Report ids.
 
 **Validated end-to-end live 2026-07-16** (account Porter `act_794709130739347`, COP): Drive JPG →
-hash `3b21ca91…` → campaign → ad set (min budget 3319 COP minor) → ad (creative == hash) → verified
+hash `3b21ca91…` → campaign → ad set (`optimization_goal=LINK_CLICKS`, budget above the 3319 COP-minor
+minimum, **no advantage-audience flag needed for plain US geo**) → ad (creative == hash) → verified
 PAUSED → deleted. See [`references/pipeline.md`](references/pipeline.md) for the video path + edge cases.
 
 ## Scope / boundary
