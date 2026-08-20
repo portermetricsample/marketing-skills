@@ -1,0 +1,280 @@
+{
+  "request": {
+    "location": "United States",
+    "devices": [
+      "desktop",
+      "mobile"
+    ],
+    "repeat": 2
+  },
+  "searches": [
+    {
+      "query": "cheap auto insurance",
+      "device": "desktop",
+      "ad_count": 4,
+      "ads": [
+        {
+          "device": "desktop",
+          "rank": 1,
+          "slot": "top",
+          "ad_type": "search",
+          "advertiser": "Rival Mutual",
+          "domain": "rivalmutual.com",
+          "copy": {
+            "headline": "Rival Mutual \u2014 quotes in minutes"
+          },
+          "destination": {
+            "url": "https://rivalmutual.com/lp/auto",
+            "tracking_exposed": true
+          },
+          "cta": {
+            "offer": [
+              "free quote"
+            ]
+          },
+          "observations": {
+            "times_seen": 2,
+            "of_samples": 2
+          }
+        },
+        {
+          "device": "desktop",
+          "rank": 2,
+          "slot": "top",
+          "ad_type": "search",
+          "advertiser": "QuoteHub",
+          "domain": "quotehub.com",
+          "copy": {
+            "headline": "QuoteHub \u2014 quotes in minutes"
+          },
+          "destination": {
+            "url": "https://quotehub.com/compare",
+            "tracking_exposed": true
+          },
+          "cta": {},
+          "observations": {
+            "times_seen": 2,
+            "of_samples": 2
+          }
+        },
+        {
+          "device": "desktop",
+          "rank": 3,
+          "slot": "top",
+          "ad_type": "search",
+          "advertiser": "Acme Insurance",
+          "domain": "acme.com",
+          "copy": {
+            "headline": "Acme Insurance \u2014 quotes in minutes"
+          },
+          "destination": {
+            "url": "https://acme.com/lp/auto",
+            "tracking_exposed": true
+          },
+          "cta": {},
+          "observations": {
+            "times_seen": 2,
+            "of_samples": 2
+          }
+        },
+        {
+          "device": "desktop",
+          "rank": 4,
+          "slot": "top",
+          "ad_type": "search",
+          "advertiser": "SaveMax",
+          "domain": "savemax.com",
+          "copy": {
+            "headline": "SaveMax \u2014 quotes in minutes"
+          },
+          "destination": {
+            "url": "https://savemax.com/auto",
+            "tracking_exposed": true
+          },
+          "cta": {
+            "offer": [
+              "discount 20%"
+            ]
+          },
+          "observations": {
+            "times_seen": 2,
+            "of_samples": 2
+          }
+        }
+      ]
+    },
+    {
+      "query": "cheap auto insurance",
+      "device": "mobile",
+      "ad_count": 2,
+      "ads": [
+        {
+          "device": "desktop",
+          "rank": 1,
+          "slot": "top",
+          "ad_type": "search",
+          "advertiser": "Rival Mutual",
+          "domain": "rivalmutual.com",
+          "copy": {
+            "headline": "Rival Mutual \u2014 quotes in minutes"
+          },
+          "destination": {
+            "url": "https://rivalmutual.com/lp/auto-m",
+            "tracking_exposed": true
+          },
+          "cta": {
+            "offer": [
+              "free quote"
+            ]
+          },
+          "observations": {
+            "times_seen": 2,
+            "of_samples": 2
+          }
+        },
+        {
+          "device": "desktop",
+          "rank": 2,
+          "slot": "top",
+          "ad_type": "search",
+          "advertiser": "QuoteHub",
+          "domain": "quotehub.com",
+          "copy": {
+            "headline": "QuoteHub \u2014 quotes in minutes"
+          },
+          "destination": {
+            "url": "https://quotehub.com/compare",
+            "tracking_exposed": true
+          },
+          "cta": {},
+          "observations": {
+            "times_seen": 2,
+            "of_samples": 2
+          }
+        }
+      ]
+    },
+    {
+      "query": "compare car insurance",
+      "device": "desktop",
+      "ad_count": 3,
+      "ads": [
+        {
+          "device": "desktop",
+          "rank": 1,
+          "slot": "top",
+          "ad_type": "search",
+          "advertiser": "QuoteHub",
+          "domain": "quotehub.com",
+          "copy": {
+            "headline": "QuoteHub \u2014 quotes in minutes"
+          },
+          "destination": {
+            "url": "https://quotehub.com/compare",
+            "tracking_exposed": true
+          },
+          "cta": {},
+          "observations": {
+            "times_seen": 2,
+            "of_samples": 2
+          }
+        },
+        {
+          "device": "desktop",
+          "rank": 2,
+          "slot": "top",
+          "ad_type": "search",
+          "advertiser": "Rival Mutual",
+          "domain": "rivalmutual.com",
+          "copy": {
+            "headline": "Rival Mutual \u2014 quotes in minutes"
+          },
+          "destination": {
+            "url": "https://rivalmutual.com/lp/compare",
+            "tracking_exposed": true
+          },
+          "cta": {
+            "offer": [
+              "free quote"
+            ]
+          },
+          "observations": {
+            "times_seen": 2,
+            "of_samples": 2
+          }
+        },
+        {
+          "device": "desktop",
+          "rank": 3,
+          "slot": "top",
+          "ad_type": "search",
+          "advertiser": "Acme Insurance",
+          "domain": "acme.com",
+          "copy": {
+            "headline": "Acme Insurance \u2014 quotes in minutes"
+          },
+          "destination": {
+            "url": "https://acme.com/lp/auto",
+            "tracking_exposed": true
+          },
+          "cta": {},
+          "observations": {
+            "times_seen": 2,
+            "of_samples": 2
+          }
+        }
+      ]
+    },
+    {
+      "query": "acme insurance",
+      "device": "desktop",
+      "ad_count": 2,
+      "ads": [
+        {
+          "device": "desktop",
+          "rank": 1,
+          "slot": "top",
+          "ad_type": "search",
+          "advertiser": "Rival Mutual",
+          "domain": "rivalmutual.com",
+          "copy": {
+            "headline": "Rival Mutual \u2014 quotes in minutes"
+          },
+          "destination": {
+            "url": "https://rivalmutual.com/switch-and-save",
+            "tracking_exposed": true
+          },
+          "cta": {
+            "offer": [
+              "discount 20%"
+            ]
+          },
+          "observations": {
+            "times_seen": 2,
+            "of_samples": 2
+          }
+        },
+        {
+          "device": "desktop",
+          "rank": 2,
+          "slot": "top",
+          "ad_type": "search",
+          "advertiser": "Acme Insurance",
+          "domain": "acme.com",
+          "copy": {
+            "headline": "Acme Insurance \u2014 quotes in minutes"
+          },
+          "destination": {
+            "url": "https://acme.com/",
+            "tracking_exposed": true
+          },
+          "cta": {},
+          "observations": {
+            "times_seen": 2,
+            "of_samples": 2
+          }
+        }
+      ]
+    }
+  ]
+}

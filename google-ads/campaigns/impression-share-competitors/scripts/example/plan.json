@@ -1,0 +1,139 @@
+{
+  "meta": {
+    "account": "Acme Insurance",
+    "source_skill": "impression-share",
+    "trigger": {
+      "labels": [
+        "Crashed",
+        "Crashing",
+        "Losing"
+      ],
+      "drivers": [
+        "mixed",
+        "rank"
+      ]
+    },
+    "rules": {
+      "coverage": 0.85,
+      "marginal": 0.01,
+      "min_impressions": 30.0,
+      "max_credits": null
+    }
+  },
+  "campaigns_triggered": {
+    "Acme_Auto_SEM": {
+      "trend_label": "Crashing",
+      "driver": "rank"
+    },
+    "Acme_Brand": {
+      "trend_label": "Losing",
+      "driver": "rank"
+    }
+  },
+  "coverage": {
+    "Acme_Auto_SEM": {
+      "spend_covered": 0.982,
+      "impressions_covered": 0.979,
+      "clusters_sampled": 3,
+      "clusters_total": 4,
+      "variants_represented": 6
+    },
+    "Acme_Brand": {
+      "spend_covered": 1.0,
+      "impressions_covered": 1.0,
+      "clusters_sampled": 1,
+      "clusters_total": 1,
+      "variants_represented": 2
+    }
+  },
+  "estimate": {
+    "terms": 4,
+    "credits": 16,
+    "tier1": 4,
+    "tier2": 0
+  },
+  "plan": [
+    {
+      "campaign": "Acme_Auto_SEM",
+      "trend_label": "Crashing",
+      "driver": "rank",
+      "term": "cheap auto insurance",
+      "owning_keyword": "cheap auto insurance",
+      "match_type": "BROAD",
+      "brand": false,
+      "cluster_size": 4,
+      "cost": 1570.0,
+      "spend_share": 0.5242,
+      "impressions": 9600,
+      "tier": 1,
+      "devices": "both",
+      "repeat": 2,
+      "credits": 4
+    },
+    {
+      "campaign": "Acme_Auto_SEM",
+      "trend_label": "Crashing",
+      "driver": "rank",
+      "term": "compare car insurance",
+      "owning_keyword": "compare car insurance",
+      "match_type": "PHRASE",
+      "brand": false,
+      "cluster_size": 1,
+      "cost": 760.0,
+      "spend_share": 0.2538,
+      "impressions": 2400,
+      "tier": 1,
+      "devices": "both",
+      "repeat": 2,
+      "credits": 4
+    },
+    {
+      "campaign": "Acme_Auto_SEM",
+      "trend_label": "Crashing",
+      "driver": "rank",
+      "term": "car insurance quotes",
+      "owning_keyword": "car insurance quotes",
+      "match_type": "EXACT",
+      "brand": false,
+      "cluster_size": 1,
+      "cost": 610.0,
+      "spend_share": 0.2037,
+      "impressions": 2100,
+      "tier": 1,
+      "devices": "both",
+      "repeat": 2,
+      "credits": 4
+    },
+    {
+      "campaign": "Acme_Brand",
+      "trend_label": "Losing",
+      "driver": "rank",
+      "term": "acme insurance",
+      "owning_keyword": "acme insurance",
+      "match_type": "PHRASE",
+      "brand": true,
+      "cluster_size": 2,
+      "cost": 340.0,
+      "spend_share": 1.0,
+      "impressions": 5900,
+      "tier": 1,
+      "devices": "both",
+      "repeat": 2,
+      "credits": 4
+    }
+  ],
+  "skipped": [
+    {
+      "term": "auto insurance for students",
+      "campaign": "Acme_Auto_SEM",
+      "reason": "coverage 85% already met",
+      "cost": 55.0
+    },
+    {
+      "term": "insurance thing",
+      "campaign": "Acme_Auto_SEM",
+      "reason": "below impression floor",
+      "impressions": 12.0
+    }
+  ]
+}

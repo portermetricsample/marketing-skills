@@ -1,0 +1,90 @@
+[
+  {
+    "google_ads_campaign_name": "Acme_Auto_SEM",
+    "google_ads_search_term": "cheap auto insurance",
+    "google_ads_keyword_info_text": "cheap auto insurance",
+    "google_ads_keyword_info_match_type": "BROAD",
+    "google_ads_cost": 900,
+    "google_ads_impressions": 3000
+  },
+  {
+    "google_ads_campaign_name": "Acme_Auto_SEM",
+    "google_ads_search_term": "cheap auto insurance quotes",
+    "google_ads_keyword_info_text": "cheap auto insurance",
+    "google_ads_keyword_info_match_type": "BROAD",
+    "google_ads_cost": 420,
+    "google_ads_impressions": 2600
+  },
+  {
+    "google_ads_campaign_name": "Acme_Auto_SEM",
+    "google_ads_search_term": "cheap auto insurance online",
+    "google_ads_keyword_info_text": "cheap auto insurance",
+    "google_ads_keyword_info_match_type": "BROAD",
+    "google_ads_cost": 160,
+    "google_ads_impressions": 2200
+  },
+  {
+    "google_ads_campaign_name": "Acme_Auto_SEM",
+    "google_ads_search_term": "cheap auto insurance near me",
+    "google_ads_keyword_info_text": "cheap auto insurance",
+    "google_ads_keyword_info_match_type": "BROAD",
+    "google_ads_cost": 90,
+    "google_ads_impressions": 1800
+  },
+  {
+    "google_ads_campaign_name": "Acme_Auto_SEM",
+    "google_ads_search_term": "compare car insurance",
+    "google_ads_keyword_info_text": "compare car insurance",
+    "google_ads_keyword_info_match_type": "PHRASE",
+    "google_ads_cost": 760,
+    "google_ads_impressions": 2400
+  },
+  {
+    "google_ads_campaign_name": "Acme_Auto_SEM",
+    "google_ads_search_term": "car insurance quotes",
+    "google_ads_keyword_info_text": "car insurance quotes",
+    "google_ads_keyword_info_match_type": "EXACT",
+    "google_ads_cost": 610,
+    "google_ads_impressions": 2100
+  },
+  {
+    "google_ads_campaign_name": "Acme_Auto_SEM",
+    "google_ads_search_term": "auto insurance for students",
+    "google_ads_keyword_info_text": "student auto insurance",
+    "google_ads_keyword_info_match_type": "BROAD",
+    "google_ads_cost": 55,
+    "google_ads_impressions": 300
+  },
+  {
+    "google_ads_campaign_name": "Acme_Auto_SEM",
+    "google_ads_search_term": "insurance thing",
+    "google_ads_keyword_info_text": "cheap auto insurance",
+    "google_ads_keyword_info_match_type": "BROAD",
+    "google_ads_cost": 4,
+    "google_ads_impressions": 12
+  },
+  {
+    "google_ads_campaign_name": "Acme_Brand",
+    "google_ads_search_term": "acme insurance",
+    "google_ads_keyword_info_text": "acme insurance",
+    "google_ads_keyword_info_match_type": "EXACT",
+    "google_ads_cost": 300,
+    "google_ads_impressions": 5000
+  },
+  {
+    "google_ads_campaign_name": "Acme_Brand",
+    "google_ads_search_term": "acme insurance login",
+    "google_ads_keyword_info_text": "acme insurance",
+    "google_ads_keyword_info_match_type": "PHRASE",
+    "google_ads_cost": 40,
+    "google_ads_impressions": 900
+  },
+  {
+    "google_ads_campaign_name": "Acme_Home_SEM",
+    "google_ads_search_term": "home insurance quotes",
+    "google_ads_keyword_info_text": "home insurance",
+    "google_ads_keyword_info_match_type": "EXACT",
+    "google_ads_cost": 800,
+    "google_ads_impressions": 2000
+  }
+]

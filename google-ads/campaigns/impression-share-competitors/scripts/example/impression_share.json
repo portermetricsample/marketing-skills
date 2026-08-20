@@ -1,0 +1,27 @@
+{
+  "meta": {
+    "account": "Acme Insurance"
+  },
+  "campaigns": [
+    {
+      "campaign": "Acme_Auto_SEM",
+      "trend_label": "Crashing",
+      "driver": "rank"
+    },
+    {
+      "campaign": "Acme_Home_SEM",
+      "trend_label": "Losing",
+      "driver": "budget"
+    },
+    {
+      "campaign": "Acme_Brand",
+      "trend_label": "Losing",
+      "driver": "rank"
+    },
+    {
+      "campaign": "Acme_Life_SEM",
+      "trend_label": "Healthy",
+      "driver": "none"
+    }
+  ]
+}

@@ -1,0 +1,253 @@
+{
+  "meta": {
+    "account": "Acme Insurance",
+    "skill": "impression-share-competitors",
+    "inputs": {
+      "impression_share": "scripts/example/impression_share.json",
+      "plan": "scripts/example/plan.json",
+      "serp": [
+        "scripts/example/ads.json"
+      ]
+    },
+    "own_domain": "acme.com",
+    "caveat": "SERP samples are live and point-in-time. They describe who is in these auctions now, not who was there when impression share fell. Presence is a sample rate across sampled terms, not an impression-weighted overlap rate. sample_presence is a visibility proxy for rivals only — for your own campaigns the account already reports exact, impression-weighted impression share."
+  },
+  "synthesis": {
+    "headline": "",
+    "diagnosis": "",
+    "action": ""
+  },
+  "campaigns": [
+    {
+      "campaign": "Acme_Auto_SEM",
+      "completeness": {
+        "spend_covered": 0.982,
+        "impressions_covered": 0.979,
+        "keyword_clusters_sampled": 3,
+        "keyword_clusters_total": 4,
+        "term_variants_represented": 6,
+        "rivals_found": 3,
+        "rivals_intermittent": 0,
+        "roster_likely_incomplete": false
+      },
+      "trend_label": "Crashing",
+      "driver": "rank",
+      "terms_sampled": [
+        {
+          "term": "cheap auto insurance",
+          "devices": [
+            "desktop",
+            "mobile"
+          ],
+          "ads_seen": 6,
+          "own_ad_ranks": [
+            3
+          ],
+          "own_ad_rank_best": 3,
+          "own_ad_present": true
+        },
+        {
+          "term": "compare car insurance",
+          "devices": [
+            "desktop"
+          ],
+          "ads_seen": 3,
+          "own_ad_ranks": [
+            3
+          ],
+          "own_ad_rank_best": 3,
+          "own_ad_present": true
+        }
+      ],
+      "own_presence": {
+        "terms_where_our_ad_appeared": 2,
+        "of_terms_sampled": 2
+      },
+      "rivals": [
+        {
+          "advertiser": "Rival Mutual",
+          "terms_present_on": 2,
+          "terms_sampled": 2,
+          "presence": 1.0,
+          "devices": [
+            "desktop",
+            "mobile"
+          ],
+          "rank_best": 1,
+          "rank_worst": 2,
+          "landing_pages": [
+            "https://rivalmutual.com/lp/auto",
+            "https://rivalmutual.com/lp/auto-m",
+            "https://rivalmutual.com/lp/compare"
+          ],
+          "offers": [
+            "free quote"
+          ],
+          "appearance": "consistent",
+          "samples_present": 6,
+          "samples_total": 6,
+          "sample_presence": 1.0,
+          "sample_presence_ci95": [
+            0.61,
+            1.0
+          ],
+          "by_term": {
+            "cheap auto insurance": {
+              "rank_best": 1,
+              "devices": [
+                "desktop",
+                "mobile"
+              ]
+            },
+            "compare car insurance": {
+              "rank_best": 2,
+              "devices": [
+                "desktop"
+              ]
+            }
+          }
+        },
+        {
+          "advertiser": "QuoteHub",
+          "terms_present_on": 2,
+          "terms_sampled": 2,
+          "presence": 1.0,
+          "devices": [
+            "desktop",
+            "mobile"
+          ],
+          "rank_best": 1,
+          "rank_worst": 2,
+          "landing_pages": [
+            "https://quotehub.com/compare"
+          ],
+          "offers": null,
+          "appearance": "consistent",
+          "samples_present": 6,
+          "samples_total": 6,
+          "sample_presence": 1.0,
+          "sample_presence_ci95": [
+            0.61,
+            1.0
+          ],
+          "by_term": {
+            "cheap auto insurance": {
+              "rank_best": 2,
+              "devices": [
+                "desktop",
+                "mobile"
+              ]
+            },
+            "compare car insurance": {
+              "rank_best": 1,
+              "devices": [
+                "desktop"
+              ]
+            }
+          }
+        },
+        {
+          "advertiser": "SaveMax",
+          "terms_present_on": 1,
+          "terms_sampled": 2,
+          "presence": 0.5,
+          "devices": [
+            "desktop"
+          ],
+          "rank_best": 4,
+          "rank_worst": 4,
+          "landing_pages": [
+            "https://savemax.com/auto"
+          ],
+          "offers": [
+            "discount 20%"
+          ],
+          "appearance": "consistent",
+          "samples_present": 2,
+          "samples_total": 2,
+          "sample_presence": 1.0,
+          "sample_presence_ci95": [
+            0.34,
+            1.0
+          ],
+          "by_term": {
+            "cheap auto insurance": {
+              "rank_best": 4,
+              "devices": [
+                "desktop"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "campaign": "Acme_Brand",
+      "completeness": {
+        "spend_covered": 1.0,
+        "impressions_covered": 1.0,
+        "keyword_clusters_sampled": 1,
+        "keyword_clusters_total": 1,
+        "term_variants_represented": 2,
+        "rivals_found": 1,
+        "rivals_intermittent": 0,
+        "roster_likely_incomplete": false
+      },
+      "trend_label": "Losing",
+      "driver": "rank",
+      "terms_sampled": [
+        {
+          "term": "acme insurance",
+          "devices": [
+            "desktop"
+          ],
+          "ads_seen": 2,
+          "own_ad_ranks": [
+            2
+          ],
+          "own_ad_rank_best": 2,
+          "own_ad_present": true
+        }
+      ],
+      "own_presence": {
+        "terms_where_our_ad_appeared": 1,
+        "of_terms_sampled": 1
+      },
+      "rivals": [
+        {
+          "advertiser": "Rival Mutual",
+          "terms_present_on": 1,
+          "terms_sampled": 1,
+          "presence": 1.0,
+          "devices": [
+            "desktop"
+          ],
+          "rank_best": 1,
+          "rank_worst": 1,
+          "landing_pages": [
+            "https://rivalmutual.com/switch-and-save"
+          ],
+          "offers": [
+            "discount 20%"
+          ],
+          "appearance": "consistent",
+          "samples_present": 2,
+          "samples_total": 2,
+          "sample_presence": 1.0,
+          "sample_presence_ci95": [
+            0.34,
+            1.0
+          ],
+          "by_term": {
+            "acme insurance": {
+              "rank_best": 1,
+              "devices": [
+                "desktop"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
